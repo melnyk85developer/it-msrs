@@ -1,0 +1,37 @@
+body {
+    background-color: #1e1e1e !important;
+    color: #eee !important;
+}
+
+.swagger-ui .topbar {
+    background-color: #111 !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+.swagger-ui .opblock {
+    background-color: #2b2b2b !important;
+}
+
+.swagger-ui .opblock-summary {
+    background-color: #222 !important;
+}
+
+.swagger-ui .opblock-summary-method {
+    background-color: #444 !important;
+    color: #fff !important;
+}
+
+.swagger-ui .opblock-description-wrapper,
+.swagger-ui .response-col_description__inner,
+.swagger-ui .markdown p,
+.swagger-ui .markdown code {
+    color: #ccc !important;
+}
+
+.swagger-ui .opblock-section-header {
+    background-color: #333 !important;
+}
+
+.swagger-ui .scheme-container {
+    background-color: #222 !important;
+}
