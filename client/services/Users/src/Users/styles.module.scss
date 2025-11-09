@@ -1,0 +1,25 @@
+@import '../../../host/src/mixins.scss';
+@import '../../../host/src/variables.scss';
+
+.wrapContentUsers.light,
+.wrapContentUsers.dark  {
+    overflow: auto;
+    overflow-x: hidden;
+    @include custom-scrollbar();
+}
+.wrapContentUsers.light {
+    width: 100%;
+    padding: 10px;
+    height: 86vh;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+.wrapContentUsers.dark {
+    width: 100%;
+    padding: 10px;
+    height: 86vh;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}

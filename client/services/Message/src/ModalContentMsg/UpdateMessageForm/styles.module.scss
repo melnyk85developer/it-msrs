@@ -1,0 +1,28 @@
+@import '../../../../host/src/mixins.scss';
+
+.wrapInput {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.input {
+    flex: 1;
+    resize: none;
+    margin: 0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #282828;
+    color: wheat;
+    font-size: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    outline: none;
+    border: none;
+    // outline: 1px solid green;
+    @include custom-scrollbar();
+
+    &:focus {
+        outline: none;
+    }
+}

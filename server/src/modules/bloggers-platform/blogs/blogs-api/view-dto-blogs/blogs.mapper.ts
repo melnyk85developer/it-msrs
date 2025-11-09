@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users-external-query/users-query-repository/users.query-repository";
 
 import { BlogViewDto } from "./blogs.view-dto";
-import { BlogDocument } from "../../blogs-domian/blog.entity";
+import { BlogDocument } from "../../blogs-domain/blog.entity";
 import { BlogExtendedViewDto } from "./blogs-extended-view.dto";
 
 @Injectable()

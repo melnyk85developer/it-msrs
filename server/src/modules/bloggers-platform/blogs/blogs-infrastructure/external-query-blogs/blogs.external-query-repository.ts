@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Blog, type BlogModelType } from '../../blogs-domian/blog.entity';
+import { Blog, type BlogModelType } from '../../blogs-domain/blog.entity';
 import { BlogExternalDto } from './external-dto/blogs.external-dto';
 
 @Injectable()

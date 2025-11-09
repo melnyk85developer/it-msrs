@@ -1,0 +1,352 @@
+.wrapPhotoBlock {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    .leftIcon {
+        flex: 1;
+        border-right: 1px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 5px;
+        &:hover {
+            background-color: #353535;
+            cursor: pointer;
+        }
+    }
+    .wrapItems {
+        display: flex;
+        width: 100%;
+        // height: 100%;
+        align-items: stretch;
+        .wrapImgPlus {
+            // flex: 1;
+            // display: flex;
+            position: relative;
+            // border: 1px solid red;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid black;
+            cursor: pointer;
+            // padding: 0 4%;
+            // background: var(--dark-fon-plus-miniature-photo-image) no-repeat, center center;
+            img {
+                width: 100%;
+            }
+            .wrapBlockIconsPlusphoto {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                .uploadIcon {
+                    display: block;
+                    margin: 17% auto 0%;
+                    font-size: 30px;
+                    font-weight: 100;
+                    color: #c4c4c4;
+                }
+                .IconPlusPhoto {
+                    display: flex;
+                    margin-left: 15%;
+                    font-size: 14px;
+                    strong {
+                        display: block;
+                        width: 100%;
+                        margin-left: 3px;
+                    }
+                }
+            }
+        }
+        .wrapImg {
+            width: 100%;
+            border-right: 1px solid black;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .rightIcon {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 5px;
+        &:hover {
+            background-color: #353535;
+            cursor: pointer;
+        }
+    }
+    .wrapContentOpenPhoto {
+        border: 1px solid rgba(73, 73, 73, 0.3);
+        border-radius: 8px;
+        display: flex;
+        padding: 4vh 3vh 3vh;
+        .wrapOpenPhotoBlockModal{
+            width: 100%;
+            // height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    }
+    .wrapUploadPhotoBlockModal {
+        width: 100%;
+        height: 70vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .wrapAlbums {
+            display: flex;
+            justify-content: space-between;
+            height: 12vh;
+            .albums {
+                width: 100%;
+                // border: 1px solid red;
+                h3 {
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                select {
+                    width: 100%;
+                    height: 30px;
+                    border-radius: 8px;
+                }
+            }
+            .addAlbums {
+                width: 100%;
+                // border: 1px solid red;
+                input {
+                    width: 100%;
+                    height: 30px;
+                    border-radius: 8px;
+                }
+                button {
+                    display: block;
+                    margin-top: 15px;
+                    width: 100%;
+                }
+                h3 {
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+            }
+        }
+        .maketCarusel {
+            border: 1px solid black;
+            border-radius: 8px;
+            width: 100%;
+            min-height: 7vh;
+            margin: 5px 0;
+            img {
+                width: 7vh;
+            }
+        }
+        .wrapMiniatureBlock {
+            border: 1px solid black;
+            border-radius: 8px;
+            width: 100%;
+            min-height: 12vh;
+            margin-bottom: 10px;
+        }
+        .wrapBlockSelectPhoto {
+            display: flex;
+            justify-content: space-between;
+            .uploadButton {
+                padding: 0 30px;
+            }
+            .button {
+                width: 100%;   
+                margin-left: 10px;
+            }
+        }
+        .blockCropperMiniature {
+            width: 200px;
+            margin: 0 auto;
+        }
+        .samplePhoto {
+            margin-bottom: 20px;
+            border: 1px solid black;
+            border-radius: 8px;
+            width: 100%;
+            overflow-y: auto;
+            min-height: 12vh;
+            max-height: 30vh;
+            // max-height: 50vh;
+            img {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                margin: 0 auto;
+                width: 300px;
+                // min-height: 30vh;
+                // max-height: 50vh;
+            }
+            &::-webkit-scrollbar {
+                width: 5px;
+                background-color: var(--dark-theme--webkit-scrollbar);
+            }
+        
+            &::-webkit-scrollbar-track {
+                background: #303030;
+            }
+        
+            &::-webkit-scrollbar-thumb {
+                background-color: #282828;
+                border-radius: 9em;
+                box-shadow: inset 1px 1px 10px #757575;
+            }
+        
+            &::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+            /* Специфичные стили для полосы прокрутки в Firefox */
+            @-moz-document url-prefix() {
+                & {
+                    scrollbar-width: thin;
+                    scrollbar-color: #181818 #353535;
+                }
+            }
+        }
+        .wrapFileUpload {
+            display: flex;
+            justify-content: space-between;
+            button {
+                width: 100%;
+            }
+            .button {
+                margin-left: 10px;
+            }
+        }
+    }
+    .modal {
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0,0,0,0.7);
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        padding-top: 125px; /* Отступ сверху для учета хедера */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // opacity: 0;
+        pointer-events: none;
+        transform: scale(0);
+        transition: 0.8s;
+        z-index: 9000;
+
+        .leftIconOpenPhoto {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            background-color: rgba(05, 05, 05, 0.8);
+            border: 1px solid rgba(73, 73, 73, 0.3);
+            border: 1px border ;
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            // border: 1px solid red;
+            width: 60px;
+            height: 100vh;
+            &:hover {
+                background-color: rgba(20, 20, 20, 0.4);
+                cursor: pointer;
+            }
+            z-index: 9999;
+
+        }
+        .rightIconOpenPhoto {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            background-color: rgba(05, 05, 05, 0.8);
+            border: 1px solid rgba(73, 73, 73, 0.3);
+
+            position: fixed;
+            top: 0;
+            right: 0;
+
+            // border: 1px solid red;
+            width: 60px;
+            height: 100vh;
+            &:hover {
+                background-color: rgba(20, 20, 20, 0.4);
+                cursor: pointer;
+            }
+            z-index: 9999;
+
+        }
+    }
+    .modal.active {
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: all;
+    }
+    .modal__content__noBakcground {
+        margin-top: 0px;
+        padding: 20px;
+        border-radius: 8px;
+        // background: #353535;
+        width: 100%;
+        max-width: 80vw; /* Ширина модального окна не более 80% ширины окна браузера */
+        max-height: calc(100vh - 125px); /* Ограничение высоты, чтобы не перекрывать хедер */
+        overflow-y: auto; /* Добавление прокрутки, если контент слишком высокий */
+        transform: scale(0.8);
+        transition: 0.4s all;
+
+        .closedIconUploadTracks {
+            display: block;
+            position: fixed;
+            top: 35px;
+            right: 35px;
+            margin-left: auto;
+        }
+    
+        &::-webkit-scrollbar {
+            width: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            // background-color: var(--dark-theme--webkit-scrollbar);
+        }
+    
+        &::-webkit-scrollbar-track {
+
+            background-color: rgba(0,0,0,0.7);
+
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(73, 73, 73, 0.3);
+            border-radius: 9em;
+            box-shadow: inset 1px 1px 10px #2c2c2c;
+        }
+    
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0,0,0,0.7);
+    ;
+        }
+        /* Специфичные стили для полосы прокрутки в Firefox */
+        @-moz-document url-prefix() {
+            & {
+                scrollbar-width: thin;
+                scrollbar-color: #181818 #353535;
+            }
+        }
+    }
+    .modal__content__noBakcground.active {
+        transform: scale(1);
+    }
+
+}

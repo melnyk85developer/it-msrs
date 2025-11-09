@@ -1,0 +1,53 @@
+@import url('../../../../../services/host/src/variables.scss');
+
+.wrapDescription.light {
+    margin: 0px auto 3px;
+    padding: 15px 0  0 0px;
+    height: 210px;
+    border-bottom: 1px dashed #aaaaaa;
+    h3 {
+        margin-bottom: 15px;
+        color: #D55612;
+        text-align: center;
+        font-weight: 900;
+    }
+}
+.wrapDescription.dark {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+// border: 1px solid red;
+    height: auto;
+    border-bottom: 1px dotted #aaaaaa;
+    .description {
+        width: 100%;
+        margin: 0px auto 0px;
+        padding: 15px 10px 0;
+        .wrapTitleAnketa {
+            display: flex;
+            justify-content: space-between;
+            h3 {
+                width: 100%;
+                // border: 1px solid red;
+                display: block;
+                margin-bottom: 15px;
+                color: #D55612;
+                text-align: center;
+                font-weight: 900;
+            }
+            .editStilus {
+                width: 5%;
+                margin-left: auto;
+                display: block;
+                color: var(--dark-theme-text-color);
+            }
+        }
+        .more {
+            text-align: right;
+            font-weight: normal;
+            color: var(--dark-theme-text-color);
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    }
+}

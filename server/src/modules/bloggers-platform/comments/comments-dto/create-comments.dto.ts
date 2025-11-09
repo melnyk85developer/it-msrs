@@ -13,16 +13,10 @@ export class CreateCommentDto {
     @Length(3, 3000, { message: 'Длина символов поля content должно быть не менеее 3 и не более 3000 символов!' })
     readonly content: string;
     @ApiProperty({ example: 'commentatorInfo', description: 'Информация о пользователе оставившего комментарий!' })
-    // commentatorInfo: {
-    //     userId: string;
-    //     userLogin: string;
-    // };
-    @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
-    createdAt: string;
-    @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
-    updatedAt: string;
-    @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
-    deletedAt: string | null;
+    commentatorInfo: {
+        userId: string;
+        userLogin: string;
+    };
 }
 
 export class UpdateCommentDto {
@@ -39,14 +33,6 @@ export class UpdateCommentDto {
     @IsNotEmpty({ message: 'Поле content не должно быть пустым!' })
     @Length(3, 3000, { message: 'Длина символов поля content должно быть не менеее 3 и не более 3000 символов!' })
     content: string;
-    // commentatorInfo: {
-    //     userId: string;
-    //     userLogin: string;
-    // };
-    @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
-    createdAt: string;
     @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
     updatedAt: string;
-    @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
-    deletedAt: string | null;
 }

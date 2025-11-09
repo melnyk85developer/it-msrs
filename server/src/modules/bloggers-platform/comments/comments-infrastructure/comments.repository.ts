@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Comment, CommentDocument, type CommentModelType } from '../comments-domian/comments.entity';
+import { Comment, CommentDocument, type CommentModelType } from '../comments-domain/comments.entity';
 
 @Injectable()
 export class CommentsRepository {

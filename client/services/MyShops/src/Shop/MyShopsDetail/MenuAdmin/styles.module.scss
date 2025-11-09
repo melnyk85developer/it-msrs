@@ -1,0 +1,115 @@
+.wrapTopNavLeftShopAdmin, .wrapTopNavRightShopAdmin {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Standard syntax */
+}
+.wrapTopNavLeftShopAdmin {
+    width: 30%;
+    .myShops {
+        display: block;
+        width: 40%;
+        padding: 4px 0px 0 10px;
+        height: 100%;
+        color: #e2e2e2;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .myShops:hover {
+        color: #FFAC00;
+    }
+    .topMenuShopLeft {
+        color: #e2e2e2;
+    }
+    .shop_menuLeftDisactive {
+        display: none;
+    }
+    .shop_menuLeftActive {
+        position: absolute;;
+        color: #e2e2e2;
+        background-color: #282828;
+        border-radius: 0px 8px 8px 8px;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        .shopItemMenuLeft {
+            display: block;
+            min-width: 150px;
+            max-width: 250px;
+            // margin: 5px;
+            padding: 11px;
+            cursor: pointer;
+            border-bottom: 1px solid black;
+        }
+        .shopItemMenuLeft:hover {
+            display: block;
+            border-radius: 8px;
+            background-color: #454545;
+        }
+    }
+}
+.wrapTopNavRightShopAdmin {
+    width: 30%;
+    .menu_icon {
+        width: 10%;
+        height: 100%;
+        display: flex;
+        margin-left: auto;
+        padding: 0px 10px 11px 5px;
+        justify-content: space-between;;
+        cursor: pointer;
+        .icon {
+            display: inline;
+            margin-top: 4px;
+            margin-left: auto;
+            color: #e2e2e2;
+        }
+    }
+    .shop_menuRightActive {
+        position: relative;
+        width: 20px;
+        margin-left: auto;
+        .wrap_menu_options {
+            position: absolute;
+            top: 100%;
+            right: 0px;
+            background-color: #282828;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+            border-radius: 8px 0 8px 8px;
+            padding: 5px 0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            z-index: 8888;
+            min-width: max-content;
+            .li {
+                display: flex;
+                padding: 8px;
+                border-radius: 8px;
+                border-bottom: 1px solid black;
+                color: #e2e2e2;
+                cursor: pointer;
+                img {
+                    width: 30px;
+                }
+                .basketImgNavUserAdmin {
+                    // width: 20px;
+                    // height: 20px;
+                    margin: 0px 10px 0px 0px;
+                }
+                strong {
+                    margin: 5px 10px;
+                    min-width: 150px;
+                    max-width: 250px;
+                }
+            }
+            .li:hover {
+                border-radius: 8px;
+                background-color: #454545;
+            }
+        }
+    }
+    .shop_menuRightDisactive {
+        display: none;
+    }
+}

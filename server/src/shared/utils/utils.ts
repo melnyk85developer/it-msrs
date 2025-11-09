@@ -1,6 +1,7 @@
 import { BLOGS_INTERNAL_STATUS } from "src/modules/bloggers-platform/blogs/internal-status-blogs-errors/blogs-etatus"
 import { COMMENT_INTERNAL_STATUS } from "src/modules/bloggers-platform/comments/internal-status-comments-errors/comment-status"
 import { POSTS_INTERNAL_STATUS } from "src/modules/bloggers-platform/posts/internal-status-posts-errors/posts-status"
+import { AUTH_INTERNAL_STATUS } from "src/modules/user.accounts/internal-status-users-errors/authStatus"
 import { USERS_INTERNAL_STATUS } from "src/modules/user.accounts/internal-status-users-errors/users-status"
 
 export const HTTP_STATUSES = {
@@ -18,7 +19,7 @@ type HttpStatusKeys = keyof typeof HTTP_STATUSES
 export type HttpStatusType = (typeof HTTP_STATUSES)[HttpStatusKeys]
 
 export const INTERNAL_STATUS_CODE = {
-    // ...AUTH_INTERNAL_STATUS,
+    ...AUTH_INTERNAL_STATUS,
     // ...SESSIONS_INTERNAL_STATUS,
     ...USERS_INTERNAL_STATUS,
     ...BLOGS_INTERNAL_STATUS,

@@ -1,0 +1,36 @@
+.wrappContentNavbarSettings {
+    width: 100%;
+    padding: 1px;
+    border: 1px solid #101010;
+    border-radius: 8px;
+    height: auto;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Standard syntax */
+    .title_nav {
+        h3{
+            display: block;
+            padding: 6px;
+            border: 1px solid #101010;
+            border-radius: 8px;
+            color: #FFAC00;
+            font-size: 15px;
+            font-weight: 900;
+            text-align: center;
+        }
+    }
+    .ul {
+        display: block;
+        margin-top: 1px;
+        padding: 6px;
+        border: 1px solid black;
+        border-radius: 8px;
+        min-height: 200px;
+        li{
+            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: 900;
+        }
+    }
+}

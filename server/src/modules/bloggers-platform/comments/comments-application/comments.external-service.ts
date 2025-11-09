@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';;
-import * as commentsEntity from '../comments-domian/comments.entity';
+import * as commentsEntity from '../comments-domain/comments.entity';
 import { CommentsRepository } from '../comments-infrastructure/comments.repository';
 
 @Injectable()

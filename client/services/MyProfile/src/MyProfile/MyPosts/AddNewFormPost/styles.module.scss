@@ -1,0 +1,110 @@
+.wrapMyPost {
+    min-height: 30px;
+    max-height: auto;
+    width: 100%;
+    margin-bottom: 2px;
+    padding: 15px;
+    border-bottom: 1px solid black;
+    .wrapInputFormPost {
+        display: flex;
+        justify-content: space-between;
+        // border: 1px solid red;
+        .inputPostProfile {
+            padding: 2px 0 0 10px;
+            width: 100%;
+            height: 30px;
+            color: #e2e2e2;
+            // border: 1px solid #5B5B5B;
+            border: 1px solid black;
+            border-radius: 8px;
+            background: #282828;
+            font-size: 20px;
+            // text-align: center;
+            text-shadow: -2px -1px 1px #000000;
+            outline: 0;
+        }
+        .inputPostProfile:focus {
+            border: 1px solid #FEA930;
+            box-shadow: inset 0 0 7px rgba(00, 00, 00, 0.95);
+            background-color: #292929;
+            box-shadow: 0px 0px 0px rgba(000, 000, 000, 0.09), inset -3px -3px 1px rgba(10, 10, 10, 0.75), inset 3px 3px 3px rgba(0, 0, 0, 0.75);
+            outline: 0;
+        }
+
+    }
+}
+.wrapModalAddPost {
+    min-width: 400px;
+    max-width: 100%;
+    // border: 1px solid red;
+    .headerModalAddPost {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        h2 {
+            width: 100%;
+            text-align: center;
+            // border: 1px solid red;
+        }
+        .closedModalIcon {
+            margin-left: auto;
+        }
+    }
+    .wrapTitleInputModalPost {
+        width: 100%;
+        height: auto;
+        .inputTitleModalPostProfile {
+            width: 100%;
+            min-height: 35px;
+            margin: 5px 0 10px;
+            border-radius: 8px;
+        }
+    }
+    .wrapTextAreaModalPost {
+        width: 100%;
+        height: auto;
+        .inputTextModalPostProfile {
+            width: 100%;
+            min-height: 100px;
+            margin: 5px 0;
+            border-radius: 8px;
+        }
+    }
+    .wrapFileblock {
+        // border: 1px solid red;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        .fileBlock {
+            display: flex;
+            max-width: 200px;
+            // border: 1px solid red;
+            img {
+                margin: 10px 5px 10px 0px;
+                width: 30px;
+                height: auto;
+                // border: 1px solid red;
+            }
+            strong {
+                margin-top: 15px;
+                text-align: center;
+                // border: 1px solid red;
+            }
+        }
+        .fileNameImg {
+            width: 50%;
+            margin-top: 15px;
+            margin-left: auto;
+            // border: 1px solid red;
+        }
+        .cleanButton {
+            width: 20%;
+            color: #e2e2e2;
+            background-color: rgb(223, 9, 9);
+        }
+    }
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

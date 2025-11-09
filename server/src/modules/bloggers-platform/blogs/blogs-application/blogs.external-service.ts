@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';;
-import * as blogsEntity from '../blogs-domian/blog.entity';
+import * as blogsEntity from '../blogs-domain/blog.entity';
 import { BlogsRepository } from '../blogs-infrastructure/blogs.repository';
 
 @Injectable()

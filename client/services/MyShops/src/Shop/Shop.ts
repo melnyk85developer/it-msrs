@@ -1,0 +1,1 @@
+export {LazyShop as Shops} from './Shop.lazy'

@@ -1,0 +1,1 @@
+export {LazyMyProfile as MyProfile} from './MyProfile.lazy'

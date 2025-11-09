@@ -1,0 +1,131 @@
+:root {
+/**
+=================== DARK THEME ====================================================
+*/
+    --dark-header-background-color: rgb(28, 28, 28);
+    --dark-header-gradient-color-1: rgba(28, 28, 28, 1);
+    --dark-header-gradient-color-2: rgba(69, 69, 69, 1);
+    --dark-header-gradient-color-3: rgba(53, 53, 53, 0.9920343137254902);
+    --dark-header-gradient-color-4: rgba(40, 40, 40, 1);
+
+    --dark-b-stroka-background-color-chrome: -webkit-gradient(linear, left top, left bottom, color-stop(0.03, #252525), color-stop(1.5, #080808));
+    --dark-b-stroka-background-color: linear-gradient(to bottom, #252525 3%, #080808 150%); /* стандартный синтаксис градиента */
+
+    --dark-LSidebar-background-image: url('~@packages/shared/src/assets/sidebar/L_Top_Sidebar.png') no-repeat top left,
+                                      url('~@packages/shared/src/assets/sidebar/R_Top_Sidebar.png') no-repeat top right,
+                                      url('~@packages/shared/src/assets/sidebar/Top_center_Sidebar.png') repeat-x top center,
+                                      url('~@packages/shared/src/assets/sidebar/L_Bottom_Sidebar.png') no-repeat bottom left,
+                                      url('~@packages/shared/src/assets/sidebar/R_Bottom_Sidebar.png') no-repeat bottom right,
+                                      url('~@packages/shared/src/assets/sidebar/bottom_center_Sidebar.png') repeat-x bottom center,				
+                                      url('~@packages/shared/src/assets/sidebar/L_center_Sidebar.png') repeat-y left center,
+                                      url('~@packages/shared/src/assets/sidebar/R_center_Sidebar.png') repeat-y right center,
+                                      #252525;
+    --dark-RSidebar-background-image: url('~@packages/shared/src/assets/sidebar/L_Top_Sidebar.png') no-repeat top left,
+                                      url('~@packages/shared/src/assets/sidebar/R_Top_Sidebar.png') no-repeat top right,
+                                      url('~@packages/shared/src/assets/sidebar/Top_center_Sidebar.png') repeat-x top center,
+                                      url('~@packages/shared/src/assets/sidebar/L_Bottom_Sidebar.png') no-repeat bottom left,
+                                      url('~@packages/shared/src/assets/sidebar/R_Bottom_Sidebar.png') no-repeat bottom right,
+                                      url('~@packages/shared/src/assets/sidebar/bottom_center_Sidebar.png') repeat-x bottom center,				
+                                      url('~@packages/shared/src/assets/sidebar/L_center_Sidebar.png') repeat-y left center,
+                                      url('~@packages/shared/src/assets/sidebar/R_center_Sidebar.png') repeat-y right center,
+                                      #252525;
+    --dark-footer-background-image:  url('~@packages/shared/src/assets/sidebar/L_Top_Sidebar.png') no-repeat top left,
+                                      url('~@packages/shared/src/assets/sidebar/R_Top_Sidebar.png') no-repeat top right,
+                                      url('~@packages/shared/src/assets/sidebar/Top_center_Sidebar.png') repeat-x top center,
+                                      url('~@packages/shared/src/assets/sidebar/L_Bottom_Sidebar.png') no-repeat bottom left,
+                                      url('~@packages/shared/src/assets/sidebar/R_Bottom_Sidebar.png') no-repeat bottom right,
+                                      url('~@packages/shared/src/assets/sidebar/bottom_center_Sidebar.png') repeat-x bottom center,				
+                                      url('~@packages/shared/src/assets/sidebar/L_center_Sidebar.png') repeat-y left center,
+                                      url('~@packages/shared/src/assets/sidebar/R_center_Sidebar.png') repeat-y right center,
+                                      #252525;   
+
+    
+    --dark-fon-plus-miniature-photo-image: '../../../packages/shared/src/assets/fonAvatars.png';
+    
+
+
+    --dark-theme-text-color: #e2e2e2;
+
+    --dark-theme--webkit-scrollbar: #282828;
+
+	--dark-theme-footer-text-color: #e2e2e2;
+
+    --dark-AppContent-background: #202020;
+
+/**
+=================== LIGHT THEME ===================================================
+*/
+
+    --light-header-background-color: #009efd;
+
+    --light-b-stroka-background-color-chrome: #009efd;
+    --light-b-stroka-background-color: #009efd;
+
+    --light-top-menu-background-color-chrome: #009efd;;
+    --light-top-menu-background-color: #009efd;;
+
+    --light-LSidebar-background: #009efd; 
+    --light-Avatar-sahta-background: #009efd;
+
+
+
+    --light-RSidebar-background: #009efd;
+
+
+    --light-AppContent-background: #d4d4b1;
+
+	--light-theme-text-color: black;
+
+    --light-theme--webkit-scrollbar: #d4d4b1;
+
+    --light-wrap-footer-background-color: #009efd;
+    --light-footer-background-color: #009efd;
+	
+    --light-footer-text-color: black;
+
+    /**
+    	text-shadow: -3px -2px 1px #000000;
+
+
+    .scrollbar-track-x,
+    .scrollbar-thumb-x {
+        height: 8px !important;
+    }
+    .scrollbar-track-y,
+    .scrollbar-thumb-y {
+        width: 3px !important;
+    }
+    .scrollbar-track {
+        background: red ;
+    
+    }
+    .scrollbar-thumb {
+        background: red;
+    }
+    */
+}
+
+
+
+/**
+крем  --light-header-background-color: linear-gradient(to right, #c1c161 0%, #c1c161 0%, #d4d4b1 100%);
+
+        --light-header-background-color: radial-gradient(circle at -0.2% 48.9%, rgb(32, 233, 104) 0%, rgb(13, 167, 236) 99.8%);
+        --light-header-background-color: linear-gradient(112.2deg, rgb(0, 204, 255) -1.1%, rgb(0, 221, 61) 100.7%);
+
+        --light-header-background-color: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
+        --light-header-background-color: linear-gradient(107deg, rgb(13, 198, 180) 8.1%, rgb(33, 198, 138) 79.5%);
+
+        --light-header-background-color-chrome: -webkit-gradient(linear, left top, left bottom, from(#0ba360), to(#3cba92));
+        --light-header-background-color: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+
+серый   --light-AppContent-background: linear-gradient(-20deg, #616161 0%, #9bc5c3 100%);
+
+        --light-b-stroka-background-color-chrome: -webkit-gradient(linear, left top, left bottom, from(#0ba360), to(#3cba92));
+        --light-b-stroka-background-color: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+
+        --light-top-menu-background-color-chrome: -webkit-gradient(linear, left top, left bottom, from(#0ba360), to(#3cba92));
+        --light-top-menu-background-color: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+
+нион    --light-wrap-footer-background-color: radial-gradient(circle at 49.8% 44.4%, rgb(251, 230, 59) 0%, rgb(161, 255, 63) 90%);
+*/

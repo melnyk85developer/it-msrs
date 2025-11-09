@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery } from 'mongoose';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
-import { Post, PostDocument, type PostModelType } from '../../../posts-domian/post.entity';
+import { Post, PostDocument, type PostModelType } from '../../../posts-domain/post.entity';
 import { PostViewDto } from '../../../posts-api/posts-view-dto/posts.view-dto';
 import { GetPostsQueryParams } from '../../../posts-api/posts-input-dto/get-posts-query-params.input-dto';
 import { CreatePostDto } from '../../../posts-dto/create-post.dto';

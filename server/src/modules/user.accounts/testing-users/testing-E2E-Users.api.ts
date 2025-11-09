@@ -64,7 +64,7 @@ export const usersE2eTest = () => {
                 HTTP_STATUSES.CREATED_201
             )
             contextTests.createdUser1 = createdEntity
-            console.log('TEST: contextTests.createdUser1 😡 ', contextTests.createdUser1)
+            // console.log('TEST: contextTests.createdUser1 😡 ', contextTests.createdUser1)
 
             // const authData = {
             //     loginOrEmail: contextTests.correctUserEmail1,

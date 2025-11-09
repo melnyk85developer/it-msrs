@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Comment, type CommentModelType } from '../comments-domian/comments.entity';
+import { Comment, type CommentModelType } from '../comments-domain/comments.entity';
 import { CreateCommentDto, UpdateCommentDto } from '../comments-dto/create-comments.dto';
 import { CommentsRepository } from '../comments-infrastructure/comments.repository';
 
@@ -11,40 +11,21 @@ export class CommentsService {
         private commentsRepository: CommentsRepository
     ) { }
 
-    async createCommentService(dto: Omit<CreateCommentDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<string> {
-        const date = new Date();
-        const createdAt = date.toISOString();
-        const updatedAt = date.toISOString();
-        // console.log('CommentsService: createCommentService - dto 😡 ', dto)
+    async createCommentService(dto: Omit<CreateCommentDto, 'commentatorInfo'>): Promise<string> {
         const commentData = {
             ...dto,
             commentatorInfo: {
                 userId: '123',
                 userLogin: 'MrRobot'
-            },
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            deletedAt: null
+            }
         }
-
-        const comment = this.CommentModel.createInstance(commentData);
-
+        const comment = this.CommentModel.createCommentInstance(commentData);
         await this.commentsRepository.save(comment);
         return comment._id.toString();
     }
-    async updateCommentService(id: string, dto: Omit<UpdateCommentDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<string> {
+    async updateCommentService(id: string, dto: Omit<UpdateCommentDto, 'updatedAt'>): Promise<string> {
         const comment = await this.commentsRepository.findCommentOrNotFoundFailRepository(id);
-        const date = new Date();
-        const createdAt = date.toISOString();
-        const updatedAt = date.toISOString();
-        // не присваиваем св-ва сущностям напрямую в сервисах! даже для изменения одного св-ва
-        // создаём метод
-        comment.update({
-            ...dto,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            deletedAt: null
-        }); // change detection
+        comment.update(dto);
         await this.commentsRepository.save(comment)
         return comment._id.toString();
     }

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { Blog, BlogSchema } from "./blogs-domian/blog.entity";
+import { Blog, BlogSchema } from "./blogs-domain/blog.entity";
 import { BlogsRepository } from "./blogs-infrastructure/blogs.repository";
 
 @Module({

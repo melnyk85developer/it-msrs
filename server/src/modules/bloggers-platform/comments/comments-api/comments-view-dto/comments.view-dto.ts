@@ -1,4 +1,4 @@
-import { CommentDocument } from "../../comments-domian/comments.entity";
+import { CommentDocument } from "../../comments-domain/comments.entity";
 
 export class CommentViewDto {
     id: string;

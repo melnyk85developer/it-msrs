@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { PostDocument } from "../../posts-domian/post.entity";
+import { PostDocument } from "../../posts-domain/post.entity";
 
 export class PostViewDto {
     id: string;

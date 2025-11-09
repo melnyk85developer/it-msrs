@@ -1,0 +1,142 @@
+.wrapContentRessedPassword {
+    width: 100%;
+    margin: 3px auto 0;
+    padding: 10px;
+    .contentRessedPassword {
+        border: 1px solid black;
+        padding: 10px;
+        min-height: 84vh;
+        h2 {
+            text-align: center;
+            color: #ff6600;
+            font-weight: 550;
+            font-family: "courier new", verdana ;
+        }
+        .wrapTitle {
+            // border: 1px solid red;
+            min-height: 24vh;
+            margin: 20px 0;
+            font-size: 17px;
+            font-weight: 100;
+            font-family: "courier new", verdana ;
+            color: wheat;
+            .wrapPunktTitle {
+                display: flex;
+            }
+            p {
+                margin: 0 0 10px 10px;
+            }
+        }
+        .wrapMessage {
+            margin-bottom: 10px;
+            min-height: 22px;
+            // padding: 10px;
+            // border: 1px solid black;
+            border-radius: 5px;
+            .h3ErrorsMessage {
+                display: inline;
+                // margin-left: 22%;
+                margin-left: 20px;
+                text-align: l;
+                font-size: 20px;
+                color: red;
+                font-weight: 500;
+                font-family: "courier new", verdana ;
+            }
+            .h3Sucsess {
+                display: inline;
+                min-height: 20px;
+                // margin-left: 30%;
+                text-align: l;
+                font-size: 20px;
+                color: green;
+                font-weight: 500;
+                font-family: "courier new", verdana ;
+            }
+        }
+        .formRessetPassord {
+            margin: 0 auto;
+            width: 70%;
+            .label {
+                width: 70%;
+                color: #ff6600; 
+                display: block;
+                margin: 0 auto 2px 3px;
+                font-size: 14px;
+                font-weight: 200;
+                font-family: "courier new"
+            }
+            .inputWrapper {
+                position: relative; /* Для позиционирования иконки относительно обертки */
+                display: flex;
+                align-items: center; /* Выравнивание по вертикали */
+            
+                input {
+                    width: 100%; /* Растянуть инпут на всю ширину */
+                    padding-right: 40px; /* Добавляем отступ справа для иконки */
+                    padding: 7px 10px;
+                    border: 1px solid black;
+                    background-color: #282828;
+                    color: wheat;
+                    border-radius: 5px;
+                    font-size: 15px;
+                    font-weight: 100;
+                    outline: none;
+                    transition: all 0.3s ease;
+                }
+            
+                .icon {
+                    position: absolute; /* Абсолютное позиционирование иконки */
+                    right: 10px; /* Отступ справа от края инпута */
+                    cursor: pointer; /* Добавляем указатель мыши при наведении */
+                    color: wheat; /* Цвет иконки */
+                }
+            
+                input:focus {
+                    border-color: wheat;
+                }
+            
+                input:-webkit-autofill {
+                    background-color: #282828 !important;
+                    color: wheat !important;
+                }
+            
+                input:-webkit-autofill:hover,
+                input:-webkit-autofill:focus {
+                    background-color: #282828 !important;
+                    color: wheat !important;
+                }
+            }
+            
+            .button {
+                display: block;
+                width: 100%;
+                margin-top: 15px;
+                padding: 7px 10px;
+                border: 1px solid black;
+                background-color: #282828;
+                color: wheat;
+                font-size: 15px;
+                font-weight: 100;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        }
+        .bottomSection {
+            margin-top: 10px;
+            // border: 1px solid black;
+            button {
+                display: block;
+                margin: 0 auto;
+                padding: 7px 10px;
+                border: 1px solid black;
+                background-color: #282828;
+                color: wheat;
+                font-size: 15px;
+                font-weight: 100;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        }
+    }
+}

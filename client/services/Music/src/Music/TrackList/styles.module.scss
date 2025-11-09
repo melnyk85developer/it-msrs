@@ -1,0 +1,28 @@
+.playlist {
+    overflow: auto;
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: var(--dark-theme--webkit-scrollbar);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #303030;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #282828;
+        border-radius: 9em;
+        box-shadow: inset 1px 1px 10px #757575;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    /* Специфичные стили для полосы прокрутки в Firefox */
+    @-moz-document url-prefix() {
+        & {
+            scrollbar-width: thin;
+            scrollbar-color: #181818 #353535;
+        }
+    }
+}

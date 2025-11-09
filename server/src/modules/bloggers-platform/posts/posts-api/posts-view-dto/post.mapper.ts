@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users-external-query/users-query-repository/users.query-repository";
-import { PostDocument } from "../../posts-domian/post.entity";
+import { PostDocument } from "../../posts-domain/post.entity";
 import { PostExtendedViewDto } from "./post-extended-view.dto";
 import { PostViewDto } from "./posts.view-dto";
 

@@ -9,9 +9,10 @@ import { UserAccountsModule } from './modules/user.accounts/user-accounts.module
     imports: [
         MongooseModule.forRoot('mongodb://localhost/it-mars'),
         UserAccountsModule,
-        TestingModule,
         BloggersPlatformModule,
+        TestingModule,
         CoreModule,
+        // NotificationsModule,
     ]
 })
 export class AppModule { }

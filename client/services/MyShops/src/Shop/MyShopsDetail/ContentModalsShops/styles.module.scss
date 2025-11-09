@@ -1,0 +1,161 @@
+.addFormType {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #9c9797;
+    border-radius: 8px;
+    h1 {
+        margin: 15px 0;
+        text-align: center;
+        color: #FFAC00;
+    }
+    h3 {
+        margin: 15px 0 0 0;
+        text-align: center;
+    }
+    .wrapButtonAddFormType {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .buttonClean {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            margin-right: 5px;
+            width: 100%;
+            background-color: #282828;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .buttonAdd {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            margin-left: 5px;
+            width: 100%;
+            background-color: #282828;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .buttonClean span, 
+        .buttonAdd span {
+            display: inline-block;
+          }
+        .buttonAdd:hover, 
+        .buttonClean:hover {
+            color: #e2e2e2;
+            background-color: #484848;
+        }
+    }
+    .buttonAddForm {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        padding: 10px;
+        width: 100%;
+        color: #e2e2e2;
+        background-color: #282828;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        cursor: pointer;
+        svg {
+            margin-right: 5px;
+        }
+    }
+    .buttonAddForm:hover {
+        background-color: #484848;
+    }
+    .wrapSelect {
+        display: flex;
+        justify-content: space-between;
+        width: auto;
+        height: 30px;
+        margin: 20px 0 10px;
+        z-index: 9999;
+        select {
+            padding: 0 5px;
+            border-radius: 8px;
+            color: #e2e2e2;
+            background-color: #282828;
+        }
+    }
+    .inputBlock {
+        .addFormTypeInput {
+            margin: 5px auto;
+            padding: 6px;
+            width: 100%;
+            color: #e2e2e2;
+            background-color: #282828;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .wrapFileBlock {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            // border: 1px solid red;
+            .fileBlock {
+                display: flex;
+                cursor: pointer;
+                img {
+                    margin-right: 5px;
+                }
+                strong {
+                    display: block;
+                    margin: auto auto;
+                }
+            }
+            .fileNameImg {
+                display: block;
+                margin: auto auto;
+            }
+        }
+    }
+
+    .propertyField {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0 0;
+        .addPropertyInput {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 5px;
+            padding: 6px;
+            width: 100%;
+            color: #e2e2e2;
+            background-color: #282828;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+    }
+    .addFormTypeInput::placeholder, 
+    .addPropertyInput::placeholder {
+        color: #9c9797;
+    }
+
+    /* Для Mozilla Firefox */
+    ::-moz-placeholder {
+        color: #9c9797;
+    }
+
+    /* Для Internet Explorer 10+ */
+    :-ms-input-placeholder {
+        color: #9c9797;
+    }
+
+    /* Для старых версий Mozilla Firefox */
+    :-moz-placeholder {
+        color: #9c9797;
+    }
+
+    /* Для WebKit браузеров (Chrome, Safari) */
+    ::-webkit-input-placeholder {
+        color: #9c9797;
+    }
+}

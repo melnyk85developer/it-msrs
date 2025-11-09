@@ -22,12 +22,12 @@ export class CreatePostDto {
     @IsString({ message: 'blogId должно быть строкой!' })
     blogId: string;
 
-    @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
-    createdAt: string;
-    @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
-    updatedAt: string;
-    @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
-    deletedAt: string | null;
+    // @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
+    // createdAt: string;
+    // @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
+    // updatedAt: string;
+    // @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
+    // deletedAt: string | null;
 }
 export class CreatePostForBlogDto {
     @ApiProperty({ example: 'title', description: 'Заголовок поста!' })
@@ -46,12 +46,12 @@ export class CreatePostForBlogDto {
     @Length(3, 8000, { message: 'Поле content должно быть не менее 3 и не более 8000 символов!' })
     readonly content: string;
 
-    @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
-    createdAt: string;
-    @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
-    updatedAt: string;
-    @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
-    deletedAt: string | null;
+    // @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
+    // createdAt: string;
+    // @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
+    // updatedAt: string;
+    // @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
+    // deletedAt: string | null;
 }
 
 export class UpdatePostDto {
@@ -77,16 +77,16 @@ export class UpdatePostDto {
     // @IsString({ message: 'blogName должно быть строкой!' })
     // @IsNotEmpty({ message: 'Поле blogName не должно быть пустым!' })
     // blogName: string;
-    @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
-    @IsString({ message: 'createdAt должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле createdAt не должно быть пустым!' })
-    createdAt: string;
-    @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
-    @IsString({ message: 'updatedAt должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле updatedAt не должно быть пустым!' })
-    updatedAt: string;
-    @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
-    @IsString({ message: 'deletedAt должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле deletedAt не должно быть пустым!' })
-    deletedAt: string | null;
+    // @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
+    // @IsString({ message: 'createdAt должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле createdAt не должно быть пустым!' })
+    // createdAt: string;
+    // @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
+    // @IsString({ message: 'updatedAt должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле updatedAt не должно быть пустым!' })
+    // updatedAt: string;
+    // @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
+    // @IsString({ message: 'deletedAt должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле deletedAt не должно быть пустым!' })
+    // deletedAt: string | null;
 }

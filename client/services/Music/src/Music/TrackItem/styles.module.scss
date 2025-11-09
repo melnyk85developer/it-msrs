@@ -1,0 +1,129 @@
+.trackActive {
+    border-top: 1px solid aqua;
+    border-bottom: 1px solid aqua;
+    background-color: #181818;
+    color: aqua;
+}
+.clickTrack {
+    background-color: #505050;
+}
+.wrapTrackItem {
+    // border: 1px solid red;
+    width: 100%;
+    max-width: 735px;
+    margin-top: 0px;
+    padding: 10px;
+    justify-content: space-between;
+    border-top: 1px solid #000;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    .trackItem {
+        display: flex;
+        justify-content: space-between;
+        .nameBlockItemTrack {
+            display: flex;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            .playerButton {
+                margin-right: 10px;
+                background-color: #282828;
+                color: aqua
+            }
+            .trackName {
+                margin-top: 3px;
+                /* Запрещаем перенос слов на новую строку */
+                white-space: nowrap;
+                /* Обрезаем текст, который не помещается в блок */
+                overflow: hidden;
+                /* Добавляем эффект, когда текст обрезается */
+                text-overflow: ellipsis; /* Добавляет многоточие (...) в конце обрезанного текста */
+            }
+        }
+        .trackDuration {
+            padding-top: 3px;
+            height: 21px;
+        }
+    }
+}
+.wrapTrackItem:hover {
+    background-color: #404040;
+}
+.iconBlockItemTrack {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10px;
+    .viewsTrack {
+        justify-content: left;
+        .viewsIconTrack {
+            margin-right: 5px;
+        }
+    }
+    .likeddislikedBlock {
+        display: flex;
+        margin-left: auto;
+        .likeTrack {
+            width: 66px;
+            .likeIconTrack {
+                margin-right: 5px;
+            }
+        }
+        .dislikeTrack {
+            width: 65px;
+            margin-left: auto;
+            .dislikeIcon {
+                margin-right: 5px;
+            }
+        }
+    }
+    .commentsTrack {
+        justify-content: center;
+        margin-left: auto;
+        .commentsIcon {
+            margin-right: 5px;
+        }
+    }
+    .deleteTrack {
+        justify-content: right;
+        margin-left: auto;
+    }
+}
+.trackModal {
+    margin-top: 10px;
+    display: flex;
+}
+.wrapTextItemComment, 
+.wrapTextItemComment h2 {
+    margin: 5px 0 0 10px;
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+}
+.headModalComments {
+    display: flex;
+    justify-content: space-between;
+    .iconClosedComments {
+        margin-left: auto;
+    }
+}
+.blockInputComments {
+    position: relative;
+    left: 0;
+    top: 10px;
+}
+
+.trackFormCommentBlock {
+    margin-top: 20px;
+    height: 500px;
+    overflow: scroll;
+    overflow-x:hidden; 
+    scrollbar-color: #757575 #959595;
+    scrollbar-width: auto;
+}
+.trackFormCommentBlock h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,164 @@
+.wrapDetailDevice {
+    height: auto;
+
+    .headerDetailDevice {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .wrapNameRatingDetailDevice {
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение элементов */
+            margin-right: 20px;
+            padding: 15px 10px;
+            min-width: 300px;
+            width: 33%;
+            min-height: 300px;
+            max-height: 400px;
+            border: 1px solid #9c9797;
+            border-radius: 8px;
+            .deviceDetailName {
+                h4 {
+                    font-size: 22px;
+                    text-align: center;
+                }
+            }
+
+            .wrapDeviceDetailRating {
+                margin-top: auto;
+                width: 100%;
+                .deviceDetailRatingNumber {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 50px;
+                    strong {
+                        display: block;
+                        margin: 0 auto;
+                        font-size: 30px;
+                        text-align: center;
+                    }
+                }
+                .wrapStarRaiting {
+                    display: flex;
+                    justify-content: space-between;
+                    img {
+                        width: 50px;
+                        // margin-left: auto;
+                    }
+                }
+            }
+        }
+
+        .blockImgDevice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 300px;
+            width: 33%;
+            max-height: 400px;
+            overflow: hidden; /* Чтобы скрыть части изображения, выходящие за границы блока */
+            border-radius: 8px;
+            margin-right: 20px;
+
+            img {
+                max-width: 400px;
+                max-height: 400px;
+                object-fit: contain; /* Сохранение пропорций изображения */
+                display: block;
+                border-radius: 8px;
+            }
+        }
+
+        .wrapBasketDetailDevice {
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение элементов */
+            min-width: 300px;
+            width: 33%;
+            min-height: 300px;
+            max-height: 400px;
+            padding: 15px 10px;
+            border: 1px solid #9c9797;
+            border-radius: 8px;
+
+            .headerBasketDetailDevice {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                h4 {
+                    margin-left: 5px;
+                    text-align: center;
+                }
+                .loadingDisabled {
+                    display: none;
+                }
+                .loadingActive {
+                    color: rgb(0, 255, 0);
+                    margin: 2px 20px 0 0;
+                }
+                .addedDisabled {
+                    display: none;
+                }
+                .addedActive {
+                    strong {
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            img {
+                width: 150px;
+                display: block;
+            }
+            .numberOfPiecesInput {
+                color: #e2e2e2;
+                background-color: #282828;
+                border: 1px solid black;
+            }
+            h4 {
+                margin-bottom: 8px;
+            }
+            .addЕoСart {
+                margin-top: auto;
+                padding: 5px;
+                background-color: #282828;
+                border: 1px solid black;
+                border-radius: 8px;
+                cursor: pointer;
+
+                strong {
+                    display: block;
+                    padding: 5px;
+                    text-align: center;
+                }
+            }
+
+            .addЕoСart:hover {
+                color: black;
+                background-color: rgb(27, 110, 219);
+            }
+        }
+    }
+
+    .сharacteristicsDetailDevice {
+        width: auto;
+        min-height: 30vh;
+        max-height: 52vh;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #9c9797;
+        border-radius: 8px;
+
+        h1 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .descriptionCharacteristicsDetailDevice {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+    }
+}

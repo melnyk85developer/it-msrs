@@ -46,11 +46,6 @@ export class PostsController {
     async createCommentForPostController(@Body() body: CreateCommentInputDto): Promise<CommentViewDto> {
         // console.log('PostsController: createCommentForPostController - body 😡 ', body)
         const commentId = await this.commentsService.createCommentService(body);
-        // console.log('PostsController: createCommentForPostController - commentId 😡 ', commentId)
-        // console.log('PostsController: createCommentForPostController - commentId 😡 ', commentId)
-        // console.log('PostsController: createCommentForPostController - commentId 😡 ', commentId)
-        // console.log('PostsController: createCommentForPostController - commentId 😡 ', commentId)
-        // console.log('PostsController: createCommentForPostController - commentId 😡 ', commentId)
 
         return this.commentsQueryRepository.getCommentByIdOrNotFoundFailRepository(commentId);
     }

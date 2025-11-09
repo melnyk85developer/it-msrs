@@ -1,0 +1,126 @@
+.wrapFinishRegistration {
+    width: 100%;
+    margin: 3px auto 0;
+    padding: 10px;
+    .wrapMessage {
+        border: 1px solid black;
+        padding: 10px;
+        .wrapTitle {
+            font-size: 17px;
+            font-weight: 100;
+            font-family: "courier new", verdana;
+            color: wheat;
+            h2 {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            p {
+                margin-bottom: 3px;
+            }
+            .errorMessages {
+                p {
+                    strong {
+                        font-weight: 500;
+                        color: rgb(230, 0, 0);
+                    }
+                }
+            }
+            .message{
+                display: block;
+                color: wheat;
+                // margin: 0 auto 5px 10px;
+                font-size: 18px;
+                strong {
+                    margin: 0 auto 10px 10px;
+                    color: rgb(4, 153, 4);
+                }
+            }
+            .conclusionMessage {
+                font-size: 19px;
+                color: #ff6600;
+                .pAfter {
+                    // color: wheat;
+                    color: #ff6600;
+                }
+                .pBefore {
+                    color: wheat;
+                }
+            }
+        }
+        .wrapButtonSendSMS {
+            .timerBlock {
+                // margin: 10px 0;
+                // border: 1px solid black;
+                min-height: 60px;
+                color: wheat;
+                text-align: center;
+                font-size: 16px;
+                font-weight: 100;
+                font-family: "Courier New", Verdana;
+                strong {
+                    display: inline-block;
+                    font-size: 55px;
+                    text-align: center;
+                    color: rgb(161, 3, 3);
+                }
+            }
+            .bottom {
+                display: block;
+                width: 50%;
+                margin: 10px auto 0;
+                padding: 4px 10px;
+                background-color: #282828;
+                color: wheat;
+                border-radius: 6px;
+            }
+        }
+        .wrapWarningMessage {
+            margin-top: 10px;
+            color: wheat;
+            font-family: "courier new", verdana;
+            h2{
+                text-align: center;
+                color: rgb(216, 1, 1);
+                font-weight: normal;
+                margin-bottom: 10px;
+            }
+            .warningMessage {
+                font-size: 16px;
+                p {
+                    margin: 5px 0 0 0;
+                }
+                p span {
+                    margin: 0 0 0 0px;  
+                }
+                strong {
+                    // color: rgb(241, 4, 4);
+                    margin-left: 5px;
+                }
+            }
+
+            .bottomSection {
+                .bottomLeftTitlte {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 10px;
+                    width: 100%;
+                    strong {
+                        font-size: 13px;
+                        color: #ff6600;
+                    }
+                    .navLink {
+                        width: 50%;
+                    }
+                    .bottom {
+                        width: 100%;
+                        padding: 4px 10px;
+                        background-color: #282828;
+                        color: wheat;
+                        border-radius: 6px;
+                        margin-left: auto;
+                    }
+                }
+            }
+        }
+    }
+}

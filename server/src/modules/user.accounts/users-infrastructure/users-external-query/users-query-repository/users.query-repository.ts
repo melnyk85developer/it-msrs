@@ -4,8 +4,8 @@ import { FilterQuery } from 'mongoose';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { GetUsersQueryParams } from 'src/modules/user.accounts/users-api/input-dto-users/get-users-query-params.input-dto';
 import { UserViewDto } from 'src/modules/user.accounts/users-api/view-dto-users/users.view-dto';
-import { User } from 'src/modules/user.accounts/users-domian/user.entity';
-import type { UserModelType } from 'src/modules/user.accounts/users-domian/user.entity';
+import { User } from 'src/modules/user.accounts/users-domain/user.entity';
+import type { UserModelType } from 'src/modules/user.accounts/users-domain/user.entity';
 
 @Injectable()
 export class UsersQueryRepository {

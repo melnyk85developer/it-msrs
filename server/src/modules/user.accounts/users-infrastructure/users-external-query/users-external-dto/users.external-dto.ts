@@ -1,4 +1,4 @@
-import { UserDocument } from "src/modules/user.accounts/users-domian/user.entity";
+import { UserDocument } from "src/modules/user.accounts/users-domain/user.entity";
 
 export class UserExternalDto {
     id: string;
@@ -9,10 +9,10 @@ export class UserExternalDto {
     static mapToView(user: UserDocument): UserExternalDto {
         const dto = new UserExternalDto();
 
-        dto.email = user.email;
-        dto.login = user.login;
+        dto.email = user.accountData.email;
+        dto.login = user.accountData.userName;
         dto.id = user._id.toString();
-        dto.createdAt = user.createdAt;
+        dto.createdAt = user.accountData.createdAt;
 
         return dto;
     }

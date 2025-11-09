@@ -23,12 +23,12 @@ export class CreateBlogDto {
     // @IsNotEmpty({ message: 'Поле userId не должно быть пустым!' })
     // @Length(1, 60, { message: 'Длина userId должена быть не меньше 1 и не больше 60 символов!' })
     userId: string;
-    @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
-    createdAt: string;
-    @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
-    updatedAt: string;
-    @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
-    deletedAt: Date | null;
+    // @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
+    // createdAt: string;
+    // @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
+    // updatedAt: string;
+    // @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
+    // deletedAt: string | null;
 }
 
 export class UpdateBlogDto {

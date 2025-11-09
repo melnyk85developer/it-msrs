@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Post } from '../posts-domian/post.schema';
+import { Post } from '../posts-domain/post.schema';
 import { CreatePostDto, CreatePostForBlogDto, UpdatePostDto } from '../posts-dto/create-post.dto';
-import { type PostModelType } from '../posts-domian/post.entity';
+import { type PostModelType } from '../posts-domain/post.entity';
 import { PostsRepository } from '../posts-infrastructure/posts.repository';
-import { Types } from 'mongoose';
 import { BlogsRepository } from '../../blogs/blogs-infrastructure/blogs.repository';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class PostsService {
@@ -15,43 +15,26 @@ export class PostsService {
         private blogsRepository: BlogsRepository,
     ) { }
 
-    async createPostService(dto: Omit<CreatePostDto, 'deletedAt' | 'blogName' | 'createdAt' | 'updatedAt'>): Promise<string> {
-        const date = new Date();
-        const createdAt = date.toISOString();
-        const updatedAt = date.toISOString();
-        let isBlog
-        let post
+    async createPostService(dto: Omit<CreatePostDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>): Promise<string> {
         // console.log('PostsService: createPostService: dto 😡 ', dto)
-        isBlog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(dto.blogId);
+        const isBlog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(dto.blogId);
         // console.log('PostsService: createPostService: isBlog IF 😡 ', isBlog)
-        post = this.PostModel.createInstance({
+        const post = this.PostModel.createPostInstance({
             ...dto,
-            blogId: isBlog._id,
-            blogName: isBlog.name,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            deletedAt: null
+            blogId: String(isBlog._id),
+            blogName: isBlog.name
         });
         await this.postsRepository.save(post);
         return post._id.toString();
     }
-    async createPostOneBlogService(dto: Omit<CreatePostForBlogDto, 'deletedAt' | 'blogName' | 'createdAt' | 'updatedAt'>, blogId: string): Promise<string> {
-        const date = new Date();
-        const createdAt = date.toISOString();
-        const updatedAt = date.toISOString();
-        let isBlog
-        let post
-
+    async createPostOneBlogService(dto: Omit<CreatePostForBlogDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, blogId: string): Promise<string> {
         // console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
-        isBlog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(blogId);
+        const isBlog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(blogId);
         // console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
-        post = this.PostModel.createInstance({
+        const post = this.PostModel.createPostInstance({
             ...dto,
             blogId: blogId,
-            blogName: isBlog.name,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            deletedAt: null
+            blogName: isBlog.name
         });
         await this.postsRepository.save(post);
         return post._id.toString();
@@ -60,23 +43,7 @@ export class PostsService {
         // console.log('PostsService: updatePostService: id REQ dto 😡 ', id, dto)
         const post = await this.postsRepository.findPostOrNotFoundFail(id);
         // console.log('PostsService: updatePostService: IsPost 😡 ', post)
-        const blog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(post.blogId);
-        // console.log('PostsService: updatePostService: IsBlog 😡 ', blog)
-
-        const date = new Date();
-        const updatedAt = date.toISOString();
-
-        // не присваиваем св-ва сущностям напрямую в сервисах! даже для изменения одного св-ва
-        // создаём метод
-        post.update(
-            {
-                ...dto,
-                id,
-                createdAt: post.createdAt,
-                updatedAt: updatedAt,
-                deletedAt: null
-            }
-        ); // change detection
+        post.update({ ...dto, id });
         await this.postsRepository.save(post);
         return post._id.toString();
     }

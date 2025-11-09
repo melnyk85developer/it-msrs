@@ -1,0 +1,1 @@
+export const routeMain = (shopId: number | null | string | undefined = ':shopId') => `/shop/${shopId}`;

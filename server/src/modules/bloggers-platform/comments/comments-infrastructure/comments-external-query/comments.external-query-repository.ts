@@ -1,7 +1,7 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CommentExternalDto } from './comments-external-dto/comments.external-dto';
-import { Comment, type CommentModelType } from '../../comments-domian/comments.entity';
+import { Comment, type CommentModelType } from '../../comments-domain/comments.entity';
 
 @Injectable()
 export class CommentsExternalQueryRepository {

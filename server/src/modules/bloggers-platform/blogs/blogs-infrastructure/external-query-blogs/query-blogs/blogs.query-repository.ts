@@ -5,7 +5,7 @@ import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { SortDirection } from 'src/core/dto/base.query-params.input-dto';
 import { GetBlogsQueryParams } from 'src/modules/bloggers-platform/blogs/blogs-api/input-dto-blogs/get-blogs-query-params.input-dto';
 import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto';
-import { Blog, type BlogModelType } from 'src/modules/bloggers-platform/blogs/blogs-domian/blog.entity';
+import { Blog, type BlogModelType } from 'src/modules/bloggers-platform/blogs/blogs-domain/blog.entity';
 
 @Injectable()
 export class BlogsQueryRepository {

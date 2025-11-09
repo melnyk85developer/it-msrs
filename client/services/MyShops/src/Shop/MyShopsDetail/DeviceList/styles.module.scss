@@ -1,0 +1,32 @@
+.wrapDeviceList {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 15px;
+    .noGoods {
+        width: 100%;
+        height: 100vh;
+        .wrapBlockOfNoGoods {
+            height: 52vh;
+            display: flex;
+            justify-content: center; /* Центрируем контент по горизонтали */
+            align-items: center; /* Центрируем контент по вертикали */
+            .blockOfNoGoods {
+                text-align: center; /* Выравниваем текст заголовков по центру */
+                border: 2px dashed #8a8a8a;
+                padding: 15px;
+                opacity: 0.5;
+                h1 {
+                    color: #D55612;
+                }
+                h2 {
+                    color: #929292;
+                }
+                span {
+                    color: #D55612;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

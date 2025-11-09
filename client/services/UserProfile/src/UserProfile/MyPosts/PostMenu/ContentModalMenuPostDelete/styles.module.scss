@@ -1,0 +1,15 @@
+.wrapModalContentMenuPost {
+    width: 100%;
+    h3{
+        margin-top: 10px;
+        text-align: center;
+    }
+    .wrapButton{
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+        .button {
+            width: 120px;
+        }
+    }
+}

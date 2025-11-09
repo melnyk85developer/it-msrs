@@ -1,0 +1,353 @@
+@import '../../../host/src/mixins.scss';
+
+.noRead {
+    width: 100%;
+    background-color: #303030;
+}
+
+.messageItem {
+    width: 100%;
+
+    .wrapMessage {
+        display: flex;
+        justify-content: space-between;
+
+        // outline: 1px solid red;
+        .messagLeft {
+            position: relative;
+            min-width: 133px;
+            max-width: 70%;
+            padding: 10px;
+            border: 1px solid #525050;
+            background-color: #252525;
+            margin: 3px 0 7px 40px;
+            border-radius: 8px;
+            word-break: break-all;
+
+            .textBlock {
+                width: 100%;
+            }
+
+            .footer {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: #919191;
+                margin-top: 4px;
+                min-height: 20px;
+                white-space: nowrap;
+
+                .edited {
+                    color: #555;
+                }
+
+                .timestamp {
+                    white-space: nowrap;
+                }
+            }
+
+            .menuButton {
+                position: absolute;
+                min-width: 132px;
+                width: calc(100% + 2px);
+                padding: 5px;
+                bottom: -29px;
+                left: -1px;
+                font-size: 14px;
+                background-color: rgba(80, 80, 80, 0.01);
+                backdrop-filter: blur(4px);
+                border-radius: 0 0 8px 8px;
+                opacity: 0;
+                transition: opacity 0.6s ease;
+                pointer-events: none;
+                cursor: pointer;
+                z-index: 8888;
+
+                .iconWrapper {
+                    display: inline-block;
+
+                    .icon {
+                        margin: 0 3px;
+                        transition: opacity 0.2s ease;
+                    }
+
+                    .iconNormal {
+                        display: inline-block;
+                    }
+
+                    .iconHover {
+                        display: none;
+                    }
+
+                    &:hover {
+                        .iconNormal {
+                            display: none;
+                        }
+
+                        .iconHover {
+                            color: #FEA930;
+                            display: inline-block;
+                        }
+                    }
+                }
+
+                border: 1px solid opacify($color: #3d3c3c, $amount: 0);
+            }
+
+            &:hover .menuButton,
+            .menuButton.icon {
+                opacity: 1;
+                pointer-events: auto;
+                // animation: dropDownFromMessage 250ms ease-out forwards;
+            }
+
+            .menuButtonWithTail {
+                left: -20px;
+                width: calc(100% + 21px);
+            }
+
+            .tailLeft {
+                position: absolute;
+                left: -21px;
+                bottom: -2px;
+                transform: rotate(90deg);
+
+                .bacgroundBorder {
+                    position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    border-left: 1px solid #505050;
+                    border-right: 1px solid #505050;
+                    width: 11px;
+                    height: 3px;
+                    background-color: #252525;
+                }
+            }
+        }
+
+        .messagRight {
+            position: relative;
+            min-width: 133px;
+            max-width: 70%;
+            padding: 10px 10px 0px 10px;
+            border: 1px solid #525050;
+            background-color: #383838;
+            margin: 0 20px 10px auto;
+            border-radius: 8px;
+            word-break: break-all;
+
+            .textBlock {
+                width: 100%;
+            }
+
+            .footer {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: #919191;
+                margin-top: 4px;
+                min-height: 20px;
+                white-space: nowrap;
+
+                .edited {
+                    color: #555;
+                }
+
+                .timestamp {
+                    white-space: nowrap;
+                }
+
+                .delivered {
+                    color: var(--dark-theme-text-color);
+                    font-size: 14px;
+                }
+
+                .statusIcon {
+                    color: #4caf50;
+                }
+            }
+
+            .menuButton {
+                position: absolute;
+                min-width: 132px;
+                width: calc(100% + 2px);
+                padding: 5px;
+                bottom: -29px;
+                right: -1px;
+                font-size: 14px;
+                background-color: rgba(80, 80, 80, 0.01);
+                backdrop-filter: blur(4px);
+                border-radius: 0 0 8px 8px;
+                opacity: 0;
+                transition: opacity 0.6s ease;
+                pointer-events: none;
+                cursor: pointer;
+                z-index: 8888;
+
+                .iconWrapper {
+                    display: inline-block;
+
+                    .icon {
+                        margin: 0 3px;
+                        transition: opacity 0.2s ease;
+                    }
+
+                    .iconNormal {
+                        display: inline-block;
+                    }
+
+                    .iconHover {
+                        display: none;
+                    }
+
+                    &:hover {
+                        .iconNormal {
+                            display: none;
+                        }
+
+                        .iconHover {
+                            color: #FEA930;
+                            display: inline-block;
+                        }
+                    }
+                }
+
+                border: 1px solid opacify($color: #3d3c3c, $amount: 0);
+            }
+
+            &:hover .menuButton,
+            .menuButton.icon {
+                opacity: 1;
+                pointer-events: auto;
+                // animation: dropDownFromMessage 250ms ease-out forwards;
+            }
+
+            .menuButtonWithTail {
+                right: -17px;
+                width: calc(100% + 18px);
+            }
+
+            .disable {
+                display: none;
+            }
+
+            .tailRight {
+                position: absolute;
+                right: -16px;
+                bottom: -2px;
+                transform: rotate(90deg);
+
+                .bacgroundBorder {
+                    position: absolute;
+                    top: 17px;
+                    left: 8px;
+                    border-right: 1px solid #505050;
+                    width: 12px;
+                    height: 6px;
+                    background-color: #383838;
+                }
+            }
+        }
+
+        .withTail {
+            position: relative;
+            border-bottom-left-radius: 3px !important;
+        }
+
+        .messagLeft:hover,
+        .messagRight:hover {
+            transition: opacity 0.6s ease;
+            border-radius: 8px 8px 0px 0px;
+
+        }
+    }
+
+    .wrapImg {
+        display: flex;
+        justify-content: space-between;
+
+        // border: 1px solid black;
+        .imgLeft {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-top: -32px;
+            margin-left: 0px;
+            // border: 1px solid red;
+            z-index: 5555;
+        }
+
+        .disableImg {
+            display: none;
+        }
+    }
+}
+
+/* Переопределяем стандартный стиль уведомлений */
+.ant-message-notice-content {
+    background-color: #1e1e2f;
+    /* тёмный фон, или свой */
+    color: #fff;
+    /* текст белый */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.messageItemDeleteRight {
+    animation: deletionToTheRight 2s forwards;
+}
+
+.messageItemDeleteLeft {
+    animation: deletionToTheLeft 2s forwards;
+
+}
+
+@keyframes deletionToTheRight {
+    0% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+@keyframes deletionToTheLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes dropDownFromMessage {
+    from {
+        top: -30px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}

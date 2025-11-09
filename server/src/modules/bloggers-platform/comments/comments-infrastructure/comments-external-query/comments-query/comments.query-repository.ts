@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery } from 'mongoose';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
-import { type CommentModelType, Comment } from '../../../comments-domian/comments.entity';
+import { type CommentModelType, Comment } from '../../../comments-domain/comments.entity';
 import { GetCommentsQueryParams } from '../../../comments-api/comments-input-dto/get-comments-query-params.input-dto';
 import { CommentViewDto } from '../../../comments-api/comments-view-dto/comments.view-dto';
 

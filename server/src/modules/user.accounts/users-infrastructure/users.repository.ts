@@ -1,7 +1,7 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User, UserDocument } from '../users-domian/user.entity';
-import type { UserModelType } from 'src/modules/user.accounts/users-domian/user.entity';
+import { User, UserDocument } from '../users-domain/user.entity';
+import type { UserModelType } from 'src/modules/user.accounts/users-domain/user.entity';
 
 @Injectable()
 export class UsersRepository {
@@ -27,5 +27,15 @@ export class UsersRepository {
         }
 
         return user;
+    }
+
+    async findByLogin(login: string): Promise<UserDocument | null> {
+        return this.UserModel.findOne({ login });
+    }
+    async findByEmail(email: string): Promise<UserDocument | null> {
+        return this.UserModel.findOne({ email });
+    }
+    async loginIsExist(login: string): Promise<boolean> {
+        return !!(await this.UserModel.countDocuments({ login: login }));
     }
 }

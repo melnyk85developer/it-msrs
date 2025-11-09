@@ -1,0 +1,88 @@
+@import '../reset.scss';
+@import '../variables.scss';
+@import '../mixins';
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	font-family: "courier new", verdana;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+}
+
+// === 1vh фикс для мобильных браузеров ===
+html {
+	--vh: 1vh;
+}
+
+body {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	@include custom-scrollbar();
+}
+
+p {
+	color: var(--main-text-color);
+	font-family: "courier new", verdana;
+}
+
+.AppContent.light {
+	margin: 0 !important;
+	padding: 0 !important;
+	min-height: 100vh;
+	max-height: 100%;
+	color: var(--main-text-color);
+	background: var(--light-AppContent-background);
+
+	.wrapper {
+		display: flex;
+		padding-top: 36px;
+		min-height: 90vh;
+		max-height: 100%;
+		margin: 87px auto 0;
+		overflow-y: auto;
+		overflow-x: hidden;
+		color: var(--light-theme-text-color);
+		@include custom-scrollbar();
+	}
+}
+
+.AppContent.dark {
+	display: block;
+	width: 100%;
+	min-height: 100vh;
+	max-height: 100%;
+	color: var(--light-text-color);
+	background-color: #282828;
+
+	// border: 1px solid red;
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		min-height: 99.9vh;
+		max-height: 100%;
+		margin: 0 auto;
+		padding-top: 120px;
+		color: var(--dark-theme-text-color);
+		overflow-y: hidden;
+		overflow-x: hidden;
+		@include custom-scrollbar();
+		// outline: 1px solid green;
+	}
+
+	.wrapFooter {
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+}

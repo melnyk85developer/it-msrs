@@ -1,0 +1,111 @@
+.wrapRegistration.light {
+    border: 1px solid black;
+    width: 100%;
+    // margin-top: 3px;
+    padding: 10px;
+    h1 {
+        text-align: center;
+        color: black;
+    }
+    .contentRegistration {
+        border: 1px solid black;
+        width: 100%;
+        min-height: 85vh;
+        padding: 10px;
+        .wrapButtonBlockRegistration {
+            display: flex;
+            justify-content: space-between;
+            // .wrapButtonRegistration {
+            //     width: 50%;
+            // }
+        }
+    }
+
+}
+.wrapRegistration.dark {
+    border: 1px solid black;
+    width: 100%;
+    padding: 10px;
+    h1 {
+        text-align: center;
+        color: wheat;
+    }
+    .contentRegistration {
+        border: 1px solid black;
+        width: 100%;
+        min-height: 85vh;
+        padding: 10px;
+        .wrapForm {
+            h3 {
+                color: wheat;
+                margin: 10px auto 3px 3px
+            }
+            
+            input {
+                padding-left: 5px;
+                width: 100%;
+                height: 30px;
+                border-radius: 8px;
+                background-color: #282828;
+                color: wheat;
+                border: 1px solid wheat;
+            }
+
+            /* Стили для автозаполнения */
+            input:-webkit-autofill {
+                background-color: transparent !important;
+                color: #333 !important;
+                box-shadow: 0 0 0px 1000px #fff inset !important;
+            }
+
+            input:-webkit-autofill:focus {
+                background-color: transparent !important;
+                color: #333 !important;
+            }
+            .formErrorsMessage {
+                color: rgb(230, 0, 0);
+                margin: 3px 0 0 3px;
+            }
+            .blockCropperAvatar {
+                max-width: 320px;
+                max-height: 320px;
+                margin: 40px auto 0;
+                border: 1px solid wheat;
+
+            }
+            .wrapButtonBlockRegistration {
+                display: flex;
+                justify-content: space-between;
+                button {
+                    margin-top: 40px;
+                    width: 100%;
+                    height: 30px;
+                    border-radius: 8px;
+                    background-color: #282828;
+                    color: wheat;
+                    border: 1px solid black;
+                    padding: 0 40px;
+                }
+                .trim {
+                    border-radius: 8px;
+                    border: 1px solid black;
+                    margin: 40px 10px;
+                    height: 30px;
+                    width: 30%;
+                }
+            }
+        }   
+        .errorMessages {
+            // border: 1px solid black;
+            margin-top: 10px;
+            min-height: 17px;
+
+            p {
+                margin-left: 10px;
+                font-size: 17px;
+                font-weight: 500;
+                color: red;
+            }
+        }
+    }
+}

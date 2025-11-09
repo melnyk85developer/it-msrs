@@ -1,0 +1,191 @@
+.wrap_post {
+    margin-bottom: 5px;
+    // border: 1px solid red;
+    .wrapHederPost{
+        display: flex;
+        justify-content: space-between;
+        // border: 1px solid red;
+        .avatarBlockPosts {
+            display: flex;
+            width: 100%;
+            padding: 5px 10px;
+            // border-bottom: 1px solid red;
+            img {
+                width: 40px;
+                height: 40px;
+                border-radius: 100%;
+            }
+            .wrapNameDatumBlockPosts {
+                margin: 5px 10px;
+                // border: 1px solid red;
+                .userNameBlockPosts {
+                    display: flex;
+                    width: auto;
+                    height: auto;
+                    margin-bottom: 5px;
+                    strong {
+                        margin-right: 5px;
+                        font-weight: 600;
+                    }
+                }
+                .LentenDate {
+                    font-size: 12px;
+                }
+            }
+    
+        }
+        .settingPost {
+            width: 30px;
+            padding-top: 18px;
+            margin-left: auto;
+            margin-right: 10px;
+            // border: 1px solid red;
+        }
+    }
+    .wrapPostContent {
+        // border: 1px solid red;
+        font-family: 'Roboto', sans-serif;
+        h2 {
+            margin: 0px 0 15px;
+            text-align: center;
+            font-size: 22px;
+            color: var(--dark-theme-text-color);
+            font-size: 1.5em;
+            // border: 1px solid red;
+
+        }
+        .post {
+            margin: 10px 0;
+            .textPost {
+                margin: 0 0 10px;
+                text-align: left;
+                .yet {
+                    font-weight: 900;
+                    color: #D55612;
+                    cursor: pointer;
+                }
+                .wrapRollUp {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 10px 10px 0 0;
+                    .rollUp {
+                        margin-left: auto;
+                        font-weight: 900;
+                        color: #D55612;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .wrapImgPost {
+                width: 100%;
+                img {
+                    width: 100%; /* Ограничиваем максимальную ширину блока до 100% ширины контейнера */
+                    height: auto; /* Это позволяет изображению сохранять пропорции */
+                    display: block; /* Это для того, чтобы изображение корректно реагировало на max-width */
+                    margin: 0 auto; 
+                }
+            }
+        }
+        .wrapFooterPost {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            min-height: 40px;
+            color: #D55612;
+            font-weight: 600;
+            .viewBlock {
+                margin: auto auto;
+                width: 100%;
+            }
+            .wrapLikesBlock {
+                width: 100%;
+                margin: auto auto;
+                .likesBlock {
+                    display: flex;
+                    justify-content: center;
+                    margin: 0 auto;
+                    width: auto;
+                    .like {
+                        display: flex;
+                        margin-right: 15px;
+                        p {
+                            margin: 0 15px 0 5px;
+                        }
+                    }
+                    .activeLike {
+                        display: flex;
+                        margin-right: 15px;
+                        p {
+                            margin: 0 15px 0 5px;
+                        }
+                        color: var(--dark-theme-text-color);
+                    }
+                    .dislike {
+                        display: flex;
+                        p {
+                            margin: 0 15px 0 5px;
+                        }
+                    }
+                    .activeDislike {
+                        display: flex;
+                        p {
+                            margin: 0 15px 0 5px;
+                        }
+                        color: var(--dark-theme-text-color);
+                    }
+                }
+            }
+            .commentsBlock {
+                display: flex;
+                margin: auto auto;
+                width: 100%;
+                justify-content: space-between;
+                .commentIcon {
+                    margin-left: auto;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+
+}
+.deletedMessage {
+    opacity: 0;
+    text-align: center;
+    font-size: 32px;
+    color: var(--dark-theme-text-color);
+    margin-top: 100px;
+    animation: fadeInAndOut 3s forwards; /* Анимация появления и исчезновения */
+}
+/* Анимация появления и исчезновения */
+@keyframes fadeInAndOut {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+.messageItem {
+    pointer-events: none;
+    transform: scale(0);
+    transition: 0.8s;
+}
+// .postItem.fadeIn {
+//     opacity: 1;
+//     visibility: visible;
+//     transition: opacity 0.8s, visibility 0s; /* Постепенно показываем элемент без задержки */
+// }
+
+
+// .postItem {
+//     animation: fadeOut 1.0s ease forwards;
+// }
+
+// @keyframes fadeOut {
+//     from {
+//         opacity: 1;
+//     }
+//     to {
+//         opacity: 0;
+//         display: none;
+//     }
+// }

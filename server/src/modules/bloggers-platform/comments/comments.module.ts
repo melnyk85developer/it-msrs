@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Comment, CommentSchema } from './comments-domian/comments.entity';
+import { Comment, CommentSchema } from './comments-domain/comments.entity';
 import { CommentsController } from './comments-api/comments.controller';
 import { CommentsService } from './comments-application/comments.service';
 import { CommentsRepository } from './comments-infrastructure/comments.repository';

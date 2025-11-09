@@ -1,0 +1,63 @@
+.borderPosts {
+    width: 100%;
+    height: auto;
+
+    .posts {
+        // border: 1px solid red;
+        margin: 0 auto;
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-left: 10px;
+        min-height: 60vh;
+        max-height: 70vh;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+            background-color: var(--dark-theme--webkit-scrollbar);
+        }
+    
+        &::-webkit-scrollbar-track {
+            background: #303030;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: #282828;
+            border-radius: 9em;
+            box-shadow: inset 1px 1px 10px #757575;
+        }
+    
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Специфичные стили для полосы прокрутки в Firefox */
+        @-moz-document url-prefix() {
+            & {
+                scrollbar-width: thin;
+                scrollbar-color: #181818 #353535;
+            }
+        }
+    }
+
+    .wrapBlockOfNoPosts {
+        min-height: 58vh;
+        display: flex;
+        justify-content: center; /* Центрируем контент по горизонтали */
+        align-items: center; /* Центрируем контент по вертикали */
+        .blockOfNoPosts {
+            text-align: center; /* Выравниваем текст заголовков по центру */
+            border: 2px dashed #8a8a8a;
+            padding: 15px;
+            opacity: 0.5;
+            h1 {
+                color: #D55612;
+            }
+            h2 {
+                color: #5B5B5B;
+            }
+        }
+    }
+}
+
+
+

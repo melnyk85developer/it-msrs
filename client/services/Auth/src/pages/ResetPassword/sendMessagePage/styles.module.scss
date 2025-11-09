@@ -1,0 +1,128 @@
+.wrapContentRessedPassword {
+    width: 100%;
+    margin: 3px auto 0;
+    padding: 10px;
+    .contentRessedPassword {
+        border: 1px solid black;
+        // min-height: 33vh;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        color: wheat;
+        font-family: "courier new", verdana ;
+        h2 {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .wrapMessage {
+            min-height: 60px;
+            border-radius: 5px;
+            font-size: 19px;
+            .wrapTitle {
+                margin: 10px 0;
+                p {
+                    margin-bottom: 10px;
+                    // border: 1px solid red;
+                    strong {
+                        margin-left: 7px;
+                        color: rgb(4, 153, 4);
+                    }
+                    span {
+                        margin-left: 10px;
+                    }
+                }
+                .errorMessages {
+                    p {
+                        strong {
+                            font-weight: 500;
+                            color: rgb(230, 0, 0);
+                        }
+                    }
+                }
+            }
+        }
+        .nextSendSMS {
+            // border: 1px solid black;
+            margin-top: auto;
+            min-height: 60px;
+            color: wheat;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 100;
+            font-family: "Courier New", Verdana;
+            strong {
+                display: inline-block;
+                font-size: 55px;
+                text-align: center;
+                color: rgb(161, 3, 3);
+            }
+            .label {
+                color: #ff6600; 
+                display: block;
+                margin: 0 0 3px 3px;
+                font-size: 14px;
+                font-weight: 400;
+                font-family: "courier new"
+            }
+            .inputBlock {
+                width: 100%;
+                .formRessetPassord {
+                    width: 70%;
+                    margin: 0 auto;
+                    // display: flex;
+                    // justify-content: space-between;
+                    input {
+                        // margin-right: 3px;
+                        margin-bottom: 10px;
+                        width: 70%;
+                        padding: 7px 10px;
+                        border: 1px solid black;
+                        background-color: #282828;
+                        color: wheat;
+                        border-radius: 5px;
+                        font-size: 15px;
+                        font-weight: 100;
+                        outline: none;
+                        transition: all 0.3s ease;
+                        -webkit-transition: all 0.3s ease;
+                        -moz-transition: all 0.3s ease;
+                        -o-transition: all 0.3s ease;
+                        -ms-transition: all 0.3s ease;
+                    }
+                    .input:focus {
+                        background-color: #282828;
+                        border-color: wheat;
+                        color: wheat;
+                        transition: all 0.3s ease;
+                        -webkit-transition: all 0.3s ease;
+                        -moz-transition: all 0.3s ease;
+                        -o-transition: all 0.3s ease;
+                        -ms-transition: all 0.3s ease;
+                    }
+                    .button {
+                        width: 70%;
+                        // margin-left: 3px;
+                        padding: 7px 10px;
+                        border: 1px solid black;
+                        background-color: #282828;
+                        color: wheat;
+                        font-size: 15px;
+                        font-weight: 100;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    }
+                    input:-webkit-autofill {
+                        background-color: #282828 !important; /* Цвет фона, который вам нужен */
+                        color: wheat !important; /* Цвет текста */
+                    }
+                    
+                    input:-webkit-autofill:hover, input:-webkit-autofill:focus {
+                        background-color: #282828 !important; /* Также для фокуса и ховера */
+                        color: wheat !important;
+                    }
+                    
+                }
+            }
+        }
+    }
+}

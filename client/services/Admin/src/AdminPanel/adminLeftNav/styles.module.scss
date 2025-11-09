@@ -1,0 +1,133 @@
+@import url('../../../../host/src/variables.scss');
+
+.wrappContentNavbarSettings {
+    min-width: 250px;
+    padding: 1px;
+    border: 1px solid #101010;
+    border-radius: 8px;
+    // width: 100%;
+    height: auto;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Standard syntax */
+    .title_nav {
+        h3{
+            display: block;
+            padding: 6px;
+            border: 1px solid #101010;
+            border-radius: 8px;
+            color: #FFAC00;
+            font-size: 15px;
+            font-weight: 900;
+            text-align: center;
+        }
+    }
+    .ul {
+        display: block;
+        margin-top: 1px;
+        padding: 6px;
+        border: 1px solid black;
+        border-radius: 8px;
+        min-height: 200px;
+        li{
+            font-size: 15px;
+            // font-weight: 900;
+        }
+    }
+    .shahtaButton {
+        margin-bottom: 2px;
+        padding: 1 1px 1px 1px;
+        height: auto;
+        border: 1px solid black;
+        border-radius: 14px;
+        a {
+            color: wheat;
+        }
+        .icon {
+			margin-right: 5px;
+		}
+        .button {
+            display: block;
+            padding: 10px 0 0 10px;
+            height: 33px;
+            border-radius: 14px;
+            background: var(--dark-button-radius-background-image);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .button:hover {
+            display: block;
+            padding: 9px 0 0 11px;
+            height: 33px;
+            border-radius: 14px;
+            color: #FFAC00;
+            background: var(--dark-button-radius-background-image-hover);
+        }
+        .button:active {
+            display: block;
+            padding: 10px 0 0 11px;
+            height: 33px;
+            border-radius: 14px;
+            background: var(--dark-button-radius-background-image-active);
+        }
+        .active {
+            display: block;
+            padding: 10px 0 0 11px;
+            height: 33px;
+            border-radius: 14px;
+            background: var(--dark-button-radius-background-image-active);
+            color: red;
+        }
+    }
+
+}
+.wrapContentSettingsMyProfile {
+    width: 100%;
+    padding: 10px;
+    .contentSettingsMyProfile {
+        // width: 100%;
+        padding: 10px;
+        border: 1px solid black;
+        min-height: 86vh;
+        h1 {
+            color: wheat;
+            margin: 0;
+            // border: 1px solid black;
+        }
+        .deleteProfile {
+            // width: 100%;
+            min-height: 40vh;
+            margin-top: 10px;
+            // border: 1px solid black;
+            .title {
+                // width: 100%;
+                border-bottom: 1px dotted wheat;
+                margin-bottom: 10px;
+                h2 {
+                    color: wheat;
+                    margin-bottom: 5px;
+                }
+            }
+            .body {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px dotted wheat;
+                padding-bottom: 10px;
+                strong {
+                    height: 30px;
+                    // border: 1px solid black;
+                    padding-top: 6px;
+                    font-size: 16px;
+                    color: wheat;
+                }
+                button {
+                    width: 50%;
+                    height: 30px;
+                    border-radius: 8px;
+                    background-color: #282828;
+                    color: red;
+                }
+            }
+        }
+    }
+}

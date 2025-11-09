@@ -15,6 +15,9 @@ import { AppModule } from "src/app.module";
 import cookieParser from "cookie-parser";
 import { HTTP_STATUSES } from 'src/shared/utils/utils';
 import { GetUsersQueryParams } from 'src/modules/user.accounts/users-api/input-dto-users/get-users-query-params.input-dto';
+import { appSetup } from 'src/setup/app.setup';
+import { authE2eTest } from 'src/modules/user.accounts/testing-users/testingAuth/testing-E2E-Auth.api';
+import { authIntegrationTest } from 'src/modules/user.accounts/testing-users/testingAuth/testing-INTEGRATION-Auth.api';
 
 dotenv.config({ quiet: true });
 
@@ -146,6 +149,7 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
             ],
         }).compile()
         contextTests.app = testingModule.createNestApplication();
+        //TODO - appSetup(contextTests.app)
         contextTests.app.use(cookieParser());
         await contextTests.app.init()
         // создаём "тестовый клиент" к приложению
@@ -161,11 +165,11 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         // jest.spyOn(contextTests.mailService, 'sendMail').mockResolvedValue(true);
     })
 
-    // // describe('AUTH-BLOCK-TESTS', () => {
-    // //     authE2eTest()
-    // //     authIntegrationTest()
-    // //     // authUnitTest()
-    // // })
+    describe('AUTH-BLOCK-TESTS', () => {
+        authE2eTest()
+        // authIntegrationTest()
+        // authUnitTest()
+    })
     // // describe('USER-SESSIONS-BLOCK-TESTS', () => {
     // //     usersSessionsE2eTest()
     // //     usersSessionsInegrationTest()
@@ -173,21 +177,21 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     // // describe('CONFIRMATION-BLOCK-TESTS', () => {
     // //     resetPasswordInegrationTest()
     // // })
-    describe('BLOGS-BLOCK-TESTS', () => {
-        blogsE2eTest()
-    })
-    describe('POSTS-BLOCK-TESTS', () => {
-        postsE2eTest()
-    })
-    describe('COMMENTS-BLOCK-TESTS', () => {
-        commentsE2eTest()
-    })
-    // // describe('LIKES-BLOCK-TESTS', () => {
-    // //     likesE2eTest()
-    // // })
-    describe('USERS-BLOCK-TESTS', () => {
-        usersE2eTest()
-    })
+    // describe('BLOGS-BLOCK-TESTS', () => {
+    //     blogsE2eTest()
+    // })
+    // describe('POSTS-BLOCK-TESTS', () => {
+    //     postsE2eTest()
+    // })
+    // describe('COMMENTS-BLOCK-TESTS', () => {
+    //     commentsE2eTest()
+    // })
+    // // // describe('LIKES-BLOCK-TESTS', () => {
+    // // //     likesE2eTest()
+    // // // })
+    // describe('USERS-BLOCK-TESTS', () => {
+    //     usersE2eTest()
+    // })
     afterAll(async () => {
         // const mailService = container.get(MailService)
         // mailService.closeTransporter()

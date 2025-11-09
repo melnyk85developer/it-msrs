@@ -1,0 +1,346 @@
+.wrapProfileDataFormBlock.light {
+    h2, h3 {
+        text-align: center;
+    }
+    .wrapProfileDataForm {
+        max-height: 60vh;
+        overflow-y: auto;
+        color: var(--dark-theme-text-color);
+        font-weight: 900;
+        padding-right: 5px;
+        strong {
+            width: 100%;
+            cursor: pointer;
+        }
+        h6 {
+            display: inline;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        input {
+            min-height: 35px;
+        }
+        .wrapName,
+        .wrapSurname,
+        .wrapILiveIn,
+        .wrapOriginallyFrom,
+        .wrapImWorkingIn  {
+            .input {
+                width: 100%;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        } 
+        .wrapGenderSelect {
+            .select {
+                width: 100%;
+                min-height: 35px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+            .option {
+                width: 100%;
+                border-radius: 0 8px 8px 0 ;
+                min-height: 35px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        }
+        .wrapLookingForAJob {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px 5px 10px 0;
+            h6 {
+                margin-top: 13px;
+            }
+            .input {
+                margin-left: auto;
+            }
+        }
+        .wrapLookingForAJobDescription {
+            width: 100%;
+            .textarea {
+                width: 100%;
+                min-height: 60px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        }
+        .wrapAboutMe {
+            .textarea {
+                width: 100%;
+                min-height: 60px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        }
+        .wrapContacts {
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 8px;
+            margin: 10px 0;
+            h6 {
+                display: block;
+            }
+            .wrapInputTel {
+                display: flex;
+                justify-content: space-between;
+                strong {
+                    display: block;
+                    margin: 13px 0;
+                }
+                .wrapSelect {
+                    // border: 1px solid red;
+                    width: 230px;
+                    .select {
+                        margin-left: 4px;
+                        min-height: 35px;
+                        border-radius: 8px 0 0 8px;
+                        border: none;
+                    }
+                    .option {
+                        border-radius: 0 8px 8px 0 ;
+                        min-height: 35px;
+                        border: none;
+                    }
+                    .inputNumberTel {
+                        border: none;
+                        border-radius: 0px 8px 8px 0px;
+                    }
+                }
+            }
+            .wrapInputEmail {
+                display: flex;
+                justify-content: space-between;
+                strong {
+                    display: block;
+                    margin: 13px 0;
+                }
+                .inputEmail {
+                    width: 226px;
+                    margin: 5px 0 10px;
+                    padding-left: 10px;
+                    border-radius: 8px;
+                    border: none;
+                }
+            }
+            .wrapInputWebsite {
+                display: flex;
+                justify-content: space-between;
+                strong {
+                    display: block;
+                    margin: 13px 0;
+                }
+                .inputWebsite {
+                    width: 226px;
+                    margin: 5px 0 10px;
+                    padding-left: 10px;
+                    border-radius: 8px;
+                    border: none;
+                }
+            }
+            .Button {
+                width: 100%;
+            }
+        }
+        &::-webkit-scrollbar {
+            width: 5px;
+            background-color: var(--dark-theme--webkit-scrollbar);
+        }
+    
+        &::-webkit-scrollbar-track {
+            background: #303030;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: #282828;
+            border-radius: 9em;
+            box-shadow: inset 1px 1px 10px #757575;
+        }
+    
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Специфичные стили для полосы прокрутки в Firefox */
+        @-moz-document url-prefix() {
+            & {
+                scrollbar-width: thin;
+                scrollbar-color: #181818 #353535;
+            }
+        }
+    }
+}
+.wrapProfileDataFormBlock.dark {
+    h2, h3 {
+        text-align: center;
+    }
+    .wrapProfileDataForm {
+        max-height: 60vh;
+        overflow-y: auto;
+        color: var(--dark-theme-text-color);
+        font-weight: 900;
+        padding-right: 5px;
+        strong {
+            width: 100%;
+            cursor: pointer;
+        }
+        h6 {
+            display: inline;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        input {
+            min-height: 35px;
+        }
+        .wrapName,
+        .wrapSurname,
+        .wrapILiveIn,
+        .wrapOriginallyFrom,
+        .wrapImWorkingIn  {
+            .input {
+                width: 100%;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        } 
+        .wrapGenderSelect {
+            .select {
+                width: 100%;
+                min-height: 35px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+            .option {
+                width: 100%;
+                border-radius: 0 8px 8px 0 ;
+                min-height: 35px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        }
+        .wrapLookingForAJob {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px 5px 10px 0;
+            h6 {
+                margin-top: 13px;
+            }
+            .input {
+                margin-left: auto;
+            }
+        }
+        .wrapLookingForAJobDescription {
+            width: 100%;
+            .textarea {
+                width: 100%;
+                min-height: 60px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        }
+        .wrapAboutMe {
+            .textarea {
+                width: 100%;
+                min-height: 60px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+            }
+        }
+        .wrapContacts {
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 8px;
+            margin: 10px 0;
+            h6 {
+                display: block;
+            }
+            .wrapInputTel {
+                display: flex;
+                justify-content: space-between;
+                strong {
+                    display: block;
+                    margin: 13px 0;
+                }
+                .wrapSelect {
+                    // border: 1px solid red;
+                    width: 230px;
+                    .select {
+                        margin-left: 4px;
+                        min-height: 35px;
+                        border-radius: 8px 0 0 8px;
+                        border: none;
+                    }
+                    .option {
+                        border-radius: 0 8px 8px 0 ;
+                        min-height: 35px;
+                        border: none;
+                    }
+                    .inputNumberTel {
+                        border: none;
+                        border-radius: 0px 8px 8px 0px;
+                    }
+                }
+            }
+            .wrapInputEmail {
+                display: flex;
+                justify-content: space-between;
+                strong {
+                    display: block;
+                    margin: 13px 0;
+                }
+                .inputEmail {
+                    width: 226px;
+                    margin: 5px 0 10px;
+                    padding-left: 10px;
+                    border-radius: 8px;
+                    border: none;
+                }
+            }
+            .wrapInputWebsite {
+                display: flex;
+                justify-content: space-between;
+                strong {
+                    display: block;
+                    margin: 13px 0;
+                }
+                .inputWebsite {
+                    width: 226px;
+                    margin: 5px 0 10px;
+                    padding-left: 10px;
+                    border-radius: 8px;
+                    border: none;
+                }
+            }
+            .Button {
+                width: 100%;
+            }
+        }
+        &::-webkit-scrollbar {
+            width: 5px;
+            background-color: var(--dark-theme--webkit-scrollbar);
+        }
+    
+        &::-webkit-scrollbar-track {
+            background: #303030;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: #282828;
+            border-radius: 9em;
+            box-shadow: inset 1px 1px 10px #757575;
+        }
+    
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Специфичные стили для полосы прокрутки в Firefox */
+        @-moz-document url-prefix() {
+            & {
+                scrollbar-width: thin;
+                scrollbar-color: #181818 #353535;
+            }
+        }
+    }
+}
