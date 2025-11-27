@@ -4,14 +4,11 @@ import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes'
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class AuthAccessGuard extends AuthGuard('jwt') {
     handleRequest(err, user) {
         if (err || !user) {
-            // здесь можно выбросить любую свою ошибку
-            throw new DomainException({
-                code: DomainExceptionCode.Unauthorized,
-                message: 'Unauthorized',
-            });
+            // console.log('JwtAuthGuard: 😡 user, err', user, err)
+            throw new DomainException(DomainExceptionCode.Unauthorized);
         }
         return user;
     }

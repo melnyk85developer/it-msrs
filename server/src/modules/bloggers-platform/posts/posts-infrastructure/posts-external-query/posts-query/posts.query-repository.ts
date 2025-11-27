@@ -8,6 +8,8 @@ import { GetPostsQueryParams } from '../../../posts-api/posts-input-dto/get-post
 import { CreatePostDto } from '../../../posts-dto/create-post.dto';
 import { PostMapper } from '../../../posts-api/posts-view-dto/post.mapper';
 import { SortDirection } from 'src/core/dto/base.query-params.input-dto';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class PostsQueryRepository {
@@ -82,7 +84,7 @@ export class PostsQueryRepository {
         });
 
         if (!post) {
-            throw new NotFoundException('post not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.POST_NOT_FOUND_ID, 'post not found');
         }
 
         return await this.postMapper.toExtendedView(post as PostDocument, null)

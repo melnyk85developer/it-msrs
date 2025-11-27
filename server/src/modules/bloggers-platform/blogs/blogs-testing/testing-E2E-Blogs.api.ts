@@ -1,30 +1,34 @@
-import { isCreatedUser1 } from "src/modules/user.accounts/testing-users/testFunctionsUser"
-import { HTTP_STATUSES } from "src/shared/utils/utils"
-import { contextTests } from "test/contextTests"
-import { blogsTestManager } from "test/managersTests/blogsTestManager"
+import { HTTP_STATUSES } from "src/core/utils/utils"
+import { isLoginUser } from "src/modules/auth/auth-testing/testFunctionsAuth"
+import { contextTests } from "test/helpers/init-settings"
+import { isCreatedBlog } from "./testFunctionsBlogs"
+import { isCreatedUser } from "src/modules/user.accounts/testing-users/testFunctionsUser"
 
 export const blogsE2eTest = () => {
     describe('E2E-BLOGS', () => {
         beforeAll(async () => {
-            // const isUser = await isCreatedUser1(
-            //     contextTests.correctUserName1,
-            //     contextTests.correctUserEmail1,
-            //     contextTests.correctUserPassword1,
-            //     HTTP_STATUSES.NO_CONTENT_204
-            // )
-            // console.log('TEST: - blogsE2eTest: isUser 😡', isUser)
-            // const isLogin = await isLoginUser1(
-            //     contextTests.accessTokenUser1Device1,
-            //     contextTests.refreshTokenUser1Device1,
-            //     contextTests.correctUserEmail1,
-            //     contextTests.correctUserPassword1,
-            //     contextTests.userAgent[0],
-            //     HTTP_STATUSES.OK_200
-            // )
+            const isUser1 = await isCreatedUser(
+                0,
+                contextTests.users.correctUserNames[0],
+                contextTests.users.correctUserEmails[0],
+                contextTests.users.correctUserPasswords[0],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            // console.log('TEST: - blogsE2eTest: isUser1 😡', isUser1)
+            const isLogin1 = await isLoginUser(
+                0,
+                0,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.users.correctUserEmails[0],
+                contextTests.users.correctUserPasswords[0],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
             // console.log('TEST: - blogsE2eTest: isLogin.status 😡', isLogin.authData)
         })
         it('GET    - Ожидается статус код 200, - Получаем пустой массив блогов!', async () => {
-            const { getBlogs } = await blogsTestManager.getAllBlogs(HTTP_STATUSES.OK_200)
+            const { getBlogs } = await contextTests.blogsTestManager.getAllBlogs(HTTP_STATUSES.OK_200)
             // console.log('TEST: - : getBlogs 😡', getBlogs)
             expect(getBlogs).toEqual(
                 expect.objectContaining({
@@ -42,12 +46,12 @@ export const blogsE2eTest = () => {
                 description: '',
                 websiteUrl: ''
             }
-            await blogsTestManager.createBlogs(
+            await contextTests.blogsTestManager.createBlogs(
                 data,
-                contextTests.codedAuth,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.BAD_REQUEST_400
             )
-            const { getBlogs } = await blogsTestManager.getAllBlogs(
+            const { getBlogs } = await contextTests.blogsTestManager.getAllBlogs(
                 HTTP_STATUSES.OK_200
             )
             expect(getBlogs).toEqual(
@@ -61,20 +65,20 @@ export const blogsE2eTest = () => {
             )
         })
         it('GET    - Ожидается статус код 404, - Запрос не существующего блога!', async () => {
-            await blogsTestManager.getBlogsById(contextTests.invalidId, HTTP_STATUSES.NOT_FOUND_404)
+            await contextTests.blogsTestManager.getBlogsById(contextTests.constants.invalidId, HTTP_STATUSES.NOT_FOUND_404)
         })
-        it.skip(`POST   - Ожидается статус код 401, - Создание блога без авторизации! Дополнительные запросы: -> GET`, async () => {
+        it(`POST   - Ожидается статус код 401, - Создание блога без авторизации! Дополнительные запросы: -> GET`, async () => {
             const data: any = {
-                name: contextTests.correctBlogNsme1,
-                description: contextTests.correctBlogDescription1,
-                websiteUrl: contextTests.correctWebsiteUrl1
+                name: contextTests.blogs.correctBlogNames[0],
+                description: contextTests.blogs.correctBlogDescriptions[0],
+                websiteUrl: contextTests.blogs.correctWebsiteUrls[0]
             }
-            await blogsTestManager.createBlogs(
+            await contextTests.blogsTestManager.createBlogs(
                 data,
-                contextTests.expiredToken,
+                contextTests.constants.expiredToken,
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
-            const { getBlogs } = await blogsTestManager.getAllBlogs(
+            const { getBlogs } = await contextTests.blogsTestManager.getAllBlogs(
                 HTTP_STATUSES.OK_200
             )
             expect(getBlogs).toEqual(
@@ -88,19 +92,16 @@ export const blogsE2eTest = () => {
             )
         })
         it(`POST   - Ожидается статус код 201, - Создание блога с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
-            const data: any = {
-                name: contextTests.correctBlogNsme1,
-                description: contextTests.correctBlogDescription1,
-                websiteUrl: contextTests.correctWebsiteUrl1
-            }
-            const { createdEntity } = await blogsTestManager.createBlogs(
-                data,
-                contextTests.codedAuth,
+            const isBlog1 = await isCreatedBlog(
+                0,
+                contextTests.blogs.correctBlogNames[0],
+                contextTests.blogs.correctBlogDescriptions[0],
+                contextTests.blogs.correctWebsiteUrls[0],
                 HTTP_STATUSES.CREATED_201
             )
-            contextTests.createdBlog1 = createdEntity;
-            // console.log('TEST: contextTests.createdBlog1 😡 ', contextTests.createdBlog1)
-            const { getBlogs } = await blogsTestManager.getAllBlogs(
+            // console.log('TEST: contextTests.createdBlogs 😡 ', contextTests.blogs.createdBlogs)
+            // console.log('TEST: isBlog1 😡 ', isBlog1)
+            const { getBlogs } = await contextTests.blogsTestManager.getAllBlogs(
                 HTTP_STATUSES.OK_200
             )
             expect(getBlogs).toEqual(
@@ -109,31 +110,28 @@ export const blogsE2eTest = () => {
                     page: 1,
                     pageSize: 10,
                     totalCount: 1,
-                    items: [contextTests.createdBlog1]
+                    items: [contextTests.blogs.createdBlogs[0]]
                 })
             )
         })
         it(`POST   - Ожидается статус код 201, - Создание еще одного блога с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
-            const data: any = {
-                name: contextTests.correctBlogNsme2,
-                description: contextTests.correctBlogDescription2,
-                websiteUrl: contextTests.correctWebsiteUrl2
-            }
-            const { createdEntity } = await blogsTestManager.createBlogs(
-                data,
-                contextTests.codedAuth,
+            const isBlog1 = await isCreatedBlog(
+                1,
+                contextTests.blogs.correctBlogNames[1],
+                contextTests.blogs.correctBlogDescriptions[1],
+                contextTests.blogs.correctWebsiteUrls[1],
                 HTTP_STATUSES.CREATED_201
             )
-            contextTests.createdBlog2 = createdEntity;
-            // console.log('TEST: contextTests.createdBlog2 😡 ', contextTests.createdBlog2)
-            const { getBlogs } = await blogsTestManager.getAllBlogs(HTTP_STATUSES.OK_200)
+            // console.log('TEST: isBlog1 😡 ', isBlog1)
+            // console.log('TEST: contextTests.createdBlog2 😡 ', contextTests.blogs.createdBlogs)
+            const { getBlogs } = await contextTests.blogsTestManager.getAllBlogs(HTTP_STATUSES.OK_200)
             expect(getBlogs).toEqual(
                 expect.objectContaining({
                     pagesCount: 1,
                     page: 1,
                     pageSize: 10,
                     totalCount: 2,
-                    items: [contextTests.createdBlog2, contextTests.createdBlog1]
+                    items: [contextTests.blogs.createdBlogs[1], contextTests.blogs.createdBlogs[0]]
                 })
             )
         })
@@ -143,45 +141,45 @@ export const blogsE2eTest = () => {
                 description: '',
                 websiteUrl: ''
             }
-            await blogsTestManager.updateBlogs(
+            await contextTests.blogsTestManager.updateBlogs(
                 data,
-                contextTests.codedAuth,
-                contextTests.createdBlog1.id,
+                contextTests.constants.codedAuth,
+                contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.BAD_REQUEST_400
             )
-            const { getBlog } = await blogsTestManager.getBlogsById(
-                contextTests.createdBlog1.id,
+            const { getBlog } = await contextTests.blogsTestManager.getBlogsById(
+                contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.OK_200
             )
-            expect(getBlog).toEqual(expect.objectContaining(contextTests.createdBlog1))
+            expect(getBlog).toEqual(expect.objectContaining(contextTests.blogs.createdBlogs[0]))
         })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего блога! Дополнительные запросы: -> GET`, async () => {
             const data = {
-                name: contextTests.correctBlogNsme3,
-                description: contextTests.correctBlogDescription3,
-                websiteUrl: contextTests.correctWebsiteUrl3
+                name: contextTests.blogs.correctBlogNames[2],
+                description: contextTests.blogs.correctBlogDescriptions[2],
+                websiteUrl: contextTests.blogs.correctWebsiteUrls[2]
             }
-            await blogsTestManager.updateBlogs(
+            await contextTests.blogsTestManager.updateBlogs(
                 data,
-                contextTests.codedAuth,
-                contextTests.invalidId,
+                contextTests.constants.codedAuth,
+                contextTests.constants.invalidId,
                 HTTP_STATUSES.NOT_FOUND_404
             )
         })
         it(`PUT    - Ожидается статус код 204, - Обновление блога с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data: any = {
-                name: contextTests.correctBlogNsme4,
-                description: contextTests.correctBlogDescription4,
-                websiteUrl: contextTests.correctWebsiteUrl4
+                name: contextTests.blogs.correctBlogNames[3],
+                description: contextTests.blogs.correctBlogDescriptions[3],
+                websiteUrl: contextTests.blogs.correctWebsiteUrls[3]
             }
-            await blogsTestManager.updateBlogs(
+            await contextTests.blogsTestManager.updateBlogs(
                 data,
-                contextTests.codedAuth,
-                contextTests.createdBlog1.id,
+                contextTests.constants.codedAuth,
+                contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.NO_CONTENT_204
             )
-            const { getBlog } = await blogsTestManager.getBlogsById(
-                contextTests.createdBlog1.id,
+            const { getBlog } = await contextTests.blogsTestManager.getBlogsById(
+                contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getBlog).toEqual(
@@ -191,36 +189,36 @@ export const blogsE2eTest = () => {
                     websiteUrl: data.websiteUrl
                 })
             )
-            const { response } = await blogsTestManager.getBlogsById(
-                contextTests.createdBlog2.id,
+            const { response } = await contextTests.blogsTestManager.getBlogsById(
+                contextTests.blogs.createdBlogs[1]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(response.body).toEqual(
                 expect.objectContaining(
-                    contextTests.createdBlog2
+                    contextTests.blogs.createdBlogs[1]
                 )
             )
         })
-        it(`DELETE    - Ожидается статус код 204, - Удаление двух блогов! Дополнительные запросы: -> GET`, async () => {
-            await blogsTestManager.deleteBlogs(
-                contextTests.createdBlog1.id,
-                contextTests.codedAuth,
+        it(`DELETE - Ожидается статус код 204, - Удаление двух блогов! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.blogsTestManager.deleteBlogs(
+                contextTests.blogs.createdBlogs[0]!.id,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
-            const { getBlog: res1 } = await blogsTestManager.getBlogsById(
-                contextTests.createdBlog1.id,
+            const { getBlog: res1 } = await contextTests.blogsTestManager.getBlogsById(
+                contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.NOT_FOUND_404
             )
-            await blogsTestManager.deleteBlogs(
-                contextTests.createdBlog2.id,
-                contextTests.codedAuth,
+            await contextTests.blogsTestManager.deleteBlogs(
+                contextTests.blogs.createdBlogs[1]!.id,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
-            const { getBlog: res2 } = await blogsTestManager.getBlogsById(
-                contextTests.createdBlog2.id,
+            const { getBlog: res2 } = await contextTests.blogsTestManager.getBlogsById(
+                contextTests.blogs.createdBlogs[1]!.id,
                 HTTP_STATUSES.NOT_FOUND_404
             )
-            const { getBlogs } = await blogsTestManager.getAllBlogs(HTTP_STATUSES.OK_200)
+            const { getBlogs } = await contextTests.blogsTestManager.getAllBlogs(HTTP_STATUSES.OK_200)
             expect(getBlogs).toEqual(
                 expect.objectContaining({
                     pagesCount: 0,
@@ -231,7 +229,8 @@ export const blogsE2eTest = () => {
                 })
             )
             if (res1 && res2) {
-                contextTests.createdBlog1 = null
+                // Удаляем в тест-сторе все Blogs после удачного посещения deleteBlogs!
+                contextTests.blogs.deleteAllBlogsStateTest()
             }
         })
     })

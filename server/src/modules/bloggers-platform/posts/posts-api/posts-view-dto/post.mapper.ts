@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users-external-query/users-query-repository/users.query-repository";
+import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users.query-repository";
 import { PostDocument } from "../../posts-domain/post.entity";
 import { PostExtendedViewDto } from "./post-extended-view.dto";
 import { PostViewDto } from "./posts.view-dto";
@@ -30,7 +30,7 @@ export class PostMapper {
                 .slice(0, 3);
             // @ts-ignore
             newestLikes = await Promise.all(latest.map(async like => {
-                const user = await this.usersQueryRepository.getUserByIdOrNotFoundFailQueryRepository(String(like.meta.userId));
+                const user = await this.usersQueryRepository.getUserByIdOrNotFoundFail(String(like.meta.userId));
                 return {
                     addedAt: like.updatedAt,
                     userId: like.meta.userId,

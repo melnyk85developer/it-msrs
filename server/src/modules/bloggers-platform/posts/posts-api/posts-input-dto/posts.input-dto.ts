@@ -21,5 +21,5 @@ export class CreatePostInputDto implements CreatePostDto {
     readonly content: string;
     @IsNotEmpty({ message: 'Поле blogId не должно быть пустым!' })
     @IsString({ message: 'blogId должно быть строкой!' })
-    blogId: string;
+    readonly blogId: string;
 }

@@ -1,81 +1,46 @@
-import { contextTests } from "test/contextTests";
 import { CreatePostInputDto } from "../posts-api/posts-input-dto/posts.input-dto";
-import { postsTestManager } from "test/managersTests/postsTestManager";
-import { HTTP_STATUSES } from "src/shared/utils/utils";
-import { Types } from "mongoose";
+import { HTTP_STATUSES } from "src/core/utils/utils";
+import { contextTests } from "test/helpers/init-settings";
 
-export const isCreatedPost1 = async (title: string, shortDescription: string, content: string, blogId: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1Post1) {
-        // console.log('isCreatedUser1: - contextTests.createdUser1', contextTests.createdUser1)
+export const isCreatedPost = async (
+    numBlog: number,
+    numPost: number,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    statusCode: number = HTTP_STATUSES.CREATED_201
+) => {
+    const postKey = contextTests.posts[`createdBlog${numBlog + 1}Posts`]
+    const isPostTestStore = postKey[numPost + 1]
+
+    if (isPostTestStore === undefined || isPostTestStore === null) {
         const postData: CreatePostInputDto = {
             title,
             shortDescription,
             content,
             blogId
         };
-        const { response } = await postsTestManager.createPosts(
+        const { response } = await contextTests.postsTestManager.createPosts(
             postData,
-            contextTests.codedAuth,
-            contextTests.accessTokenUser1Device1,
-            contextTests.refreshTokenUser1Device1,
+            contextTests.constants.codedAuth,
+            contextTests.sessions.accessTokenUser1Devices[0],
+            contextTests.sessions.refreshTokenUser1Devices[0],
             statusCode
         );
         if (response.status === statusCode) {
             // console.log('TEST isCreatedPost1: - response.body 😡😡😡', response.body)
-            contextTests.createdBlog1Post1 = response.body;
-            return contextTests.createdBlog1Post1
+            contextTests.posts.addPostsStateTest({
+                numBlog,
+                numPost,
+                addPost: response.body
+            })
+            return response.body;
         } else {
             return response.body;
         }
     } else {
-        return null
-    }
-}
-export const isCreatedPost2 = async (title: string, shortDescription: string, content: string, blogId: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1Post2) {
-        const postData: CreatePostInputDto = {
-            title,
-            shortDescription,
-            content,
-            blogId
-        };
-        const { response } = await postsTestManager.createPosts(
-            postData,
-            contextTests.codedAuth,
-            contextTests.accessTokenUser1Device1,
-            contextTests.refreshTokenUser1Device1,
-            statusCode
-        );
-        if (response.status === statusCode) {
-            contextTests.createdBlog1Post2 = response.body;
-            return contextTests.createdBlog1Post2
-        } else {
-            return response.body;
-        }
-    } else {
-        return null
-    }
-}
-export const isCreatedPost3 = async (title: string, shortDescription: string, content: string, blogId: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1Post3) {
-        const postData: CreatePostInputDto = {
-            title,
-            shortDescription,
-            content,
-            blogId
-        };
-        const { response } = await postsTestManager.createPosts(
-            postData,
-            contextTests.codedAuth,
-            contextTests.accessTokenUser1Device1,
-            contextTests.refreshTokenUser1Device1,
-            statusCode
-        );
-        if (response.status === statusCode) {
-            contextTests.createdBlog1Post3 = response.body;
-            return contextTests.createdBlog1Post3
-        } else {
-            return response.body;
-        }
+        return contextTests.posts[`createdBlog${numBlog +1}Posts`][numPost]
+        // return null
     }
 }

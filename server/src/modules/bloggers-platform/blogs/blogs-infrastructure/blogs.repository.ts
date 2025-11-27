@@ -3,6 +3,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Blog } from '../blogs-domain/blog.entity';
 import type { BlogDocument, BlogModelType } from '../blogs-domain/blog.entity';
 import { Types } from 'mongoose';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class BlogsRepository {
@@ -21,19 +23,18 @@ export class BlogsRepository {
         await blog.save();
     }
 
-    async findBlogOrNotFoundFailBlogsRepository(id: string): Promise<BlogDocument> {
+    async findBlogOrNotFoundFailRepository(id: string): Promise<BlogDocument> {
         let blog
         if (!id || id === undefined || id === 'undefined') {
-            throw new BadRequestException('id сука говняный 😡😡😡😡😡😡');
+            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - IF id 😡😡😡 typeof', id, typeof id)
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'id сука говняный 😡😡😡😡😡😡');
         } else {
-            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - id 😡😡😡 typeof', id, typeof id)
+            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - ELSE id 😡😡😡 typeof', id, typeof id)
             blog = await this.findBlogById(id);
         }
-        blog = await this.findBlogById(id);
         if (!blog) {
-            throw new NotFoundException('blog not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_ID);
         }
-
         return blog;
     }
 }

@@ -2,6 +2,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Post, PostDocument, type PostModelType } from '../posts-domain/post.entity';
 import { Types } from 'mongoose';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class PostsRepository {
@@ -24,7 +26,7 @@ export class PostsRepository {
         // console.log('PostsRepository: findPostOrNotFoundFail - id 😡 ', id)
         const post = await this.findById(id);
         if (!post) {
-            throw new NotFoundException('post not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.POST_NOT_FOUND_ID, 'post not found');
         }
         // console.log('PostsRepository: findPostOrNotFoundFail - post 😡 ', !!post)
         return post;

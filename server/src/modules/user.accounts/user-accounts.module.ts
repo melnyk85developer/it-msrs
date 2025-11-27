@@ -3,63 +3,76 @@ import { UsersController } from './users-api/users.controller';
 import { UsersService } from './users-application/users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersRepository } from './users-infrastructure/users.repository';
-import { AuthController } from './users-api/auth.controller';
-import { SecurityDevicesController } from './users-api/security-devices.controller';
-import { UsersExternalQueryRepository } from './users-infrastructure/users-external-query/users.external-query-repository';
+import { AuthController } from '../auth/auth-api/auth.controller';
+import { UsersExternalQueryRepository } from './users-infrastructure/users.external-query-repository';
 import { UsersExternalService } from './users-application/users.external-service';
 import { User, UserSchema } from './users-domain/user.entity';
-import { UsersQueryRepository } from './users-infrastructure/users-external-query/users-query-repository/users.query-repository';
-import { SecurityDevicesQueryRepository } from './users-infrastructure/users-external-query/users-query-repository/security-devices.query-repository';
-import { AuthQueryRepository } from './users-infrastructure/users-external-query/users-query-repository/auth.query-repository';
+import { UsersQueryRepository } from './users-infrastructure/users.query-repository';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { AuthService } from './users-application/auth.service';
 import { LocalStrategy } from './users-guards/local/local.strategy';
 import { CryptoService } from './users-application/crypto.service';
 import { JwtStrategy } from './users-guards/bearer/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { TokenModule } from '../tokens/token.module';
+import { SessionService } from '../usersSessions/sessions-application/sessions.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SessionController } from '../usersSessions/sessions-api/sessions.controller';
+import { AuthQueryRepository } from './users-infrastructure/auth.query-repository';
+import { SessionQueryRepository } from '../usersSessions/sessions-infrastructure/sessions.query-repository';
+import { SessionModule } from '../usersSessions/sessions.module';
 
 @Module({
     imports: [
-        //если в системе несколько токенов (например, access и refresh) с разными опциями (время жизни, секрет)
-        //можно переопределить опции при вызове метода jwt.service.sign
-        //или написать свой tokens сервис (адаптер), где эти опции будут уже учтены
-        //или использовать useFactory и регистрацию через токены для JwtService,
-        //для создания нескольких экземпляров в IoC с разными настройками (пример в следующих занятиях)
-        JwtModule.register({
-            secret: 'access-token-secret', //TODO: move to env. will be in the following lessons
-            signOptions: { expiresIn: '60m' }, // Время жизни токена
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: (configService: ConfigService) => ({
+                secret: configService.get('JWT_ACCESS_SECRET'),
+            }),
+            inject: [ConfigService],
         }),
+
         MongooseModule.forFeature([
             { name: User.name, schema: UserSchema }
         ]),
+
         NotificationsModule,
+        PassportModule,
+
+        TokenModule,   // НУЖЕН для AuthService, стратегий, blacklist
+        SessionModule, // СЕССИИ ИСПОЛЬЗУЮТСЯ ПРИ АВТОРИЗАЦИИ
     ],
     controllers: [
         UsersController,
         AuthController,
-        SecurityDevicesController
     ],
     providers: [
         UsersService,
         UsersRepository,
         UsersQueryRepository,
-        SecurityDevicesQueryRepository,
-        AuthQueryRepository,
 
         AuthService,
+        AuthQueryRepository,
+
         LocalStrategy,
-        CryptoService,
         JwtStrategy,
+
+        CryptoService,
 
         UsersExternalQueryRepository,
         UsersExternalService,
     ],
     exports: [
-        JwtStrategy, 
-        UsersExternalQueryRepository, 
+        UsersService,
+        UsersRepository,
+        UsersQueryRepository,
+
+        UsersExternalQueryRepository,
         UsersExternalService,
 
-        UsersQueryRepository
-    ]
+        JwtStrategy,
+        AuthQueryRepository,
+    ],
 })
 export class UserAccountsModule { }

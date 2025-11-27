@@ -22,13 +22,13 @@ export class BlogsService {
         return blog._id.toString();
     }
     async updateBlogService(id: string, dto: UpdateBlogDto): Promise<string> {
-        const blog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(id);
+        const blog = await this.blogsRepository.findBlogOrNotFoundFailRepository(id);
         blog.update(dto);
         await this.blogsRepository.save(blog);
         return blog._id.toString();
     }
     async deleteBlogService(id: string) {
-        const blog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(id);
+        const blog = await this.blogsRepository.findBlogOrNotFoundFailRepository(id);
         blog.makeDeleted();
         await this.blogsRepository.save(blog);
     }

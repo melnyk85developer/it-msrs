@@ -1,7 +1,6 @@
-import { contextTests } from "test/contextTests";
-import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "../../../shared/utils/utils";
-import { usersTestManager } from "test/managersTests/usersTestManager";
-import { CreateUserInputDto } from "../users-api/input-dto-users/users.input-dto";
+import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "src/core/utils/utils";
+import { contextTests } from "test/helpers/init-settings";
+import { CreateUserInputDto } from "../users-dto/users.input-dto";
 
 // const mockRepository = {
 //     createConfirmationRepository: jest.fn().mockResolvedValue({
@@ -34,16 +33,19 @@ export const resetPasswordInegrationTest = () => {
             // contextTests.mailService = mockMailService
             
             const userData1: CreateUserInputDto = {
-                login: contextTests.correctUserName1,
-                password: contextTests.correctUserPassword1,
-                email: contextTests.correctUserEmail1
+                login: contextTests.users.correctUserNames[0],
+                password: contextTests.users.correctUserPasswords[0],
+                email: contextTests.users.correctUserEmails[0]
             }
-            const { response } = await usersTestManager.createUser(
+            const { response, createdEntity } = await contextTests.usersTestManager.createUser(
                 userData1,
-                contextTests.codedAuth,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.CREATED_201
             )
-            contextTests.createdUser1 = response
+            if (response.status === HTTP_STATUSES.CREATED_201) {
+                contextTests.users.addUserStateTest({ numUser: 0, addUser: createdEntity });
+                // console.log('TEST: contextTests.createdUser1 😡 ', contextTests.users.createdUsers[0])
+            }
             // console.log('beforeEach: response', response)
             jest.useRealTimers();
         });
@@ -53,12 +55,18 @@ export const resetPasswordInegrationTest = () => {
             expect(error.status).toBe(INTERNAL_STATUS_CODE.NOT_FOUND_USER);
         });
         it('Успешно отправляет на email сообщение о попытке сбросить пароль', async () => {
-            const result = await contextTests.userService.ressetPasswordService(contextTests.createdUser1.email);
+            const result = await contextTests.userService.ressetPasswordService(
+                contextTests.users.createdUsers[0]!.email
+            );
             expect(result.status).toBe(INTERNAL_STATUS_CODE.SUCCESS);
         });
         it('Выбрасывает ошибку, если 3 минуты не прошло с момента отправки сообщения', async () => {
-            await contextTests.userService.ressetPasswordService(contextTests.createdUser1.email); // Первая попытка
-            const error = await contextTests.userService.ressetPasswordService(contextTests.createdUser1.email); // Вторая попытка через короткий промежуток
+            await contextTests.userService.ressetPasswordService(
+                contextTests.users.createdUsers[0]!.email
+            ); // Первая попытка
+            const error = await contextTests.userService.ressetPasswordService(
+                contextTests.users.createdUsers[0]!.email
+            ); // Вторая попытка через короткий промежуток
             // expect(error.status).toBe(INTERNAL_STATUS_CODE.BAD_REQUEST_TIME_HASNT_PASSED_YET);
         });
         it('Блокирует пользователя, если за последние 18 минут было больше 5 запросов', async () => {
@@ -68,7 +76,7 @@ export const resetPasswordInegrationTest = () => {
                     expirationDate: null as unknown as Date,
                     isBlocked: false,
                     field: 'password',
-                    userId: contextTests.createdUser1.id,
+                    userId: contextTests.users.createdUsers[0]!.id,
                 };
 
                 // Вычисляем время для каждого запроса, отнимая 18 - i*3 минуты
@@ -76,7 +84,9 @@ export const resetPasswordInegrationTest = () => {
                 const isCreatedConfirmation = await contextTests.confirmationRepository.createConfirmationRepository(dataCode);
                 console.log('ITERATION FOR TEST: isCreatedConfirmation - ',isCreatedConfirmation)
             }
-            const error = await contextTests.userService.ressetPasswordService(contextTests.createdUser1.email); // Шестая попытка
+            const error = await contextTests.userService.ressetPasswordService(
+                contextTests.users.createdUsers[0]!.email
+            ); // Шестая попытка
             console.log('TEST error:', error)
             // expect(error.status).toBe(INTERNAL_STATUS_CODE.BAD_REQUEST_A_LOT_OF_REQUESTS_TRY_AGAIN_LATER);
 
@@ -84,13 +94,17 @@ export const resetPasswordInegrationTest = () => {
             jest.useFakeTimers("modern");
             jest.setSystemTime(new Date(Date.now() + 38 * 60 * 1000));
 
-            const result = await contextTests.userService.ressetPasswordService(contextTests.createdUser1.email);
+            const result = await contextTests.userService.ressetPasswordService(
+                contextTests.users.createdUsers[0]!.email
+            );
             console.log('TEST result:', result)
             // expect(result.status).toBe(INTERNAL_STATUS_CODE.BAD_REQUEST_FUNCTION_BLOCKED);
 
             jest.advanceTimersByTime(2 * 60 * 1000);
             // Снимает блокировку 40 мин., если время действия блокировки истекло
-            const success = await contextTests.userService.ressetPasswordService(contextTests.createdUser1.email);
+            const success = await contextTests.userService.ressetPasswordService(
+                contextTests.users.createdUsers[0]!.email
+            );
             console.log('TEST success:', success)
             expect(success.status).toBe(INTERNAL_STATUS_CODE.SUCCESS);
         });

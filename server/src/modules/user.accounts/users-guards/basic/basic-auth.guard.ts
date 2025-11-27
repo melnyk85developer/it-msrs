@@ -27,10 +27,7 @@ export class BasicAuthGuard implements CanActivate {
         }
 
         if (!authHeader || !authHeader.startsWith('Basic ')) {
-            throw new DomainException({
-                code: DomainExceptionCode.Unauthorized,
-                message: 'unauthorised',
-            });
+            throw new DomainException(DomainExceptionCode.Unauthorized);
         }
 
         const base64Credentials = authHeader.split(' ')[1];
@@ -42,10 +39,7 @@ export class BasicAuthGuard implements CanActivate {
         if (username === this.validUsername && password === this.validPassword) {
             return true;
         } else {
-            throw new DomainException({
-                code: DomainExceptionCode.Unauthorized,
-                message: 'unauthorised',
-            });
+            throw new DomainException(DomainExceptionCode.Unauthorized);
         }
     }
 }

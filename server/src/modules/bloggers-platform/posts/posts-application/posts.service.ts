@@ -5,7 +5,6 @@ import { CreatePostDto, CreatePostForBlogDto, UpdatePostDto } from '../posts-dto
 import { type PostModelType } from '../posts-domain/post.entity';
 import { PostsRepository } from '../posts-infrastructure/posts.repository';
 import { BlogsRepository } from '../../blogs/blogs-infrastructure/blogs.repository';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class PostsService {
@@ -17,19 +16,21 @@ export class PostsService {
 
     async createPostService(dto: Omit<CreatePostDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>): Promise<string> {
         // console.log('PostsService: createPostService: dto 😡 ', dto)
-        const isBlog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(dto.blogId);
+        const isBlog = await this.blogsRepository.findBlogOrNotFoundFailRepository(String(dto.blogId));
         // console.log('PostsService: createPostService: isBlog IF 😡 ', isBlog)
         const post = this.PostModel.createPostInstance({
             ...dto,
             blogId: String(isBlog._id),
             blogName: isBlog.name
         });
+        // console.log('PostsService: createPostService: post PREV SAVE 😡 ', post)
         await this.postsRepository.save(post);
+        // console.log('PostsService: createPostService: post RES 😡 ', post)
         return post._id.toString();
     }
     async createPostOneBlogService(dto: Omit<CreatePostForBlogDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, blogId: string): Promise<string> {
         // console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
-        const isBlog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(blogId);
+        const isBlog = await this.blogsRepository.findBlogOrNotFoundFailRepository(blogId);
         // console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
         const post = this.PostModel.createPostInstance({
             ...dto,

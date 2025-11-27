@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Types } from 'mongoose';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { SortDirection } from 'src/core/dto/base.query-params.input-dto';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { GetBlogsQueryParams } from 'src/modules/bloggers-platform/blogs/blogs-api/input-dto-blogs/get-blogs-query-params.input-dto';
 import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto';
 import { Blog, type BlogModelType } from 'src/modules/bloggers-platform/blogs/blogs-domain/blog.entity';
@@ -69,7 +71,7 @@ export class BlogsQueryRepository {
         //     throw new NotFoundException('blog not found');
         // }
         if (!blogId) {
-            throw new BadRequestException('Корявый 😡😡😡 blogId');
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'Корявый blogId ты мне пихаешь 😡!')
         }
         const blog = await this.BlogModel.findOne({
             _id: blogId,
@@ -77,7 +79,7 @@ export class BlogsQueryRepository {
         });
 
         if (!blog) {
-            throw new NotFoundException('blog not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_BLOG_ID);
         }
 
         return BlogViewDto.mapToBlogsView(blog);

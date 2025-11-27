@@ -1,4 +1,4 @@
-import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "../../../shared/utils/utils";
+import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "../../../core/utils/utils";
 
 export const USERS_STATUS_POSITIVE = {
     [INTERNAL_STATUS_CODE.SUCCESS_CREATED_USER]: {

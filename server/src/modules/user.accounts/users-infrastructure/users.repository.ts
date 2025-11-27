@@ -2,6 +2,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User, UserDocument } from '../users-domain/user.entity';
 import type { UserModelType } from 'src/modules/user.accounts/users-domain/user.entity';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class UsersRepository {
@@ -20,22 +22,31 @@ export class UsersRepository {
         await user.save();
     }
 
-    async findOrNotFoundFail(id: string): Promise<UserDocument> {
+    async findUserByIdOrNotFoundFail(id: string): Promise<UserDocument> {
         const user = await this.findById(id);
         if (!user) {
-            throw new NotFoundException('user not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
         }
 
         return user;
     }
 
-    async findByLogin(login: string): Promise<UserDocument | null> {
-        return this.UserModel.findOne({ login });
+    async findByLoginOrEmail(loginOrEmail: string): Promise<UserDocument | null> {
+        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail);
+        return this.UserModel.findOne(
+            {
+                $or: [
+                    { 'accountData.userName': loginOrEmail }, // Ищем по логину
+                    { 'accountData.email': loginOrEmail }    // Ищем по почте
+                ]
+            }
+        );
     }
-    async findByEmail(email: string): Promise<UserDocument | null> {
-        return this.UserModel.findOne({ email });
-    }
+
     async loginIsExist(login: string): Promise<boolean> {
         return !!(await this.UserModel.countDocuments({ login: login }));
+    }
+    async findAllUsers(): Promise<UserDocument[]> {
+        return this.UserModel.find();
     }
 }

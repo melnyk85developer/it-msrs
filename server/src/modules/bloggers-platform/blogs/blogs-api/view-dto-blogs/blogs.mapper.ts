@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users-external-query/users-query-repository/users.query-repository";
+import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users.query-repository";
 
 import { BlogViewDto } from "./blogs.view-dto";
 import { BlogDocument } from "../../blogs-domain/blog.entity";
@@ -31,7 +31,7 @@ export class BlogMapper {
                 .slice(0, 3);
             // @ts-ignore
             newestLikes = await Promise.all(latest.map(async like => {
-                const user = await this.usersQueryRepository.getUserByIdOrNotFoundFailQueryRepository(String(like.meta.userId));
+                const user = await this.usersQueryRepository.getUserByIdOrNotFoundFail(String(like.meta.userId));
                 return {
                     addedAt: like.updatedAt,
                     userId: like.meta.userId,

@@ -3,6 +3,8 @@ import mongoose, { HydratedDocument, Model, Types } from 'mongoose';
 import { UpdateBlogDto } from '../blogs-dto/create-blog.dto';
 import { CreateBlogDomainDto } from './dto/create-blog.domain.dto';
 import { NotFoundException } from '@nestjs/common';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Schema({
     // timestamps: true, 
@@ -65,7 +67,7 @@ export class Blog {
     }
     makeDeleted() {
         if (this.deletedAt !== null) {
-            throw new NotFoundException('Блог уже удален!');
+            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_ID)
         }
         this.deletedAt = new Date().toISOString();
     }

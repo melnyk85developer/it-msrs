@@ -13,43 +13,32 @@ export class DomainHttpExceptionsFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
 
-        const status = this.mapToHttpStatus(exception.code);
+        // !!! ИСПОЛЬЗУЕМ ГОТОВЫЙ СТАТУС 400 ИЗ ИСКЛЮЧЕНИЯ !!!
+        const status = exception.httpStatus;
+
+        // !!! ДИАГНОСТИЧЕСКИЙ ЛОГ (Убедитесь, что тут 400)
+        // console.log(`DomainFilter: Final Status 😡 ${status}. Code: ${exception.code}`);
+
         const responseBody = this.buildResponseBody(exception, request.url);
 
         response.status(status).json(responseBody);
     }
 
-    private mapToHttpStatus(code: DomainExceptionCode): number {
-        switch (code) {
-            case DomainExceptionCode.BadRequest:
-            case DomainExceptionCode.ValidationError:
-            case DomainExceptionCode.ConfirmationCodeExpired:
-            case DomainExceptionCode.EmailNotConfirmed:
-            case DomainExceptionCode.PasswordRecoveryCodeExpired:
-                return HttpStatus.BAD_REQUEST;
-            case DomainExceptionCode.Forbidden:
-                return HttpStatus.FORBIDDEN;
-            case DomainExceptionCode.NotFound:
-                return HttpStatus.NOT_FOUND;
-            case DomainExceptionCode.Unauthorized:
-                return HttpStatus.UNAUTHORIZED;
-            case DomainExceptionCode.InternalServerError:
-                return HttpStatus.INTERNAL_SERVER_ERROR;
-            default:
-                return HttpStatus.I_AM_A_TEAPOT;
-        }
-    }
+    // !!! ВАЖНО: ЭТОТ МЕТОД НУЖНО ПОЛНОСТЬЮ УДАЛИТЬ !!!
+    // private mapToHttpStatus(code: DomainExceptionCode): number { ... }
 
     private buildResponseBody(
         exception: DomainException,
         requestUrl: string,
     ): ErrorResponseBody {
+        // ... (остается без изменений)
         return {
             timestamp: new Date().toISOString(),
             path: requestUrl,
             message: exception.message,
             code: exception.code,
             extensions: exception.extensions,
+            field: exception.field, // Этот лог сработал
         };
     }
 }

@@ -1,16 +1,23 @@
-import { contextTests } from "test/contextTests";
-import { HTTP_STATUSES } from "../../../shared/utils/utils";
-import { authTestManager } from "test/managersTests/authTestManager";
+import { HTTP_STATUSES } from "src/core/utils/utils";
+import { contextTests } from "test/helpers/init-settings";
 
-export const isCreatedUser1 = async (login: string, email: string, password: string, statusCode: number = HTTP_STATUSES.NO_CONTENT_204) => {
-    if (!contextTests.createdUser1) {
-        // console.log('isCreatedUser1: - contextTests.createdUser1', contextTests.createdUser1)
+export const isCreatedUser = async (
+    numUser: number,
+    login: string,
+    email: string,
+    password: string,
+    statusCode: number = HTTP_STATUSES.NO_CONTENT_204
+) => {
+    if (contextTests.users.createdUsers[numUser] === undefined || contextTests.users.createdUsers[numUser] === null) {
+        // console.log('isCreatedUser1: - contextTests.createdUsers[num]', contextTests.users.createdUsers[numUser])
+        // console.log('isCreatedUser1: - contextTests.createdUsers[num]', contextTests.users.createdUsers)
         const user: any = {
             login,
             password,
             email
         }
-        const { body, response } = await authTestManager.registration(
+        // console.log('isCreatedUser1: - user', user)
+        const { body, response } = await contextTests.authTestManager.registration(
             user,
             statusCode
         )
@@ -21,61 +28,5 @@ export const isCreatedUser1 = async (login: string, email: string, password: str
         }
     } else {
         return null
-    }
-}
-export const isCreatedUser2 = async (login: string, email: string, password: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdUser2) {
-        const user: any = {
-            login,
-            password,
-            email
-        }
-        const { body, response } = await authTestManager.registration(
-            user,
-            statusCode
-        )
-        if (response.status === HTTP_STATUSES.NO_CONTENT_204) {
-            return true
-        } else {
-            return body
-        }
-    }
-}
-export const isCreatedUser3 = async (login: string, email: string, password: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdUser3) {
-        const user: any = {
-            login,
-            password,
-            email
-        }
-        const { body, response } = await authTestManager.registration(
-            user,
-            statusCode
-        )
-        // console.log('isCreatedUser3: - body', body)
-        if (response.status === HTTP_STATUSES.NO_CONTENT_204) {
-            return true
-        } else {
-            return body
-        }
-    }
-}
-export const isCreatedUser4 = async (login: string, email: string, password: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdUser4) {
-        const user: any = {
-            login,
-            password,
-            email
-        }
-        const { body, response } = await authTestManager.registration(
-            user,
-            statusCode
-        )
-        // console.log('isCreatedUser3: - body', body)
-        if (response.status === HTTP_STATUSES.NO_CONTENT_204) {
-            return true
-        } else {
-            return body
-        }
     }
 }

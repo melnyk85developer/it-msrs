@@ -13,7 +13,7 @@ export class UsersExternalService {
     ) { }
 
     async makeUserAsSpammer(userId: string) {
-        const user = await this.usersRepository.findOrNotFoundFail(userId);
+        const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
 
         // user.makeSpammer();
 

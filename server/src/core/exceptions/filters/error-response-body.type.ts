@@ -7,4 +7,5 @@ export type ErrorResponseBody = {
     message: string;
     extensions: Extension[];
     code: DomainExceptionCode;
+    field?: string;
 };

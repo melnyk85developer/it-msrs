@@ -1,4 +1,4 @@
-import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "src/shared/utils/utils"
+import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "src/core/utils/utils"
 
 export const POSTS_STATUS_POSITIVE = {
     [INTERNAL_STATUS_CODE.SUCCESS_CREATED_POST]: {

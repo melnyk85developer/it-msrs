@@ -5,6 +5,8 @@ import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { type CommentModelType, Comment } from '../../../comments-domain/comments.entity';
 import { GetCommentsQueryParams } from '../../../comments-api/comments-input-dto/get-comments-query-params.input-dto';
 import { CommentViewDto } from '../../../comments-api/comments-view-dto/comments.view-dto';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class CommentsQueryRepository {
@@ -50,7 +52,7 @@ export class CommentsQueryRepository {
         });
 
         if (!post) {
-            throw new NotFoundException('comment not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.COMMENT_NOT_FOUND)
         }
 
         return CommentViewDto.mapToView(post);

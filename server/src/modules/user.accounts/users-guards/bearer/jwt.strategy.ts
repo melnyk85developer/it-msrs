@@ -1,23 +1,61 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
+import { Strategy, ExtractJwt } from 'passport-jwt';
+import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
+import { UsersRepository } from '../../users-infrastructure/users.repository';
+import { UsersService } from '../../users-application/users.service';
 import { UserContextDto } from '../dto/user-context.dto';
+import { SessionService } from 'src/modules/usersSessions/sessions-application/sessions.service';
+import { TokenService } from 'src/modules/tokens/token-service';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor() {
+    constructor(
+        private usersRepository: UsersRepository,
+        private configService: ConfigService,
+        private tokenService: TokenService,
+        private usersService: UsersService,
+        private sessionService: SessionService,
+    ) {
+        const secret = configService.get('JWT_ACCESS_SECRET');
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: 'access-token-secret', //TODO: move to env. will be in the following lessons
+            secretOrKey: secret,
         });
     }
-
-    /**
-     * функция принимает payload из jwt токена и возвращает то, что впоследствии будет записано в req.user
-     * @param payload
-     */
-    async validate(payload: UserContextDto): Promise<UserContextDto> {
-        return payload;
+    async validate(payload: { id: string, iat: number, exp: number }): Promise<UserContextDto | null> {
+        const user = await this.usersRepository.findById(payload.id);
+        if (!user || user.isBanned) {
+            console.log('🔥 JwtStrategy: - user', user)
+            return null;
+        }
+        const isToken = await this.tokenService.getTokenBlackList(payload.id)
+        if (isToken) {
+            console.log('🔥 JwtStrategy: - isToken', isToken)
+            // throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_REFRESH_TOKEN_BLACK_LIST)
+            return null;
+        }
+        const devices = await this.sessionService.findAllSessionsServices(payload.id)
+        if (!devices) {
+            console.log('🔥 JwtStrategy: - devices', devices)
+            // throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED)
+            return null;
+        }
+        const sessionExists = devices.some(d => d.userId === payload.id && Number(d.lastActiveDate) === Number(payload.iat))
+        // console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
+        if (!sessionExists) {
+            console.log('JwtAuthGuard: СУКА 😡 Сессия токена не найдена/обновлена');
+            return null;
+        }
+        const isUpdateLastSeen = await this.usersService.updateLastSeenUserService(payload.id);
+        console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
+        if (!isUpdateLastSeen) {
+            console.log('🔥 JwtStrategy: - isUpdateLastSeen', isUpdateLastSeen)
+            return null;
+        }
+        return { id: user.id };
     }
 }

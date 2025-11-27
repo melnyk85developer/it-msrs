@@ -1,69 +1,24 @@
-import { HTTP_STATUSES } from "src/shared/utils/utils";
-import { contextTests } from "test/contextTests";
-import { blogsTestManager } from "test/managersTests/blogsTestManager";
+import { HTTP_STATUSES } from "src/core/utils/utils";
+import { contextTests } from "test/helpers/init-settings";
 
-export const isCreatedBlog1 = async (name: string, description: string, websiteUrl: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1) {
-            const blogData = {
-                name,
-                description,
-                websiteUrl
-            };
-            const { bodyBlog, response } = await blogsTestManager.createBlogs(
-                blogData,
-                contextTests.codedAuth,
-                HTTP_STATUSES.CREATED_201
-            );
-            contextTests.createdBlog1 = bodyBlog
-
-        if (response.status === statusCode) {
-            return contextTests.createdBlog1
-        } else {
+export const isCreatedBlog = async (numBlog: number, name: string, description: string, websiteUrl: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
+    if (contextTests.blogs.createdBlogs[numBlog] === undefined || contextTests.blogs.createdBlogs[numBlog] === null) {
+        // console.log('isCreatedBlog: - contextTests.createdBlogs[num]', contextTests.createdBlogs[num])
+        const blogData = {
+            name,
+            description,
+            websiteUrl
+        };
+        const { bodyBlog, response } = await contextTests.blogsTestManager.createBlogs(
+            blogData,
+            contextTests.constants.codedAuth,
+            HTTP_STATUSES.CREATED_201
+        );
+        if (response.status === HTTP_STATUSES.CREATED_201) {
+            // console.log('isCreatedBlog: bodyBlog 😡', bodyBlog)
+            // Добавляем в тест-сторе Blog после удачного посещения createBlogs!
+            contextTests.blogs.addBlogStateTest({ numBlog, addBlog: bodyBlog })
             return response.body;
-        }
-    } else {
-        return null
-    }
-}
-export const isCreatedBlog2 = async (name: string, description: string, websiteUrl: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog2) {
-            const blogData = {
-                name,
-                description,
-                websiteUrl
-            };
-            const { bodyBlog, response } = await blogsTestManager.createBlogs(
-                blogData,
-                contextTests.codedAuth,
-                HTTP_STATUSES.CREATED_201
-            );
-            contextTests.createdBlog2 = bodyBlog
-
-        if (response.status === statusCode) {
-            return contextTests.createdBlog2
-        } else {
-            return response.body;
-        }
-    } else {
-        return null
-    }
-}
-export const isCreatedBlog3 = async (name: string, description: string, websiteUrl: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog3) {
-            const blogData = {
-                name,
-                description,
-                websiteUrl
-            };
-            const { bodyBlog, response } = await blogsTestManager.createBlogs(
-                blogData,
-                contextTests.codedAuth,
-                HTTP_STATUSES.CREATED_201
-            );
-            contextTests.createdBlog3 = bodyBlog
-
-        if (response.status === statusCode) {
-            return contextTests.createdBlog3
         } else {
             return response.body;
         }

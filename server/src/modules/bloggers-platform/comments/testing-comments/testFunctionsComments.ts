@@ -1,74 +1,34 @@
-import { HTTP_STATUSES } from "src/shared/utils/utils";
-import { contextTests } from "test/contextTests";
+import { HTTP_STATUSES } from "src/core/utils/utils";
 import { CreateCommentInputDto } from "../comments-api/comments-input-dto/comments.input-dto";
-import { commetsTestManager } from "test/managersTests/commentsTestManager";
+import { contextTests } from "test/helpers/init-settings";
 
-
-export const isCreatedComment1 = async (content: string, postId: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1Post1Comment1) {
-            const commentData: CreateCommentInputDto = {
-                content,
-                postId
-            };
-            const { createdComment, response } = await commetsTestManager.createComment(
-                contextTests.createdBlog1Post1.id,
-                commentData,
-                contextTests.accessTokenUser1Device1,
-                statusCode
-            )
-            contextTests.createdBlog1Post1Comment1 = createdComment
-
-        if (response.status === statusCode) {
-            contextTests.total_number_of_comments_in_tests++
-            return contextTests.createdBlog1Post1Comment1
-        } else {
-            return response.body;
-        }
-    } else {
-        return null
-    }
-}
-export const isCreatedComment2 = async (content: string, postId: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1Post1Comment2) {
-            const commentData: CreateCommentInputDto = {
-                content,
-                postId
-            };
-            const { createdComment, response } = await commetsTestManager.createComment(
-                contextTests.createdBlog1Post1.id,
-                commentData,
-                contextTests.accessTokenUser1Device1,
-                HTTP_STATUSES.CREATED_201
-            )
-            contextTests.createdBlog1Post1Comment2 = createdComment
+export const isCreatedComment1 = async (
+    numBlog: number,
+    numPost: number,
+    numComment: number,
+    content: string,
+    postId: string,
+    statusCode: number = HTTP_STATUSES.CREATED_201
+) => {
+    if (!contextTests.comments.createdBlog1Post1Comments.length) {
+        const commentData: CreateCommentInputDto = {
+            content,
+            postId
+        };
+        const { createdComment, response } = await contextTests.commentsTestManager.createComment(
+            numBlog,
+            numPost,
+            numComment,
+            contextTests.posts.createdBlog1Posts[0]!.id,
+            commentData,
+            contextTests.sessions.accessTokenUser1Devices[0],
+            statusCode
+        )
 
         if (response.status === statusCode) {
-            contextTests.total_number_of_comments_in_tests++
-            return contextTests.createdBlog1Post1Comment2
-        } else {
-            return response.body;
-        }
-    } else {
-        return null
-    }
-}
-export const isCreatedComment3 = async (content: string, postId: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
-    if (!contextTests.createdBlog1Post1Comment3) {
-            const commentData: CreateCommentInputDto = {
-                content,
-                postId
-            };
-            const { createdComment, response } = await commetsTestManager.createComment(
-                contextTests.createdBlog1Post1.id,
-                commentData,
-                contextTests.accessTokenUser1Device1,
-                HTTP_STATUSES.CREATED_201
-            )
-            contextTests.createdBlog1Post1Comment3 = createdComment
-
-        if (response.status === statusCode) {
-            contextTests.total_number_of_comments_in_tests++
-            return contextTests.createdBlog1Post1Comment3
+            // contextTests.comments.total_number_of_comments_in_tests++
+            // return contextTests.comments.createdBlog1Post1Comments.push(createdComment)
+            return createdComment;
         } else {
             return response.body;
         }

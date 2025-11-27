@@ -13,10 +13,8 @@ export class BlogsExternalService {
     ) { }
 
     async makeUserAsSpammer(userId: string) {
-        const blog = await this.blogsRepository.findBlogOrNotFoundFailBlogsRepository(userId);
-
+        const blog = await this.blogsRepository.findBlogOrNotFoundFailRepository(userId);
         // blog.makeSpammer();
-
         await this.blogsRepository.save(blog);
     }
 }

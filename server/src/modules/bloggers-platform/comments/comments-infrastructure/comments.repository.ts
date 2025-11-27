@@ -1,6 +1,8 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Comment, CommentDocument, type CommentModelType } from '../comments-domain/comments.entity';
+import { DomainException } from 'src/core/exceptions/domain-exceptions';
+import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 
 @Injectable()
 export class CommentsRepository {
@@ -22,7 +24,7 @@ export class CommentsRepository {
     async findCommentOrNotFoundFailRepository(id: string): Promise<CommentDocument> {
         const comment = await this.findCommentByIdRepository(id);
         if (!comment) {
-            throw new NotFoundException('comment not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.COMMENT_NOT_FOUND)
         }
 
         return comment;

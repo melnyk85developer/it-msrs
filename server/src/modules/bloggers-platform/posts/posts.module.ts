@@ -7,7 +7,6 @@ import { PostsExternalQueryRepository } from './posts-infrastructure/posts-exter
 import { PostsExternalService } from './posts-application/posts.external-service';
 import { Post, PostSchema } from './posts-domain/post.entity';
 import { CommentModule } from '../comments/comments.module';
-import { ValidationUpdatePostInterceptor } from './posts-interceptors/post-update-validation-interceptor';
 import { BlogsRepositoryModule } from '../blogs/blogs-repository.module';
 import { PostsRepositoryModule } from './posts-repository.module';
 import { PostMapper } from './posts-api/posts-view-dto/post.mapper';
@@ -32,7 +31,6 @@ import { UserAccountsModule } from 'src/modules/user.accounts/user-accounts.modu
         PostsExternalQueryRepository,
         PostsExternalService,
         
-        ValidationUpdatePostInterceptor
     ],
     exports: [
         PostsService,

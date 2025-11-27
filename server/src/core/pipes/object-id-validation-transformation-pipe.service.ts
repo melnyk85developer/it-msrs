@@ -14,10 +14,7 @@ export class ObjectIdValidationTransformationPipe implements PipeTransform {
         }
 
         if (!isValidObjectId(value)) {
-            throw new DomainException({
-                code: DomainExceptionCode.BadRequest,
-                message: `Invalid ObjectId: ${value}`,
-            });
+            throw new DomainException(DomainExceptionCode.BadRequest);
         }
         return new Types.ObjectId(value); // Преобразуем строку в ObjectId
 
@@ -34,10 +31,7 @@ export class ObjectIdValidationPipe implements PipeTransform {
         // Проверяем, что тип данных в декораторе — ObjectId
 
         if (!isValidObjectId(value)) {
-            throw new DomainException({
-                code: DomainExceptionCode.BadRequest,
-                message: `Invalid ObjectId: ${value}`,
-            });
+            throw new DomainException(DomainExceptionCode.BadRequest);
         }
 
         // Если тип не ObjectId, возвращаем значение без изменений

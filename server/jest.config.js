@@ -9,6 +9,7 @@ module.exports = {
     "/node_modules/",
     "/dist/",  // Исключает скомпилированные файлы
     "\\.d\\.ts$",  // Игнорирует файлы .d.ts
+    "\\/test\\/helpers\\/",
   ],
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
