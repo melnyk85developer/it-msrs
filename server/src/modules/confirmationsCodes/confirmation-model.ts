@@ -1,21 +1,32 @@
-import { Table, Column, Model, DataType, ForeignKey } from 'sequelize-typescript';
-import { User } from '../users/usersModel';
+import { ApiProperty } from '@nestjs/swagger';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument, Model } from 'mongoose';
 
-@Table({ tableName: 'confirmation' })
-export class Confirmation extends Model<Confirmation> {
-    @Column({type: DataType.STRING,allowNull: false})
+@Schema({
+    _id: false,
+})
+export class Confirmation {
+    @ApiProperty({ example: 'confirmationCode', description: 'Код подверждения.' })
+    @Prop({ type: String, required: true }) // unique: true
     confirmationCode: string;
 
-    @Column({type: DataType.DATE, allowNull: false})
+    @ApiProperty({ example: 'expirationDate', description: 'Срок годности.' })
+    @Prop({ type: String, required: true }) // unique: true
     expirationDate: Date;
 
-    @Column({type: DataType.BOOLEAN, allowNull: false})
+    @ApiProperty({ example: 'isBlocked', description: 'Стоит ли блокировка.' })
+    @Prop({ type: String, required: true }) // unique: true
     isBlocked: boolean;
 
-    @Column({type: DataType.STRING, allowNull: false})
+    @ApiProperty({ example: 'field', description: 'Поле сущьности с которой работает подтверждение.' })
+    @Prop({ type: String, required: true }) // unique: true
     field: string;
 
-    @ForeignKey(() => User)
-    @Column({type: DataType.INTEGER, allowNull: false})
+    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя который совершает подтверждение.' })
+    @Prop({ type: String, required: true }) // unique: true
     userId: number;
 }
+export const ConfirmationSchema = SchemaFactory.createForClass(Confirmation);
+ConfirmationSchema.loadClass(Confirmation);
+export type ConfirmationDocument = HydratedDocument<Confirmation>;
+export type ConfirmationModelType = Model<ConfirmationDocument> & typeof Confirmation;

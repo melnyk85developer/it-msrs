@@ -1,22 +1,17 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { Confirmation } from './confirmation-model';
-import { AuthModule } from '../auth/authModule';
-import { UsersModule } from '../users/usersModule';
-import { User } from '../users/usersModel';
-import { ConfirmationService } from './confirmations-infrastructure/confirmationRepository';
+import { Confirmation, ConfirmationSchema } from './confirmation-model';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfirmationRepository } from './confirmations-infrastructure/confirmationRepository';
 
 @Module({
-  providers: [
-    ConfirmationService,
-  ],
-  imports: [
-    SequelizeModule.forFeature([Confirmation, User]),
-    forwardRef(() => AuthModule),
-    forwardRef(() => UsersModule),
-  ],
-  exports: [
-    ConfirmationService,
-  ],
+    imports: [
+        MongooseModule.forFeature([{ name: Confirmation.name, schema: ConfirmationSchema }]),
+    ],
+    providers: [
+        ConfirmationRepository,
+    ],
+    exports: [
+        ConfirmationRepository,
+    ],
 })
-export class ConfirmationModule {}
+export class ConfirmationModule { }

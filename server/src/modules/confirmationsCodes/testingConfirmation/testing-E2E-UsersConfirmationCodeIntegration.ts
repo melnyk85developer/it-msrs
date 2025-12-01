@@ -1,13 +1,6 @@
-import { HttpStatus, INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { Sequelize } from 'sequelize-typescript';
-import { getConnectionToken } from '@nestjs/sequelize';
-import { ConfigModule } from '@nestjs/config';
-import { AppModule } from '../../../../src/app-module';
-import { ConfirmationService } from '../confirmations-infrastructure/confirmationRepository';
-import { UserCreationsAttrs } from '../../../../src/services/users/usersModel';
-import { usersTestManager } from '../../../../__tests__/managersTests/usersTestManager';
-import { contextTests } from '../../../../__tests__/contextTests';
+import { contextTests } from 'test/helpers/init-settings';
+import { HTTP_STATUSES } from 'src/core/utils/utils';
+import { CreateUserDto } from 'src/modules/user.accounts/users-dto/create-user.dto';
 
 export const confirmationCodeIntegrationTest = () => {
     describe('CONFIRMATION-CODE-INTEGRATION', () => {
@@ -20,39 +13,18 @@ export const confirmationCodeIntegrationTest = () => {
             jest.clearAllMocks();
         });
         beforeAll(async () => {
-            const moduleFixture: TestingModule = await Test.createTestingModule({
-                imports: [
-                    ConfigModule.forRoot({
-                        envFilePath: '.development.env',
-                        isGlobal: true,
-                    }),
-                    AppModule,
-                ],
-            }).compile();
-
-            contextTests.app = moduleFixture.createNestApplication();
-            await contextTests.app.init();
-
-            // Получение подключения к базе данных
-            const sequelize = moduleFixture.get<Sequelize>(getConnectionToken());
-            // Очистка всех данных из таблиц перед тестами
-            await sequelize.sync({ force: true });
-
-            // confirmationService = moduleFixture.get<ConfirmationService>(ConfirmationService)
-
-            const userData: UserCreationsAttrs = {
-                name: 'MR - TEST - 1',
-                surname: 'ROBOR - TEST - 1',
+            const userData: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'> = {
+                login: 'MR - TEST - 1',
                 password: 'qwerty',
                 email: 'magamelnyk85developer@gmail.com',
             };
 
-            const { createdUser } = await usersTestManager.createUser(
-                contextTests.app.getHttpServer(),
+            const { createdEntity } = await contextTests.usersTestManager.createUser(
                 userData,
-                HttpStatus.CREATED,
+                contextTests.constants.codedAuth,
+                HTTP_STATUSES.CREATED_201,
             );
-            user = createdUser;
+            user = createdEntity;
         });
         it('GET  - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             await confirmationService.findAllConfirmationRepository()

@@ -246,7 +246,12 @@ export class AuthService {
             const to = email
             const subject = `Повторный запрос на активацию аккаунта в проекте ${process.env.PROJEKT_NAME}`
             const text = confirmationCode
-            const html = mailResendingEmailMessageHTMLDocument(nameProjekt, to, text, `${process.env.API_URL}/auth/registration-confirmation/${confirmationCode}`)
+            const html = mailResendingEmailMessageHTMLDocument(
+                nameProjekt, 
+                to, 
+                text, 
+                `${process.env.API_URL}/auth/registration-confirmation/${confirmationCode}`
+            )
 // emailService
             const isSend = this.mailService.sendMail(from, to, subject, text, html)
                 .catch(() => console.log('Ошибка отправки сообщения на E-Mail'))
