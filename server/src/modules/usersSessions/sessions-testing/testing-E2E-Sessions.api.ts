@@ -75,7 +75,7 @@ export const userSessionE2eTest = () => {
             )
             // console.log('TEST - arrSessions', arrSessions)
             // console.log('TEST - contextTests.sessionsUser1', contextTests.sessionsUser1)
-            expect(arrSessions.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            expect(arrSessions.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
         })
         it('POST   - Ожидается статус код 201, - Выдаёт новую пару access и refresh tokens, заносит старый refreshToken в черный список!, Дополнительные запросы: -> GET', async () => {
             const { arrSessions: userSessions } = await contextTests.userSessionTestManager.getAllUserSessionByUserId(
@@ -84,7 +84,7 @@ export const userSessionE2eTest = () => {
                 HTTP_STATUSES.OK_200
             )
             // console.log('TEST - arrSessions', userSessions)
-            expect(userSessions.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            expect(userSessions.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
             // console.log('TEST - accessTokenUser1Device1, refreshTokenUser1Device1', contextTests.accessTokenUser1Device1, contextTests.refreshTokenUser1Device1)
             const { response, refresh } = await contextTests.authTestManager.refreshToken(
                 contextTests.sessions.accessTokenUser1Devices[0],
@@ -111,7 +111,7 @@ export const userSessionE2eTest = () => {
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(arrSessions.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            expect(arrSessions.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
         })
         it('DELETE - Ожидается статус код 204, - Успешное удаление сессии пользователя!', async () => {
             const { arrSessions } = await contextTests.userSessionTestManager.getAllUserSessionByUserId(
@@ -119,7 +119,8 @@ export const userSessionE2eTest = () => {
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(arrSessions.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            expect(arrSessions.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            // console.log('TEST - total_count_sessions_user1!!!', contextTests.sessions.total_count_sessions_user1)
             const { response: res } = await contextTests.userSessionTestManager.deleteSessionByDeviceId(
                 contextTests.sessions.sessionsUser1[1].deviceId,
                 contextTests.sessions.accessTokenUser1Devices[1],
@@ -135,9 +136,18 @@ export const userSessionE2eTest = () => {
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(response.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            expect(response.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            // console.log('TEST - total_count_sessions_user1!!!', contextTests.sessions.total_count_sessions_user1)
         })
         it('POST   - Ожидается статус код 204, При logout заносит в черный список refreshToken и онулирует сессию пользователя!, Дополнительные запросы: -> GET', async () => {
+            const { response: sessions1 } = await contextTests.userSessionTestManager.getAllUserSessionByUserId(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(sessions1.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            // console.log('TEST - total_count_sessions_user1', contextTests.sessions.total_count_sessions_user1)
+
             const { status } = await contextTests.authTestManager.logout(
                 contextTests.sessions.accessTokenUser1Devices[2],
                 contextTests.sessions.refreshTokenUser1Devices[2],
@@ -165,7 +175,7 @@ export const userSessionE2eTest = () => {
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(sessions.length).toBe(contextTests.sessions.total_count_sessions_user1)
+            expect(sessions.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
         })
         it(`DELETE - Должен удалить все сессии пользователя - кроме текущей! Дополнительные запросы: -> GET`, async () => {
             const { response } = await contextTests.userSessionTestManager.deleteUserSessions(
@@ -173,9 +183,14 @@ export const userSessionE2eTest = () => {
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
+            const { arrSessions } = await contextTests.userSessionTestManager.getAllUserSessionByUserId(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(arrSessions.items.length).toBe(1)
             if (response.status === HTTP_STATUSES.NO_CONTENT_204) {
-                // console.log('contextTests.total_count_sessions_user1', contextTests.total_count_sessions_user1)
-                
+                // console.log('contextTests.total_count_sessions_user1', contextTests.sessions.total_count_sessions_user1)
                 // Удаляем в тест-сторе все сессии кроме текущей, а так же токены после удачного посещения deleteUserSessions!
                 await contextTests.sessions.deleteAllSessionStateTest({
                     numUser: 0,
@@ -183,14 +198,8 @@ export const userSessionE2eTest = () => {
                     accessToken: contextTests.sessions.accessTokenUser1Devices[0],
                     refreshToken: contextTests.sessions.refreshTokenUser1Devices[0]
                 })
-                // console.log('contextTests.total_count_sessions_user1', contextTests.total_count_sessions_user1)
+                // console.log('contextTests.total_count_sessions_user1', contextTests.sessions.total_count_sessions_user1)
             }
-            const { arrSessions } = await contextTests.userSessionTestManager.getAllUserSessionByUserId(
-                contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.sessions.refreshTokenUser1Devices[0],
-                HTTP_STATUSES.OK_200
-            )
-            expect(arrSessions.length).toBe(1)
         })
     })
 }

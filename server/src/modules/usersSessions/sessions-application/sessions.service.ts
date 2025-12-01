@@ -26,11 +26,11 @@ export class SessionService {
         let existingSession: any | null = null
         if (refreshToken) {
             userToken = await this.tokenService.decodeRefreshToken(refreshToken);
-            console.log('🔥🔥 createSessionsServices - userToken:', userToken);
+            // console.log('🔥🔥 createSessionsServices - userToken:', userToken);
         }
         if (userId && refreshToken) {
             if (devices && devices.length && userToken) {
-                console.log('🔥 createSessionsServices - devices:', devices);
+                // console.log('🔥 createSessionsServices - devices:', devices);
                 existingSession = devices.find(
                     (session: { browserName: string | null; browserVersion: string | null; osName: string | null; osVersion: string | null; deviceId: string }) =>
                         session.browserName === browserName &&
@@ -39,11 +39,11 @@ export class SessionService {
                         session.osVersion === osVersion &&
                         session.deviceId === userToken.deviceId
                 );
-                console.log('🔥 createSessionsServices - existingSession:', existingSession);
+                // console.log('🔥 createSessionsServices - existingSession:', existingSession);
             }
         }
         if (existingSession) {
-            console.log('🔥 UsersSessionService: - Обновляем существующую сессию', existingSession)
+            // console.log('🔥 UsersSessionService: - Обновляем существующую сессию', existingSession)
             return await this.updateSessionService({
                 userId,
                 ip,
@@ -152,7 +152,7 @@ export class SessionService {
     }
     async deleteSessionsByDeviceIdServices(userId: string, deviceId: string): Promise<{ statusCode: number; message: string; } | any> {
         const session = await this.findSessionByDeviceIdOrNotFoundServices(deviceId)
-        console.log('SessionService deleteSessionsByDeviceIdServices - session', session)
+        // console.log('SessionService deleteSessionsByDeviceIdServices - session', session)
         if (session && String(session.userId) !== String(userId)) {
             // console.log('UsersSessionService deleteSessionsByDeviceIdServices - if', userSession.userId, userId)
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_DELETED_YOU_ARE_NOT_THE_OWNER_OF_THE_SESSION)
@@ -167,15 +167,23 @@ export class SessionService {
         }
     }
     async deleteAllSessionsServices(userId: string, deviceId: string, refreshToken: string): Promise<{ statusCode: number; message: string; } | any> {
-        const isDelete = await this.sessionsRepository.deleteAllSession(userId);
-        console.log('SessionService deleteAllSessionsServices - isDelete', isDelete)
-        return isDelete
+        const isSessions = await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(userId);
+
+        if (isSessions && isSessions.length > 0) {
+            for (let i = 0; isSessions.length > i; i++) {
+                if (isSessions[i].deviceId !== deviceId) {
+                    await this.sessionsRepository.deleteSession(userId, deviceId);
+                }
+            }
+        }
+        console.log('SessionService deleteAllSessionsServices - isSessions.length', isSessions.length)
+        return isSessions.length
     }
 
-    async findSessionByDeviceIdOrNotFoundServices(deviceId): Promise<any> {
+    async findSessionByDeviceIdOrNotFoundServices(deviceId: string): Promise<any> {
         return await this.sessionsRepository.findSessionByDeviceIdOrNotFoundFail(deviceId)
     }
-    async findAllSessionsServices(userId): Promise<SessionDocument[]> {
+    async findAllSessionsServices(userId: string): Promise<SessionDocument[]> {
         return await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(userId)
     }
 }

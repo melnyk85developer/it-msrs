@@ -30,31 +30,34 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         const user = await this.usersRepository.findById(payload.id);
         if (!user || user.isBanned) {
             console.log('🔥 JwtStrategy: - user', user)
-            return null;
+            throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED)
+            // return null;
         }
         const isToken = await this.tokenService.getTokenBlackList(payload.id)
         if (isToken) {
             console.log('🔥 JwtStrategy: - isToken', isToken)
-            // throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_REFRESH_TOKEN_BLACK_LIST)
-            return null;
+            throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_REFRESH_TOKEN_BLACK_LIST)
+            // return null;
         }
         const devices = await this.sessionService.findAllSessionsServices(payload.id)
         if (!devices) {
             console.log('🔥 JwtStrategy: - devices', devices)
-            // throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED)
-            return null;
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_SESSION_ID)
+            // return null;
         }
         const sessionExists = devices.some(d => d.userId === payload.id && Number(d.lastActiveDate) === Number(payload.iat))
         // console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
         if (!sessionExists) {
             console.log('JwtAuthGuard: СУКА 😡 Сессия токена не найдена/обновлена');
-            return null;
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_SESSION_ID)
+            // return null;
         }
         const isUpdateLastSeen = await this.usersService.updateLastSeenUserService(payload.id);
-        console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
+        // console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
         if (!isUpdateLastSeen) {
             console.log('🔥 JwtStrategy: - isUpdateLastSeen', isUpdateLastSeen)
-            return null;
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
+            // return null;
         }
         return { id: user.id };
     }

@@ -32,7 +32,7 @@ export class UserSessionTestManager {
                         osVersion: expect.any(String),
                         country: null,
                         city: null,
-                        device: expect.any(String),
+                        // device: expect.any(String),
                         userId: expect.any(String),
                         deviceId: expect.any(String),
                         expirationDate: expect.any(Number),

@@ -50,6 +50,7 @@ export class SessionsRepository {
         return this.SessionModel.deleteOne({ userId, deviceId });
     }
     async deleteAllSession(userId: string): Promise<DeleteResult> {
+        // Для Админа
         return this.SessionModel.deleteMany({ userId });
     }
 }

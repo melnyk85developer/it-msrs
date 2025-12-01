@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseGuards, Get, HttpCode, HttpStatus, UseInterceptors, Redirect, Param } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from '../../user.accounts/users-application/users.service';
 import { AuthService } from '../../user.accounts/users-application/auth.service';
 import { LocalAuthGuard } from '../../user.accounts/users-guards/local/local-auth.guard';
@@ -69,7 +69,7 @@ export class AuthController {
     @Post('/refresh-token')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async refreshController(@ExtractDeviceInfo() deviceInfo: DeviceInfo, @ExtractRefreshPayload() refreshTokenPayload: any): Promise<{ accessToken: string, refreshToken: string }> {
-        console.log('refreshController: refreshTokenPayload - 👽👽👽', refreshTokenPayload)
+        // console.log('refreshController: refreshTokenPayload - 👽👽👽', refreshTokenPayload)
         const isRefresh = await this.authService.refreshService(
             deviceInfo.ip,
             deviceInfo.title,
@@ -82,14 +82,16 @@ export class AuthController {
     @ApiBearerAuth()
     // @UseGuards(AuthAccessGuard)
     @UseGuards(AuthRefreshGuard)
-    @UseInterceptors(ClearCookieInterceptor) 
+    @UseInterceptors(ClearCookieInterceptor)
     @Post('/logout')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async logoutController(@ExtractDeviceInfo() deviceInfo: DeviceInfo, @ExtractRefreshPayload() refreshTokenPayload: any) {
-        return await this.authService.logoutService(
+        const isLogout = await this.authService.logoutService(
             deviceInfo.refreshToken as string,
             refreshTokenPayload
         );
+        console.log('logoutController: isLogout 👽👽😡👽👽 RES', isLogout)
+        return isLogout
     }
     @ApiBearerAuth()
     @Get('/me')
@@ -98,24 +100,20 @@ export class AuthController {
         // console.log('AuthController: me - user 👽😡👽 ', user)
         return this.authQueryRepository.me(user.id);
     }
-
+    @Post('/registration-email-resending')
+    @ApiResponse({ status: 200, description: 'Повторная отправка для активации аккаунта!' })
+    async registrationEmailResendingController(@Body() userDto: CreateUserInputDto) {
+        return await this.authService.registrationEmailResendingService(userDto.email)
+    }
     @Redirect(process.env.CLIENT_URL, 3000) // Указываем дефолтный URL для редиректа
     @Get('/registration-confirmation/:link')
     async registrationСonfirmationController(@Param('link') confirmationCode: string) {
 
-        // if (confirmationCode) {
-        //     const isActivated = await this.usersService.confirmationCodeRegistrationService(confirmationCode);
+        const isActivated = await this.usersService.confirmationCodeRegistrationService(confirmationCode);
 
-        //     if (isActivated === true) {
-        //         return { url: process.env.CLIENT_URL }; // URL для перенаправления
-        //     }
-
-        //     if (isActivated === INTERNAL_STATUS_CODE.BAD_REQUEST_EXPIRATION_TIME_PASSED) {
-        //         throw new ErRes(INTERNAL_STATUS_CODE.BAD_REQUEST_EXPIRATION_TIME_PASSED);
-        //     }
-        // } else {
-        //     throw new ErRes(INTERNAL_STATUS_CODE.BAD_REQUEST_CONFIRMATION_CODE_CANNOT_BE_EMPTY);
-        // }
+        if (isActivated === true) {
+            return { url: process.env.CLIENT_URL }; // URL для перенаправления
+        }
 
     }
     @ApiBearerAuth()

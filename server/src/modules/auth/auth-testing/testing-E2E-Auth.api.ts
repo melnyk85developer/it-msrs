@@ -72,6 +72,7 @@ export const authE2eTest = () => {
                 beforeRefreshToken,
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
+            // Обновляем токены в контектсе тестов!
             contextTests.sessions.updateAccessRefreshTokenUsersStateTest({
                 numUser: 0,
                 numDevice: 0,
@@ -90,43 +91,43 @@ export const authE2eTest = () => {
             )
             expect(arrSessions.items.length).toBe(contextTests.sessions.total_count_sessions_user1)
         })
-        // it('POST   - Ожидается статус код 204, - При logout заносит в черный список refreshToken! Дополнительные запросы: -> POST', async () => {
-        //     const isLogin = await isLoginUser(
-        //         0,
-        //         0,
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         contextTests.users.correctUserEmails[0],
-        //         contextTests.users.correctUserPasswords[0],
-        //         contextTests.sessions.userAgent[0],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     const beforeAccessToken = contextTests.sessions.accessTokenUser1Devices[0]
-        //     const beforeRefreshToken = contextTests.sessions.refreshTokenUser1Devices[0]
+        it('POST   - Ожидается статус код 204, - При logout заносит в черный список refreshToken! Дополнительные запросы: -> POST', async () => {
+            const isLogin = await isLoginUser(
+                0,
+                0,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.users.correctUserEmails[0],
+                contextTests.users.correctUserPasswords[0],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            const beforeAccessToken = contextTests.sessions.accessTokenUser1Devices[0]
+            const beforeRefreshToken = contextTests.sessions.refreshTokenUser1Devices[0]
 
-        //     const { status } = await contextTests.authTestManager.logout(
-        //         beforeAccessToken,
-        //         beforeRefreshToken,
-        //         HTTP_STATUSES.NO_CONTENT_204
-        //     )
-        //     const { response } = await contextTests.authTestManager.refreshToken(
-        //         beforeAccessToken,
-        //         beforeRefreshToken,
-        //         contextTests.sessions.userAgent[0],
-        //         HTTP_STATUSES.UNAUTHORIZED_401
-        //     )
-        //     expect(response.body.message).toBe('Указаной сессии по deviceId не найдено!')
-        //     if (status === HTTP_STATUSES.NO_CONTENT_204) {
-        //         console.log('🔥TEST🔥: - status:', status);
-        //         contextTests.sessions.deleteSessionStateTest(
-        //             {
-        //                 numUser: 0,
-        //                 numDevice: 0,
-        //                 accessToken: contextTests.sessions.accessTokenUser1Devices[0],
-        //                 refreshToken: contextTests.sessions.refreshTokenUser1Devices[0]
-        //             }
-        //         )
-        //     }
-        // })
+            const { status } = await contextTests.authTestManager.logout(
+                beforeAccessToken,
+                beforeRefreshToken,
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            if (status === HTTP_STATUSES.NO_CONTENT_204) {
+                console.log('🔥TEST🔥: - status:', status);
+                contextTests.sessions.deleteSessionStateTest(
+                    {
+                        numUser: 0,
+                        numDevice: 0,
+                        accessToken: contextTests.sessions.accessTokenUser1Devices[0],
+                        refreshToken: contextTests.sessions.refreshTokenUser1Devices[0]
+                    }
+                )
+            }
+            const { response } = await contextTests.authTestManager.refreshToken(
+                beforeRefreshToken,
+                beforeRefreshToken,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            expect(response.body.message).toBe('⛔️ Не авторизован!')
+        })
     })
 }

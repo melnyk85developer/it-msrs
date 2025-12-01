@@ -30,9 +30,9 @@ export class SessionController {
     @Get('/devices')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getallDevicesByUserIdController(@Query() query: GetSessionsQueryParams, @ExtractUserIfExistsFromRequest() user: UserContextDto): Promise<PaginatedViewDto<SessionViewDto[]>> {
-        // console.log('SecurityDevicesQueryRepository: - user 😡 ', user)
+        console.log('getallDevicesByUserIdController: - user 😡 ', user)
         const allDevices = await this.sessionsQueryRepository.allDevicesOneUserQueryRepository(query, user.id);
-        // console.log('SecurityDevicesQueryRepository: - allDevices 😡 ', allDevices)
+        // console.log('getallDevicesByUserIdController: - allDevices 😡 ', allDevices)
         return allDevices
     }
     @ApiOperation({ summary: 'Удалить сессию по deviceId!' })
@@ -41,7 +41,7 @@ export class SessionController {
     @Delete(`/devices/:deviceId`)
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteSessionByDeviceIdController(@Param('deviceId') deviceId: string, @ExtractUserIfExistsFromRequest() user: UserContextDto) {
-        console.log('SecurityDevicesQueryRepository: - deviceId 😡 ', deviceId)
+        // console.log('SecurityDevicesQueryRepository: - deviceId 😡 ', deviceId)
         const isDeleteSession = await this.usersSessionService.deleteSessionsByDeviceIdServices(
             user.id,
             deviceId,

@@ -160,18 +160,18 @@ export class SessionContextClass {
         const updatedAccessTokens = this[accessKey].map((t: string, index: number) =>
             index === numDevice ? null : t
         );
-        console.log('SessionContextClass: updatedAccessTokens 👽😡👽 ', updatedAccessTokens)
+        // console.log('SessionContextClass: updatedAccessTokens 👽😡👽 ', updatedAccessTokens)
         const updatedRefreshTokens = this[refreshKey].map((t: string, index: number) =>
             index === numDevice ? null : t
         );
-        console.log('SessionContextClass: updatedRefreshTokens 👽😡👽 ', updatedRefreshTokens)
+        // console.log('SessionContextClass: updatedRefreshTokens 👽😡👽 ', updatedRefreshTokens)
         const updatedSessions = this[sessionKey].map((s: any, index: number) =>
             index === numDevice ? null : s
         );
         this[accessKey] = updatedAccessTokens
         this[refreshKey] = updatedRefreshTokens
         this[sessionKey] = updatedSessions
-        this.total_count_sessions_user1--
+        this.total_count_sessions_user1 --
     }
     public async deleteAllSessionStateTest({ numUser, numDevice, accessToken, refreshToken, userId }: {
         numUser: number;
@@ -183,6 +183,7 @@ export class SessionContextClass {
 
         this[`accessTokenUser${numUser + 1}Devices`] = [this[`accessTokenUser${numUser + 1}Devices`][numDevice]]
         this[`refreshTokenUser${numUser + 1}Devices`] = [this[`refreshTokenUser${numUser + 1}Devices`][numDevice]]
+
         this[`sessionsUser${numUser + 1}`] = [this[`sessionsUser${numUser + 1}`][numDevice]]
 
         this.total_count_sessions_user1 = this[`sessionsUser${numUser + 1}`].length

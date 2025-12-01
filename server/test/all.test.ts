@@ -43,28 +43,28 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         // authIntegrationTest()
         // authUnitTest()
     })
-    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
-    //     userSessionE2eTest()
-    //     // usersSessionsInegrationTest()
+    describe('USER-SESSIONS-BLOCK-TESTS', () => {
+        userSessionE2eTest()
+        // usersSessionsInegrationTest()
+    })
+    // describe('CONFIRMATION-BLOCK-TESTS', () => {
+    //     resetPasswordInegrationTest()
     // })
-    // // describe('CONFIRMATION-BLOCK-TESTS', () => {
-    // //     resetPasswordInegrationTest()
-    // // })
-    // describe('BLOGS-BLOCK-TESTS', () => {
-    //     blogsE2eTest()
+    describe('BLOGS-BLOCK-TESTS', () => {
+        blogsE2eTest()
+    })
+    describe('POSTS-BLOCK-TESTS', () => {
+        postsE2eTest()
+    })
+    describe('COMMENTS-BLOCK-TESTS', () => {
+        commentsE2eTest()
+    })
+    // describe('LIKES-BLOCK-TESTS', () => {
+    //     likesE2eTest()
     // })
-    // describe('POSTS-BLOCK-TESTS', () => {
-    //     postsE2eTest()
-    // })
-    // describe('COMMENTS-BLOCK-TESTS', () => {
-    //     commentsE2eTest()
-    // })
-    // // describe('LIKES-BLOCK-TESTS', () => {
-    // //     likesE2eTest()
-    // // })
-    // describe('USERS-BLOCK-TESTS', () => {
-    //     usersE2eTest()
-    // })
+    describe('USERS-BLOCK-TESTS', () => {
+        usersE2eTest()
+    })
     afterAll(async () => {
         await mongoose.disconnect();
         await contextTests.app.close();

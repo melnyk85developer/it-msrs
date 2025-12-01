@@ -42,11 +42,11 @@ export const AUTH_ERRORS = {
         statusCode: HTTP_STATUSES.BAD_REQUEST_400,
     },
     [HTTP_STATUSES.UNAUTHORIZED_401]: {
-        messages: { message: '⛔️ Не авторизован', field: 'auth' },
+        messages: { message: '⛔️ Не авторизован!', field: 'auth' },
         statusCode: HTTP_STATUSES.UNAUTHORIZED_401,
     },
     [INTERNAL_STATUS_CODE.UNAUTHORIZED]: {
-        messages: { message: '⛔️ Не авторизован', field: 'auth' },
+        messages: { message: '⛔️ Не авторизован!', field: 'auth' },
         statusCode: HTTP_STATUSES.UNAUTHORIZED_401,
     },
     [INTERNAL_STATUS_CODE.UNAUTHORIZED_ACCESS_TOKEN_LENGHT]: {
