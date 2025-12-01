@@ -5,6 +5,6 @@ export class CreateConfirmationDomainDto {
     isBlocked: boolean;
     field: string;
     userId: string;
-    lastActiveDate: Date | null;
-    expirationDate: Date | null;
+    lastActiveDate: Date;
+    expirationDate: Date;
 }

@@ -2,16 +2,15 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { AccountData, AccountDataSchema } from './account.data';
 import { add } from "date-fns";
-import { Confirmation, ConfirmationSchema } from 'src/modules/user.accounts/users-domain/confirmation.entity';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from './roles-user.data';
 import { Banneds } from './all-banneds-user.data';
-import { CreateSessionDomainDto, UpdateSessionDto } from 'src/modules/usersSessions/sessions-dto/create-sessions.domain.dto';
 import { Session } from 'src/modules/usersSessions/sessions-domain/sessions.entity';
 import { UpdateUserDto } from '../users-dto/create-user.dto';
 import { CreateUserDomainDto } from '../users-dto/create-user.domain.dto';
+import { Confirmation, ConfirmationSchema } from 'src/modules/confirmationsCodes/confirmation-model';
 
 @Schema({
     // _id: false,
@@ -43,8 +42,8 @@ export class User {
     @Prop({ type: [Banneds], required: false })
     banneds: Banneds[]
 
-    // @Prop({ type: [ConfirmationSchema], required: false, default: [] })
-    // confirmations: Confirmation[];
+    @Prop({ type: [ConfirmationSchema], required: false, default: [] })
+    confirmations: Confirmation[];
 
     get id() {
         // @ts-ignore

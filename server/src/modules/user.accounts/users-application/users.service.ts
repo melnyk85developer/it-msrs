@@ -92,32 +92,20 @@ export class UsersService {
         await this.usersRepository.save(user);
     }
     async confirmationCodeRegistrationService(confirmationCode: string): Promise<any> {
-        const myAConfirmation = await this.myConfirmationRepository.findByCodeConfirmationRepository(confirmationCode)
-        const user = await this.usersRepository.findUserByIdOrNotFoundFail(String(myAConfirmation.userId));
-
-        const isUser = await this._getUserByIdService(myAConfirmation.userId)
-        if (isUser) {
-            if (isUser.confirmation.length) {
-                const confirmation = isUser.confirmation[isUser.confirmation.length - 1]
-                if (new Date > confirmation.expirationDate) {
-                    console.log('UsersService confirmationCode: - EXPIRATION', confirmation.expirationDate)
-                    throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_EXPIRATION_TIME_PASSED)
-                } else {
-                    return await this.usersRepository.activateProfileByUserIdRepository(myAConfirmation.userId)
-                }
+        const сonfirmation = await this.myConfirmationRepository.findByCodeConfirmationRepository(confirmationCode)
+        if (сonfirmation) {
+            const confirmation = confirmation[confirmation.length - 1]
+            if (new Date > confirmation.expirationDate) {
+                console.log('UsersService confirmationCode: - EXPIRATION', confirmation.expirationDate)
+                throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_EXPIRATION_TIME_PASSED)
+            } else {
+                return await this.usersRepository.activateProfileByUserIdRepository(myAConfirmation.userId)
             }
-        }
-    }
-    async _getUserByIdService(userId: number): Promise<User | null> {
-        const getUser = await this.usersRepository._getUserByIdRepository(userId)
-        // console.log('_getUserByIdService: - ', getUser)
-        if (getUser) {
-            return getUser
-        } else {
-            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
+        }else{
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_CONFIRMATION_CODE)
         }
     }
     async _getUserByEmailService(email: string): Promise<User | any> {
-        return await this.usersRepository._getUserByEmailRepository(email)
+        return await this.usersRepository.findByLoginOrEmail(email)
     }
 }

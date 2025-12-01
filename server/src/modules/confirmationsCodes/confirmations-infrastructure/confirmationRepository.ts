@@ -1,71 +1,63 @@
 import { Injectable } from '@nestjs/common';
-import { Confirmation, type ConfirmationModelType } from '../confirmation-model';
+import { Confirmation, ConfirmationDocument, type ConfirmationModelType } from '../confirmation-model';
 import { ConfDto } from '../dto/confDto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { InjectModel } from '@nestjs/mongoose';
+import { DeleteResult } from 'mongoose';
 
 @Injectable()
 export class ConfirmationRepository {
     constructor(
-        @InjectModel(Confirmation.name) private UserModel: ConfirmationModelType,
+        @InjectModel(Confirmation.name) private ConfirmationModel: ConfirmationModelType,
     ) { }
 
-    async findAllConfirmationRepository(): Promise<Confirmation[]> {
-        try {
-            return await this.UserModel.find()
-        } catch (error) {
-            throw new DomainException(-100, `Ошибка базы данных: findAllConfirmationRepository: ${error}`, error)
-        }
+    async findConfirmationById(id: string): Promise<ConfirmationDocument | null> {
+        return this.ConfirmationModel.findOne({
+            _id: id,
+            // deletedAt: null,
+        });
     }
-    async findByCodeConfirmationRepository(confirmationCode: string): Promise<Confirmation> {
-        try {
-            return await this.UserModel.findOne({ where: { confirmationCode } })
-        } catch (error) {
-            throw new DomainException(-100, `Ошибка базы данных: findByCodeConfirmationRepository: ${error}`, error)
-        }
+
+    async saveConfirmation(confirmation: ConfirmationDocument) {
+        await confirmation.save();
     }
-    async createConfirmationRepository(dto: ConfDto): Promise<ConfDto> {
-        try {
-            // console.log('ConfirmationService: - createCo dto: nfirmationRepository', dto)
-            const code = await this.UserModel.create({
-                ...dto,
-                confirmationCode: dto.confirmationCode,
-                expirationDate: dto.expirationDate,
-                field: dto.field,
-                userId: dto.userId
-            })
-            // console.log('ConfirmationService: - response DB code: createConfirmationRepository', code)
-            return code
-        } catch (error) {
-            throw new DomainException(-100, `Ошибка базы данных: createConfirmationRepository: ${error}`, error)
-        }
+
+    async findAllConfirmationsRepository(): Promise<Confirmation[]> {
+        return await this.ConfirmationModel.find()
     }
-    async updateConfirmationRepository(confirmationId: number, myShopDto: any): Promise<Confirmation> {
-        const { confirmationCode, isBlocked, field, expirationDate, userId } = myShopDto
-        try {
-            const [updatedRowCount, [updateConfirmation]] = await this.UserModel.update(
-                { confirmationCode, isBlocked, field, expirationDate, userId },
-                { where: { id: confirmationId }, returning: true }
-            )
-            return updateConfirmation
-        } catch (error) {
-            throw new DomainException(-100, `Ошибка базы данных: updateConfirmationRepository: ${error}`, error)
-        }
+    async findByCodeConfirmationRepository(confirmationCode: string): Promise<Confirmation | null> {
+        return await this.ConfirmationModel.findOne({
+            confirmationCode: confirmationCode
+        })
     }
-    async deleteConfirmationUserIdRepository(userId: number): Promise<number> {
-        try {
-            return await this.UserModel.destroy({
-                where: { userId: userId },
-            })
-        } catch (error) {
-            throw new DomainException(-100, `Ошибка базы данных: deleteConfirmationUserIdRepository: ${error}`, error)
-        }
+    // async createConfirmationRepository(dto: ConfDto): Promise<ConfDto> {
+    //     // console.log('ConfirmationService: - createCo dto: nfirmationRepository', dto)
+    //     const code = await this.UserModel.create({
+    //         ...dto,
+    //         confirmationCode: dto.confirmationCode,
+    //         expirationDate: dto.expirationDate,
+    //         field: dto.field,
+    //         userId: dto.userId
+    //     })
+    //     // console.log('ConfirmationService: - response DB code: createConfirmationRepository', code)
+    //     return code
+    // }
+    // async updateConfirmationRepository(confirmationId: number, myShopDto: any): Promise<Confirmation> {
+    //     const { confirmationCode, isBlocked, field, expirationDate, userId } = myShopDto
+    //     const [updatedRowCount, [updateConfirmation]] = await this.UserModel.update(
+    //         { confirmationCode, isBlocked, field, expirationDate, userId },
+    //         { where: { id: confirmationId }, returning: true }
+    //     )
+    //     return updateConfirmation
+    // }
+    async deleteConfirmationUserIdRepository(userId: number): Promise<DeleteResult> {
+        return await this.ConfirmationModel.deleteOne({
+            userId: userId,
+        })
     }
-    async deleteConfirmationIdRepository(id: number): Promise<number> {
-        try {
-            return await this.UserModel.destroy({ where: { id: id } })
-        } catch (error) {
-            throw new DomainException(-100, `Ошибка базы данных: deleteConfirmationUserIdRepository: ${error}`, error)
-        }
+    async deleteConfirmationIdRepository(id: number): Promise<DeleteResult> {
+        return await this.ConfirmationModel.deleteOne({
+            id: id
+        })
     }
 }

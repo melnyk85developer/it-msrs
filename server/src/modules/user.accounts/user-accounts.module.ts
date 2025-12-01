@@ -22,6 +22,7 @@ import { SessionController } from '../usersSessions/sessions-api/sessions.contro
 import { AuthQueryRepository } from './users-infrastructure/auth.query-repository';
 import { SessionQueryRepository } from '../usersSessions/sessions-infrastructure/sessions.query-repository';
 import { SessionModule } from '../usersSessions/sessions.module';
+import { ConfirmationModule } from '../confirmationsCodes/confirmation-module';
 
 @Module({
     imports: [
@@ -42,6 +43,7 @@ import { SessionModule } from '../usersSessions/sessions.module';
 
         TokenModule,   // НУЖЕН для AuthService, стратегий, blacklist
         SessionModule, // СЕССИИ ИСПОЛЬЗУЮТСЯ ПРИ АВТОРИЗАЦИИ
+        ConfirmationModule
     ],
     controllers: [
         UsersController,
