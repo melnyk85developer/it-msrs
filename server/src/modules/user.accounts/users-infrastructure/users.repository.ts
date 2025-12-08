@@ -17,7 +17,17 @@ export class UsersRepository {
             deletedAt: null,
         });
     }
-
+    async findByLoginOrEmail(loginOrEmail: string): Promise<UserDocument | null> {
+        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail);
+        return this.UserModel.findOne(
+            {
+                $or: [
+                    { 'accountData.userName': loginOrEmail }, // Ищем по логину
+                    { 'accountData.email': loginOrEmail }    // Ищем по почте
+                ]
+            }
+        );
+    }
     async save(user: UserDocument) {
         await user.save();
     }
@@ -30,21 +40,19 @@ export class UsersRepository {
 
         return user;
     }
+    async findUserByLoginOrEmailOrNotFoundFail(id: string): Promise<UserDocument> {
+        const user = await this.findById(id);
+        if (!user) {
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
+        }
 
-    async findByLoginOrEmail(loginOrEmail: string): Promise<UserDocument | null> {
-        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail);
-        return this.UserModel.findOne(
-            {
-                $or: [
-                    { 'accountData.userName': loginOrEmail }, // Ищем по логину
-                    { 'accountData.email': loginOrEmail }    // Ищем по почте
-                ]
-            }
-        );
+        return user;
     }
 
     async loginIsExist(login: string): Promise<boolean> {
-        return !!(await this.UserModel.countDocuments({ login: login }));
+        return !!(await this.UserModel.countDocuments({
+            'accountData.userName': login
+        }));
     }
     async findAllUsers(): Promise<UserDocument[]> {
         return this.UserModel.find();

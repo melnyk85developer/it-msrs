@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Token, TokenSchema } from './token-entity';
-import { TokenService } from './token-service';
-import { TokenRepository } from './token.repository';
+import { Token, TokenSchema } from './tokens-domain/token-entity';
+import { TokenService } from './tokens-application/token-service';
+import { TokenRepository } from './tokens-infrastructure/token.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 

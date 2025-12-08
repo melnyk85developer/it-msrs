@@ -1,16 +1,13 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { AccountData, AccountDataSchema } from './account.data';
-import { add } from "date-fns";
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from './roles-user.data';
 import { Banneds } from './all-banneds-user.data';
-import { Session } from 'src/modules/usersSessions/sessions-domain/sessions.entity';
 import { UpdateUserDto } from '../users-dto/create-user.dto';
 import { CreateUserDomainDto } from '../users-dto/create-user.domain.dto';
-import { Confirmation, ConfirmationSchema } from 'src/modules/confirmationsCodes/confirmation-model';
 
 @Schema({
     // _id: false,
@@ -26,10 +23,6 @@ export class User {
     @Prop({ type: [Role], required: false })
     roles: Role[]
 
-    // @ApiProperty({ example: 'Devices', description: 'Устройства пользователя с которых осуществлен вход!.' })
-    // @Prop({ type: [Session], required: false, default: [] })
-    // devices: Session[];
-
     @ApiProperty({ example: 'isBanned', description: 'Является ли заблокированным в данный момент?' })
     @Prop({ type: Boolean, required: false })
     isBanned: boolean;
@@ -41,9 +34,6 @@ export class User {
     @ApiProperty({ example: 'Blockages', description: 'Блокировки пользователя в проекте.' })
     @Prop({ type: [Banneds], required: false })
     banneds: Banneds[]
-
-    @Prop({ type: [ConfirmationSchema], required: false, default: [] })
-    confirmations: Confirmation[];
 
     get id() {
         // @ts-ignore
@@ -70,24 +60,50 @@ export class User {
         user.bannReason = null;
         return user as UserDocument;
     }
-    static async addRole(role: Role) {
-        const user = new this();
-        user.roles.push(role)
-        return user as UserDocument;
-    }
-    updateAccountData(dto: Omit<UpdateUserDto, 'deletedAt' | 'updatedAt'>) {
+    updateAccountData(id: string, dto: Omit<UpdateUserDto, 'deletedAt' | 'updatedAt'>) {
         const date = new Date();
         const updatedAt = date.toISOString();
 
-        if (dto.email !== this.accountData.email) {
-            this.accountData.isEmailConfirmed = false;
+        if (this.id === id) {
             this.accountData.email = dto.email;
             this.accountData.userName = dto.login;
             this.accountData.updatedAt = updatedAt;
             this.accountData.deletedAt = null;
         }
     }
-    static async updateLastSeen(userId) {
+    updateUserPassword(passwordHash: string, userId: string) {
+        if (this.id === userId) {
+            this.accountData.passwordHash = passwordHash;
+        }
+    }
+    static async makeUpdatedConfirmedAccount(userId: string) {
+        const user = new this();
+        if (userId === user.id) {
+            // console.log('UsersService: deleteUserService - this.deletedAt 😡 ', this.accountData.deletedAt)
+            if (user.accountData.isEmailConfirmed !== true) {
+                user.accountData.isEmailConfirmed = true;
+            } else {
+                throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
+            }
+        }
+    }
+    // setConfirmationCode(code: string) {
+    //     this.confirmations.push({
+    //         confirmationCode: code,
+    //         expirationDate: add(new Date(), {
+    //             // hours: 1,
+    //             minutes: 3
+    //         }),
+    //         isBlocked: true,
+    //         field: 'registration'
+    //     })
+    // }
+    static async addRole(role: Role) {
+        const user = new this();
+        user.roles.push(role)
+        return user as UserDocument;
+    }
+    static async updateLastSeen(userId: string) {
         const date = new Date();
         const user = new this();
 
@@ -105,18 +121,6 @@ export class User {
         this.accountData.deletedAt = date.toISOString();
         // console.log('UsersService: deleteUserService - this.deletedAt 😡 ', this.accountData.deletedAt)
     }
-    // setConfirmationCode(code: string) {
-    //     this.confirmations.push({
-    //         confirmationCode: code,
-    //         expirationDate: add(new Date(), {
-    //             // hours: 1,
-    //             minutes: 3
-    //         }),
-    //         isBlocked: true,
-    //         field: 'registration'
-    //     })
-    // }
-
 }
 export const UserSchema = SchemaFactory.createForClass(User);
 //регистрирует методы сущности в схеме

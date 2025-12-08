@@ -26,6 +26,9 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto {
+    // @ApiProperty({ example: 'login', description: 'Samuray - Логин пользователя!' })
+    // @IsString({ message: 'login должно быть строкой!' })
+    // id: string;
     @ApiProperty({ example: 'login', description: 'Samuray - Логин пользователя!' })
     @IsString({ message: 'login должно быть строкой!' })
     @Length(2, 16, { message: 'Длина логина должена быть не меньше 2 и не больше 16 символов!' })
@@ -34,8 +37,12 @@ export class UpdateUserDto {
     @IsString({ message: 'Email должен быть строкой!' })
     @IsEmail({}, { message: "Некорректный E-mail" })
     email: string;
+    // @ApiProperty({ example: 'isEmailConfirmed', description: 'Подтверждена ли почта!' })
+    // isEmailConfirmed: boolean
     @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
     updatedAt: string;
+    @ApiProperty({ example: 'lastSeen', description: 'Время последнего посещения!' })
+    lastSeen: string;
     @ApiProperty({ example: 'deletedAt', description: 'deletedAt!' })
     deletedAt: string | null;
 }

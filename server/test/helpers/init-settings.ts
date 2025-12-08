@@ -15,10 +15,13 @@ import { LikesTestManager } from './likes-test-manager';
 import { PostsTestManager } from './posts-test-manager';
 import { UserSessionTestManager } from './user-session-test-manager';
 import { UsersRepository } from 'src/modules/user.accounts/users-infrastructure/users.repository';
-import { AuthService } from 'src/modules/user.accounts/users-application/auth.service';
+import { AuthService } from 'src/modules/auth/auth-application/auth.service';
 import { UsersService } from 'src/modules/user.accounts/users-application/users.service';
-import { TokenService } from 'src/modules/tokens/token-service';
+import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastructure/session.repository';
+import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
+import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
+import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -50,6 +53,9 @@ export const initSettings = async (
     contextTests.userService = contextTests.app.get<UsersService>(UsersService);
     contextTests.usersRepository = contextTests.app.get<UsersRepository>(UsersRepository);
     contextTests.sessiosRepository = contextTests.app.get<SessionsRepository>(SessionsRepository);
+    contextTests.confirmationService = contextTests.app.get<ConfirmationsCodesService>(ConfirmationsCodesService);
+    contextTests.isBlockedEmailResendingService = contextTests.app.get<IsBlockedEmailResendingService>(IsBlockedEmailResendingService);
+    contextTests.confirmationRepository = contextTests.app.get<ConfirmationRepository>(ConfirmationRepository);
     contextTests.databaseConnection = contextTests.app.get<Connection>(getConnectionToken());
     contextTests.httpServer = contextTests.app.getHttpServer();
 

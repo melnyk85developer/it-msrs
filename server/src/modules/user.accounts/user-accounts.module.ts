@@ -9,7 +9,7 @@ import { UsersExternalService } from './users-application/users.external-service
 import { User, UserSchema } from './users-domain/user.entity';
 import { UsersQueryRepository } from './users-infrastructure/users.query-repository';
 import { NotificationsModule } from '../notifications/notifications.module';
-import { AuthService } from './users-application/auth.service';
+import { AuthService } from '../auth/auth-application/auth.service';
 import { LocalStrategy } from './users-guards/local/local.strategy';
 import { CryptoService } from './users-application/crypto.service';
 import { JwtStrategy } from './users-guards/bearer/jwt.strategy';
@@ -23,6 +23,7 @@ import { AuthQueryRepository } from './users-infrastructure/auth.query-repositor
 import { SessionQueryRepository } from '../usersSessions/sessions-infrastructure/sessions.query-repository';
 import { SessionModule } from '../usersSessions/sessions.module';
 import { ConfirmationModule } from '../confirmationsCodes/confirmation-module';
+import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 
 @Module({
     imports: [
@@ -61,6 +62,7 @@ import { ConfirmationModule } from '../confirmationsCodes/confirmation-module';
         JwtStrategy,
 
         CryptoService,
+        IsBlockedEmailResendingService,
 
         UsersExternalQueryRepository,
         UsersExternalService,

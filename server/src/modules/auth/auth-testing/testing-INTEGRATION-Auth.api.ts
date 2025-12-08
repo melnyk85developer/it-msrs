@@ -4,7 +4,7 @@ import { contextTests } from "test/helpers/init-settings";
 export const authIntegrationTest = () => {
     describe('AUTH-INTEGRATION', () => {
         it('POST   - Ожидается успешная регистрация пользователя и отправка письма с активацией', async () => {
-            contextTests.mailService.sendMail = jest.fn((from, to, subject, text, html) => {
+            contextTests.mailService.sendConfirmationEmail = jest.fn((from, to, subject, text, html) => {
                 return Promise.resolve(true)
             })
             const response = await contextTests.userService.registrationService(

@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { TokenModule } from './modules/tokens/token.module';
 import { SessionModule } from './modules/usersSessions/sessions.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { SuccessMessageInterceptor } from './core/interceptors/successMessageInterceptor';
 
 @Module({
     imports: [
@@ -23,6 +25,12 @@ import { SessionModule } from './modules/usersSessions/sessions.module';
         CoreModule,
         TokenModule,
         SessionModule
-    ]
+    ],
+    providers: [
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: SuccessMessageInterceptor,
+        },
+    ],
 })
 export class AppModule { }

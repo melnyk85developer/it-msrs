@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { HydratedDocument, Model } from "mongoose";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
 import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
-import { CreateTokenDomainDto, UpdateTokenDto } from "./dto/add-token-black-list.domain.dto";
+import { CreateTokenDomainDto, UpdateTokenDto } from "../tokens-dto/add-token-black-list.domain.dto";
 
 @Schema({
     // timestamps: true, 

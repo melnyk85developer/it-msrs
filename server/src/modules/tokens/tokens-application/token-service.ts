@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { Token, type TokenModelType } from './token-entity';
+import { Token, type TokenModelType } from '../tokens-domain/token-entity';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
-import { TokenRepository } from './token.repository';
+import { TokenRepository } from '../tokens-infrastructure/token.repository';
 
 @Injectable()
 export class TokenService {

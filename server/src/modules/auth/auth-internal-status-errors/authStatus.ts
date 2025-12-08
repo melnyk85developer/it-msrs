@@ -25,7 +25,7 @@ export const AUTH_INTERNAL_STATUS = {
     ERROR_REFRESH_TOKEN_BLACK_LIST: 905, //  Ошибка добавления рефрешь токена в чёрный список! 
 
     BAD_REQUEST_TIME_HASNT_PASSED_YET: 680, /**Время еще не пришло до следующего запроса*/
-    BAD_REQUEST_A_LOT_OF_REQUESTS_TRY_AGAIN_LATER: 678, /**Слишком много запросов*/
+    BAD_REQUEST_A_LOT_OF_REQUESTS_TRY_AGAIN_LATER: 678, /**Слишком много запросов за последнее время, Вам последнее предупреждение!*/
 
     BAD_REQUEST_EXPIRATION_TIME_PASSED: 674, /**К сожалению время этого кода активации уже истекло!*/
     // CONFIRMED

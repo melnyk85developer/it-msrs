@@ -10,7 +10,15 @@ export const AUTH_STATUS_POSITIVE = {
 
 export const AUTH_ERRORS = {
     [AUTH_INTERNAL_STATUS.BAD_REQUEST_FUNCTION_BLOCKED]: {
-        messages: { message: '⛔️ Функция отпрвки сообщения на E-Mail временно заблокирована!', field: 'E-Mail' },
+        messages: { message: '⛔️ Функция отпрвки сообщения на E-Mail временно заблокирована в связи с частыми запросами!', field: 'E-Mail' },
+        statusCode: HTTP_STATUSES.BAD_REQUEST_400,
+    },
+    [AUTH_INTERNAL_STATUS.BAD_REQUEST_TIME_HASNT_PASSED_YET]: {
+        messages: { message: '⛔️ Время еще не истекло до следующего запроса!', field: 'code' },
+        statusCode: HTTP_STATUSES.BAD_REQUEST_400,
+    },
+    [AUTH_INTERNAL_STATUS.BAD_REQUEST_A_LOT_OF_REQUESTS_TRY_AGAIN_LATER]: {
+        messages: { message: '⛔️ Слишком много запросов за последнее время, Вам последнее предупреждение!', field: 'code' },
         statusCode: HTTP_STATUSES.BAD_REQUEST_400,
     },
     [INTERNAL_STATUS_CODE.BAD_REQUEST_TНE_EMAIL_ALREADY_EXISTS]: {
@@ -35,10 +43,6 @@ export const AUTH_ERRORS = {
     },
     [AUTH_INTERNAL_STATUS.BAD_REQUEST_EXPIRATION_TIME_PASSED]: {
         messages: { message: '⛔️ К сожалению время этого кода активации уже истекло!', field: 'code' },
-        statusCode: HTTP_STATUSES.BAD_REQUEST_400,
-    },
-    [AUTH_INTERNAL_STATUS.BAD_REQUEST_TIME_HASNT_PASSED_YET]: {
-        messages: { message: '⛔️ Время еще не истекло до следующего запроса', field: 'code' },
         statusCode: HTTP_STATUSES.BAD_REQUEST_400,
     },
     [HTTP_STATUSES.UNAUTHORIZED_401]: {

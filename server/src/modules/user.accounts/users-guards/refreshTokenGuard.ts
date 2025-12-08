@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
 import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
-import { TokenService } from "src/modules/tokens/token-service";
+import { TokenService } from "src/modules/tokens/tokens-application/token-service";
 
 @Injectable()
 export class AuthRefreshGuard implements CanActivate {

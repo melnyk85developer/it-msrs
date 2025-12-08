@@ -16,10 +16,10 @@ import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-
 import { PostViewDto } from 'src/modules/bloggers-platform/posts/posts-api/posts-view-dto/posts.view-dto';
 import { CommentViewDto } from 'src/modules/bloggers-platform/comments/comments-api/comments-view-dto/comments.view-dto';
 import { UsersRepository } from 'src/modules/user.accounts/users-infrastructure/users.repository';
-import { AuthService } from 'src/modules/user.accounts/users-application/auth.service';
+import { AuthService } from 'src/modules/auth/auth-application/auth.service';
 import { UsersService } from 'src/modules/user.accounts/users-application/users.service';
 import { EmailService } from 'src/modules/notifications/email.service';
-import { TokenService } from 'src/modules/tokens/token-service';
+import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { Session } from 'src/modules/usersSessions/sessions-domain/sessions.entity';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
@@ -31,20 +31,25 @@ import { PostsContextClass } from './context-module/posts-context';
 import { CommentsContextClass } from './context-module/comments-context';
 import { GetUsersQueryParams } from 'src/modules/user.accounts/users-dto/get-users-query-params.input-dto';
 import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastructure/session.repository';
+import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
+import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
+import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 
 export class TestContext {
     public app: INestApplication;
     public databaseConnection: Connection;
     public httpServer: INestApplication;
 
-    public authServices: AuthService | any;
+    public authServices: AuthService;
     public userService: UsersService | any;
     public usersRepository: UsersRepository;
     public sessiosRepository: SessionsRepository;
     public mailService: EmailService | any;
-    public tokenService: TokenService | any
-    public mongoDBCollection: any
-    public confirmationRepository: any
+    public tokenService: TokenService | any;
+    public mongoDBCollection: any;
+    public confirmationService: ConfirmationsCodesService;
+    public isBlockedEmailResendingService: IsBlockedEmailResendingService;
+    public confirmationRepository: ConfirmationRepository;
 
     public userParams: GetUsersQueryParams
 

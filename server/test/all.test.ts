@@ -10,6 +10,8 @@ import { authIntegrationTest } from "src/modules/auth/auth-testing/testing-INTEG
 import { authUnitTest } from "src/modules/auth/auth-testing/testing-Unit-Auth.api";
 import { userSessionE2eTest } from "src/modules/usersSessions/sessions-testing/testing-E2E-Sessions.api";
 import { usersE2eTest } from "src/modules/user.accounts/testing-users/testing-E2E-Users.api";
+import { resetPasswordInegrationTest } from "src/modules/user.accounts/testing-users/testing-RESET-PASSWORD-INTEGRATION";
+import { registrationEmailResendingInegrationTest } from "src/modules/user.accounts/testing-users/testing-REGISTRATION-EMAIL-RESSENDING-INTEGRATION";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     beforeAll(async () => {
@@ -47,9 +49,6 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         userSessionE2eTest()
         // usersSessionsInegrationTest()
     })
-    // describe('CONFIRMATION-BLOCK-TESTS', () => {
-    //     resetPasswordInegrationTest()
-    // })
     describe('BLOGS-BLOCK-TESTS', () => {
         blogsE2eTest()
     })
@@ -58,6 +57,10 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     })
     describe('COMMENTS-BLOCK-TESTS', () => {
         commentsE2eTest()
+    })
+    describe('CONFIRMATION-BLOCK-TESTS', () => {
+        registrationEmailResendingInegrationTest()
+        resetPasswordInegrationTest()
     })
     // describe('LIKES-BLOCK-TESTS', () => {
     //     likesE2eTest()

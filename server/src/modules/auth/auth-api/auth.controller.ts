@@ -1,7 +1,7 @@
-import { Body, Controller, Post, UseGuards, Get, HttpCode, HttpStatus, UseInterceptors, Redirect, Param } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get, HttpCode, HttpStatus, UseInterceptors, Redirect, Param, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from '../../user.accounts/users-application/users.service';
-import { AuthService } from '../../user.accounts/users-application/auth.service';
+import { AuthService } from '../auth-application/auth.service';
 import { LocalAuthGuard } from '../../user.accounts/users-guards/local/local-auth.guard';
 import { ExtractUserFromRequest } from '../../user.accounts/users-guards/decorators/param/extract-user-from-request.decorator';
 import { Nullable, UserContextDto } from '../../user.accounts/users-guards/dto/user-context.dto';
@@ -18,11 +18,11 @@ import { SETTINGS } from 'src/core/settings';
 import { ClearCookieInterceptor } from '../../user.accounts/users-interceptors/clear-cookie.interceptor';
 import { CreateUserInputDto } from '../../user.accounts/users-dto/users.input-dto';
 import { AuthQueryRepository } from '../../user.accounts/users-infrastructure/auth.query-repository';
+import { RessetPasswordDto } from 'src/modules/user.accounts/users-dto/resset-password-dto';
 
 @Controller('/auth')
 export class AuthController {
     constructor(
-        private usersService: UsersService,
         private authService: AuthService,
         private authQueryRepository: AuthQueryRepository,
     ) { }
@@ -30,7 +30,7 @@ export class AuthController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async registrationController(@Body() body: CreateUserInputDto): Promise<string> {
         // console.log('AuthController: registrationController - body 👽 😡 👽', body)
-        return this.usersService.registrationService(body);
+        return this.authService.registrationService(body);
     }
     @UseGuards(LocalAuthGuard)
     @UseInterceptors(SetCookieInterceptor)
@@ -80,7 +80,6 @@ export class AuthController {
         return isRefresh
     }
     @ApiBearerAuth()
-    // @UseGuards(AuthAccessGuard)
     @UseGuards(AuthRefreshGuard)
     @UseInterceptors(ClearCookieInterceptor)
     @Post('/logout')
@@ -106,15 +105,24 @@ export class AuthController {
         return await this.authService.registrationEmailResendingService(userDto.email)
     }
     @Redirect(process.env.CLIENT_URL, 3000) // Указываем дефолтный URL для редиректа
-    @Get('/registration-confirmation/:link')
-    async registrationСonfirmationController(@Param('link') confirmationCode: string) {
-
-        const isActivated = await this.usersService.confirmationCodeRegistrationService(confirmationCode);
-
+    @Get('/registration-confirmation')
+    async registrationСonfirmationController(@Body() confirmationCode: string) {
+        const isActivated = await this.authService.confirmationCodeRegistrationService(confirmationCode);
         if (isActivated === true) {
             return { url: process.env.CLIENT_URL }; // URL для перенаправления
         }
-
+    }
+    @ApiResponse({ status: 204, description: 'Отправка письма для сбросса пароля!' })
+    @Post('/password-recovery')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    async passwordRecoverySendEmailController(@Body() dto: any) {
+        return await this.authService.passwordRecoverySendEmailService(dto.email)
+    }
+    @ApiResponse({ status: 204, description: 'Ожидаем новый пароль и код подтверждения для обновления пароля!' })
+    @Put('/new-password')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    async ressetPasswordController(@Body() body: RessetPasswordDto) {
+        return await this.authService.ressetPasswordService(body.password, body.code)
     }
     @ApiBearerAuth()
     @Get('/me-or-default')

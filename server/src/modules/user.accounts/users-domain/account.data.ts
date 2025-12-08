@@ -38,10 +38,6 @@ export class AccountData {
     @Prop({ type: String, required: false })
     updatedAt: string;
 
-    @ApiProperty({ example: 'lastSeen', description: 'Время последнего посещения.' })
-    @Prop({ type: String, required: false })
-    lastSeen: string;
-
     @ApiProperty({ example: 'deletedAt', description: 'Число удаления  аккаунта.' })
     @Prop({ type: String, nullable: true })
     deletedAt: string | null;
@@ -49,9 +45,9 @@ export class AccountData {
     @Prop({ type: Boolean, required: true, default: false })
     isEmailConfirmed: boolean;
 
-    // @ApiProperty({ example: 'lastSeen', description: 'Последнее посещение пользователя.' })
-    // @Prop({ type: String, nullable: true })
-    // lastSeen: string
+    @ApiProperty({ example: 'lastSeen', description: 'Последнее посещение пользователя.' })
+    @Prop({ type: String, required: false })
+    lastSeen: string
 }
 
 export const AccountDataSchema = SchemaFactory.createForClass(AccountData);

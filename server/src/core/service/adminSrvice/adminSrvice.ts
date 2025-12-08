@@ -39,6 +39,7 @@ export class AdminService {
                 // console.log('AdminService: getFtpFileByFolderAndName: if (stat.isFile() && filePath.startsWith(dir + path.sep))', filePath)
                 return filePath;
             }
+            return null
         } catch(error) {
             // console.error('AdminService: getFtpFileByFolderAndName: catch(error)', error)
             return null;

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { Token, TokenDocument, type TokenModelType } from './token-entity';
+import { Token, TokenDocument, type TokenModelType } from '../tokens-domain/token-entity';
 import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
 
 @Injectable()

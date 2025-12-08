@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { DomainException } from '../../../../core/exceptions/domain-exceptions';
 import { UserContextDto } from '../dto/user-context.dto';
 import { DomainExceptionCode } from '../../../../core/exceptions/domain-exception-codes';
-import { AuthService } from '../../users-application/auth.service';
+import { AuthService } from '../../../auth/auth-application/auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

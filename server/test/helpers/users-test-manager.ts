@@ -42,7 +42,6 @@ export class UsersTestManager {
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         // console.log('UsersTestManager - data 😡👽😡👽😡 req', data)
-
         const response = await request(this.app.getHttpServer())
             .post(`${SETTINGS.RouterPath.users}`)
             .set('User-Agent', 'TestDevice/1.0')
@@ -50,7 +49,7 @@ export class UsersTestManager {
             .send(data)
             .expect(expectedStatusCode)
 
-        // console.log('UsersTestManager - data 😎👽😎👽😎', response.body)
+        // console.log('UsersTestManager - response.body 😎👽😎👽😎', response.body)
 
         let createdEntity
         // .set('Authorization', `Basic ${codedAuth}`)
@@ -73,7 +72,7 @@ export class UsersTestManager {
     }
     async updateUser(
         id: string,
-        data: UpdateUserInputDto,
+        data: Omit<UpdateUserInputDto, 'id' | 'isEmailConfirmed' | 'lastSeen'>,
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204) {
         // console.log('usersTestManager - updateUser data, codedAuth', data, codedAuth)

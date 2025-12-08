@@ -34,9 +34,9 @@ export class UsersController {
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateUserController(@Param('id') id: string, @Body() body: UpdateUserInputDto): Promise<string> {
-        // console.log('UsersController: updateUserController - body 😡 ', body)
+        console.log('UsersController: updateUserController - body 😡 ', body)
         const userId = await this.usersService.updateUserService(id, body);
-        // console.log('UsersController: updateUserController - userId 😡 ', userId)
+        console.log('UsersController: updateUserController - userId 😡 ', userId)
         return userId
         // return SuccessResponse(INTERNAL_STATUS_CODE.SUCCESS_UPDATED_USER);
     }

@@ -6,7 +6,7 @@ import { UsersRepository } from '../../users-infrastructure/users.repository';
 import { UsersService } from '../../users-application/users.service';
 import { UserContextDto } from '../dto/user-context.dto';
 import { SessionService } from 'src/modules/usersSessions/sessions-application/sessions.service';
-import { TokenService } from 'src/modules/tokens/token-service';
+import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 

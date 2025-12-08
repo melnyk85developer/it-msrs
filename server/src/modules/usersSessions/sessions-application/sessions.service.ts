@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as uuid from 'uuid';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { TokenService } from 'src/modules/tokens/token-service';
+import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { CreateSessionDto, UpdateSessionDto } from '../sessions-dto/create-sessions.domain.dto';
 import { SessionsRepository } from '../sessions-infrastructure/session.repository';

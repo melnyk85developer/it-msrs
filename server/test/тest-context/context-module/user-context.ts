@@ -6,8 +6,8 @@ import { UsersRepository } from "src/modules/user.accounts/users-infrastructure/
 export class UserContextClass {
     public usersRepository: UsersRepository;
 
-    public correctUserNames: string[]
-    public correctUserSurNames: string[]
+    public correctUserNames: string[];
+    public correctUserSurNames: string[];
     public correctUserEmails: string[];
     public correctUserPasswords: string[];
 

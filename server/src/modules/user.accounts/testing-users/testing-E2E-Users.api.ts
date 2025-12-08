@@ -193,12 +193,18 @@ export const usersE2eTest = () => {
                 password: contextTests.users.correctUserPasswords[1],
                 email: contextTests.users.correctUserEmails[1]
             }
-            await contextTests.usersTestManager.updateUser(
+            const { response: res } = await contextTests.usersTestManager.updateUser(
                 contextTests.users.createdUsers[0]!.id,
                 data,
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
+            // if(res.status === HTTP_STATUSES.NO_CONTENT_204){
+            //     contextTests.users.addUserStateTest({
+            //         numUser: 0,
+            //         addUser: 
+            //     })
+            // }
             const { getUsersById } = await contextTests.usersTestManager.getUserById(
                 contextTests.users.createdUsers[0]!.id,
                 HTTP_STATUSES.OK_200
@@ -218,9 +224,10 @@ export const usersE2eTest = () => {
                 HTTP_STATUSES.OK_200
             )
             expect(response.body)
-                .toEqual(expect.objectContaining(
-                    contextTests.users.createdUsers[1]
-                )
+                .toEqual(
+                    expect.objectContaining(
+                        contextTests.users.createdUsers[1]
+                    )
                 )
         })
         it(`DELETE - Ожидается статус код 204, - Успешное удаление обоих пользователей! Дополнительные запросы: -> GET`, async () => {

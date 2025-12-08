@@ -1,6 +1,6 @@
 import { contextTests } from 'test/helpers/init-settings';
 import { HTTP_STATUSES } from 'src/core/utils/utils';
-import { CreateUserInputDto } from '../users-dto/users.input-dto';
+import { CreateUserInputDto } from '../../user.accounts/users-dto/users.input-dto';
 
 describe('CONFIRMATION-CODE-INTEGRATION', () => {
     let confirmationService: any
