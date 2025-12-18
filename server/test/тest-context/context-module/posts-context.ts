@@ -44,7 +44,7 @@ export class PostsContextClass {
         numPost: number;
         addPost: PostViewDto;
     }) {
-        console.log('PostsContextClass: addPostsStateTest - numBlog, addBlog 😡 ', numBlog, addPost)
+        // console.log('PostsContextClass: addPostsStateTest - numBlog, addBlog 😡 ', numBlog, addPost)
         // if(numBlog === undefined || numPost === undefined || addPost === undefined){
         //     return 
         // }

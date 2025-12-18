@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { EditOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import ProfileDataForm from "./ProfileDataForm/ProfileDataForm";
 import ProfileData from "./ProfileData/ProfileData";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
@@ -10,7 +10,7 @@ import PhotoCarousel from "./PhotoCarousel/PhotoCarousel";
 
 type PropsType = {
     profile: IProfile;
-    authorizedUser: IProfile
+    authorizedUser: IUser
     dispatch: AppDispatch;
     error: string;
     isDarkTheme: string;

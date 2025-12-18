@@ -12,7 +12,7 @@ import classes from './styles.module.scss'
 
 const AppContainer = () => {
     const dispatch = useAppDispatch();
-    const { content } = useAppContext()
+    const { content } = useAppContext();
     const { contentTopNav, contentLsidebar, contentRsidebar, contentFooter } = content;
     const { isLoadingAuthUser, isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage);
     const { profile, error } = useAppSelector(state => state.myProfilePage);
@@ -30,27 +30,15 @@ const AppContainer = () => {
         }
     }, [dispatch]);
 
-    // useEffect(() => {
-    //     const setVhVariable = () => {
-    //         const vh = window.innerHeight * 0.01;
-    //         document.documentElement.style.setProperty('--vh', `${vh}px`);
-    //     };
-    //     setVhVariable(); // Установить при монтировании
-    //     window.addEventListener('resize', setVhVariable);
-    //     return () => {
-    //         window.removeEventListener('resize', setVhVariable);
-    //     };
-    // }, []);
-
     return (
         <Row className={`
                 ${classes.AppContent} 
-                ${isDarkTheme !== "light" 
-                    ? 
-                        classes.dark 
-                    : 
-                        classes.light
-                }
+                ${isDarkTheme !== "light"
+                ?
+                classes.dark
+                :
+                classes.light
+            }
             `} gutter={0}
         >
             <Col span={24}>
@@ -71,7 +59,7 @@ const AppContainer = () => {
                     <MyRoutes />
                 }
             </Col>
-            {FooterState !== FOOTER_OFF 
+            {FooterState !== FOOTER_OFF
                 ?
                 (<Col span={24} className={classes.wrapFooter}>
                     <footer>

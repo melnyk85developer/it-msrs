@@ -5,7 +5,6 @@ import { Tooltip } from "antd";
 import { formatTimeOfPublication } from "../../../../packages/shared/src/components/utils/timeOfPublication";
 import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
-import { API_URL } from "../../../../packages/shared/src/services/http";
 import { MessagesType } from "../../../../packages/shared/src/types/types";
 import { RiDeleteBin6Fill, RiDeleteBin6Line, RiFileCopyFill, RiFileCopyLine, RiShareForwardFill, RiShareForwardLine } from "react-icons/ri";
 import { BsEmojiSmile, BsEmojiSmileFill, BsPencil, BsPencilFill, BsPin, BsPinFill } from "react-icons/bs";
@@ -15,6 +14,7 @@ import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import MessageFormModal from "../ModalContentMsg/messageFormModal";
 import classes from './styles.module.scss'
 import DeleteMessageModal from "../ModalContentMsg/deleteMessageModal/deleteMessageModal";
+import { API_URL } from "@packages/shared/src/http";
 
 type PropsType = {
     dispatch: AppDispatch;

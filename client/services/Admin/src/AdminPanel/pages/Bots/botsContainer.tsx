@@ -6,6 +6,7 @@ import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import imageCompression from 'browser-image-compression';
 import classes from '../../styles.module.scss';
 import routeMain from "./routes";
+import { IUser } from "@packages/shared/src/types/IUser";
 
 const BotsContainer = () => {
     const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ const BotsContainer = () => {
     const [candincatPost, setCandincatPost] = useState(0);
     const [resFile, setResFile] = useState(null);
 
-    const filterBots = users?.filter((b: { isBot: boolean; }) => b?.isBot === true);
+    const filterBots: IUser[] = users?.filter((b: { isBot: boolean; }) => b?.isBot === true);
     // console.log('BotsContainer: - fileName: 😳 ', avatars)
 
     useEffect(() => {
@@ -41,7 +42,7 @@ const BotsContainer = () => {
     const deleteUsers = async () => {
         for (let i = 0; i < users.length; i++) {
             if (users[i].isBot === true) {
-                await dispatch(deleteUserMyAdmin(users[i].userId));
+                await dispatch(deleteUserMyAdmin(users[i].id));
             }
         }
         dispatch(getUserMyAdminAC());
@@ -49,8 +50,8 @@ const BotsContainer = () => {
 
     useEffect(() => {
         if (bot && bot.user) {
-            sendPhotos(bot.user.userId);
-            sendPosts(bot.user.userId);
+            sendPhotos(bot.user.id);
+            sendPosts(bot.user.id);
         }
     }, [bot]);
 
@@ -167,6 +168,7 @@ const BotsContainer = () => {
             // console.log('BotsContainer: finalFile', finalFile)
 
             const userData = {
+                login: `Login${i}`,
                 name: `MR ${i}`,
                 surname: `ROBOT ${i}`,
                 password: `qwerty${i}qwerty`,
@@ -182,7 +184,7 @@ const BotsContainer = () => {
         setMessageUsers('Создано пользователей: ');
     };
 
-    const sendPhotos = async (userId: number) => {
+    const sendPhotos = async (userId: string) => {
         setMessagePhotos('Создаются фотографии: ');
         for (let d = 0; d < Number(photoCount); d++) {
             setIsCompletedPhotos(true);
@@ -198,7 +200,7 @@ const BotsContainer = () => {
         }
     };
 
-    const sendPosts = async (userId: number) => {
+    const sendPosts = async (userId: string) => {
         setMessagePosts('Создаются посты: ');
         for (let b = 0; b < Number(postCount); b++) {
             setIsCompletedPosts(true);

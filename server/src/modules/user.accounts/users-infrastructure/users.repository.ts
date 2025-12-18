@@ -10,7 +10,9 @@ export class UsersRepository {
     constructor(
         @InjectModel(User.name) private UserModel: UserModelType
     ) { }
-
+    async save(user: UserDocument) {
+        await user.save();
+    }
     async findById(id: string): Promise<UserDocument | null> {
         return this.UserModel.findOne({
             _id: id,
@@ -22,14 +24,11 @@ export class UsersRepository {
         return this.UserModel.findOne(
             {
                 $or: [
-                    { 'accountData.userName': loginOrEmail }, // Ищем по логину
+                    { 'accountData.login': loginOrEmail }, // Ищем по логину
                     { 'accountData.email': loginOrEmail }    // Ищем по почте
                 ]
             }
         );
-    }
-    async save(user: UserDocument) {
-        await user.save();
     }
 
     async findUserByIdOrNotFoundFail(id: string): Promise<UserDocument> {
@@ -51,7 +50,7 @@ export class UsersRepository {
 
     async loginIsExist(login: string): Promise<boolean> {
         return !!(await this.UserModel.countDocuments({
-            'accountData.userName': login
+            'accountData.login': login
         }));
     }
     async findAllUsers(): Promise<UserDocument[]> {

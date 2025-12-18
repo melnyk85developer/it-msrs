@@ -3,7 +3,7 @@ import FileUpload from "@packages/shared/src/components/FileUpload/fileUpload";
 import { Button } from "antd";
 import MyCropperAvatar from "./UploadAvatar/MyCropperAvatar";
 import NewAvatar from "./UploadAvatar/newAvatar";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { updateAvatarMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import classes from './styles.module.scss'
@@ -12,7 +12,7 @@ type PropsType = {
     profile: IProfile
     dispatch: AppDispatch;
     setModalActive: any;
-    authorizedUser: IProfile;
+    authorizedUser: IUser;
 }
 
 const UploadAvatar: React.FC<PropsType> = React.memo(({
@@ -24,7 +24,7 @@ const UploadAvatar: React.FC<PropsType> = React.memo(({
     const [originalFileName, setOriginalFileName] = useState('');
 
     const userId = profile ? profile.userId : undefined
-    const authorizedUserId = authorizedUser ? authorizedUser.userId : undefined
+    const authorizedUserId = authorizedUser ? authorizedUser.id : undefined
 
     const handleFileSelect = (file: File) => {
         setNameImg(URL.createObjectURL(file));
@@ -55,7 +55,7 @@ const UploadAvatar: React.FC<PropsType> = React.memo(({
     };
 
     const onFinish = async () => {
-        dispatch(updateAvatarMyProfileAC(userId, authorizedUserId, avatar))
+        dispatch(updateAvatarMyProfileAC(userId, Number(authorizedUserId), avatar))
             .then(() => setModalActive(false))
     };
 

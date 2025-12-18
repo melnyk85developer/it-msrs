@@ -64,6 +64,10 @@ export class UsersTestManager {
                         id: expect.any(String),
                         login: data.login,
                         email: data.email,
+                        avatar: null,
+                        name: null,
+                        surname: null,
+                        isBot: expect.any(Boolean),
                         // createdAt: expect.any(String),
                     }
                 )
@@ -117,7 +121,8 @@ export class UsersTestManager {
             const { createdEntity } = await this.createUser({
                 login: `MyLogin${i}`,
                 password: `password${i}`,
-                email: `webmars${i}@mars.com`
+                email: `webmars${i}@mars.com`,
+                isBot: true
             }, accessToken, HTTP_STATUSES.CREATED_201)
             users.push(createdEntity)
 

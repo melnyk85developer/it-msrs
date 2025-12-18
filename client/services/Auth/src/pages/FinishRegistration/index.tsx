@@ -36,16 +36,16 @@ const FinishRegistration: React.FC = React.memo(() => {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
             <div>
-                <WidgetPerhapsYoureFamiliar/>
+                {/* <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentRsidebar: [
             <div>
-                <WidgetPeople />
+                {/* <WidgetPeople />
                 <WidgetPerhapsYoureFamiliar/>
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentFooter: [

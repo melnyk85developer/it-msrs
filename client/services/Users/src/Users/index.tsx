@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { Col } from 'antd';
 import { useAppContext } from '@packages/shared/src/components/contexts/AppContext';
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import WidgetFriends from '@packages/shared/src/components/Widgets/WidgetFriends'
-import WidgetPeople from '@packages/shared/src/components/Widgets/WidgetsPeople'
-import WidgetPerhapsYoureFamiliar from '@packages/shared/src/components/Widgets/WidgetPerhapsYoureFamiliar'
+// import WidgetFriends from '@packages/shared/src/components/Widgets/WidgetFriends'
+// import WidgetPeople from '@packages/shared/src/components/Widgets/WidgetsPeople'
+// import WidgetPerhapsYoureFamiliar from '@packages/shared/src/components/Widgets/WidgetPerhapsYoureFamiliar'
 import { getUsersAC } from "@packages/shared/src/store/UsersReducers/usersSlice";
 import UsersList from "./UsersList/UsersList";
 import { FOOTER_ON, setContentSpanAC, setFooterAC, setLSidebarAC, setLSidebarSpanAC, setRSidebarAC, setRSidebarSpanAC, SIDEBAR_ON } from "@packages/shared/src/store/PageElementsSlice/pageElementsSlice";
@@ -20,13 +20,14 @@ const Users = () => {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
             <div>
-                <WidgetFriends />
+                {/* <WidgetFriends />
                 <WidgetPeople />
-                <WidgetPeople />
+                <WidgetPeople /> */}
             </div>
         ],
         contentRsidebar: [
-            <WidgetPerhapsYoureFamiliar />
+            <></>
+            // <WidgetPerhapsYoureFamiliar />
         ],
         contentFooter: [
             <div className={`

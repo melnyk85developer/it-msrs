@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { MessagesType } from "@/types/types";
-import $api from "./http";
+import $api from "../http";
 
 export default class UserMessageAPI {
     static async getInterlocutorAPI(): Promise<AxiosResponse<any>> {

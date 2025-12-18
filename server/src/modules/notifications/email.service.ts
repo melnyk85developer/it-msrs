@@ -13,9 +13,7 @@ export class EmailService {
 
     async sendConfirmationEmail(from: string, to: string, subject: string, text: string, html: any): Promise<void> {
         try {
-            const result = await this.mailerService.sendMail({
-                from, to, subject, text, html
-            });
+            const result = await this.mailerService.sendMail({from, to, subject, text, html});
             this.logger.log(`✅ Письмо отправлено на ${to}`);
             // console.log('Mailer result:', result);
         } catch (err) {

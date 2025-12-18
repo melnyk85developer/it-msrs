@@ -26,11 +26,11 @@ export default class MyAdminAPI {
     }
     static getFtpFilesAPI(folder: string): Promise<AxiosResponse<{files: string[], folder: string}>> {
         // Получаем список имён файлов в папке, JSON массив строк
-        return $api.get<any>(`/users/admin/static/ftp/img/${folder}`);
+        return $api.get<any>(`/admin/static/ftp/img/${folder}`);
     }
 
     static getFtpAvatarFileAPI(fileName: string, folder: string): Promise<AxiosResponse<Blob>> {
         // console.log('getFtpAvatarFileAPI: - fileName 😡', fileName)
-        return $api.get<Blob>(`/users/admin/static/ftp/${folder}`, { params: { fileName }, responseType: 'blob' });
+        return $api.get<Blob>(`/admin/static/ftp/${folder}`, { params: { fileName }, responseType: 'blob' });
     }
 }

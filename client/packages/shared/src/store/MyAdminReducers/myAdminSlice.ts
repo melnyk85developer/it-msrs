@@ -63,7 +63,7 @@ export const myAdminSlice = createSlice({
         deleteUsersAdmin(state, action: PayloadAction<IUser>) {
             state.isLoading = false
             state.error = ''
-            state.bots = state.bots.filter((i: { userId: number; }) => i.userId !== action.payload.userId)
+            state.bots = state.bots.filter((i: { id: string; }) => i.id !== action.payload.id)
             // state.bot = action.payload
         },
         setMyBotsAdmin(state, action: PayloadAction<IUser[]>) {
@@ -101,9 +101,9 @@ export const createUsersMyAdmin = (user: any) => async (dispatch: AppDispatch) =
     try {
         dispatch(myAdminSlice.actions.usersFetching())
         const data = await MyAdminAPI.createUsersAdminAPI(user)
+        console.log('createUsersMyAdmin: res - data.data', data.data)
         dispatch(myAdminSlice.actions.createUserBotAdmin(data.data))
         dispatch(myAdminSlice.actions.createUsersBotsAdmin(data.data))
-        // console.log('createUsersMyAdmin: res - data.data', data.data)
         return data.data
     } catch (error: any) {
         dispatch(myAdminSlice.actions.myAdminFetchingError(error.message))

@@ -6,7 +6,12 @@ export class CreateUserDomainDto {
     email: string;
     passwordHash: string;
 
+    avatar: string | null;
+    name?: string | null;
+    surname?: string | null;
+
     role: Role;
+    isBot: boolean;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;

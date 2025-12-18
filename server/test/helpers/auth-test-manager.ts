@@ -63,7 +63,7 @@ export class AuthTestManager {
             .set('Cookie', `refreshToken=${refreshToken}`)
             .expect(expectedStatusCode);
         if (expectedStatusCode === HTTP_STATUSES.NO_CONTENT_204) {
-            console.log('TEST - ⚙️ authTestManager logout: - response', response.body)
+            // console.log('TEST - ⚙️ authTestManager logout: - response', response.body)
             const clearedCookies = response.headers['set-cookie'];
             expect(clearedCookies).toBeDefined();
             expect(clearedCookies[0]).toContain('refreshToken=;');
@@ -130,6 +130,7 @@ export class AuthTestManager {
                 .toEqual(
                     {
                         id: expect.any(String),
+                        avatar:  null,
                         login: expect.any(String),
                         email: expect.any(String)
                     }

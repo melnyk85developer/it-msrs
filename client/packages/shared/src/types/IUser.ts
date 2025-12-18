@@ -1,27 +1,28 @@
 import { PostsType } from "./types";
 
 export interface IUser {
-    userId: number;
-    avatar: string | null;
-    name: string;
-    surname: string;
-    status: string;
+    id: string;
+    login: string
+    avatar?: string | null;
+    name?: string | null;
+    surname?: string | null;
+    // status: string;
     isBot: boolean
-    gender: string;
-    liveIn: string
-    originallyFrom: string;
-    imWorkingIn: string;
-    lookingForAJob: boolean;
-    lookingForAJobDescription: string;
-    aboutMe: string;
-    telephone: string;
-    website: string;
-    photoAlbums?: IPhotoAlbum[];
+    // gender: string;
+    // liveIn: string
+    // originallyFrom: string;
+    // imWorkingIn: string;
+    // lookingForAJob: boolean;
+    // lookingForAJobDescription: string;
+    // aboutMe: string;
+    // telephone: string;
+    // website: string;
+    // photoAlbums?: IPhotoAlbum[];
     email: string;
-    friends: Array<number>;
-    posts: Array<PostsType>
-    isActivated: boolean;
-    isConfirmed: boolean;
+    // friends: Array<number>;
+    // posts: Array<PostsType>
+    // isActivated: boolean;
+    // isConfirmed: boolean;
 }
 export interface IProfile {
     userId: number;

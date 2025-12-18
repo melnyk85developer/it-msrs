@@ -39,7 +39,7 @@ export class BlogsContextClass {
         numBlog: number;
         addBlog: BlogViewDto;
     }) {
-        console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
         // 1. Если массив пустой
         if (!this.createdBlogs.length) {
             this.createdBlogs = [addBlog];

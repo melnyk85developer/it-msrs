@@ -30,7 +30,7 @@ export class SessionController {
     @Get('/devices')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getallDevicesByUserIdController(@Query() query: GetSessionsQueryParams, @ExtractUserIfExistsFromRequest() user: UserContextDto): Promise<PaginatedViewDto<SessionViewDto[]>> {
-        console.log('getallDevicesByUserIdController: - user 😡 ', user)
+        // console.log('getallDevicesByUserIdController: - user 😡 ', user)
         const allDevices = await this.sessionsQueryRepository.allDevicesOneUserQueryRepository(query, user.id);
         // console.log('getallDevicesByUserIdController: - allDevices 😡 ', allDevices)
         return allDevices

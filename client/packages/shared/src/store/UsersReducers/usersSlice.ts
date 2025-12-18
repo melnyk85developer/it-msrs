@@ -33,19 +33,15 @@ export const usersSlice = createSlice({
         },
     }
 })
-
 export const getUsersAC = () => async (dispatch: AppDispatch) => {
     try{
         dispatch(usersSlice.actions.usersFetching())
         const data = await UsersAPI.getUsersAPI()
-        // console.log(data.data)
-        dispatch(usersSlice.actions.usersFetchingSuccess(data.data))
+        // console.log('getUsersAC: - data', data.data)
+        const users = data.data.items
+        dispatch(usersSlice.actions.usersFetchingSuccess(users))
     }catch(e: any){
         dispatch(usersSlice.actions.usersFetchingError(e.message))
     }
 }
-
-
-
-
 export default usersSlice.reducer

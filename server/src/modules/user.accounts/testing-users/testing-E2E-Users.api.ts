@@ -148,7 +148,7 @@ export const usersE2eTest = () => {
                     page: 1,
                     pageSize: 10,
                     totalCount: 2,
-                    items: [contextTests.users.createdUsers[0], contextTests.users.createdUsers[1]]
+                    items: [contextTests.users.createdUsers[1], contextTests.users.createdUsers[0]]
                 })
             )
         })

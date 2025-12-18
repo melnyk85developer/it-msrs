@@ -32,7 +32,8 @@ const MyProfile: React.FC<PropsType> = React.memo(({ error, isDarkTheme, profile
     const { content, setContent, setPageType } = useAppContext();
     const [reloadProfile, setReloadProfile] = useState(false);
     const [modalActiveError, setModalActiveError] = useState(false);
-    const authorizedUserId = authorizedUser && authorizedUser.userId
+    const authorizedUserId = authorizedUser && authorizedUser.id
+    // console.log('MyProfile: - authorizedUserId 😡😡😡😡😡 ', authorizedUserId)
 
     const newContent = {
         contentTopNav: [] as React.ReactNode[],
@@ -45,10 +46,10 @@ const MyProfile: React.FC<PropsType> = React.memo(({ error, isDarkTheme, profile
                     authorizedUser={authorizedUser}
                 />
                 <div className={classes.wrapWidgetFriendsProfile}>
-                    <WidgetFriends />
+                    {/* <WidgetFriends /> */}
                 </div>
                 <div className={classes.wrapWidgetPeopleProfile}>
-                    <WidgetPeople />
+                    {/* <WidgetPeople /> */}
                 </div>
             </div>
         ],
@@ -80,7 +81,7 @@ const MyProfile: React.FC<PropsType> = React.memo(({ error, isDarkTheme, profile
     };
 
     useEffect(() => {
-        if (isAuth && !isNaN(authorizedUserId) && authorizedUserId !== undefined) {
+        if (isAuth && authorizedUserId !== undefined) {
             dispatch(myProfileAC(authorizedUserId));
             dispatch(setLSidebarAC(SIDEBAR_ON));
             dispatch(setLSidebarSpanAC(5));

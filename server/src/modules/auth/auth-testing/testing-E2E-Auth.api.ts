@@ -111,7 +111,7 @@ export const authE2eTest = () => {
                 HTTP_STATUSES.NO_CONTENT_204
             )
             if (status === HTTP_STATUSES.NO_CONTENT_204) {
-                console.log('🔥TEST🔥: - status:', status);
+                // console.log('🔥TEST🔥: - status:', status);
                 contextTests.sessions.deleteSessionStateTest(
                     {
                         numUser: 0,

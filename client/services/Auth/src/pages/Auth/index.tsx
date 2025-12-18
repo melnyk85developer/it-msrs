@@ -25,6 +25,8 @@ const Auth: React.FC<PropsType> = React.memo(() => {
     const { content, setContent, setPageType } = useAppContext();
     const {isDarkTheme, authorizedUser, isAuth, isLoadingAuthUser} = useAppSelector(state => state.authPage)
 
+    // console.log('Auth: - authorizedUser', authorizedUser)
+
     if(isLoadingAuthUser){
         return <h1>Идет загрузка...</h1>
     }
@@ -33,16 +35,16 @@ const Auth: React.FC<PropsType> = React.memo(() => {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
             <div>
-                <WidgetPerhapsYoureFamiliar/>
+                {/* <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentRsidebar: [
             <div>
-                <WidgetPerhapsYoureFamiliar/>
+                {/* <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentFooter: [
@@ -84,7 +86,7 @@ const Auth: React.FC<PropsType> = React.memo(() => {
         <div className={`${classes.wrapContentAuth} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.contentAuth}>
                 <h1>Авторизация</h1>
-                {isAuth === true && authorizedUser && authorizedUser.userId ? <Navigate to={routeMyProfile(authorizedUser.userId)}/> : <LoginForm />}  
+                {isAuth === true && authorizedUser && authorizedUser.id ? <Navigate to={routeMyProfile(authorizedUser.id)}/> : <LoginForm />}  
             </div>
         </div>
     );

@@ -10,16 +10,17 @@ import NewAvatar from "./NewAvatar/NewAvatar";
 import { useAppContext } from '@packages/shared/src/components/contexts/AppContext';
 import TypingEffect from "@packages/shared/src/components/TypingEffect";
 import classes from './styles.module.scss'
+import { Col } from "antd";
 
 type PropsType = {
     setRedirect: any
 }
 
-const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
+const RegistrationForm: React.FC<PropsType> = React.memo(({ setRedirect }) => {
     const dispatch = useAppDispatch()
-    const {isAuth, error} = useAppSelector(state => state.authPage)
+    const { isAuth, error } = useAppSelector(state => state.authPage)
     const { content, setContent } = useAppContext();
-    const {isDarkTheme} = useAppSelector(state => state.authPage)
+    const { isDarkTheme } = useAppSelector(state => state.authPage)
     const [avatar, setAvatar] = useState<any>(null);
     const [nameImg, setNameImg] = useState('');
     const [croppedImage, setCroppedImage] = useState<string | null>(null);
@@ -45,7 +46,7 @@ const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
             const expirationTime = new Date(isoDate).getTime();
             const remainingTimeInSeconds = Math.floor((expirationTime - currentTime) / 1000);
 
-            const textWithoutDate = error.split('2024-')[0].trim(); 
+            const textWithoutDate = error.split('2024-')[0].trim();
             setErrors(textWithoutDate)
             setTimer(remainingTimeInSeconds)
         }
@@ -56,27 +57,49 @@ const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
     }, [croppedImage])
 
     useEffect(() => {
-        if(errors){setErrors('')}
-    },[])
+        if (errors) { setErrors('') }
+    }, [])
 
     const newContent = {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
-            <div> 
-                <NewAvatar 
+            <div>
+                <NewAvatar
                     avatar={croppedImage}
                 />
                 <div className={classes.wrapWidgetFriendsProfile}>
-                    <WidgetFriends />
+                    {/* <WidgetFriends /> */}
                 </div>
                 <div className={classes.wrapWidgetPeopleProfile}>
-                    <WidgetPeople />
+                    {/* <WidgetPeople /> */}
                 </div>
             </div>
         ],
         contentRsidebar: [
-            <WidgetPerhapsYoureFamiliar/>
+            <WidgetPerhapsYoureFamiliar />
         ],
+        contentFooter: [
+            <div className={`
+                ${classes.wrapFooterSectionsForSettingProfile}
+                ${isDarkTheme !== "light"
+                    ? classes.dark
+                    : classes.light
+                }
+            `}>
+                <Col className={classes.footer_sections}>
+                    <p>Блок 1</p>
+                </Col>
+                <Col className={classes.footer_sections}>
+                    <p>Блок 2</p>
+                </Col>
+                <Col className={classes.footer_sections}>
+                    <p>Блок 3</p>
+                </Col>
+                <Col className={classes.footer_sections}>
+                    <p>Блок 4</p>
+                </Col>
+            </div>
+        ]
     };
     const handleFileSelect = (file: File) => {
         setNameImg(URL.createObjectURL(file));
@@ -93,6 +116,7 @@ const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
         }
     };
     const [formValues, setFormValues] = useState({
+        login: '',
         email: '',
         password: '',
         confirm: '',
@@ -105,51 +129,58 @@ const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
     };
     const validateForm = () => {
         let errors: any = {};
-    
+
+        if (!formValues.login) {
+            errors.login = 'Пожалуйста, придумайте свой Login!';
+            setErrors(errors.login); // Сетим первую ошибку
+            return false; // Останавливаем дальнейшую валидацию
+        }
+
         if (!formValues.email) {
             errors.email = 'Пожалуйста, введите свой E-mail!';
             setErrors(errors.email); // Сетим первую ошибку
             return false; // Останавливаем дальнейшую валидацию
         }
-        
+
         if (!formValues.password) {
             errors.password = 'Пожалуйста, введите свой пароль!';
             setErrors(errors.password); // Сетим ошибку для пароля
             return false;
         }
-        
+
         if (formValues.password !== formValues.confirm) {
             errors.confirm = 'Новый пароль, который вы ввели, не совпадает!';
             setErrors(errors.confirm); // Сетим ошибку для подтверждения пароля
             return false;
         }
-        
-        if (!formValues.name) {
-            errors.name = 'Пожалуйста, введите Ваше имя!';
-            setErrors(errors.name); // Сетим ошибку для имени
-            return false;
-        }
-        
-        if (!formValues.surname) {
-            errors.surname = 'Пожалуйста, введите Вашу фамилию!';
-            setErrors(errors.surname); // Сетим ошибку для фамилии
-            return false;
-        }
-    
+
+        // if (!formValues.name) {
+        //     errors.name = 'Пожалуйста, введите Ваше имя!';
+        //     setErrors(errors.name); // Сетим ошибку для имени
+        //     return false;
+        // }
+
+        // if (!formValues.surname) {
+        //     errors.surname = 'Пожалуйста, введите Вашу фамилию!';
+        //     setErrors(errors.surname); // Сетим ошибку для фамилии
+        //     return false;
+        // }
+
         return true;
     };
     const onFinish = async () => {
         setErrors('')
         setMessage('')
         const newUser = {
+            login: formValues.login,
             email: formValues.email,
             name: formValues.name,
             surname: formValues.surname,
             password: formValues.password,
             avatar: avatar
         };
-        dispatch(registrationAC(newUser.name, newUser.surname, newUser.email, newUser.password, newUser.avatar))
-            .then( () => dispatch(successfulRegistrationAC(formValues.email)))
+        dispatch(registrationAC(newUser.login, newUser.name, newUser.surname, newUser.email, newUser.password, newUser.avatar))
+            .then(() => dispatch(successfulRegistrationAC(formValues.email)))
             .then((data: any) => {
                 if (data?.message) {
                     dispatch(successfulRegistrationAC(formValues.email))
@@ -180,31 +211,33 @@ const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
             <div className={classes.contentRegistration}>
                 <h1>Регистрация</h1>
                 <div className={classes.errorMessages}>
-                    {errors && errors !== "" && error &&  
+                    {errors && errors !== "" && error &&
                         <p className={classes.message}>
                             <TypingEffect message={errors} speed={30} />
                         </p>
                     }
-                    {!error && errors && 
+                    {!error && errors &&
                         <p className={classes.message}>
                             <TypingEffect message={errors} speed={30} />
                         </p>
                     }
                 </div>
                 <div className={classes.wrapForm}>
+                    <h3>Ваш Login:</h3>
+                    <input type="login" name="login" value={formValues.login} onChange={handleChange} />
                     <h3>Ваш E-mail:</h3>
-                    <input type="email" name="email" value={formValues.email} onChange={handleChange}/>
+                    <input type="email" name="email" value={formValues.email} onChange={handleChange} />
                     <h3>Придумайте Ваш пароль:</h3>
-                    <input type="password" name="password" value={formValues.password} onChange={handleChange}/>
+                    <input type="password" name="password" value={formValues.password} onChange={handleChange} />
                     <h3>Подтвердите Ваш придуманный пароль:</h3>
-                    <input type="password" name="confirm" value={formValues.confirm} onChange={handleChange}/>
+                    <input type="password" name="confirm" value={formValues.confirm} onChange={handleChange} />
                     <h3>Ваше Имя:</h3>
-                    <input name="name" value={formValues.name} onChange={handleChange}/>
+                    <input name="name" value={formValues.name} onChange={handleChange} />
                     <h3>Ваша фамилия:</h3>
-                    <input name="surname" value={formValues.surname} onChange={handleChange}/>
-                    {nameImg &&                         
+                    <input name="surname" value={formValues.surname} onChange={handleChange} />
+                    {nameImg &&
                         <div className={classes.blockCropperAvatar}>
-                            <MyCropperAvatar 
+                            <MyCropperAvatar
                                 nameImg={nameImg}
                                 setCropper={setCropper}
                             />
@@ -214,8 +247,8 @@ const RegistrationForm: React.FC<PropsType> = React.memo(({setRedirect}) => {
                         <FileUpload setFile={handleFileSelect} accept="image/*">
                             <button>Выбрать Avatar</button>
                         </FileUpload>
-                        {nameImg && 
-                        <button type="button" className={classes.trim} onClick={handleCrop}>Обрезать</button>}
+                        {nameImg &&
+                            <button type="button" className={classes.trim} onClick={handleCrop}>Обрезать</button>}
                         <div className={classes.wrapButtonRegistration}>
                             <button type="button" onClick={() => { if (validateForm()) onFinish(); }}>
                                 Зарегистрироваться

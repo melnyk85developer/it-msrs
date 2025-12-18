@@ -3,7 +3,7 @@ import { BiDownvote, BiDuplicate } from "react-icons/bi";
 import { IoDuplicate, IoDuplicateOutline } from "react-icons/io5";
 import { LeftOutlined, RightOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { API_URL } from "@packages/shared/src/http";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
@@ -15,7 +15,7 @@ import classes from './styles.module.scss'
 
 type PropsType = {
     profile: IProfile;
-    authorizedUser: IProfile
+    authorizedUser: IUser
     dispatch: AppDispatch;
     isDarkTheme: string;
 }

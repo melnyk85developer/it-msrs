@@ -56,7 +56,7 @@ const AppMyAdminContainer: React.FC = React.memo(() => {
         dispatch(setLSidebarAC(SIDEBAR_ON));
         dispatch(setLSidebarSpanAC(5));
         dispatch(setContentSpanAC(15));
-        dispatch(setRSidebarAC(SIDEBAR_OFF));
+        dispatch(setRSidebarAC(SIDEBAR_ON));
         dispatch(setRSidebarSpanAC(0));
         dispatch(setFooterAC(FOOTER_ON));
         setPageType('stretch');

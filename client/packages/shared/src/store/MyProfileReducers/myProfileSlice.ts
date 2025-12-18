@@ -119,7 +119,9 @@ export const myProfileSlice = createSlice({
         },
     }
 })
-export const myProfileAC = (userId: number) => async (dispatch: AppDispatch) => {
+export const myProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
+    console.log('myProfileAC: - userId 😡😡😡😡😡 ', userId)
+
     try {
       const [userData] = await Promise.all([MyProfileAPI.getMyProfileAPI(userId)]);
       dispatch(myProfileSlice.actions.setMyProfile(userData.data));
@@ -132,13 +134,17 @@ export const myProfileAC = (userId: number) => async (dispatch: AppDispatch) => 
 };
 export const sendEmailResetPasswordMyProfileAC = (email: string) => async (dispatch: AppDispatch) => {
     try{
-        const data = await MyProfileAPI.sendEmailResetPasswordAPI(email)
-        // console.log('sendEmailResetPasswordMyProfileAC: - data res', data.data)
+        const response = await MyProfileAPI.sendEmailResetPasswordAPI(email)
+        const msg = response.headers['x-service-message'];
+        console.log('sendEmailResetPasswordMyProfileAC: - msg res', msg)
+
+        console.log('sendEmailResetPasswordMyProfileAC: - status res', response.status)
+        console.log('sendEmailResetPasswordMyProfileAC: - data res', response.data)
         dispatch(myProfileSlice.actions.myProfileFetchingError(''))
-        return data.data
-    }catch(e: any){
+        return response
+    }catch(error: any){
         // console.log('sendEmailResetPasswordMyProfileAC: - e', e.response)
-        dispatch(myProfileSlice.actions.myProfileFetchingError(e.response?.data?.message))
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
 export const updatePasswordAC = (password: string, code: string) => async (dispatch: AppDispatch) => {
@@ -224,7 +230,7 @@ export const setPhotoCarouselMyProfileAC = (photoId: number) => async (dispatch:
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const addPhotoMyProfileAC = (userId: number, authorizedUserId: number, image: File, miniature: File, albumName: string) => async (dispatch: AppDispatch) => {
+export const addPhotoMyProfileAC = (userId: string, authorizedUserId: string, image: File, miniature: File, albumName: string) => async (dispatch: AppDispatch) => {
     try{
         const res = await MyProfileAPI.addPhotoAPI(userId, authorizedUserId, image, miniature, albumName)
         // console.log('addPhotoMyProfileAC res', res.data)

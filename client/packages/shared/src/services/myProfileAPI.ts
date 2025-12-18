@@ -4,11 +4,12 @@ import { IAnketaProfile, IPhoto, IPhotoAlbum, IProfile, IUpdateStatus } from "..
 import { IsLikesType, PinPostType, PostsType } from "@/types/types";
 
 export default class MyProfileAPI {
-    static async getMyProfileAPI(userId: number): Promise<AxiosResponse<IProfile>> {
+    static async getMyProfileAPI(userId: string): Promise<AxiosResponse<IProfile>> {
+        // console.log('MyProfileAPI: getMyProfileAPI - userId 😡😡😡😡😡 ', userId)
         return $api.get<IProfile>(`/users/profile/${userId}`)
     }
     static async updateMyProfileAPI(userId: number, anketa: IAnketaProfile): Promise<AxiosResponse<IProfile>> {
-        
+
         // console.log('updateMyProfileAPI - anketa', anketa)
         // const formData = new FormData()
         // formData.append('userId', anketa.userId.toString())
@@ -40,7 +41,7 @@ export default class MyProfileAPI {
         return $api.put<Object>(`/users/profile/update/avatar/${userId}`, formData)
     }
     static async updateStatusMyProfileAPI(userId: number, authorizedUserId: number, status: string): Promise<AxiosResponse<any>> {
-        return $api.put<Object>(`/users/profile/update/status/${userId}`, {authorizedUserId, status})
+        return $api.put<Object>(`/users/profile/update/status/${userId}`, { authorizedUserId, status })
     }
     static async deleteMyProfileAPI(userId: number): Promise<AxiosResponse<void>> {
         return $api.delete<void>(`/users/${userId}`);
@@ -69,7 +70,7 @@ export default class MyProfileAPI {
         formData.append('profileId', post.profileId.toString())
         // formData.append('authorizedUserId', post.authorizedUserId.toString())
         return $api.put<PostsType>(`/posts/${postId}`, formData)
-    }   
+    }
     static async deletePostAPI(postId: number, authorizedUserId: number): Promise<AxiosResponse<PostsType>> {
         return $api.delete<PostsType>(`/posts/${postId}`, { data: { postId, authorizedUserId } });
     }
@@ -81,7 +82,7 @@ export default class MyProfileAPI {
         // console.log('MyProfileAPI - getPhotoByIdAPI: ', photoId)
         return $api.get<IPhoto>(`/users/photo/${photoId}`)
     }
-    static async addPhotoAPI(userId: number, authorizedUserId: number, imgFile: File, miniature: File, albumName: string): Promise<AxiosResponse<IPhoto>> {
+    static async addPhotoAPI(userId: string, authorizedUserId: string, imgFile: File, miniature: File, albumName: string): Promise<AxiosResponse<IPhoto>> {
 
         // console.log('addPhotoAPI: ', image, albumName, userId, authorizedUserId)
         const formData = new FormData()
@@ -105,11 +106,11 @@ export default class MyProfileAPI {
         return $api.post<IsLikesType>(`/like/`, like)
     }
     static async sendEmailResetPasswordAPI(email: string): Promise<AxiosResponse<any>> {
-        // console.log('sendEmailResetPasswordAPI - req: ', email)
-        return $api.post<any>(`/users/resetpassword`, {email})
+        console.log('sendEmailResetPasswordAPI - req: ', email)
+        return $api.post<any>(`/auth/password-recovery`, { email })
     }
     static async updatePasswordAPI(password: string, code: string): Promise<AxiosResponse<IProfile>> {
         console.log('sendEmailResetPasswordAPI - req: ', password, code)
-        return $api.put<IProfile>(`/users/resetpassword`, {password, code})
+        return $api.put<IProfile>(`/auth/new-password`, { password, code })
     }
 }

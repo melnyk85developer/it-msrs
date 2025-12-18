@@ -24,7 +24,7 @@ export class CommentsContextClass {
         numComment: number;
         addComment: CommentViewDto;
     }) {
-        console.log('CommentsContextClass: addCommentStateTest - numBlog, numPost, addBlog 😡 ', numBlog, numPost, addComment)
+        // console.log('CommentsContextClass: addCommentStateTest - numBlog, numPost, addBlog 😡 ', numBlog, numPost, addComment)
         // if(numBlog === undefined || numPost === undefined || addPost === undefined){
         //     return 
         // }

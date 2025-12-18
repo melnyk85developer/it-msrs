@@ -11,7 +11,7 @@ import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
 import { CreateUserDto, UpdateUserDto } from '../users-dto/create-user.dto';
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
-import { resetPasswordEmailMessageHTMLDocument } from 'src/core/service/resetPassword/resetPasswordEmailMessage.HTML';
+import { resetPasswordEmailMessageHTMLDocument } from 'src/modules/notifications/service/resetPassword/resetPasswordEmailMessage.HTML';
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 
@@ -27,9 +27,11 @@ export class UsersService {
         private emailService: EmailService,
     ) { }
 
-    async createUserService(dto: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<string | number> {
+    async createUserService(dto: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'>, avatar: string | null): Promise<string | number> {
         const { email, login, password } = dto
-        // console.log('createUserService - email, login, password 😡 ', email, login, password)
+        let role: any
+        let isBot: boolean
+        // console.log('createUserService - email, login, password 😡 avatar', email, login, password, avatar) 
         const isLogin = await this.usersRepository.findByLoginOrEmail(login)
         if (isLogin) {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_TНE_LOGIN_ALREADY_EXISTS);
@@ -39,20 +41,27 @@ export class UsersService {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_TНE_EMAIL_ALREADY_EXISTS)
         }
         const passwordHash = await this.cryptoService.createPasswordHash(password);
-
         const isUsers = await this.usersRepository.findAllUsers()
-        let role: any
         if (!isUsers.length) {
             role = { value: "ADMIN", description: "Администратор" }
         } else {
             role = { value: "USER", description: "Пользователь" }
         }
+        if (dto.isBot) {
+            isBot = dto.isBot
+        } else {
+            isBot = false
+        }
         const user = await this.UserModel.createUserInstance({
             ...dto,
+            avatar: avatar ? avatar : null,
             passwordHash,
-            role
+            role,
+            isBot: isBot
         });
+        // console.log('createUserService - user 😡 ', user)
         await this.usersRepository.save(user);
+        // console.log('createUserService - user 😡 ', user)
         return user._id.toString();
     }
     async updateUserService(id: string, dto: Omit<UpdateUserDto, 'deletedAt' | 'updatedAt'>): Promise<string> {

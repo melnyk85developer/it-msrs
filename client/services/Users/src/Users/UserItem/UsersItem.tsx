@@ -3,16 +3,16 @@ import { NavLink } from "react-router-dom";
 import { routeMain as routeUserProfile } from "../../../../UserProfile/src/UserProfile/UserProfileContainer";
 import defaultUserAvatar from "@packages/shared/src/assets/fonAvatars.png"
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { API_URL } from "@packages/shared/src/services/http";
 import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import SendMessageFormModal from "./ModalContentMsg/messageFormModal";
 import { sendMessageAC } from "@packages/shared/src/store/MessagesReducers/messagesSlice";
 import { v4 as uuidv4 } from 'uuid';
 import classes from './styles.module.scss'
+import { API_URL } from "@packages/shared/src/http";
 
 type PropsType = {
-    user: IProfile
+    user: IUser
     // followingInProgress: Array<number>
     // unfollow: (userId: number) => void
     // follow: (userId: number) => void
@@ -28,8 +28,8 @@ const UsersItem: React.FC<PropsType> = React.memo(({ user }) => {
     const addNewMessage = (messageText: string) => {
         const message = {
             message: messageText,
-            senderId: authorizedUser.userId,
-            receiverId: user.userId,
+            senderId: authorizedUser.id,
+            receiverId: user.id,
             read: false,
             createdAt: new Date().toISOString(),
             replyToMessageId: '',
@@ -44,12 +44,12 @@ const UsersItem: React.FC<PropsType> = React.memo(({ user }) => {
     const writeAmessage = () => {
         setOpenModalMessage(true)
     }
-
+    console.log('Avatar: - `${API_URL}/${avatar}`', `${API_URL}/${user.avatar}`)
     return (
         <section className={`${classes.wrapUsersItem} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.usersItem}>
                 <div className={classes.wrapUserBlock_1}>
-                    <NavLink to={routeUserProfile(user.userId)}>
+                    <NavLink to={routeUserProfile(user.id)}>
                         <div className={classes.wrapUsersAvatar}>
                             <img
                                 className={classes.usersAvatar}

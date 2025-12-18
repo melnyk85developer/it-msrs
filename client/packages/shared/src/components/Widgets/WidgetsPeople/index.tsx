@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import WidgetsPeopleList from "./WidgetsPeopleList";
-import { useAppSelector } from "../../../components/hooks/redux";
+import { useAppSelector } from "../../hooks/redux";
 import classes from './styles.module.scss'
 
 const WidgetPeople: React.FC = () => {

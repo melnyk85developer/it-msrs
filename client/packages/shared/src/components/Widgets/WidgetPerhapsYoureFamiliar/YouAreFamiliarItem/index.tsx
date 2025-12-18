@@ -4,7 +4,7 @@ import { routeMain as routeUserProfile } from "../../../../../../../services/Use
 import { API_URL } from "../../../../http";
 import defaultUserAvatar from "../../../../assets/fonAvatars.png"
 import { IUser } from "@/types/IUser";
-import { useAppSelector } from "../../../../components/hooks/redux";
+import { useAppSelector } from "../../../hooks/redux";
 import classes from './styles.module.scss'
 
 type PropsType = {

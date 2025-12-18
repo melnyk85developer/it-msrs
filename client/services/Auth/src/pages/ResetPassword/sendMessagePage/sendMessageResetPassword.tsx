@@ -40,24 +40,24 @@ const SendResetPassword: React.FC = () => {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
             <div>
-                <WidgetPerhapsYoureFamiliar />
+                {/* <WidgetPerhapsYoureFamiliar />
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentRsidebar: [
             <div>
-                <WidgetPeople />
+                {/* <WidgetPeople />
                 <WidgetPerhapsYoureFamiliar />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentFooter: [
             <div className={`
                 ${classes.wrapFooterSectionsForSettingProfile}
-                ${isDarkTheme !== "light" 
-                    ? classes.dark 
-                    : classes.light 
+                ${isDarkTheme !== "light"
+                    ? classes.dark
+                    : classes.light
                 }
             `}>
                 <Col className={classes.footer_sections}>
@@ -83,7 +83,7 @@ const SendResetPassword: React.FC = () => {
         dispatch(setLSidebarAC(SIDEBAR_ON));
         dispatch(setLSidebarSpanAC(5));
         dispatch(setContentSpanAC(10));
-        dispatch(setRSidebarAC(SIDEBAR_OFF));
+        dispatch(setRSidebarAC(SIDEBAR_ON));
         dispatch(setRSidebarSpanAC(5));
         dispatch(setFooterAC(FOOTER_ON));
         setPageType('stretch');
@@ -102,7 +102,7 @@ const SendResetPassword: React.FC = () => {
             const expirationTime = new Date(isoDate).getTime();
             const remainingTimeInSeconds = Math.floor((expirationTime - currentTime) / 1000);
 
-            const textWithoutDate = error.split('2024-')[0].trim(); 
+            const textWithoutDate = error.split('2024-')[0].trim();
             setErrors(textWithoutDate)
             setTimer(remainingTimeInSeconds)
         }
@@ -123,7 +123,7 @@ const SendResetPassword: React.FC = () => {
             }, 1000);
             return () => clearInterval(intervalId); // Очистка интервала
         }
-    }, [timer]);   
+    }, [timer]);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -131,12 +131,13 @@ const SendResetPassword: React.FC = () => {
         setMessage('');
         setShowMessage(false);
         const validationError = validateEmail(email);
-        if(validationError){
+        if (validationError) {
             setErrors(validationError);
             return;
         }
         dispatch(sendEmailResetPasswordMyProfileAC(email))
             .then((data: any) => {
+                console.log('SendResetPassword: 👽👽😡👽👽 data', data)
                 if (data?.message) {
                     const extractISODate = (message: string): string | null => {
                         const isoDatePattern = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
@@ -182,7 +183,7 @@ const SendResetPassword: React.FC = () => {
             <TypingEffect key={`error-${index}`} message={errorMessage[index]} speed={40} />
         ));
     };
-    
+
     return (
         <div className={classes.wrapContentRessedPassword}>
             <div className={classes.contentRessedPassword}>
@@ -191,48 +192,48 @@ const SendResetPassword: React.FC = () => {
                     <div className={classes.wrapTitle}>
                         {!showMessage && !message && !errors && (
                             <>
-                                <strong style={{marginLeft: 7}}></strong>
+                                <strong style={{ marginLeft: 7 }}></strong>
                                 {renderMessages([0])}
                             </>
                         )}
                         {!errors && showMessage && message && (
                             <>
-                                <strong style={{marginLeft: 7}}></strong>
+                                <strong style={{ marginLeft: 7 }}></strong>
                                 {timer > 0 && renderMessages([1])}
-                                <strong style={{marginLeft: 7}}></strong>
+                                <strong style={{ marginLeft: 7 }}></strong>
                                 {timer === 0 && (
-                                        renderMessages([2])
-                                    )
+                                    renderMessages([2])
+                                )
                                 }
                             </>
-                        )}  
-                        {errors && errors !== "" && error &&  
+                        )}
+                        {errors && errors !== "" && error &&
                             <div className={classes.errorMessages}>
                                 <>
-                                    <strong style={{marginLeft: 7}}></strong>
+                                    <strong style={{ marginLeft: 7 }}></strong>
                                     {timer > 0 && renderErrors([0])}
-                                    <strong style={{marginLeft: 7}}></strong>
+                                    <strong style={{ marginLeft: 7 }}></strong>
                                     {timer === 0 && renderErrors([2])}
                                 </>
                             </div>
                         }
-                        {!error && errors && 
+                        {!error && errors &&
                             <div className={classes.errorMessages}>
-                                <strong style={{marginLeft: 7}}></strong>
+                                <strong style={{ marginLeft: 7 }}></strong>
                                 {renderErrors([1])}
                             </div>
                         }
                     </div>
                 </div>
 
-                {timer > 0 
-                    ? 
+                {timer > 0
+                    ?
                     <div className={classes.nextSendSMS}>
-                        <strong style={errors ? { color: "rgb(161, 3, 3)"} : {color: "rgb(4, 153, 4)"}}>
+                        <strong style={errors ? { color: "rgb(161, 3, 3)" } : { color: "rgb(4, 153, 4)" }}>
                             {` ${formatTime(timer)}`}
                         </strong>
                     </div>
-                    : 
+                    :
                     <div className={classes.nextSendSMS}>
                         <label htmlFor="email" className={classes.label}>
                             Введите E-Mail адрес:
@@ -247,8 +248,8 @@ const SendResetPassword: React.FC = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                     className={classes.input}
                                 />
-                                <button 
-                                    className={classes.button} 
+                                <button
+                                    className={classes.button}
                                     type="submit"
                                 >
                                     Сбросить пароль

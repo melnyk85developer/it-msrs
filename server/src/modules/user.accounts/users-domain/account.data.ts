@@ -18,36 +18,13 @@ export const emailConstraints = {
     _id: false,
 })
 export class AccountData {
-    @ApiProperty({ example: 'userName', description: 'Имя пользователя.' })
+    @ApiProperty({ example: 'login', description: 'login пользователя.' })
     @Prop({ type: String, required: true }) // unique: true
-    userName: string;
-
-    @ApiProperty({ example: 'passwordHash', description: 'Хешь пароля пользователя.' })
-    @Prop({ type: String, required: true })
-    passwordHash: string;
+    login: string;
 
     @ApiProperty({ example: 'email', description: 'E-mail адрес пользоателя.' })
     @Prop({ type: String, min: 5, required: true }) // unique: true
     email: string;
-
-    @ApiProperty({ example: 'createdAt', description: 'Число создания аккаунта.' })
-    @Prop({ type: String, required: true })
-    createdAt: string;
-
-    @ApiProperty({ example: 'updatedAt', description: 'Число обновления аккаунта.' })
-    @Prop({ type: String, required: false })
-    updatedAt: string;
-
-    @ApiProperty({ example: 'deletedAt', description: 'Число удаления  аккаунта.' })
-    @Prop({ type: String, nullable: true })
-    deletedAt: string | null;
-
-    @Prop({ type: Boolean, required: true, default: false })
-    isEmailConfirmed: boolean;
-
-    @ApiProperty({ example: 'lastSeen', description: 'Последнее посещение пользователя.' })
-    @Prop({ type: String, required: false })
-    lastSeen: string
 }
 
 export const AccountDataSchema = SchemaFactory.createForClass(AccountData);

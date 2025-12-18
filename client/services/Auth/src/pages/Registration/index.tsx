@@ -28,16 +28,16 @@ const Registration: React.FC = () => {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
             <div>
-                <WidgetPerhapsYoureFamiliar/>
+                {/* <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentRsidebar: [
             <div>
-                <WidgetPerhapsYoureFamiliar/>
+                {/* <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentFooter: [
@@ -69,7 +69,7 @@ const Registration: React.FC = () => {
         dispatch(setLSidebarAC(SIDEBAR_ON));
         dispatch(setLSidebarSpanAC(5));
         dispatch(setContentSpanAC(10));
-        dispatch(setRSidebarAC(SIDEBAR_OFF));
+        dispatch(setRSidebarAC(SIDEBAR_ON));
         dispatch(setRSidebarSpanAC(5));
         dispatch(setFooterAC(FOOTER_ON));
         setPageType('stretch');

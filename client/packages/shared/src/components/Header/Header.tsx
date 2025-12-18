@@ -35,14 +35,18 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
     const { content } = useAppContext(); // Получаем объект content из контекста
     const { contentTopNav } = content;
 
+    // console.log('Header: - authorizedUser', authorizedUser)
+
+    const userId = authorizedUser?.id
+
     const changeTheme = () => {
         dispatch(isDarkThemeAC(isDarkTheme !== "light" ? "light" : "dark"))
     }
 
-    const redirect = () => {
-        console.log('Выход' + authorizedUser)
-        return (<Navigate to={routeAuth()} />)
-    }
+    // const redirect = () => {
+    //     console.log('Выход' + authorizedUser)
+    //     return (<Navigate to={routeAuth()} />)
+    // }
 
     const logouting = () => {
         dispatch(logoutAC())
@@ -57,7 +61,7 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
                     <div className={classes.centrBlockHeader}>
                         <Row gutter={0} className={classes.row}>
                             <Col span={2} className={classes.logoBlock}>
-                                <NavLink to={routeMyProfile(profile.userId)}>
+                                <NavLink to={routeMyProfile(userId)}>
                                     <div className={classes.wrapImg}>
                                         {/* <img className={classes.logoImg} src={marsLogo} alt={'logo'} /> */}
                                         {/* <IoMdPlanet /> */}
@@ -72,7 +76,7 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
                                             My
                                         </span>
                                         <span className={classes.span2}>
-                                            Social
+                                            Corner
                                             {/* Life */}
                                             {/* Mars */}
                                         </span>
@@ -92,11 +96,11 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
                                         <>
                                             <MoonOutlined onClick={changeTheme} className={classes.iconTheme} />
                                             <strong className={classes.nameWrap}>
-                                                <li><strong className={classes.nameHeader}>{profile.name}</strong></li>
+                                                <li><strong className={classes.nameHeader}>{authorizedUser?.login}</strong></li>
                                                 <li><NavLink to={routeAdmin()}><strong>Admin</strong></NavLink></li>
                                             </strong>
                                             <img
-                                                src={profile.avatar !== null ? `${API_URL}/` + profile.avatar : defaultAvatar}
+                                                src={authorizedUser.avatar !== null ? `${API_URL}/` + authorizedUser.avatar : defaultAvatar}
                                                 alt={"avatar"}
                                                 className={classes.img}
                                             />
@@ -105,11 +109,11 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
                                         <>
                                             <SunOutlined onClick={changeTheme} className={classes.iconTheme} />
                                             <strong className={classes.nameWrap}>
-                                                <li><strong className={classes.nameHeader}>{profile.name}</strong></li>
+                                                <li><strong className={classes.nameHeader}>{authorizedUser?.login}</strong></li>
                                                 <li><NavLink to={routeAdmin()}><strong>Admin</strong></NavLink></li>
                                             </strong>
                                             <img
-                                                src={profile.avatar !== null ? `${API_URL}/` + profile.avatar : defaultAvatar}
+                                                src={authorizedUser.avatar !== null ? `${API_URL}/` + authorizedUser.avatar : defaultAvatar}
                                                 alt={"avatar"}
                                                 className={classes.img}
                                             />

@@ -17,6 +17,22 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'Поле password не должно быть пустым!' })
     @Length(6, 16, { message: 'Пароль должен быть не меньше 6 и не больше 16 символов!' })
     readonly password: string;
+
+    @ApiProperty({ example: 'isBot', description: 'Является ли пользователь ботом?!' })
+    @IsOptional()
+    isBot?: boolean;
+
+    @ApiProperty({ example: 'name', description: 'Имя пользователя!' })
+    @IsString({ message: 'name должен быть строкой!' })
+    @Length(1, 16, { message: 'Пароль должен быть не меньше 6 и не больше 16 символов!' })
+    @IsOptional()
+    readonly name?: string;
+    @ApiProperty({ example: 'surname', description: 'Фамилия пользователя!' })
+    @IsString({ message: 'surname должно быть строкой!' })
+    @Length(1, 16, { message: 'Фамилия должна быть не меньше 1 и не больше 16 символов!' })
+    @IsOptional()
+    readonly surname?: string;
+
     @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
     createdAt: string;
     @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
@@ -37,8 +53,7 @@ export class UpdateUserDto {
     @IsString({ message: 'Email должен быть строкой!' })
     @IsEmail({}, { message: "Некорректный E-mail" })
     email: string;
-    // @ApiProperty({ example: 'isEmailConfirmed', description: 'Подтверждена ли почта!' })
-    // isEmailConfirmed: boolean
+
     @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
     updatedAt: string;
     @ApiProperty({ example: 'lastSeen', description: 'Время последнего посещения!' })

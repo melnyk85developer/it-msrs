@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FileUpload from "@packages/shared/src/components/FileUpload/fileUpload";
 import { Button } from "antd";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { addPhotoAlbumMyProfileAC, addPhotoMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import MyCropperUploadMiniature from "./uploadMiniature";
@@ -9,7 +9,7 @@ import classes from './styles.module.scss'
 
 type PropsType = {
     profile: IProfile;
-    authorizedUser: IProfile
+    authorizedUser: IUser
     dispatch: AppDispatch;
     isDarkTheme: string;
     setModalUploadPhoto: any
@@ -28,7 +28,7 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
 
     const image = imgFile
     const userId = profile ? profile.userId : undefined
-    const authorizedUserId = authorizedUser ? authorizedUser.userId : undefined
+    const authorizedUserId = authorizedUser ? authorizedUser.id : undefined
 
     const handleClean = () => {
         setImgName(null)
@@ -53,7 +53,7 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
             await handleCrop();
             dispatch(addPhotoMyProfileAC(                
                 userId, 
-                authorizedUserId,
+                Number(authorizedUserId),
                 image, 
                 miniature,
                 albumName
@@ -76,7 +76,7 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     }
 
     const handleAddAlbum = () => {
-        dispatch(addPhotoAlbumMyProfileAC(userId, authorizedUserId, newAlbumName))
+        dispatch(addPhotoAlbumMyProfileAC(userId, Number(authorizedUserId), newAlbumName))
         .then(() => setNewAlbumName(''))
     }
 

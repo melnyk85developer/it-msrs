@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as uuid from 'uuid';
-import { add } from "date-fns";
 import { UsersRepository } from '../../user.accounts/users-infrastructure/users.repository';
 import { CryptoService } from '../../user.accounts/users-application/crypto.service';
 import { UserContextDto } from '../../user.accounts/users-guards/dto/user-context.dto';
@@ -12,13 +11,14 @@ import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { UsersService } from '../../user.accounts/users-application/users.service';
 import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastructure/session.repository';
-import { User } from '../../user.accounts/users-domain/user.entity';
-import { mailResendingEmailMessageHTMLDocument } from 'src/core/service/mailResending/mailResendingEmailMessage.HTML';
+import { mailResendingEmailMessageHTMLDocument } from 'src/modules/notifications/service/mailResending/mailResendingEmailMessage.HTML';
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
 import { EmailService } from 'src/modules/notifications/email.service';
 import { CreateUserDto } from 'src/modules/user.accounts/users-dto/create-user.dto';
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
+import { Multer } from 'multer';
+import { FilesService } from 'src/modules/files/files.service';
 
 export type ParseDeviceNameType = {
     osName: string | null;
@@ -43,16 +43,20 @@ export class AuthService {
         private sessionService: SessionService,
         private tokenService: TokenService,
         private emailService: EmailService,
+        private filesService: FilesService,
     ) { }
-    async registrationService(dto: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'>) {
+    async registrationService(dto: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'>, avatar: Multer.File | null) {
         // console.log('registrationUserService - dto 😡😡', dto)
-        const createdUserId = await this.usersService.createUserService(dto);
+        // console.log('AuthService: registrationService - avatar 👽 😡 👽', avatar)
+        const confirmationCode = uuid.v4()
+        const date = new Date()
+        const fileName = avatar ? await this.filesService.createAvatarFile(avatar) : null;
+        // console.log('FilesService: createFile - fileName 👽 😡 👽', fileName)
+        const createdUserId = await this.usersService.createUserService(dto, fileName);
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(
             String(createdUserId),
         );
         // console.log('registrationUserService: - user 😡 ', user)
-        const confirmationCode = uuid.v4()
-        const date = new Date()
         // user.setConfirmationCode(confirmationCode);
 
         const isConfirmation = await this.confirmationsCodesService.createConfirmationsCodesService(
@@ -93,7 +97,7 @@ export class AuthService {
         // console.log('loginService: - ', ip, userAgent, refreshToken)
         // const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
-        const roleValues = user.roles.map(role => role.value);
+        const roleValues = user.systemUserData.roles.map(role => role.value);
         // console.log('loginService: - user', user)
         // console.log('loginService: - roleValues', roleValues)
         const isParse = await this._myParserService(ip, userAgent)
@@ -110,8 +114,8 @@ export class AuthService {
         },
             refreshToken as string,
             roleValues,
-            user.isBanned,
-            user.bannReason as string,
+            user.systemUserData.isBanned,
+            user.systemUserData.bannReason as string,
         );
         // console.log('loginService: - isLogin RES', isLogin)
         const isUpdateLastSeen = await this.usersService.updateLastSeenUserService(userId)
@@ -144,7 +148,7 @@ export class AuthService {
 
         if (noExpSession && Number(device.lastActiveDate) === Number(refreshTokenPayload.iat)) {
             const isParse = await this._myParserService(ip, userAgent)
-            const roleValues = user.roles.map(role => role.value);
+            const roleValues = user.systemUserData.roles.map(role => role.value);
 
             const isUpdatedSession = await this.sessionService.updateSessionService({
                 userId: user.id,
@@ -160,8 +164,8 @@ export class AuthService {
             },
                 refreshToken as string,
                 roleValues,
-                user.isBanned,
-                user.bannReason as string,
+                user.systemUserData.isBanned,
+                user.systemUserData.bannReason as string,
             );
             // console.log('🔥🔥 refreshService - isUpdatedSession:', isUpdatedSession);
             const isUpdateLastSeen = await this.usersService.updateLastSeenUserService(user.id)
@@ -239,7 +243,7 @@ export class AuthService {
             field: 'registration'
         })
         if (expirationDate) {
-            console.log('AuthService registrationEmailResendingService: - isSendEmail res 200', expirationDate.expirationDate)
+            // console.log('AuthService registrationEmailResendingService: - isSendEmail res 200', expirationDate.expirationDate)
             const expirationISO = new Date(expirationDate.expirationDate).toISOString();
             return {
                 done: true,
@@ -264,7 +268,7 @@ export class AuthService {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_CONFIRMATION_CODE)
         }
     }
-    async passwordRecoverySendEmailService(email: string): Promise<any> {
+    async passwordRecoverySendEmailService(email: string): Promise<{ done: boolean, data: string | null, code: number, serviceMessage: string }> {
         return await this.usersService.ressetPasswordService(email)
     }
     async ressetPasswordService(email: string, code: string): Promise<any> {
@@ -278,7 +282,7 @@ export class AuthService {
         }
         const isPasswordValid = await this.cryptoService.comparePasswords({
             password,
-            hash: user.accountData.passwordHash,
+            hash: user.passwordHash,
         });
         if (!isPasswordValid) {
             return null;

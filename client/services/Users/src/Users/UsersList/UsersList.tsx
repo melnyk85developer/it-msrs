@@ -16,7 +16,7 @@ const UsersList: React.FC<PropsType> = React.memo((props) => {
         <div className="wrapFriendsList">
             {props.users.map( (user) => (
                 <UsersItem 
-                    key={user.userId}
+                    key={user.id}
                     user={user}
 
                     // followingInProgress={props.followingInProgress} 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { API_URL } from "@packages/shared/src/services/http";
 import { routeMain as routeDialog } from "../index";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { formatTimeOfPublication } from "@packages/shared/src/components/utils/timeOfPublication";
@@ -9,6 +8,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import defaultUserAvatar from "@packages/shared/src/assets/fonAvatars.png"
 import classes from './styles.module.scss'
 import { MessagesType } from "@packages/shared/src/types/types";
+import { API_URL } from "@packages/shared/src/http";
 
 type PropsType = {
     avatar: string;

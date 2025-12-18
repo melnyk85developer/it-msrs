@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { Button } from 'antd';
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { updateMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
@@ -8,7 +8,7 @@ import classes from './styles.module.scss'
 type PropsType = {
     dispatch: AppDispatch;
     profile: IProfile;
-    authorizedUser: IProfile;
+    authorizedUser: IUser;
     modalActive: any;
     setModalActive: any;
     isDarkTheme: string;
@@ -33,7 +33,7 @@ const ProfileDataForm: React.FC<PropsType> = ({
     const sendAPicture = () => {
         const profileQuestionnaire = {
             userId: profile.userId, 
-            authorizedUserId: authorizedUser.userId,
+            authorizedUserId: Number(authorizedUser.id),
             name,
             surname,
             gender,

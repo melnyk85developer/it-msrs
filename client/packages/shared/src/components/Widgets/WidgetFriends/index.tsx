@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import WidgetFriendsList from "./WidgetFriendsList"
-import Preloader from "../../../components/Priloader";
+import Preloader from "../../Priloader";
 import { IUser } from "@/types/IUser";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import classes from './styles.module.scss'

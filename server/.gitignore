@@ -2,7 +2,9 @@
 /dist
 /node_modules
 /build
-
+/static/avatars
+/static/music
+/static/post-images
 # Logs
 logs
 *.log

@@ -7,7 +7,6 @@ import { CreateSessionDto, UpdateSessionDto } from '../sessions-dto/create-sessi
 import { SessionsRepository } from '../sessions-infrastructure/session.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { Session, SessionDocument, type SessionModelType } from '../sessions-domain/sessions.entity';
-import { UserDocument } from 'src/modules/user.accounts/users-domain/user.entity';
 
 @Injectable()
 export class SessionService {
@@ -63,7 +62,7 @@ export class SessionService {
             )
         } else {
             let deviceId = uuid.v4()
-            console.log('UsersSessionService: - 🔥🔥🔥 Создаём новую сессию', deviceId)
+            // console.log('UsersSessionService: - 🔥🔥🔥 Создаём новую сессию', deviceId)
             const { accessToken, refreshToken } = this.tokenService.generateTokens({
                 id: userId,
                 deviceId,
@@ -140,7 +139,6 @@ export class SessionService {
                 refreshToken,
                 isUpdatedSession: newSession
             }
-
             // if (isUpdateLastSeen) {
 
             // } else {
@@ -168,7 +166,6 @@ export class SessionService {
     }
     async deleteAllSessionsServices(userId: string, deviceId: string, refreshToken: string): Promise<{ statusCode: number; message: string; } | any> {
         const isSessions = await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(userId);
-
         if (isSessions && isSessions.length > 0) {
             for (let i = 0; isSessions.length > i; i++) {
                 if (isSessions[i].deviceId !== deviceId) {
@@ -176,7 +173,7 @@ export class SessionService {
                 }
             }
         }
-        console.log('SessionService deleteAllSessionsServices - isSessions.length', isSessions.length)
+        // console.log('SessionService deleteAllSessionsServices - isSessions.length', isSessions.length)
         return isSessions.length
     }
 

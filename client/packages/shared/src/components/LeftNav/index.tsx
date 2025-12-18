@@ -7,7 +7,7 @@ import { routeMain as routeMessages } from '../../../../../services/Message/src/
 import { routeMain as routeShop } from '../../../../../services/MyShops/src/Shop/myShopsContainer';
 import { routeMain as routeUsers } from '../../../../../services/Users/src/Users/UsersContainer';
 import { routeMain as routeSettings } from '../../../../../services/SettingsMyProfile/src/SettingsMyProfile/SettingsProfile';
-import { useAppDispatch, useAppSelector } from '../../../../../packages/shared/src/components/hooks/redux';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { routeMain as routePlaylist } from '../../../../../services/Music/src/Music/MusicContainer';
 import { HomeOutlined, MessageOutlined, ShopOutlined, TeamOutlined, SettingOutlined, UsergroupAddOutlined, CustomerServiceOutlined, VideoCameraOutlined, CommentOutlined, MailOutlined } from '@ant-design/icons';
 import classes from './styles.module.scss'
@@ -26,7 +26,7 @@ const LeftNav: React.FC = () => {
 
     const items: Item[] = [
         {
-            to: routeMyProfile(authorizedUser && authorizedUser.userId),
+            to: routeMyProfile(authorizedUser && authorizedUser.id),
             icon: <><RiHome4Fill className={classes.icon}/><RiHome4Line className={classes.icon}/></> , //<HomeOutlined className={classes.icon} />, //<><RiCriminalFill className={classes.icon}/><RiCriminalLine className={classes.icon}/></>, //<><RiAliensLine className={classes.icon}/><RiAliensFill className={classes.icon}/></>
             label: 'Profile',
         },

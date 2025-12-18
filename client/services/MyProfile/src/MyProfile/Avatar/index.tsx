@@ -6,7 +6,7 @@ import { API_URL } from "@packages/shared/src/http";
 import { useAppSelector } from "@packages/shared/src/components/hooks/redux";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import UploadAvatar from "./uploadAvatar";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import classes from './styles.module.scss'
 
@@ -14,7 +14,7 @@ type PropsType = {
     avatar: string;
     profile: IProfile
     dispatch: AppDispatch
-    authorizedUser: IProfile;
+    authorizedUser: IUser;
 
 }
 
@@ -25,7 +25,7 @@ const Avatar: React.FC<PropsType> = ({ dispatch, profile, avatar, authorizedUser
     const handleUpdateAvatar = () => {
         setModalActive(true)
     }
-    console.log('Avatar: - ', avatar)
+    console.log('Avatar: - `${API_URL}/${avatar}`', `${API_URL}/${avatar}`)
 
     return (
         <div className={`${classes.avatar} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>

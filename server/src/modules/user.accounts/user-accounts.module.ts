@@ -24,6 +24,9 @@ import { SessionQueryRepository } from '../usersSessions/sessions-infrastructure
 import { SessionModule } from '../usersSessions/sessions.module';
 import { ConfirmationModule } from '../confirmationsCodes/confirmation-module';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
+import { FilesService } from '../files/files.service';
+import { AdminController } from './users-api/admin.controller';
+import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
 
 @Module({
     imports: [
@@ -47,8 +50,9 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
         ConfirmationModule
     ],
     controllers: [
-        UsersController,
         AuthController,
+        AdminController,
+        UsersController,
     ],
     providers: [
         UsersService,
@@ -56,6 +60,7 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
         UsersQueryRepository,
 
         AuthService,
+        AdminService,
         AuthQueryRepository,
 
         LocalStrategy,
@@ -66,6 +71,7 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 
         UsersExternalQueryRepository,
         UsersExternalService,
+        FilesService
     ],
     exports: [
         UsersService,
@@ -77,6 +83,8 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 
         JwtStrategy,
         AuthQueryRepository,
+        FilesService,
+        AdminService
     ],
 })
 export class UserAccountsModule { }
