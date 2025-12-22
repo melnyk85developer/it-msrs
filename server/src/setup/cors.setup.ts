@@ -8,5 +8,6 @@ export function corsSetup(app: INestApplication) {
     app.enableCors({
         credentials: true,
         origin: true,
+        exposedHeaders: ['X-Service-Message'],
     });
 }

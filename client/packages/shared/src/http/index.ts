@@ -1,12 +1,10 @@
 import axios from "axios";
 import { AuthResponse } from "../types/response/AuthResponce";
+import { systemSuccessMsgServerAC } from "../store/AuthReducers/authSlice";
+import { useAppDispatch } from "../components/hooks/redux";
 
 export const API_URL = `http://localhost:5006`
-
-// const $api = axios.create({
-//     withCredentials: true,
-//     baseURL: API_URL
-// })
+// const dispatch = useAppDispatch();
 
 const $api = axios.create({
     withCredentials: true,
@@ -14,7 +12,7 @@ const $api = axios.create({
     validateStatus: (status) => {
         // console.log('Проверка статуса:', status); 
         // Ловим статус только от 200 до 299
-        return status >= 200 && status < 300; 
+        return status >= 200 && status < 300;
     }
 })
 
@@ -23,9 +21,13 @@ $api.interceptors.request.use((config) => {
     return config
 })
 
+
 $api.interceptors.response.use((config) => {
+    // const systemMsgServer = decodeURIComponent(config.headers['x-service-message'])
+    // console.log('HTTPInterceptors: systemMsgServer: - ', systemMsgServer)
+    // dispatch(systemSuccessMsgServerAC(systemMsgServer))
     return config;
-}, async function(error) {
+}, async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 401 && originalRequest && !originalRequest._isRetry) {
         originalRequest._isRetry = true;

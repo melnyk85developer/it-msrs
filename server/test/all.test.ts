@@ -38,7 +38,7 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
                     },
                 }),
         );
-        contextTests.app = result.app;
+        // contextTests.app = result.app;
     });
     describe('AUTH-BLOCK-TESTS', () => {
         authE2eTest()

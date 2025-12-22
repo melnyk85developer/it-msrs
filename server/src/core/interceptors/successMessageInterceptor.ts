@@ -1,5 +1,5 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { map, Observable } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 
 @Injectable()
 export class SuccessMessageInterceptor implements NestInterceptor {
@@ -7,13 +7,15 @@ export class SuccessMessageInterceptor implements NestInterceptor {
         const res = context.switchToHttp().getResponse();
 
         return next.handle().pipe(
-            map((data) => {
+            tap((data) => {
                 if (data?.serviceMessage) {
-                    res.setHeader('X-Service-Message', data.serviceMessage);
-                    delete data.serviceMessage;
+                    res.setHeader(
+                        'X-Service-Message',
+                        encodeURIComponent(data.serviceMessage),
+                    );
                 }
-                return data;
             }),
         );
     }
 }
+

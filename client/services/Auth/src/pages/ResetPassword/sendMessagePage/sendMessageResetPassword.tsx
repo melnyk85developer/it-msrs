@@ -13,7 +13,7 @@ import classes from "./styles.module.scss";
 
 const SendResetPassword: React.FC = () => {
     const dispatch = useAppDispatch();
-    const { isDarkTheme } = useAppSelector(state => state.authPage)
+    const { isDarkTheme, systemMsg } = useAppSelector(state => state.authPage)
     const { error } = useAppSelector((state) => state.myProfilePage)
     const { setContent, setPageType } = useAppContext()
     const [email, setEmail] = useState('')
@@ -102,7 +102,7 @@ const SendResetPassword: React.FC = () => {
             const expirationTime = new Date(isoDate).getTime();
             const remainingTimeInSeconds = Math.floor((expirationTime - currentTime) / 1000);
 
-            const textWithoutDate = error.split('2024-')[0].trim();
+            const textWithoutDate = error.split('2025-')[0].trim();
             setErrors(textWithoutDate)
             setTimer(remainingTimeInSeconds)
         }
@@ -137,24 +137,26 @@ const SendResetPassword: React.FC = () => {
         }
         dispatch(sendEmailResetPasswordMyProfileAC(email))
             .then((data: any) => {
-                console.log('SendResetPassword: 👽👽😡👽👽 data', data)
-                if (data?.message) {
+                if (data) {
+                    // console.log('SendResetPassword: 👽👽😡👽👽 systemMsg then', data)
                     const extractISODate = (message: string): string | null => {
                         const isoDatePattern = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
                         const match = message.match(isoDatePattern);
                         return match ? match[0] : null;
                     };
-                    const isoDate = extractISODate(data.message);
+                    const isoDate = extractISODate(data);
                     const currentTime = Date.now();
                     const expirationTime = new Date(isoDate).getTime();
                     const remainingTimeInSeconds = Math.floor((expirationTime - currentTime) / 1000);
-                    const textWithoutDate = data.message.split('2024-')[0].trim();
+                    const textWithoutDate = data.split('2025-')[0].trim();
+                    // console.log('SendResetPassword: 👽👽😡👽👽 textWithoutDate', textWithoutDate)
                     setMessage(textWithoutDate);
                     setTimer(remainingTimeInSeconds);
                     setErrors('');
                 }
             })
             .finally(() => {
+                // console.log('SendResetPassword: 👽👽😡👽👽 systemMsg finally', systemMsg)
                 setSend((prevState) => !prevState);
                 setShowMessage(true);
             });

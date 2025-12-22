@@ -10,6 +10,7 @@ interface AuthState {
     isLoadingAuthUser: boolean;
     successfulRegistration: string;
     error: string;
+    systemMsg: string;
 }
 
 const initialState: AuthState = {
@@ -19,6 +20,7 @@ const initialState: AuthState = {
     isLoadingAuthUser: false,
     successfulRegistration: '',
     error: '',
+    systemMsg: ''
 }
 
 export const authSlice = createSlice({
@@ -46,14 +48,30 @@ export const authSlice = createSlice({
         userFetchingError(state, action: PayloadAction<string>) {
             state.error = action.payload
         },
+        userFetchingSuccessMsgServer(state, action: PayloadAction<string>) {
+            state.systemMsg = action.payload
+        },
     }
 })
 export const isDarkThemeAC = (theme: string) => async (dispatch: AppDispatch) => {
     localStorage.setItem("isDarkTheme", theme)
     dispatch(authSlice.actions.setIsDark(theme))
 }
-export const successfulRegistrationAC = (email: string) => (dispatch: AppDispatch) => {
-    dispatch(authSlice.actions.successfulRegistration(email))
+export const registrationAC = (login: string, name: string, surname: string, email: string, password: string, avatar?: any) => async (dispatch: AppDispatch) => {
+    // console.log(name, surname, email, password, avatar)
+    try {
+        const data = await AuthAPI.registration(login, name, surname, email, password, avatar)
+        console.log('registrationAC: - ', data)
+
+        // localStorage.setItem('token', data.data.accessToken)
+        // dispatch(authSlice.actions.userFetchingSuccess(data.data))
+        // dispatch(authSlice.actions.userIsAuth(true))
+    } catch (error: any) {
+        console.log('registrationAC: - ERROR', error.response?.data?.message)
+        dispatch(authSlice.actions.userFetchingError(error.response?.data?.message))
+        return error.response?.data?.message
+        // dispatch(authSlice.actions.userIsAuth(false)); 
+    }
 }
 export const loginAC = (email: string, password: string) => async (dispatch: AppDispatch) => {
     try {
@@ -71,21 +89,8 @@ export const loginAC = (email: string, password: string) => async (dispatch: App
         dispatch(authSlice.actions.userIsAuth(false))
     }
 }
-export const registrationAC = (login: string, name: string, surname: string, email: string, password: string, avatar?: any) => async (dispatch: AppDispatch) => {
-    // console.log(name, surname, email, password, avatar)
-    try {
-        const data = await AuthAPI.registration(login, name, surname, email, password, avatar)
-        console.log('registrationAC: - ', data)
-
-        // localStorage.setItem('token', data.data.accessToken)
-        // dispatch(authSlice.actions.userFetchingSuccess(data.data))
-        // dispatch(authSlice.actions.userIsAuth(true))
-    } catch (error: any) {
-        console.log('registrationAC: - ERROR', error.response?.data?.message)
-        dispatch(authSlice.actions.userFetchingError(error.response?.data?.message))
-        return error.response?.data?.message
-        // dispatch(authSlice.actions.userIsAuth(false)); 
-    }
+export const successfulRegistrationAC = (email: string) => (dispatch: AppDispatch) => {
+    dispatch(authSlice.actions.successfulRegistration(email))
 }
 export const registrationEmailResendingAC = (email: string) => async (dispatch: AppDispatch) => {
     // console.log('registrationEmailResendingAC: - email', email)
@@ -131,6 +136,14 @@ export const checkAuthAC = () => async (dispatch: AppDispatch) => {
         dispatch(authSlice.actions.userIsAuth(false))
     } finally {
         dispatch(authSlice.actions.userIsLoading(false))
+    }
+}
+export const systemSuccessMsgServerAC = (msg: string) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(authSlice.actions.userFetchingSuccessMsgServer(msg))
+        dispatch(authSlice.actions.userIsAuth(false))
+    } catch (error: any) {
+        dispatch(authSlice.actions.userFetchingError(error.data?.data?.message))
     }
 }
 export default authSlice.reducer

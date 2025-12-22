@@ -122,9 +122,9 @@ export class AuthController {
     @Post('/password-recovery')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async passwordRecoverySendEmailController(@Body() dto: any) {
-        console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 dto', dto)
+        // console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 dto', dto)
         const isSend = await this.authService.passwordRecoverySendEmailService(dto.email)
-        console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 isSend', isSend)
+        // console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 isSend', isSend)
         return isSend
     }
     @ApiResponse({ status: 204, description: 'Ожидаем новый пароль и код подтверждения для обновления пароля!' })
