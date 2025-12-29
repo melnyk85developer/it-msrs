@@ -12,7 +12,7 @@ const WidgetsPeopleList: React.FC<PropsType> = (props) => {
         <div>
             {props.users.map( (user) => (
                 <WidgetPeopleItem 
-                    key={user.userId}
+                    key={user.id}
                     user={user}
                 />
             ))}

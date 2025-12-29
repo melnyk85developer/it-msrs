@@ -23,7 +23,7 @@ dotenv.config({ quiet: true });
         ConfigModule.forRoot({
             isGlobal: true,
             // Логика выбора файла правильная, оставляем, но она будет работать в связке
-            envFilePath: process.env.NODE_ENV === 'test' ? '.test.env' : '.development.env'
+            envFilePath: process.env.NODE_ENV === 'development' ? '.dev.env' : '.test.env'
         }),
         // 2. Mongoose подключаем АСИНХРОННО. 
         // Он будет ждать, пока ConfigModule прочитает нужный файл.

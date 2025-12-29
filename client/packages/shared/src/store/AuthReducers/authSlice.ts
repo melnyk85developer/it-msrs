@@ -73,16 +73,16 @@ export const registrationAC = (login: string, name: string, surname: string, ema
         // dispatch(authSlice.actions.userIsAuth(false)); 
     }
 }
-export const loginAC = (email: string, password: string) => async (dispatch: AppDispatch) => {
+export const loginAC = (email: string, password: string, remember: boolean) => async (dispatch: AppDispatch) => {
     try {
-        const data = await AuthAPI.login(email, password)
-        console.log('loginAC: - data', data)
-        localStorage.setItem('token', data.data.accessToken)
+        const response = await AuthAPI.login(email, password, remember)
+        // console.log('loginAC: - response.data.accessToken', response.data.accessToken)
+        localStorage.setItem('token', response.data.accessToken)
         const responce = await AuthAPI.me()
-        console.log('loginAC: - responce.data', responce.data)
+        // console.log('loginAC: - responce.data', responce.data)
         dispatch(authSlice.actions.userFetchingSuccess(responce.data))
         dispatch(authSlice.actions.userIsAuth(true))
-        return data.data
+        return response.data
     } catch (error: any) {
         console.log('loginAC: - error', error)
         dispatch(authSlice.actions.userFetchingError(error.data?.data?.message))

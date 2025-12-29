@@ -11,6 +11,7 @@ export const usersE2eTest = () => {
 
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -42,6 +43,7 @@ export const usersE2eTest = () => {
             )
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -91,6 +93,7 @@ export const usersE2eTest = () => {
             }
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -140,6 +143,7 @@ export const usersE2eTest = () => {
             }
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -189,9 +193,10 @@ export const usersE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 204, - Обновление пользователя валидными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data: any = {
-                login: contextTests.users.correctUserNames[1],
-                password: contextTests.users.correctUserPasswords[1],
-                email: contextTests.users.correctUserEmails[1]
+                avatar: null,
+                login: contextTests.users.correctUserNames[2],
+                password: contextTests.users.correctUserPasswords[2],
+                email: contextTests.users.correctUserEmails[2]
             }
             const { response: res } = await contextTests.usersTestManager.updateUser(
                 contextTests.users.createdUsers[0]!.id,
@@ -213,8 +218,8 @@ export const usersE2eTest = () => {
                 expect.objectContaining(
                     {
                         id: expect.any(String),
-                        login: contextTests.users.correctUserNames[1],
-                        email: contextTests.users.correctUserEmails[1],
+                        login: contextTests.users.correctUserNames[2],
+                        email: contextTests.users.correctUserEmails[2],
                         // createdAt: expect.any(String),
                     },
                 )
@@ -251,6 +256,7 @@ export const usersE2eTest = () => {
             )
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(

@@ -127,7 +127,7 @@ export const authE2eTest = () => {
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
-            expect(response.body.message).toBe('⛔️ Не авторизован!')
+            expect(response.body.errorsMessages[0].message).toBe('🧐 Указаной сессии по deviceId не найдено!')
         })
     })
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, Length } from "class-validator";
+import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
 import { User } from "src/modules/user.accounts/users-domain/user.entity";
 
 export class CreateSessionDto {
@@ -99,6 +99,9 @@ export class CreateSessionDomainDto {
     // @IsString({ message: 'name должно быть строкой!' })
     // @Length(1, 50, { message: 'Длина name должена быть не меньше 1 и не больше 15 символов!' })
     expirationDate: number;
+    @IsBoolean()
+    @IsOptional()
+    readonly remember: boolean;
 }
 export class UpdateSessionDto {
     @ApiProperty({ example: '192.168.1.1', description: 'IP адрес пользователя' })
@@ -148,4 +151,7 @@ export class UpdateSessionDto {
     // @IsString({ message: 'name должно быть строкой!' })
     // @Length(1, 50, { message: 'Длина name должена быть не меньше 1 и не больше 15 символов!' })
     expirationDate: number;
+    @IsBoolean()
+    @IsOptional()
+    readonly remember: boolean;
 }

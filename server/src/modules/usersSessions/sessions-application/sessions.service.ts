@@ -16,7 +16,7 @@ export class SessionService {
         private sessionsRepository: SessionsRepository
     ) { }
 
-    async createSessionService(dto: CreateSessionDtoAndNewField, refreshToken: string, roleValues: string[], banned: boolean, bannReason: string): Promise<any> {
+    async createSessionService(dto: CreateSessionDtoAndNewField, remember: boolean, refreshToken: string, roleValues: string[], banned: boolean, bannReason: string): Promise<any> {
         const { ip, browserName, browserVersion, osName, osVersion, country, city, userId, device } = dto
         // console.log('UsersSessionService: - createSessionsServices dto', dto)
         const devices = await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(userId);
@@ -53,7 +53,8 @@ export class SessionService {
                 country,
                 city,
                 deviceId: existingSession.deviceId,
-                device
+                device,
+                remember,
             },
                 refreshToken as string,
                 roleValues,
@@ -69,7 +70,9 @@ export class SessionService {
                 roleValues,
                 banned: banned,
                 bannReason: bannReason
-            })
+            },
+                remember
+            )
             // console.log('UsersSessionService: - accessToken, refreshToken', accessToken, refreshToken)
             if (!accessToken || !refreshToken) {
                 throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_TOKEN_CREATION_ERROR)
@@ -89,6 +92,7 @@ export class SessionService {
                 city,
                 lastActiveDate: Number(userToken.iat),
                 expirationDate: Number(userToken.exp),
+                remember: remember
             });
             // console.log('SessionService: - session', session)
             await this.sessionsRepository.save(session);
@@ -102,7 +106,7 @@ export class SessionService {
         }
     }
     async updateSessionService(dto: UpdateSessionDtoDtoAndNewField, refresh: string, roleValues: string[], banned: boolean, bannReason: string): Promise<{ accessToken: string, refreshToken: string, isUpdatedSession: any }> {
-        const { userId, ip, browserName, browserVersion, osName, osVersion, country, city, deviceId, device } = dto
+        const { userId, ip, browserName, browserVersion, osName, osVersion, country, city, deviceId, device, remember } = dto
         // console.log('updateSessionsServices: - dto', dto);
         const isSaveRefreshTokenBlackList = await this.tokenService.saveTokenBlackList(userId, refresh)
         if (isSaveRefreshTokenBlackList) {
@@ -113,7 +117,9 @@ export class SessionService {
                 roleValues,
                 banned: banned,
                 bannReason: bannReason
-            })
+            },
+                remember
+            )
             const userToken = await this.tokenService.decodeRefreshToken(refreshToken);
             let session = await this.sessionsRepository.findSessionByDeviceIdOrNotFoundFail(userToken.deviceId);
             // console.log('updateSessionsServices: - userToken', userToken)
@@ -131,6 +137,7 @@ export class SessionService {
                 device,
                 lastActiveDate: Number(userToken.iat),
                 expirationDate: Number(userToken.exp),
+                remember
             };
             session.updateSessionData(newSession)
             await this.sessionsRepository.save(session);

@@ -46,7 +46,7 @@ export class AuthService {
         private filesService: FilesService,
     ) { }
     async registrationService(dto: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'>, avatar: Multer.File | null) {
-        // console.log('registrationUserService - dto 😡😡', dto)
+        console.log('registrationUserService - dto 😡😡', dto)
         // console.log('AuthService: registrationService - avatar 👽 😡 👽', avatar)
         const confirmationCode = uuid.v4()
         const date = new Date()
@@ -57,9 +57,39 @@ export class AuthService {
             String(createdUserId),
         );
         // console.log('registrationUserService: - user 😡 ', user)
-        // user.setConfirmationCode(confirmationCode);
+        await this.usersRepository.save(user);
 
-        const isConfirmation = await this.confirmationsCodesService.createConfirmationsCodesService(
+        const from = `IT-INCUBATOR PROJECT<${process.env.SMTP_USER}>`
+        const to = user.accountData.email
+        const subject = `Активация аккаунта на сайте ${process.env.PROJEKT_NAME}`
+        const text = confirmationCode
+        const html =
+            `<div>
+                    <h1>Для активации аккаунта на сайте ${process.env.PROJEKT_NAME} перейдите по ссылке</h1>
+                    <h2>${confirmationCode}</h2>
+                    <p>
+                        To finish registration please follow the link below:
+                        <a href="${process.env.API_URL}/auth/registration-confirmation?code=${confirmationCode}">Подтвердить регистрацию</a>
+                    </p>
+                    <button>
+                        <a href="${process.env.API_URL}/auth/registration-confirmation?code=${confirmationCode}">Подтвердить регистрацию</a>
+                    </button>
+                </div>`
+
+        // <a href="${process.env.API_URL}/auth/confirm-email?code=${confirmationCode}">Подтвердить регистрацию</a>
+
+        const isSendEmail = await this.emailService.sendConfirmationEmail(
+            from,
+            to,
+            subject,
+            text,
+            html
+        )
+            .catch(() => console.log(`
+                Упс, что-то пошло не так во время отправки сообщения на E-Mail: ${to}. Возможно сервис отправки 
+                писем перегружен, просим Вас повторить запрос чуть позже.`))
+
+        const expirationDate = await this.confirmationsCodesService.createConfirmationsCodesService(
             {
                 confirmationCode: confirmationCode,
                 isBlocked: false,
@@ -70,29 +100,21 @@ export class AuthService {
                 field: 'registration'
             }
         )
-
-        await this.usersRepository.save(user);
-        const from = `IT-INCUBATOR <${process.env.SMTP_USER}>`
-        const to = user.accountData.email
-        const subject = `Активация аккаунта на сайте ${process.env.PROJEKT_NAME}`
-        const text = confirmationCode
-        const html =
-            `<div>
-                    <h1>Для активации аккаунта на сайте ${process.env.PROJEKT_NAME} перейдите по ссылке</h1>
-                    <h2>${confirmationCode}</h2>
-                    <p>
-                        To finish registration please follow the link below:
-                        <a href="${process.env.API_URL}/auth/confirm-email?code=${confirmationCode}">Подтвердить регистрацию</a>
-                    </p>
-                    <button>
-                        <a href="${process.env.API_URL}/auth/confirm-email?code=${confirmationCode}">Подтвердить регистрацию</a>
-                    </button>
-                </div>`
-        // console.log('registrationUserService: confirmationCode - user 😡 ', user)
-        this.emailService.sendConfirmationEmail(from, to, subject, text, html).catch(console.error);
-        return user._id.toString();
+        if (expirationDate) {
+            console.log('registrationUserService: - isSendEmail 😡 ', isSendEmail)
+            console.log('registrationUserService: - return user._id.toString(); 😡 ', user._id.toString())
+            // return user._id.toString()
+            return {
+                done: true,
+                data: user._id.toString(),
+                code: INTERNAL_STATUS_CODE.SUCCESS,
+                serviceMessage: `Сообщение успешно отправлено на E-Mail: ${to}. Проверьте почту и следуйте дальнейшим инструкциям в письме.`
+            };
+        } else {
+            throw new DomainException(INTERNAL_STATUS_CODE.UNPROCESSABLE_ENTITY)
+        }
     }
-    async loginService(ip: string, userAgent: string, userId: string, refreshToken: string | null) {
+    async loginService(ip: string, userAgent: string, userId: string, remember: boolean, refreshToken: string | null) {
         // console.log('AuthService → login: userId 👍', userId);
         // console.log('loginService: - ', ip, userAgent, refreshToken)
         // const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
@@ -112,6 +134,7 @@ export class AuthService {
             country: isParse.country as string,
             city: isParse.city as string
         },
+            remember,
             refreshToken as string,
             roleValues,
             user.systemUserData.isBanned,
@@ -131,6 +154,7 @@ export class AuthService {
             return expirationDate < currentDate;
         };
         // console.log('🔥🔥 refreshService - refreshTokenPayload:', refreshTokenPayload);
+        // console.log('🔥🔥 refreshService - refreshToken:', refreshToken);
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(refreshTokenPayload.id);
         const devices = await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(refreshTokenPayload.id);
         // console.log('🔥🔥 refreshService - devices:', devices);
@@ -161,6 +185,7 @@ export class AuthService {
                 city: isParse.city,
                 device: isParse.device,
                 deviceId: refreshTokenPayload.deviceId,
+                remember: device.remember,
             },
                 refreshToken as string,
                 roleValues,
@@ -204,7 +229,7 @@ export class AuthService {
         const confirmationCode = uuid.v4()
         const date = new Date().toISOString()
         const getUser = await this.usersService._getUserByEmailService(email)
-        // console.log('registrationEmailResendingController: - getUser 😡😡😡', getUser)
+        // console.log('registrationEmailResendingService: - getUser 😡😡😡', getUser)
 
         if (!getUser) {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
@@ -225,14 +250,36 @@ export class AuthService {
         const to = email
         const subject = `Повторный запрос на активацию аккаунта в проекте ${process.env.PROJEKT_NAME}`
         const text = confirmationCode
-        const html = mailResendingEmailMessageHTMLDocument(
-            nameProjekt,
+        const html =
+            `<div>
+                    <h1>Повторный запрос на активацию аккаунта ${process.env.PROJEKT_NAME} перейдите по ссылке</h1>
+                    <h2>${confirmationCode}</h2>
+                    <p>
+                        To finish registration please follow the link below:
+                        <a href="${process.env.API_URL}/auth/registration-confirmation">Сбросить пароль</a>
+                    </p>
+                    <button>
+                        <a href="${process.env.API_URL}/auth/registration-confirmation">Сбросить пароль</a>
+                    </button>
+                </div>`
+
+        // const html = mailResendingEmailMessageHTMLDocument(
+        //     nameProjekt,
+        //     to,
+        //     text,
+        //     `${process.env.API_URL}/auth/registration-confirmation/${confirmationCode}`
+        // )
+        const isSendEmail = await this.emailService.sendConfirmationEmail(
+            from,
             to,
+            subject,
             text,
-            `${process.env.API_URL}/auth/registration-confirmation/${confirmationCode}`
+            html
         )
-        const isSend = this.emailService.sendConfirmationEmail(from, to, subject, text, html)
-            .catch(() => console.log('Ошибка отправки сообщения на E-Mail'))
+            .catch(() => console.log(`
+                Упс, что-то пошло не так во время отправки сообщения на E-Mail: ${email}. Возможно сервис отправки 
+                писем перегружен, просим Вас повторить запрос чуть позже.`))
+
         const expirationDate = await this.confirmationsCodesService.createConfirmationsCodesService({
             confirmationCode: confirmationCode,
             isBlocked: false,
@@ -243,7 +290,7 @@ export class AuthService {
             field: 'registration'
         })
         if (expirationDate) {
-            // console.log('AuthService registrationEmailResendingService: - isSendEmail res 200', expirationDate.expirationDate)
+            console.log('AuthService registrationEmailResendingService: - isSendEmail res 200', expirationDate.expirationDate)
             const expirationISO = new Date(expirationDate.expirationDate).toISOString();
             return {
                 done: true,

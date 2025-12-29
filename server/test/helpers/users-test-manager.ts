@@ -12,11 +12,13 @@ export class UsersTestManager {
 
     async getAllUsers(
         params: GetUsersQueryParams | null,
+        codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         const response = await request(this.app.getHttpServer())
             .get(`${SETTINGS.RouterPath.users}`)
             // .get(params !== null ? `${SETTINGS.RouterPath.users}${params}` : `${SETTINGS.RouterPath.users}`)
             .set('User-Agent', 'TestDevice/1.0')
+            .set('Authorization', `Basic ${codedAuth}`)
             .expect(expectedStatusCode)
         // console.log('usersTestManager - res 😡', response.body)
         return { response: response, getAllUsers: response.body }
@@ -64,11 +66,11 @@ export class UsersTestManager {
                         id: expect.any(String),
                         login: data.login,
                         email: data.email,
-                        avatar: null,
-                        name: null,
-                        surname: null,
-                        isBot: expect.any(Boolean),
-                        // createdAt: expect.any(String),
+                        // avatar: null,
+                        // name: null,
+                        // surname: null,
+                        // isBot: expect.any(Boolean),
+                        createdAt: expect.any(String),
                     }
                 )
         }
@@ -76,7 +78,7 @@ export class UsersTestManager {
     }
     async updateUser(
         id: string,
-        data: Omit<UpdateUserInputDto, 'id' | 'isEmailConfirmed' | 'lastSeen'>,
+        data: Omit<UpdateUserInputDto, 'id' | 'isEmailConfirmed' | 'lastSeen' | 'avatar'>,
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204) {
         // console.log('usersTestManager - updateUser data, codedAuth', data, codedAuth)
@@ -90,6 +92,8 @@ export class UsersTestManager {
         // accessToken: string | undefined = undefined,
         // .set('Authorization', `Bearer ${accessToken}`)
         // console.log('usersTestManager - ', accessToken)
+
+        // console.log('usersTestManager - updateUser response.body', response.body)
 
         if (expectedStatusCode === HTTP_STATUSES.UNAUTHORIZED_401) { expect(expectedStatusCode) }
 

@@ -24,21 +24,17 @@ export class DomainHttpExceptionsFilter implements ExceptionFilter {
         response.status(status).json(responseBody);
     }
 
-    // !!! ВАЖНО: ЭТОТ МЕТОД НУЖНО ПОЛНОСТЬЮ УДАЛИТЬ !!!
-    // private mapToHttpStatus(code: DomainExceptionCode): number { ... }
-
     private buildResponseBody(
         exception: DomainException,
         requestUrl: string,
     ): ErrorResponseBody {
-        // ... (остается без изменений)
         return {
-            timestamp: new Date().toISOString(),
-            path: requestUrl,
-            message: exception.message,
-            code: exception.code,
-            extensions: exception.extensions,
-            field: exception.field, // Этот лог сработал
+            // timestamp: new Date().toISOString(),
+            // path: requestUrl,
+            // message: exception.message,
+            // code: exception.code,
+            errorsMessages: exception.extensions,
+            // field: exception.field, // Этот лог сработал
         };
     }
 }

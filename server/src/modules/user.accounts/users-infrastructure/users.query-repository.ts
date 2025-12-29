@@ -17,45 +17,78 @@ export class UsersQueryRepository {
     ) { }
 
     async getAllUsersQueryRepository(query: GetUsersQueryParams): Promise<PaginatedViewDto<UserViewDto[]>> {
+
         const normalizedQuery = GetUsersQueryParams.normalize(query);
         // console.log('UsersQueryRepository: normalizedQuery 😡 ', normalizedQuery)
+
         const filter: FilterQuery<User> = {
-            'deletedAt': null,
+            deletedAt: null,
         };
-        // console.log('UsersQueryRepository: filter 😡 ', filter)
+
+        // console.log('UsersQueryRepository: base filter 😡 ', filter)
+
+        const searchOrConditions: FilterQuery<User>[] = [];
+
         if (normalizedQuery.searchLoginTerm) {
-            // console.log('UsersQueryRepository: query.searchLoginTerm 😡 ', normalizedQuery.searchLoginTerm)
-            filter.$or = filter.$or || [];
-            filter.$or.push({
-                login: { $regex: normalizedQuery.searchLoginTerm, $options: 'i' },
+            // console.log('UsersQueryRepository: searchLoginTerm 😡 ', normalizedQuery.searchLoginTerm)
+            searchOrConditions.push({
+                'accountData.login': {
+                    $regex: normalizedQuery.searchLoginTerm,
+                    $options: 'i',
+                },
             });
         }
+
         if (normalizedQuery.searchEmailTerm) {
-            // console.log('UsersQueryRepository: query.searchEmailTerm 😡 ', normalizedQuery.searchEmailTerm)
-            filter.$or = filter.$or || [];
-            filter.$or.push({
-                email: { $regex: normalizedQuery.searchEmailTerm, $options: 'i' },
+            // console.log('UsersQueryRepository: searchEmailTerm 😡 ', normalizedQuery.searchEmailTerm)
+            searchOrConditions.push({
+                'accountData.email': {
+                    $regex: normalizedQuery.searchEmailTerm,
+                    $options: 'i',
+                },
             });
         }
+
+        if (searchOrConditions.length > 0) {
+            filter.$or = searchOrConditions;
+        }
+
+        // console.log('UsersQueryRepository: final filter 😡 ', filter)
+
+        const sortFieldMap: Record<string, string> = {
+            login: 'accountData.login',
+            email: 'accountData.email',
+            createdAt: 'createdAt',
+        };
+
+        const sortBy =
+            sortFieldMap[normalizedQuery.sortBy] ?? 'createdAt';
+
         const users = await this.UserModel.find(filter)
-            .sort({ [normalizedQuery.sortBy]: normalizedQuery.sortDirection })
+            .sort({ [sortBy]: normalizedQuery.sortDirection })
             .skip(normalizedQuery.calculateSkip())
             .limit(normalizedQuery.pageSize);
 
         // console.log('UsersQueryRepository: users 😡 ', users)
+
         const totalCount = await this.UserModel.countDocuments(filter);
-        // console.log('UsersController: totalCount 😡 ', totalCount)
+        // console.log('UsersQueryRepository: totalCount 😡 ', totalCount)
+
         const items = users.map(UserViewDto.mapToView);
         // console.log('UsersQueryRepository: items 😡 ', items)
+
         const res = PaginatedViewDto.mapToView({
             items,
             totalCount,
             page: normalizedQuery.pageNumber,
             size: normalizedQuery.pageSize,
         });
+
         // console.log('UsersQueryRepository: res 😡 ', res)
-        return res
+
+        return res;
     }
+
     async getUserByIdOrNotFoundFail(id: string): Promise<UserViewDto> {
         // console.log('UsersQueryRepository: getUserByIdOrNotFoundFail - id 😡 ', id)
         const user = await this.UserModel.findOne(

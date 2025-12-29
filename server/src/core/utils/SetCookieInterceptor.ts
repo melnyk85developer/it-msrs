@@ -10,15 +10,10 @@ export class SetCookieInterceptor implements NestInterceptor {
 
         return next.handle().pipe(
             tap((data) => {
-                // Ожидаем, что AuthService вернет объект с accessToken и refreshToken
+                // Устанавливаем куку после успешного выполнения метода
                 if (data && data.refreshToken) {
-                    response.cookie('refreshToken', data.refreshToken, {
-                        maxAge: 30 * 24 * 60 * 60 * 1000,
-                        httpOnly: true,
-                        secure: true, // Рекомендуется, если не на http
-                    });
-                    // Очищаем Refresh Token, чтобы он не ушел в теле ответа
-                    delete data.refreshToken;
+                    // console.log('SetCookieInterceptor: data.refreshToken - 👽👽👽', data.refreshToken)
+                    response.cookie('refreshToken', data.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
                 }
             }),
         );

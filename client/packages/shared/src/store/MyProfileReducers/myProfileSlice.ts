@@ -120,8 +120,7 @@ export const myProfileSlice = createSlice({
     }
 })
 export const myProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
-    console.log('myProfileAC: - userId 😡😡😡😡😡 ', userId)
-
+    // console.log('myProfileAC: - userId 😡😡😡😡😡 ', userId)
     try {
         const [userData] = await Promise.all([MyProfileAPI.getMyProfileAPI(userId)]);
         dispatch(myProfileSlice.actions.setMyProfile(userData.data));
@@ -203,6 +202,7 @@ export const deleteMyProfileAC = (userId: number) => async (dispatch: AppDispatc
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
+
 export const addPostMyProfileAC = (post: PostsType) => async (dispatch: AppDispatch) => {
     // console.log('addPostAC - req: ', post)
     try {
@@ -211,42 +211,6 @@ export const addPostMyProfileAC = (post: PostsType) => async (dispatch: AppDispa
         const newPost: PostsType = { ...data.data, likes }
         // console.log('addPostAC - res: ', data.data)
         dispatch(myProfileSlice.actions.addPost(newPost))
-    } catch (error: any) {
-        if (error.response?.status === 401) {
-            dispatch(authSlice.actions.userIsAuth(false))
-        }
-        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
-    }
-}
-export const setPhotoCarouselMyProfileAC = (photoId: number) => async (dispatch: AppDispatch) => {
-    // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
-    try {
-        const res = await MyProfileAPI.getPhotoByIdAPI(photoId)
-        // console.log('res setPhotoCarouselMyProfileAC: ', res.data.image)
-        dispatch(myProfileSlice.actions.openPhoto(res.data.image))
-    } catch (error: any) {
-        if (error.response?.status === 401) {
-            dispatch(authSlice.actions.userIsAuth(false))
-        }
-        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
-    }
-}
-export const addPhotoMyProfileAC = (userId: string, authorizedUserId: string, image: File, miniature: File, albumName: string) => async (dispatch: AppDispatch) => {
-    try {
-        const res = await MyProfileAPI.addPhotoAPI(userId, authorizedUserId, image, miniature, albumName)
-        // console.log('addPhotoMyProfileAC res', res.data)
-        dispatch(myProfileSlice.actions.addNewPhoto(res.data))
-    } catch (error: any) {
-        if (error.response?.status === 401) {
-            dispatch(authSlice.actions.userIsAuth(false))
-        }
-        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
-    }
-}
-export const addPhotoAlbumMyProfileAC = (userId: number, authorizedUserId: number, albumName: string) => async (dispatch: AppDispatch) => {
-    try {
-        const data = await MyProfileAPI.addPhotoAlbumAPI(userId, authorizedUserId, albumName)
-        dispatch(myProfileSlice.actions.addNewPhotoAlbum(data.data))
     } catch (error: any) {
         if (error.response?.status === 401) {
             dispatch(authSlice.actions.userIsAuth(false))
@@ -283,6 +247,44 @@ export const deletePostMyProfileAC = (postId: number, authorizedUserId: number) 
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
+
+export const setPhotoCarouselMyProfileAC = (photoId: number) => async (dispatch: AppDispatch) => {
+    // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
+    try {
+        const res = await MyProfileAPI.getPhotoByIdAPI(photoId)
+        // console.log('res setPhotoCarouselMyProfileAC: ', res.data.image)
+        dispatch(myProfileSlice.actions.openPhoto(res.data.image))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+export const addPhotoMyProfileAC = (userId: string, authorizedUserId: string, image: File, miniature: File, albumName: string) => async (dispatch: AppDispatch) => {
+    try {
+        const res = await MyProfileAPI.addPhotoAPI(userId, authorizedUserId, image, miniature, albumName)
+        // console.log('addPhotoMyProfileAC res', res.data)
+        dispatch(myProfileSlice.actions.addNewPhoto(res.data))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+export const addPhotoAlbumMyProfileAC = (userId: number, authorizedUserId: number, albumName: string) => async (dispatch: AppDispatch) => {
+    try {
+        const data = await MyProfileAPI.addPhotoAlbumAPI(userId, authorizedUserId, albumName)
+        dispatch(myProfileSlice.actions.addNewPhotoAlbum(data.data))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+
 export const addLikeToPostAC = (like: IsLikesType) => async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
         const state = getState();

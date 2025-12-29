@@ -16,6 +16,7 @@ export class EmailService {
             const result = await this.mailerService.sendMail({from, to, subject, text, html});
             this.logger.log(`✅ Письмо отправлено на ${to}`);
             // console.log('Mailer result:', result);
+            return result
         } catch (err) {
             this.logger.error('❌ Ошибка отправки письма:', err.message);
             // console.log('Error details:', err);

@@ -46,10 +46,10 @@ const MyProfile: React.FC<PropsType> = React.memo(({ error, isDarkTheme, profile
                     authorizedUser={authorizedUser}
                 />
                 <div className={classes.wrapWidgetFriendsProfile}>
-                    {/* <WidgetFriends /> */}
+                    <WidgetFriends />
                 </div>
                 <div className={classes.wrapWidgetPeopleProfile}>
-                    {/* <WidgetPeople /> */}
+                    <WidgetPeople />
                 </div>
             </div>
         ],

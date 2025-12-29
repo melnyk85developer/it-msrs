@@ -19,11 +19,11 @@ export const emailConstraints = {
 })
 export class AccountData {
     @ApiProperty({ example: 'login', description: 'login пользователя.' })
-    @Prop({ type: String, required: true }) // unique: true
+    @Prop({ type: String, required: true, unique: true }) // unique: true
     login: string;
 
     @ApiProperty({ example: 'email', description: 'E-mail адрес пользоателя.' })
-    @Prop({ type: String, min: 5, required: true }) // unique: true
+    @Prop({ type: String, min: 5, required: true, unique: true }) // unique: true
     email: string;
 }
 

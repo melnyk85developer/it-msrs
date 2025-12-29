@@ -59,6 +59,10 @@ export class Session {
     @Prop({ type: Number, required: true })
     expirationDate: number;
 
+    @ApiProperty({ example: 'Чекбокс Запомнить меня', description: 'Отмеченый чекбокс 30д. жизни рефрешь токена, не отмеченый 1 сутки жизни рефрешь токена!!!' })
+    @Prop({ type: Boolean, required: false })
+    remember: boolean;
+
     static async createSessionInstance(dto: CreateSessionDomainDto): Promise<SessionDocument> {
         const session = new this();
         // console.log('SessionEntity: createInstance - session 😡 ', session)
@@ -74,6 +78,7 @@ export class Session {
             session.device = dto.device,
             session.expirationDate = dto.expirationDate,
             session.lastActiveDate = dto.lastActiveDate
+            session.remember = dto.remember
         return session as SessionDocument;
     }
     async updateSessionData(dto: Omit<UpdateSessionDto, 'deletedAt' | 'updatedAt'>) {
@@ -92,6 +97,7 @@ export class Session {
             this.device = dto.device;
             this.lastActiveDate = dto.lastActiveDate;
             this.expirationDate = dto.expirationDate;
+            this.remember = dto.remember;
         }
     }
 }

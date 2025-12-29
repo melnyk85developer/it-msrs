@@ -44,7 +44,7 @@ const UsersItem: React.FC<PropsType> = React.memo(({ user }) => {
     const writeAmessage = () => {
         setOpenModalMessage(true)
     }
-    console.log('Avatar: - `${API_URL}/${avatar}`', `${API_URL}/${user.avatar}`)
+    // console.log('Avatar: - `${API_URL}/${avatar}`', `${API_URL}/${user.avatar}`)
     return (
         <section className={`${classes.wrapUsersItem} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.usersItem}>

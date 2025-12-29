@@ -28,16 +28,16 @@ const Registration: React.FC = () => {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
             <div>
-                {/* <WidgetPerhapsYoureFamiliar/>
+                <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends /> */}
+                <WidgetFriends />
             </div>
         ],
         contentRsidebar: [
             <div>
-                {/* <WidgetPerhapsYoureFamiliar/>
+                <WidgetPerhapsYoureFamiliar/>
                 <WidgetPeople />
-                <WidgetFriends /> */}
+                <WidgetFriends />
             </div>
         ],
         contentFooter: [

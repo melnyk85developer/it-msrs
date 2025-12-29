@@ -15,13 +15,11 @@ const $api = axios.create({
         return status >= 200 && status < 300;
     }
 })
-
 $api.interceptors.request.use((config) => {
+    // console.log('localStorage: token - ', `Bearer ${localStorage.getItem('token')}`)
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
     return config
 })
-
-
 $api.interceptors.response.use((config) => {
     // const systemMsgServer = decodeURIComponent(config.headers['x-service-message'])
     // console.log('HTTPInterceptors: systemMsgServer: - ', systemMsgServer)
@@ -32,7 +30,7 @@ $api.interceptors.response.use((config) => {
     if (error.response.status === 401 && originalRequest && !originalRequest._isRetry) {
         originalRequest._isRetry = true;
         try {
-            const response = await axios.get<AuthResponse>(`${API_URL}/auth/refresh-token`, { withCredentials: true });
+            const response = await axios.post<AuthResponse>('/auth/refresh-token');
             localStorage.setItem('token', response.data.accessToken);
             return $api(originalRequest);
         } catch (error) {

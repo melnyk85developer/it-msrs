@@ -25,8 +25,7 @@ const Avatar: React.FC<PropsType> = ({ dispatch, profile, avatar, authorizedUser
     const handleUpdateAvatar = () => {
         setModalActive(true)
     }
-    console.log('Avatar: - `${API_URL}/${avatar}`', `${API_URL}/${avatar}`)
-
+    // console.log('Avatar: - `${API_URL}/${avatar}`', `${API_URL}/${avatar}`)
     return (
         <div className={`${classes.avatar} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.wrapAvatarBlock}>

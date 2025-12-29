@@ -15,7 +15,7 @@ const WidgetPeopleItem: React.FC<PropsType>  = (props) => {
     
     return (
         <div className={`${classes.wrapFriendsWidget} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
-            <NavLink to={routeUserProfile(props.user.userId)}>
+            <NavLink to={routeUserProfile(props.user.id)}>
                 <div className={classes.friendItem}>
                     <img  
                             src={props.user.avatar != null 

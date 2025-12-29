@@ -19,7 +19,7 @@ export const errorFormatter = (
             for (const key of constrainKeys) {
                 // ИЗВЛЕКАЕМ ДАННЫЕ В ПЕРЕМЕННЫЕ
                 const message = error.constraints[key]
-                    ? `${error.constraints[key]}; Received value: ${error?.value}`
+                    ? `${error.constraints[key]}`
                     : '';
                 const keyName = error.property;
 

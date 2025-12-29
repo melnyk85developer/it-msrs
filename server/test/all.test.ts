@@ -33,7 +33,7 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
                             // 3. Используем реальный секрет из .test.env
                             secret: configService.get('JWT_ACCESS_SECRET'),
                             // 4. Оставляем специфичное для тестов время жизни
-                            signOptions: { expiresIn: '2s' },
+                            signOptions: { expiresIn: '15m' },
                         });
                     },
                 }),

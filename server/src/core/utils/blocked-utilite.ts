@@ -63,6 +63,7 @@ export class IsBlockedEmailResendingService {
             for (let i = 0; block.length > i; i++) {
                 const confirmation = block[i]
                 if (date < confirmation.expirationDate) {
+                    console.log('ressetPasswordService blocked length: ', block.length)
                     throw new DomainException(
                         INTERNAL_STATUS_CODE.BAD_REQUEST_FUNCTION_BLOCKED,
                         `⛔️ Функция отпрвки сообщения на E-Mail временно заблокирована в связи с частыми запросами! ${confirmation.expirationDate}`
@@ -82,6 +83,7 @@ export class IsBlockedEmailResendingService {
             for (let i = 0; cooldown.length > i; i++) {
                 const confirmation = cooldown[i]
                 if (date < confirmation.expirationDate) {
+                    console.log('ressetPasswordService cooldown.length: ', cooldown.length)
                     throw new DomainException(
                         INTERNAL_STATUS_CODE.BAD_REQUEST_TIME_HASNT_PASSED_YET,
                         `⛔️ Время еще не истекло до следующего запроса! ${confirmation.expirationDate}`
@@ -100,6 +102,7 @@ export class IsBlockedEmailResendingService {
         if (active) {
             for (let i = 0; active.length > i; i++) {
                 if (date < active[i].expirationDate) {
+                    console.log('ressetPasswordService _checkActiveCodes: ', active[i].expirationDate)
                     throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_TIME_HASNT_PASSED_YET, `${active[i].expirationDate}`)
                 }
             }

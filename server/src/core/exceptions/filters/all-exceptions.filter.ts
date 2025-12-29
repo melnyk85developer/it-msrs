@@ -14,7 +14,7 @@ export class AllHttpExceptionsFilter implements ExceptionFilter {
         const request = ctx.getRequest<Request>();
 
         //Если сработал этот фильтр, то пользователю улетит 500я ошибка
-        const message = exception.message || 'Unknown exception occurred.';
+        const message = exception.message;
         const status = HttpStatus.INTERNAL_SERVER_ERROR;
         const responseBody = this.buildResponseBody(request.url, message);
 
@@ -30,20 +30,20 @@ export class AllHttpExceptionsFilter implements ExceptionFilter {
 
         if (isProduction) {
             return {
-                timestamp: new Date().toISOString(),
-                path: null,
-                message: 'Some error occurred',
-                extensions: [],
-                code: DomainExceptionCode.InternalServerError,
+                // timestamp: new Date().toISOString(),
+                // path: null,
+                // message,
+                errorsMessages: [],
+                // code: DomainExceptionCode.InternalServerError,
             };
         }
 
         return {
-            timestamp: new Date().toISOString(),
-            path: requestUrl,
-            message,
-            extensions: [],
-            code: DomainExceptionCode.InternalServerError,
+            // timestamp: new Date().toISOString(),
+            // path: requestUrl,
+            // message,
+            errorsMessages: [],
+            // code: DomainExceptionCode.InternalServerError,
         };
     }
 }

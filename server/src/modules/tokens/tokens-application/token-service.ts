@@ -14,11 +14,11 @@ export class TokenService {
         private tokenRepository: TokenRepository,
         private jwtService: JwtService,
     ) { }
-    generateTokens(payload: any): { accessToken: string; refreshToken: string } {
+    generateTokens(payload: any, remember: boolean): { accessToken: string; refreshToken: string } {
         const { id, deviceId, roles, banned, bannReason } = payload
         // console.log('TokenService: payload', payload)
         const accessToken = this.jwtService.sign({ id }, { expiresIn: '15m', secret: process.env.JWT_ACCESS_SECRET });
-        const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d', secret: process.env.JWT_REFRESH_SECRET });
+        const refreshToken = this.jwtService.sign(payload, { expiresIn: remember === true ? '30d' : '1d', secret: process.env.JWT_REFRESH_SECRET });
         // console.log('TokenService: accessToken, refreshToken', accessToken, refreshToken)
         return { accessToken, refreshToken }
     }
@@ -70,8 +70,7 @@ export class TokenService {
         try {
             return this.jwtService.verify(refreshToken, { secret: process.env.JWT_REFRESH_SECRET });
         } catch (error) {
-            // throw new ErRes(-100, `Произошла ошибка в базе данных при валидации validateRefreshToken ${error}`)
-            throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_INVALID_REFRESH_TOKEN)
+            throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_INVALID_REFRESH_TOKEN, `Произошла ошибка в jwtService при валидации validateRefreshToken ${error}`)
         }
     }
     decodeRefreshToken(refreshToken: string): any {

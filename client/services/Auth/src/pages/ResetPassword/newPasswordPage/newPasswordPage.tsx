@@ -94,7 +94,7 @@ const NewPssword: React.FC = React.memo(() => {
         })
     }
     const autch = () => {
-        dispatch(loginAC('melnyk85developer@gmail.com', 'masikus2002vm'))
+        dispatch(loginAC('melnyk85developer@gmail.com', 'masikus2002vm', false))
         .then(() => console.log('Переход в профиль пользователя'))
     }
     const newContent = {
@@ -221,7 +221,7 @@ const NewPssword: React.FC = React.memo(() => {
                         <button onClick={autch}>Перейти в профиль пользователя</button>
                     </div>
                     }
-                {isAuth ? <Navigate to={routeMyProfile(authorizedUser.userId)}/> : <></>}   
+                {isAuth ? <Navigate to={routeMyProfile(authorizedUser.id)}/> : <></>}   
             </div>
         </div>
     );

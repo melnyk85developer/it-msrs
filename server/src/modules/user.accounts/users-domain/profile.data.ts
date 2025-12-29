@@ -51,7 +51,7 @@ export class ProfileData {
     imWorkingIn: string | null;
 
     @ApiProperty({ example: 'Ищу работу', description: 'Да или нет' })
-    @Prop({ type: String, required: false, nullable: true }) // unique: true
+    @Prop({ type: Boolean, required: false, nullable: true }) // unique: true
     lookingForAJob: boolean | null;
 
     @ApiProperty({ example: 'Мои профессиональные навыки', description: 'React, Redux, TypeScript ...' })

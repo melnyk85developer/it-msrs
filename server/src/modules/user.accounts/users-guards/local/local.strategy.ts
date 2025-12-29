@@ -21,7 +21,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         if (!user) {
             throw new DomainException(DomainExceptionCode.Unauthorized);
         }
-
         return user;
     }
 }

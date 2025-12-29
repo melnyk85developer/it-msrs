@@ -10,7 +10,7 @@ const PerhapsYoureFamiliarList: React.FC<PropsType> = (props) => {
     return (
         <>
             {props.friends.map( item => (
-                <YouAreFamiliarItem key={item.userId} friends={item}/>
+                <YouAreFamiliarItem key={item.id} friends={item}/>
             ))}
         </>
     )

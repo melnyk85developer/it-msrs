@@ -47,8 +47,16 @@ export class DomainException extends Error {
         // 3. ИНИЦИАЛИЗАЦИЯ this ПОСЛЕ super()
         this.message = finalMessage;
         this.code = finalCode;
-        this.extensions = extensions || [];
+        if (extensions && extensions.length > 0) {
+            this.extensions = extensions;
+        } else if (finalField && finalMessage) {
+            this.extensions = [new Extension(finalMessage, finalField)];
+        } else {
+            this.extensions = [];
+        }
+
         this.field = finalField;
+
         // !!! ИНИЦИАЛИЗИРУЕМ СТАТУС, КОТОРЫЙ УЖЕ 400 !!!
         this.httpStatus = finalStatus;
     }

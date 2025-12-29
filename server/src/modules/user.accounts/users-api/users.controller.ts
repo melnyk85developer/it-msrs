@@ -12,6 +12,7 @@ import { AuthAccessGuard } from '../users-guards/bearer/jwt-auth.guard';
 import { ExtractUserFromRequest } from '../users-guards/decorators/param/extract-user-from-request.decorator';
 import { UserContextDto } from '../users-guards/dto/user-context.dto';
 import { UserProfileViewDto } from '../users-dto/user-profile.view-dto';
+import { BasicAuthGuard } from '../users-guards/basic/basic-auth.guard';
 
 @Controller('/users')
 export class UsersController {
@@ -22,11 +23,11 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Создать пользователя!' })
     @ApiResponse({ status: 201 })
-    // @UseInterceptors(ValidationCreateUserInterceptor)
+    @UseGuards(BasicAuthGuard)
     @Post('/')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async createUserController(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
-        console.log('UsersController: createUserController - body 😡 ', body)
+        // console.log('UsersController: createUserController - body 😡 ', body)
         const userId = await this.usersService.createUserService(body, null);
         console.log('UsersController: createUserController - userId 😡 ', userId)
         return this.usersQueryRepository.getUserByIdOrNotFoundFail(String(userId));
@@ -34,7 +35,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Обновить пользователя по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
-    // @UseInterceptors(ValidationCreateUserInterceptor)
+    @UseGuards(BasicAuthGuard)
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateUserController(@Param('id') id: string, @Body() body: UpdateUserInputDto): Promise<string> {
@@ -48,6 +49,7 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
     @ApiResponse({ status: 404 })
+    @UseGuards(BasicAuthGuard)
     @Delete('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteUserController(@Param('id') id: string): Promise<void> {
@@ -56,6 +58,7 @@ export class UsersController {
     }
     @ApiOperation({ summary: 'Получить всех пользователей!' })
     @ApiResponse({ status: 200 })
+    @UseGuards(BasicAuthGuard)
     @Get('/')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllUsersController(@Query() query: GetUsersQueryParams): Promise<PaginatedViewDto<UserViewDto[]>> {

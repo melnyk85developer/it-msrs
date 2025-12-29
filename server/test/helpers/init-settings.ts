@@ -46,7 +46,8 @@ export const initSettings = async (
     appSetup(contextTests.app);
     await contextTests.app.init();
 
-    // 🛑 ИЗВЛЕКАЕМ UsersRepository И СОХРАНЯЕМ В КОНТЕКСТЕ
+    contextTests.databaseConnection = contextTests.app.get<Connection>(getConnectionToken());
+    contextTests.httpServer = contextTests.app.getHttpServer();
     contextTests.mailService = contextTests.app.get<EmailService>(EmailService);
     contextTests.tokenService = contextTests.app.get<TokenService>(TokenService);
     contextTests.authServices = contextTests.app.get<AuthService>(AuthService);
@@ -56,8 +57,6 @@ export const initSettings = async (
     contextTests.confirmationService = contextTests.app.get<ConfirmationsCodesService>(ConfirmationsCodesService);
     contextTests.isBlockedEmailResendingService = contextTests.app.get<IsBlockedEmailResendingService>(IsBlockedEmailResendingService);
     contextTests.confirmationRepository = contextTests.app.get<ConfirmationRepository>(ConfirmationRepository);
-    contextTests.databaseConnection = contextTests.app.get<Connection>(getConnectionToken());
-    contextTests.httpServer = contextTests.app.getHttpServer();
 
     contextTests.authTestManager = new AuthTestManager(contextTests.app);
     contextTests.blogsTestManager = new BlogsTestManager(contextTests.app);

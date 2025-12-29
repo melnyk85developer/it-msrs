@@ -26,7 +26,6 @@ export class SessionController {
     @ApiOperation({ summary: 'Получить все сессии пользователя!' })
     @ApiResponse({ status: 200 })
     @UseGuards(AuthAccessGuard)
-    // @UseGuards(AuthRefreshGuard)
     @Get('/devices')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getallDevicesByUserIdController(@Query() query: GetSessionsQueryParams, @ExtractUserIfExistsFromRequest() user: UserContextDto): Promise<PaginatedViewDto<SessionViewDto[]>> {

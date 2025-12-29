@@ -4,7 +4,7 @@ import { SESSIONS_INTERNAL_STATUS } from "./sessions-status"
 export const SESSIONS_ERRORS = {
     // SESSION 
     [SESSIONS_INTERNAL_STATUS.NOT_FOUND_SESSION_ID]: {
-        messages: { message: 'Указаной сессии по deviceId не найдено!', field: 'session' },
+        messages: { message: '🧐 Указаной сессии по deviceId не найдено!', field: 'session' },
         statusCode: HTTP_STATUSES.UNAUTHORIZED_401,
     },
     [SESSIONS_INTERNAL_STATUS.FORBIDDEN_DELETED_YOU_ARE_NOT_THE_OWNER_OF_THE_SESSION]: {

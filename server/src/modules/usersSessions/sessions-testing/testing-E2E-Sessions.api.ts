@@ -168,7 +168,7 @@ export const userSessionE2eTest = () => {
                 contextTests.sessions.userAgent[2],
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
-            expect(response.body.message).toBe('⛔️ Отсутствует или некорректный refresh токен!')
+            expect(response.body.errorsMessages[0].message).toBe('⛔️ Отсутствует или некорректный refresh токен!')
 
             const { response: sessions } = await contextTests.userSessionTestManager.getAllUserSessionByUserId(
                 contextTests.sessions.accessTokenUser1Devices[0],

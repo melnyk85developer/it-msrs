@@ -11,6 +11,7 @@ export class UsersRepository {
         @InjectModel(User.name) private UserModel: UserModelType
     ) { }
     async save(user: UserDocument) {
+        // console.log('UsersRepository: save() - user 😡 ', user)
         await user.save();
     }
     async findById(id: string): Promise<UserDocument | null> {

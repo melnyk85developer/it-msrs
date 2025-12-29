@@ -63,16 +63,16 @@ console.log("Music",  tracks)
         ] as React.ReactNode[],
         contentLsidebar: [
             <div className={classes.wrapWidgetFriendsProfile}>
-                <WidgetYofamiliar />
+                {/* <WidgetYofamiliar />
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentRsidebar: [
             <div className={classes.wrapWidgetFriendsProfile}>
-                <WidgetYofamiliar />
+                {/* <WidgetYofamiliar />
                 <WidgetPeople />
-                <WidgetFriends />
+                <WidgetFriends /> */}
             </div>
         ],
         contentFooter: [

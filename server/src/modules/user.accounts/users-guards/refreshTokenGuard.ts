@@ -10,7 +10,7 @@ export class AuthRefreshGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest()
         const refreshToken = req.cookies['refreshToken']
-        // console.log('AuthRefreshGuard: - refreshToken', refreshToken)
+        // console.log('AuthRefreshGuard: - refreshToken', req.cookies['refreshToken'])
 
         if (!refreshToken) {
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_NO_REFRESH_TOKEN)

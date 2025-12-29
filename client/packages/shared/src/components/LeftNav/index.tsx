@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useMatch } from 'react-router-dom';
 import { ImFilm } from "react-icons/im";
 import { RiAliensFill, RiAliensLine, RiCriminalFill, RiCriminalLine, RiHome3Line, RiHome4Fill, RiHome4Line } from "react-icons/ri";
+import { GrBlog } from "react-icons/gr";
 import { routeMain as routeMyProfile } from '../../../../../services/MyProfile/src/MyProfile/MyProfileContainer';
 import { routeMain as routeMessages } from '../../../../../services/Message/src/StartMessage/startMessage';
 import { routeMain as routeShop } from '../../../../../services/MyShops/src/Shop/myShopsContainer';
@@ -24,10 +25,12 @@ const LeftNav: React.FC = () => {
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(s => s.authPage);
     const { myshops } = useAppSelector(s => s.myShopsPage);
 
+    const myblogs: any[] = []
+
     const items: Item[] = [
         {
             to: routeMyProfile(authorizedUser && authorizedUser.id),
-            icon: <><RiHome4Fill className={classes.icon}/><RiHome4Line className={classes.icon}/></> , //<HomeOutlined className={classes.icon} />, //<><RiCriminalFill className={classes.icon}/><RiCriminalLine className={classes.icon}/></>, //<><RiAliensLine className={classes.icon}/><RiAliensFill className={classes.icon}/></>
+            icon: <><RiHome4Fill className={classes.icon} /><RiHome4Line className={classes.icon} /></>, //<HomeOutlined className={classes.icon} />, //<><RiCriminalFill className={classes.icon}/><RiCriminalLine className={classes.icon}/></>, //<><RiAliensLine className={classes.icon}/><RiAliensFill className={classes.icon}/></>
             label: 'Profile',
         },
         {
@@ -47,13 +50,18 @@ const LeftNav: React.FC = () => {
             label: 'Shops',
         },
         {
+            to: routeShop(myblogs?.[0]?.blogId || 'fallback'),
+            icon: <GrBlog className={classes.icon} />,
+            label: 'Blogs',
+        },
+        {
             to: routePlaylist(),
             icon: <CustomerServiceOutlined className={classes.icon} />,
             label: 'Music',
         },
         {
             to: routeSettings(),
-            icon: <ImFilm className={classes.icon}/>, // <MdOutlineSubscriptions className={classes.icon}/>, //<VideoCameraOutlined className={classes.icon} />,
+            icon: <ImFilm className={classes.icon} />, // <MdOutlineSubscriptions className={classes.icon}/>, //<VideoCameraOutlined className={classes.icon} />,
             label: 'Video',
         },
         {
@@ -68,7 +76,7 @@ const LeftNav: React.FC = () => {
         },
         {
             to: routeSettings(),
-            icon: <IoMdChatboxes className={classes.icon}/>, //<CommentOutlined className={classes.icon} />,
+            icon: <IoMdChatboxes className={classes.icon} />, //<CommentOutlined className={classes.icon} />,
             label: 'Chats',
         },
     ];

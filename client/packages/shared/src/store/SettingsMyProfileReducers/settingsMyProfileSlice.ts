@@ -33,7 +33,7 @@ export const settingMyProfileSlice = createSlice({
 export const sessionsReceivedAC = () => async (dispatch: AppDispatch) => {
     try {
         const userData = await SettingsMyProfileAPI.getSessionAPI();
-        dispatch(settingMyProfileSlice.actions.sessionsReceived(userData.data));
+        dispatch(settingMyProfileSlice.actions.sessionsReceived(userData.data.items));
         // console.log('sessionsReceivedAC: ', userData.data);
         if(userData.status === 401){
             dispatch(authSlice.actions.userIsAuth(false))

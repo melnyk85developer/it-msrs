@@ -19,6 +19,9 @@ import { CreateUserInputDto } from '../../user.accounts/users-dto/users.input-dt
 import { AuthQueryRepository } from '../../user.accounts/users-infrastructure/auth.query-repository';
 import { RessetPasswordDto } from 'src/modules/user.accounts/users-dto/resset-password-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthUserDto } from '../auth-dto/auth-user-dto';
+import { EmailResendingDto } from '../auth-dto/email-resending-dto';
+import { ConfirmationCodeDto } from '../auth-dto/confirmation-code-dto';
 
 @Controller('/auth')
 export class AuthController {
@@ -29,9 +32,9 @@ export class AuthController {
     @Post('/registration')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     @UseInterceptors(FileInterceptor('image'))
-    async registrationController(@Body() body: CreateUserInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<string> {
-        // console.log('registrationController: registrationController - body 👽 😡 👽', body)
-        const avatar =  image ? image : null
+    async registrationController(@Body() body: CreateUserInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<{ done: boolean; data: string; code: number; serviceMessage: string; }> {
+        console.log('registrationController: registrationController - body 👽 😡 👽', body)
+        const avatar = image ? image : null
         return this.authService.registrationService(
             body,
             avatar
@@ -51,14 +54,19 @@ export class AuthController {
     @Post('/login')
     @HttpCode(HTTP_STATUSES.OK_200)
     async loginController(
+        @Body() authDto: AuthUserDto,
         @ExtractUserFromRequest() user: UserContextDto,
         @ExtractDeviceInfo() deviceInfo: DeviceInfo): Promise<{ accessToken: string, refreshToken: string }> {
         // console.log('AuthController: login - user 😡 REQ', user)
         // console.log('AuthController: login - deviceInfo 😡 REQ', deviceInfo)
+        const { remember } = authDto;
+        console.log('AuthController: login - remember 😡 REQ', remember)
+
         const { accessToken, refreshToken } = await this.authService.loginService(
             deviceInfo.ip,
             deviceInfo.title,
             user.id,
+            authDto.remember,
             deviceInfo.refreshToken as string
         );
         // console.log('AuthController: login - accessToken, refreshToken 😡 RES', accessToken, refreshToken)
@@ -68,7 +76,6 @@ export class AuthController {
         }
     }
     @ApiBearerAuth()
-    @UseGuards(AuthAccessGuard)
     @UseGuards(AuthRefreshGuard)
     @UseInterceptors(SetCookieInterceptor)
     @Post('/refresh-token')
@@ -105,33 +112,39 @@ export class AuthController {
         // console.log('AuthController: me - user 👽😡👽 ', user)
         return this.authQueryRepository.me(user.id);
     }
+    @ApiResponse({ status: 204, description: 'Повторная отправка для активации аккаунта!' })
     @Post('/registration-email-resending')
-    @ApiResponse({ status: 200, description: 'Повторная отправка для активации аккаунта!' })
-    async registrationEmailResendingController(@Body() userDto: CreateUserInputDto) {
-        return await this.authService.registrationEmailResendingService(userDto.email)
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    async registrationEmailResendingController(@Body() body: EmailResendingDto): Promise<{ done: boolean, data: string | null, code: number, serviceMessage: string }> {
+        console.log('AuthController: registrationEmailResendingController - body.email 😡 ', body.email)
+        return await this.authService.registrationEmailResendingService(body.email)
     }
-    @Redirect(process.env.CLIENT_URL, 3000) // Указываем дефолтный URL для редиректа
-    @Get('/registration-confirmation')
-    async registrationСonfirmationController(@Body() confirmationCode: string) {
-        const isActivated = await this.authService.confirmationCodeRegistrationService(confirmationCode);
+    // @Redirect(process.env.CLIENT_URL, 3000) // Указываем дефолтный URL для редиректа
+    @Post('/registration-confirmation')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    async registrationСonfirmationController(@Body() body: ConfirmationCodeDto) {
+        console.log('AuthController: registrationСonfirmationController - body.code 😡 ', body.code)
+        const isActivated = await this.authService.confirmationCodeRegistrationService(body.code);
         if (isActivated === true) {
-            return { url: process.env.CLIENT_URL }; // URL для перенаправления
+            return { url: process.env.API_URL } // URL для перенаправления
+            // return { url: process.env.CLIENT_URL }; // URL для перенаправления
         }
     }
     @ApiResponse({ status: 204, description: 'Отправка письма для сбросса пароля!' })
     @Post('/password-recovery')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async passwordRecoverySendEmailController(@Body() dto: any) {
-        // console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 dto', dto)
-        const isSend = await this.authService.passwordRecoverySendEmailService(dto.email)
-        // console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 isSend', isSend)
+    async passwordRecoverySendEmailController(@Body() body: EmailResendingDto) {
+        console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 body.email', body.email)
+        const isSend = await this.authService.passwordRecoverySendEmailService(body.email)
+        console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 isSend', isSend)
         return isSend
     }
     @ApiResponse({ status: 204, description: 'Ожидаем новый пароль и код подтверждения для обновления пароля!' })
-    @Put('/new-password')
+    @Post('/new-password')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async ressetPasswordController(@Body() body: RessetPasswordDto) {
-        return await this.authService.ressetPasswordService(body.password, body.code)
+        console.log('AuthController: ressetPasswordController - body 😡 ', body)
+        return await this.authService.ressetPasswordService(body.newPassword, body.recoveryCode)
     }
     @ApiBearerAuth()
     @Get('/me-or-default')
@@ -144,10 +157,11 @@ export class AuthController {
                 login: 'anonymous',
                 id: null,
                 email: null,
-                avatar: null,
-                name: null,
-                surname: null,
-                isBot: false
+                createdAt: null
+                // avatar: null,
+                // name: null,
+                // surname: null,
+                // isBot: false
                 // firstName: null,
                 // lastName: null,
             };

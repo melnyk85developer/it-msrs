@@ -28,7 +28,7 @@ export class User {
     @Prop({ type: SystemUserSchema, required: true })
     systemUserData: SystemUserData;
 
-    @ApiProperty({ example: 'passwordHash', description: 'Хешь пароля пользователя.' })
+    @ApiProperty({ example: 'passwordHash', description: 'Хеш пароля пользователя.' })
     @Prop({ type: String, required: true })
     passwordHash: string;
 
@@ -98,8 +98,30 @@ export class User {
         const updatedAt = date.toISOString();
 
         if (this.id === id) {
-            this.accountData.email = dto.email;
-            this.accountData.login = dto.login;
+            this.accountData.email = dto.email === undefined ? this.accountData.email : dto.email;
+            this.accountData.login = dto.login === undefined ? this.accountData.login : dto.login;
+
+            this.profileData.avatar = dto.avatar === undefined ? this.profileData.avatar : dto.avatar;
+            this.profileData.name = dto.name === undefined ? this.profileData.name : dto.name;
+            this.profileData.surname = dto.surname === undefined ? this.profileData.surname : dto.surname;
+            this.profileData.gender = dto.gender === undefined ? this.profileData.gender : dto.gender;
+            this.profileData.liveIn = dto.liveIn === undefined ? this.profileData.liveIn  : dto.liveIn;
+            this.profileData.originallyFrom = dto.originallyFrom === undefined ? this.profileData.originallyFrom : dto.originallyFrom;
+            this.profileData.status = dto.status === undefined ? this.profileData.status : dto.status;
+            this.profileData.imWorkingIn = dto.imWorkingIn === undefined ? this.profileData.imWorkingIn : dto.imWorkingIn;
+            this.profileData.lookingForAJob = dto.lookingForAJob === undefined ? this.profileData.lookingForAJob : dto.lookingForAJob;
+            this.profileData.lookingForAJobDescription = dto.lookingForAJobDescription === undefined ? this.profileData.lookingForAJobDescription : dto.lookingForAJobDescription;
+            this.profileData.aboutMe = dto.aboutMe === undefined ? this.profileData.aboutMe : dto.aboutMe;
+            this.profileData.telephone = dto.telephone === undefined ? this.profileData.telephone : dto.telephone;
+            this.profileData.website = dto.website === undefined ? this.profileData.website : dto.website;
+
+            this.systemUserData.isBot = dto.isBot === undefined ? this.systemUserData.isBot : dto.isBot;
+            this.systemUserData.isEmailConfirmed = dto.isEmailConfirmed === undefined ? this.systemUserData.isEmailConfirmed : dto.isEmailConfirmed;
+            this.systemUserData.roles = dto.roles === undefined ? this.systemUserData.roles : dto.roles;
+            this.systemUserData.isBanned = dto.isBanned === undefined ? this.systemUserData.isBanned : dto.isBanned;
+            this.systemUserData.bannReason = dto.bannReason === undefined ? this.systemUserData.bannReason : dto.bannReason;
+            this.systemUserData.banneds = dto.banneds === undefined ? this.systemUserData.banneds : dto.banneds;
+            
             this.updatedAt = updatedAt;
             this.deletedAt = null;
         }

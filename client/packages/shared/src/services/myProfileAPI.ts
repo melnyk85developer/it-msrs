@@ -74,6 +74,7 @@ export default class MyProfileAPI {
     static async deletePostAPI(postId: number, authorizedUserId: number): Promise<AxiosResponse<PostsType>> {
         return $api.delete<PostsType>(`/posts/${postId}`, { data: { postId, authorizedUserId } });
     }
+
     static async pinPostAPI(pin: boolean, pinData: PinPostType): Promise<AxiosResponse<PinPostType>> {
         console.log('updatePinAPI - pin, pinData', pin, pinData);
         return $api.put<any>(`/posts/pined/${pin}`, pinData);
@@ -106,11 +107,11 @@ export default class MyProfileAPI {
         return $api.post<IsLikesType>(`/like/`, like)
     }
     static async sendEmailResetPasswordAPI(email: string): Promise<AxiosResponse<any>> {
-        console.log('sendEmailResetPasswordAPI - req: ', email)
+        // console.log('sendEmailResetPasswordAPI - req: ', email)
         return $api.post<any>(`/auth/password-recovery`, { email })
     }
     static async updatePasswordAPI(password: string, code: string): Promise<AxiosResponse<IProfile>> {
-        console.log('sendEmailResetPasswordAPI - req: ', password, code)
+        // console.log('sendEmailResetPasswordAPI - req: ', password, code)
         return $api.put<IProfile>(`/auth/new-password`, { password, code })
     }
 }

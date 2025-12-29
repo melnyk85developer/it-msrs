@@ -31,7 +31,7 @@ export class UsersService {
         const { email, login, password } = dto
         let role: any
         let isBot: boolean
-        // console.log('createUserService - email, login, password 😡 avatar', email, login, password, avatar) 
+        console.log('createUserService - email, login, password 😡 avatar', email, login, password, avatar)
         const isLogin = await this.usersRepository.findByLoginOrEmail(login)
         if (isLogin) {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_TНE_LOGIN_ALREADY_EXISTS);
@@ -61,7 +61,7 @@ export class UsersService {
         });
         // console.log('createUserService - user 😡 ', user)
         await this.usersRepository.save(user);
-        // console.log('createUserService - user 😡 ', user)
+        console.log('createUserService - user._id.toString() 😡 ', user._id.toString())
         return user._id.toString();
     }
     async updateUserService(id: string, dto: Omit<UpdateUserDto, 'deletedAt' | 'updatedAt'>): Promise<string> {
@@ -117,9 +117,29 @@ export class UsersService {
         const to = email
         const subject = `Сброс пароля на проекте ${process.env.PROJEKT_NAME}`
         const text = confirmationCode
-        const html = resetPasswordEmailMessageHTMLDocument(nameProjekt, to, text, `${process.env.CLIENT_URL}/newpassword?code=${confirmationCode}`, getUser)
+        const html =
+            `<div>
+                    <h1>Сбросс пароля на ${process.env.PROJEKT_NAME} перейдите по ссылке</h1>
+                    <h2>${confirmationCode}</h2>
+                    <p>
+                        To finish registration please follow the link below:
+                        <a href="${process.env.API_URL}/auth/new-password">Сбросить пароль</a>
+                    </p>
+                    <button>
+                        <a href="${process.env.API_URL}/auth/new-password">Сбросить пароль</a>
+                    </button>
+                </div>`
 
-        const isSendEmail = this.emailService.sendConfirmationEmail(from, to, subject, text, html)
+
+        // const html = resetPasswordEmailMessageHTMLDocument(nameProjekt, to, text, `${process.env.CLIENT_URL}/new-password?code=${confirmationCode}`, getUser)
+
+        const isSendEmail = await this.emailService.sendConfirmationEmail(
+            from,
+            to,
+            subject,
+            text,
+            html
+        )
             .catch(() => console.log(`
                 Упс, что-то пошло не так во время отправки сообщения на E-Mail: ${email}. Возможно сервис отправки 
                 писем перегружен, просим Вас повторить запрос чуть позже.`))
@@ -134,7 +154,7 @@ export class UsersService {
             userId: getUser.id,
         })
         if (expirationDate) {
-            // console.log('UsersService ressetPasswordService: - isSendEmail res 200', expirationDate)
+            console.log('UsersService ressetPasswordService: - isSendEmail res 200', expirationDate)
             const expirationISO = new Date(expirationDate.expirationDate).toISOString();
             return {
                 done: true,
@@ -143,7 +163,7 @@ export class UsersService {
                 serviceMessage: `Сообщение успешно отправлено на E-Mail: ${email}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${expirationISO}`
             };
         } else {
-            // console.log('UNPROCESSABLE_ENTITY: - isSendEmail', isSendEmail)
+            console.log('UNPROCESSABLE_ENTITY: - isSendEmail', isSendEmail)
             throw new DomainException(INTERNAL_STATUS_CODE.UNPROCESSABLE_ENTITY)
         }
     }

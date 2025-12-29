@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 export interface DeviceInfo {
     ip: string;
     title: string;
-    refreshToken?: string;
+    refreshToken: string;
 }
 
 export const ExtractDeviceInfo = createParamDecorator(
@@ -24,10 +24,12 @@ export const ExtractDeviceInfo = createParamDecorator(
 
         // 3. Извлечение старого Refresh Token из куки
         const rawToken = request.cookies?.['refreshToken'];
+
         const refreshToken = (!rawToken || rawToken === 'null' || rawToken === 'undefined')
             ? undefined
             : rawToken;
 
+        // console.log('ExtractDeviceInfo: refreshToken - 👽👽👽', refreshToken)
         return { ip, title, refreshToken };
     },
 );

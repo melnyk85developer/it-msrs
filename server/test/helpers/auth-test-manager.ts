@@ -130,9 +130,10 @@ export class AuthTestManager {
                 .toEqual(
                     {
                         id: expect.any(String),
-                        avatar:  null,
+                        // avatar:  null,
                         login: expect.any(String),
-                        email: expect.any(String)
+                        email: expect.any(String),
+                        createdAt: expect.any(String),
                     }
                 )
         }
