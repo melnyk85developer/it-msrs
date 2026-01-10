@@ -5,6 +5,7 @@ import type { BlogModelType } from '../blogs-domain/blog.entity';
 import { BlogsRepository } from '../blogs-infrastructure/blogs.repository';
 import { CreateBlogDto, UpdateBlogDto } from '../blogs-dto/create-blog.dto';
 import { Types } from 'mongoose';
+import { UpdateHomePageBlogDto } from '../blogs-api/input-dto-blogs/update-HomePageblog-dto';
 
 @Injectable()
 export class BlogsService {
@@ -23,7 +24,15 @@ export class BlogsService {
     }
     async updateBlogService(id: string, dto: UpdateBlogDto): Promise<string> {
         const blog = await this.blogsRepository.findBlogOrNotFoundFailRepository(id);
-        blog.update(dto);
+        blog.updateBlogData(dto);
+        // console.log('BlogsService: updateBlogService - blog 😡 ', blog)
+        await this.blogsRepository.save(blog);
+        return blog._id.toString();
+    }
+    async updateBlogHomePageService(id: string, dto: UpdateHomePageBlogDto): Promise<string> {
+        const blog = await this.blogsRepository.findBlogOrNotFoundFailRepository(id);
+        blog.updateHomePageBlogData(dto);
+        console.log('BlogsService: updateBlogHomePageService - blog 😡 ', blog)
         await this.blogsRepository.save(blog);
         return blog._id.toString();
     }

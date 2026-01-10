@@ -23,19 +23,19 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Создать пользователя!' })
     @ApiResponse({ status: 201 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
     @Post('/')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async createUserController(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
         // console.log('UsersController: createUserController - body 😡 ', body)
         const userId = await this.usersService.createUserService(body, null);
-        console.log('UsersController: createUserController - userId 😡 ', userId)
+        // console.log('UsersController: createUserController - RES userId 😡 ', userId)
         return this.usersQueryRepository.getUserByIdOrNotFoundFail(String(userId));
     }
     @ApiOperation({ summary: 'Обновить пользователя по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateUserController(@Param('id') id: string, @Body() body: UpdateUserInputDto): Promise<string> {
@@ -49,7 +49,7 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
     @ApiResponse({ status: 404 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
     @Delete('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteUserController(@Param('id') id: string): Promise<void> {
@@ -58,7 +58,7 @@ export class UsersController {
     }
     @ApiOperation({ summary: 'Получить всех пользователей!' })
     @ApiResponse({ status: 200 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
     @Get('/')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllUsersController(@Query() query: GetUsersQueryParams): Promise<PaginatedViewDto<UserViewDto[]>> {

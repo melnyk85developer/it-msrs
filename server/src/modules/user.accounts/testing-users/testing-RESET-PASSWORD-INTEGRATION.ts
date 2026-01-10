@@ -39,8 +39,8 @@ export const resetPasswordInegrationTest = () => {
         it('SUCCESS - Ожидается внутренний статус код 900, - Успешное отправление на email сообщение о попытке сбросить пароль!', async () => {
             const result = await contextTests.userService.ressetPasswordService(contextTests.users.correctUserEmails[0]);
             expect(result.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
-            expect(result.serviceMessage).toBe(`Сообщение успешно отправлено на E-Mail: ${contextTests.users.correctUserEmails[0]}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${result.data}`);
-            expect(result.data).toMatch(isoDateRegex); // Проверяет формат строки
+            expect(result.serviceMessage).toBe(`Сообщение успешно отправлено на E-Mail: ${contextTests.users.correctUserEmails[0]}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${result.data.expirationISO}`);
+            expect(result.data.expirationISO).toMatch(isoDateRegex); // Проверяет формат строки
             expect(result.done).toEqual(expect.any(Boolean));
         });
         it('ERROR   - Ожидается внутренний статус код 680, - Ошибка если 3 минуты не прошло с момента отправки сообщения!', async () => {
@@ -108,8 +108,32 @@ export const resetPasswordInegrationTest = () => {
             const success = await contextTests.userService.ressetPasswordService(contextTests.users.createdUsers[0]!.email);
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
-            expect(success.serviceMessage).toBe(`Сообщение успешно отправлено на E-Mail: ${contextTests.users.correctUserEmails[0]}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${success.data}`);
-            expect(success.data).toMatch(isoDateRegex); // Проверяет формат строки
+            expect(success.serviceMessage).toBe(`Сообщение успешно отправлено на E-Mail: ${contextTests.users.correctUserEmails[0]}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${success.data.expirationISO}`);
+            expect(success.data.expirationISO).toMatch(isoDateRegex); // Проверяет формат строки
+            expect(success.done).toEqual(expect.any(Boolean));
+        });
+        it('SUCCESS - Ожидается внутренний статус код 900, - Успешное обновление пароля в профиле пользователя!', async () => {
+
+            const isSendEmail = await contextTests.authServices.passwordRecoverySendEmailService(
+                contextTests.users.correctUserEmails[0]
+            )
+            if (isSendEmail) {
+                contextTests.codeConfirmation.addCodeConfirmationStateTest({
+                    numConfirmation: 2,
+                    nameConfirmation: 'Password',
+                    newCode: isSendEmail.data!.code
+                })
+                // console.log('TEST: contextTests.createdUser1 😡 ', contextTests.users.createdUsers[1])
+            }
+            // console.log('TEST: isSendEmail 😡 ', isSendEmail)
+            const success = await contextTests.authServices.ressetPasswordService(
+                'new-password',
+                isSendEmail.data!.code
+            );
+            // console.log('TEST: success 😡 ', success)
+            expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
+            expect(success.data).toBe(contextTests.users.createdUsers[0]!.id);
+            expect(success.serviceMessage).toBe(`Пароль успешно обновлен!`);
             expect(success.done).toEqual(expect.any(Boolean));
         });
     });

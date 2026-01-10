@@ -1,11 +1,13 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
 import { routeMain as routeShop } from '../../../../../services/ShopsList/src/ShopListContainer';
+import { routeMain as routeBlogs } from '../../../../../services/BlogsList/src/BlogListContainer';
 import { routeMain as routePlaylist } from '../../../../../services/Music/src/Music/MusicContainer';
 import { useAppDispatch, useAppSelector } from '@packages/shared/src/components/hooks/redux';
 import { HomeOutlined, MessageOutlined, ShopOutlined, TeamOutlined, SettingOutlined, UsergroupAddOutlined, CustomerServiceOutlined, VideoCameraOutlined, CommentOutlined, MailOutlined } from '@ant-design/icons';
-import classes from './styles.module.scss'
 import { BsFillSpeakerFill } from "react-icons/bs";
+import { GrBlog } from "react-icons/gr";
+import classes from './styles.module.scss'
 
 type Item = {
     to: string;
@@ -18,15 +20,20 @@ const RightNav: React.FC = () => {
 
     const items: Item[] = [
         {
+            to: routePlaylist(),
+            icon: <BsFillSpeakerFill className={classes.icon} />,
+            label: 'Music',
+        },
+        {
             to: routeShop(),
             icon: <ShopOutlined className={classes.icon} />,
             label: 'Shops',
         },
         {
-            to: routePlaylist(),
-            icon: <BsFillSpeakerFill  className={classes.icon} />,
-            label: 'Music',
-        }
+            to: routeBlogs(),
+            icon: <GrBlog className={classes.iconGrBlog} />,
+            label: 'Blogs',
+        },
     ];
 
     return (

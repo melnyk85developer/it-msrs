@@ -17,6 +17,7 @@ export class TokenService {
     generateTokens(payload: any, remember: boolean): { accessToken: string; refreshToken: string } {
         const { id, deviceId, roles, banned, bannReason } = payload
         // console.log('TokenService: payload', payload)
+        console.log('TokenService: remember', remember)
         const accessToken = this.jwtService.sign({ id }, { expiresIn: '15m', secret: process.env.JWT_ACCESS_SECRET });
         const refreshToken = this.jwtService.sign(payload, { expiresIn: remember === true ? '30d' : '1d', secret: process.env.JWT_REFRESH_SECRET });
         // console.log('TokenService: accessToken, refreshToken', accessToken, refreshToken)

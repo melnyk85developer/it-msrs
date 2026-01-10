@@ -66,7 +66,7 @@ export class UsersTestManager {
                         id: expect.any(String),
                         login: data.login,
                         email: data.email,
-                        // avatar: null,
+                        avatar: null,
                         // name: null,
                         // surname: null,
                         // isBot: expect.any(Boolean),

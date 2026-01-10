@@ -48,6 +48,7 @@ export const blogsE2eTest = () => {
             }
             await contextTests.blogsTestManager.createBlogs(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.BAD_REQUEST_400
             )
@@ -75,6 +76,7 @@ export const blogsE2eTest = () => {
             }
             await contextTests.blogsTestManager.createBlogs(
                 data,
+                '',
                 contextTests.constants.expiredToken,
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
@@ -143,6 +145,7 @@ export const blogsE2eTest = () => {
             }
             await contextTests.blogsTestManager.updateBlogs(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.BAD_REQUEST_400
@@ -161,6 +164,7 @@ export const blogsE2eTest = () => {
             }
             await contextTests.blogsTestManager.updateBlogs(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 contextTests.constants.invalidId,
                 HTTP_STATUSES.NOT_FOUND_404
@@ -174,6 +178,7 @@ export const blogsE2eTest = () => {
             }
             await contextTests.blogsTestManager.updateBlogs(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.NO_CONTENT_204
@@ -202,6 +207,7 @@ export const blogsE2eTest = () => {
         it(`DELETE - Ожидается статус код 204, - Удаление двух блогов! Дополнительные запросы: -> GET`, async () => {
             await contextTests.blogsTestManager.deleteBlogs(
                 contextTests.blogs.createdBlogs[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
@@ -211,6 +217,7 @@ export const blogsE2eTest = () => {
             )
             await contextTests.blogsTestManager.deleteBlogs(
                 contextTests.blogs.createdBlogs[1]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )

@@ -14,7 +14,7 @@ import PhotoCarousel from "./PhotoCarousel/PhotoCarousel";
 
 type PropsType = {
     profile: IProfile;
-    authorizedUser: IProfile
+    authorizedUser: IUser
     dispatch: AppDispatch;
     error: string;
     isDarkTheme: string;

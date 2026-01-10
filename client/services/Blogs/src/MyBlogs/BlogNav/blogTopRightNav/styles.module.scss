@@ -1,0 +1,98 @@
+@import '../../../../../host/src/mixins.scss';
+@import '../../../../../host/src/variables.scss';
+
+.wrapTopRightNavMyBlogs.light {
+    .topNavMyBlogs {
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        color: var(--dark-theme-text-color);
+        outline: 1px solid rgb(255, 230, 0);
+
+        // width: 30%;
+
+        .menu_icon {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            margin-left: auto;
+            padding: 0px 10px 11px 5px;
+            justify-content: space-between;
+            cursor: pointer;
+
+            .icon {
+                display: inline;
+                margin-top: 4px;
+                margin-left: auto;
+                color: #e2e2e2;
+            }
+        }
+    }
+}
+
+.wrapTopRightNavMyBlogs.dark {
+    // width: 100%;
+    color: var(--dark-theme-text-color);
+
+    .menu_icon {
+        height: 100%;
+        display: flex;
+        margin-left: auto;
+        padding: 4px 7px 11px 5px;
+        justify-content: space-between;
+        cursor: pointer;
+
+        .icon {
+            display: inline;
+            margin-top: 4px;
+            margin-left: auto;
+            color: var(--dark-theme-text-color);
+        }
+    }
+
+    .topNavMyBlogsActive {
+        position: relative;
+        width: 20px;
+        margin-left: auto;
+
+        .wrap_menu_options {
+            position: absolute;
+            top: 100%;
+            right: 0px;
+            background-color: #282828;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+            border-radius: 8px 0 8px 8px;
+            padding: 5px 0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            z-index: 8888;
+            min-width: max-content;
+
+            .li {
+                display: flex;
+                padding: 8px;
+                border-radius: 8px;
+                border-bottom: 1px solid black;
+                color: #e2e2e2;
+                cursor: pointer;
+
+                strong {
+                    margin: 5px 10px;
+                    min-width: 150px;
+                    max-width: 250px;
+                }
+            }
+
+            .li:hover {
+                border-radius: 8px;
+                background-color: #454545;
+            }
+        }
+    }
+
+    .topNavMyBlogsDisactive {
+        display: none;
+    }
+}

@@ -21,6 +21,7 @@ export class ConfirmationsCodesService {
         private confirmationRepository: ConfirmationRepository,
     ) { }
     async createConfirmationsCodesService(dto: ConfDto): Promise<Confirmation> {
+        // console.log('ConfirmationsCodesService: - dto 😡 ', dto)
         const confirmation = await this.ConfirmationModel.createConfirmationInstance({
             confirmationCode: dto.confirmationCode,
             isBlocked: dto.isBlocked,
@@ -30,7 +31,9 @@ export class ConfirmationsCodesService {
             field: dto.field,
             userId: dto.userId
         });
+        // console.log('ConfirmationsCodesService: - confirmation 😡 ', confirmation)
         await this.confirmationRepository.saveConfirmation(confirmation);
+        // console.log('ConfirmationsCodesService: - saveConfirmation 😡 ', confirmation)
         return confirmation;
     }
     async updateConfirmationCodesService(confirmationId: string, dto: UodateConfDto): Promise<Confirmation | null> {

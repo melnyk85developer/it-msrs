@@ -19,7 +19,6 @@ const AppMessages = () => {
                     </Suspense>
                 } />
             </Route>
-
         </Routes>
     )
 }

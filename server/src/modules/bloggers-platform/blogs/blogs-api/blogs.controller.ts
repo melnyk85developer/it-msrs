@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Multer } from 'multer';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { GetBlogsQueryParams } from './input-dto-blogs/get-blogs-query-params.input-dto';
@@ -17,6 +18,12 @@ import { CreatePostForBlogInputDto } from './input-dto-blogs/posts-for-blog.inpu
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { AuthAccessGuard } from 'src/modules/user.accounts/users-guards/bearer/jwt-auth.guard';
 import { BasicAuthGuard } from 'src/modules/user.accounts/users-guards/basic/basic-auth.guard';
+import { ExtractUserFromRequest } from 'src/modules/user.accounts/users-guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from 'src/modules/user.accounts/users-guards/dto/user-context.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { HomePageBlogViewDto } from './view-dto-blogs/homePageBlog.view-dto';
+import { UpdateHomePageBlogDto } from './input-dto-blogs/update-HomePageblog-dto';
+import { AboutPageBlogViewDto } from './view-dto-blogs/aboutPageBlog.view-dto';
 
 @Controller('/blogs')
 export class BlogsController {
@@ -29,10 +36,12 @@ export class BlogsController {
 
     @ApiOperation({ summary: 'Создать блог!' })
     @ApiResponse({ status: 201 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
+    @UseGuards(AuthAccessGuard)
     @Post()
     @HttpCode(HTTP_STATUSES.CREATED_201)
-    async createBlogController(@Body() body: CreateBlogInputDto): Promise<BlogViewDto> {
+    // @UseInterceptors(FileInterceptor('image'))
+    async createBlogController(@Body() body: CreateBlogInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<BlogViewDto> {
         // console.log('BlogsController: createBlogController - REQ body 😡 ', body)
         const blogId = await this.blogsService.createBlogService(body);
         // console.log('BlogsController: createBlogController - RES blogId REQ 😡 ', blogId)
@@ -45,9 +54,16 @@ export class BlogsController {
     }
     @ApiOperation({ summary: 'Создать пост конкретному блогу!' })
     @ApiResponse({ status: 201 })
-    @Post('/:blogId/posts')
+    @UseGuards(AuthAccessGuard)
+    @Post(':blogId/posts')
     @HttpCode(HTTP_STATUSES.CREATED_201)
-    async createPostForBlogController(@Param('blogId') blogId: string, @Body() body: CreatePostForBlogInputDto): Promise<BlogViewDto> {
+    @UseInterceptors(FileInterceptor('image'))
+    async createPostForBlogController(
+        @Param('blogId') blogId: string,
+        @Body() body: CreatePostForBlogInputDto,
+        @UploadedFile() image?: Multer.File | undefined
+    ): Promise<BlogViewDto> {
+
         // console.log('BlogsController: createPostForBlogController - body, blogId 😡 ', body, blogId)
         const postId = await this.postsService.createPostOneBlogService(body, blogId);
         // console.log('BlogsController: createPostForBlogController - postId 😡 ', postId)
@@ -61,30 +77,39 @@ export class BlogsController {
     @ApiOperation({ summary: 'Обновить блог по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
+    @UseGuards(AuthAccessGuard)
     @Put(':id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateBlogController(@Param('id') id: string, @Body() body: UpdateBlogInputDto): Promise<string> {
         // console.log('BlogsController: updateBlogController - id 😡 body ', id, body)
         const isUpdateBlog = await this.blogsService.updateBlogService(id, body);
         // console.log('BlogsController: updateBlogController - isUpdateBlog 😡 ', isUpdateBlog)
-        if (isUpdateBlog) {
-            return isUpdateBlog
-            // return SuccessResponse(INTERNAL_STATUS_CODE.SUCCESS_UPDATED_BLOG);
-        } else {
-            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
-        }
+        return isUpdateBlog
+    }
+    @ApiOperation({ summary: 'Обновить блог по id.' })
+    @ApiParam({ name: 'id' })
+    @ApiResponse({ status: 204 })
+    @UseGuards(AuthAccessGuard)
+    @Put('/home-page/:id')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    async updateBlogHomePageController(@Param('id') id: string, @Body() body: UpdateHomePageBlogDto): Promise<string> {
+        // console.log('BlogsController: updateBlogHomePageController - id 😡 body ', id, body)
+        const isUpdateBlog = await this.blogsService.updateBlogHomePageService(id, body);
+        // console.log('BlogsController: updateBlogHomePageController - isUpdateBlog 😡 ', isUpdateBlog)
+        return isUpdateBlog
     }
     @ApiOperation({ summary: 'Удалить блог по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
     @ApiResponse({ status: 404 })
+    @UseGuards(AuthAccessGuard)
     @Delete(':id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteBlogController(@Param('id') id: string): Promise<void> {
         // console.log('PostsController: deleteBlogController - id 😡 ', id)
         return this.blogsService.deleteBlogService(id);
     }
-    @ApiOperation({ summary: 'Получить все блоги!' })
+    @ApiOperation({ summary: 'Получить все блоги - всех пользователей!' })
     @ApiResponse({ status: 200 })
     @Get()
     @HttpCode(HTTP_STATUSES.OK_200)
@@ -92,6 +117,18 @@ export class BlogsController {
         // console.log('BlogsController: getAllBlogsController - query 😡 ', query)
         const isBlogs = await this.blogsQueryRepository.getAllBlogRepository(query)
         // console.log('BlogsController: getAllBlogsController - isBlogs 😡 ', isBlogs)
+        return isBlogs
+    }
+    @ApiOperation({ summary: 'Получить все блоги - текущего пользователя!' })
+    @ApiResponse({ status: 200 })
+    @UseGuards(AuthAccessGuard)
+    @Get('/my-blogs')
+    @HttpCode(HTTP_STATUSES.OK_200)
+    async getAllMyBlogsController(@Query() query: GetBlogsQueryParams, @ExtractUserFromRequest() user: UserContextDto): Promise<PaginatedViewDto<BlogViewDto[]>> {
+        // console.log('BlogsController: getAllMyBlogsController - query 😡 ', query)
+        // console.log('BlogsController: getAllMyBlogsController - user 😡 ', user)
+        const isBlogs = await this.blogsQueryRepository.getAllBlogRepository(query)
+        // console.log('BlogsController: getAllMyBlogsController - isBlogs 😡 ', isBlogs)
         return isBlogs
     }
     @ApiOperation({ summary: 'Получить блог по id.' })
@@ -102,6 +139,28 @@ export class BlogsController {
     async getBlogByIdController(@Param('id') id: string): Promise<BlogViewDto> {
         // console.log('BlogsController: getBlogByIdController - id 😡 ', id)
         return this.blogsQueryRepository.getBlogByIdOrNotFoundFailQueryRepository(id);
+    }
+    @ApiOperation({ summary: 'Получить блог по id.' })
+    @ApiParam({ name: 'id' })
+    @ApiResponse({ status: 200 })
+    @Get('/home-page/:id')
+    @HttpCode(HTTP_STATUSES.OK_200)
+    async getHomePageBlogByIdController(@Param('id') id: string): Promise<HomePageBlogViewDto> {
+        // console.log('BlogsController: getHomePageBlogByIdController - id 😡 ', id)
+        const isHomePage = await this.blogsQueryRepository.getHomePageBlogByIdOrNotFoundFailQueryRepository(id);
+        // console.log('BlogsController: isHomePage - 😡 ', isHomePage)
+        return isHomePage
+    }
+    @ApiOperation({ summary: 'Получить блог по id.' })
+    @ApiParam({ name: 'id' })
+    @ApiResponse({ status: 200 })
+    @Get('/about-page/:id')
+    @HttpCode(HTTP_STATUSES.OK_200)
+    async getAboutPageBlogByIdController(@Param('id') id: string): Promise<AboutPageBlogViewDto> {
+        console.log('BlogsController: getAboutPageBlogByIdController - id 😡 ', id)
+        const isAboutPage = await this.blogsQueryRepository.getAboutPageBlogByIdOrNotFoundFailQueryRepository(id);
+        console.log('BlogsController: isAboutPage - 😡 ', isAboutPage)
+        return isAboutPage
     }
     @ApiOperation({ summary: 'Получить все посты определенного блога!' })
     @ApiResponse({ status: 200 })

@@ -32,7 +32,7 @@ const MyShopsContainer: React.FC = React.memo(() => {
     const [modalActiveBasket, setModalActiveBasket] = useState(false);
     const [modalActiveCreateShop, setModalActiveCreateShop] = useState(false);
     const [modalActiveUpdateShop, setModalActiveUpdateShop] = useState(false);
-    const userId = authorizedUser.userId
+    const userId = authorizedUser.id
     const { shopId } = useParams<{ shopId: string }>();
     const numericShopId = Number(shopId);
 console.log('device: - ', device)
@@ -88,7 +88,7 @@ console.log('device: - ', device)
 
     const newContent = () => ({
         contentTopNav: [
-            shop.userId === authorizedUser.userId
+            shop.userId === authorizedUser.id
             ?
                 <Col className={`${classes.wrapTopNawShop}
                     ${isDarkTheme !== "light" 
@@ -174,7 +174,7 @@ console.log('device: - ', device)
     
     return (
         <div className={ `${classes.contentShop} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
-            {shop.userId !== authorizedUser.userId
+            {shop.userId !== authorizedUser.id
             ?   
                 <MyShopsDetail 
                     shop={shop}

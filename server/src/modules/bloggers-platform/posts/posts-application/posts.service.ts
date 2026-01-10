@@ -29,9 +29,9 @@ export class PostsService {
         return post._id.toString();
     }
     async createPostOneBlogService(dto: Omit<CreatePostForBlogDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, blogId: string): Promise<string> {
-        // console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
+        console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
         const isBlog = await this.blogsRepository.findBlogOrNotFoundFailRepository(blogId);
-        // console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
+        console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
         const post = this.PostModel.createPostInstance({
             ...dto,
             blogId: blogId,

@@ -1,0 +1,12 @@
+@import '../../../../../host/src/mixins.scss';
+@import '../../../../../host/src/variables.scss';
+
+.wrapHomePageBlog {
+    width: 100%;
+
+    .sectionHomePageBlog {
+        border: 1px solid black;
+        min-height: 68.5vh;
+        max-height: 100vh;
+    }
+}

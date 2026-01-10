@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { EditOutlined } from "@ant-design/icons";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import AnketaModal from "../AnketaModal/anketaModal";
@@ -9,7 +9,7 @@ import classes from './styles.module.scss'
 type ProfileDataPropsType = {
     profile: IProfile
     dispatch: AppDispatch
-    authorizedUser: IProfile
+    authorizedUser: IUser
     modalActiveProfileData: any
     setModalActiveProfileData: any
     isDarkTheme: string;

@@ -1,0 +1,154 @@
+@import '../../../../../host/src/mixins.scss';
+@import '../../../../../host/src/variables.scss';
+
+.row {
+    display: flex;
+    flex-direction: column;
+    min-width: 72vh;
+    max-width: 80vh;
+    min-height: 30vh;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    color: wheat;
+
+    .headerBlockUpdateMsgModal {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 30px;
+        border-radius: 8px;
+        text-align: center;
+
+        .title {
+            width: 90%;
+            margin: 0 10px;
+            color: #FEA930;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .topIconWrapper {
+            width: 10%;
+            display: block;
+            margin-left: auto;
+            width: 30px;
+            font-size: 22px;
+            cursor: pointer;
+
+            .topIcon {
+                margin: 0 3px;
+                transition: opacity 0.2s ease;
+            }
+
+            .topIconNormal {
+                display: inline-block;
+            }
+
+            .topIconHover {
+                display: none;
+            }
+
+            &:hover {
+                .topIconNormal {
+                    display: none;
+                }
+
+                .topIconHover {
+                    color: #FEA930;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .wrapCentrBlockInputAddMessage {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        border-radius: 8px;
+        border: 1px solid rgb(68, 68, 68);
+
+        .title {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .formContainer {
+            .inputWrapper {
+                .label {
+                    display: block;
+                    margin-left: 5px;
+                }
+
+                .input,
+                .textarea {
+                    display: block;
+                    width: 100%;
+                    margin: 5px auto 5px 0;
+                    padding-left: 5px;
+                    border-radius: 8px;
+
+                    background-color: #282828;
+                    border: 1px solid #282828;
+                    color: wheat;
+
+                    outline: none;
+                    box-shadow: none;
+                    transition: border-color 0.2s ease;
+                }
+
+                .input::placeholder,
+                .textarea::placeholder {
+                    color: #8c8c8c;
+                }
+
+                .input:focus,
+                .textarea:focus {
+                    border-color: #FEA930;
+                    box-shadow: none;
+                }
+
+                .input {
+                    min-height: 30px;
+                }
+
+                textarea {
+                    line-height: 1.4;
+                    scrollbar-width: thin;
+                    min-height: 70px;
+                }
+            }
+
+        }
+    }
+
+    .futerBlockAddPostBlog {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        width: 100%;
+        min-height: 30px;
+        border-radius: 8px;
+        text-align: center;
+
+        .butonBlock {
+            display: block;
+            border-radius: 8px;
+            width: auto;
+            padding: 5px 10px;
+            font-size: 16px;
+            font-weight: 400;
+            border: 1px solid rgb(68, 68, 68);
+            background-color: #282828;
+            cursor: pointer;
+        }
+        .butonBlock:hover {
+            background-color: #454545;
+            border: 1px solid rgb(24, 24, 24);
+            color: #FEA930;
+        }
+    }
+}

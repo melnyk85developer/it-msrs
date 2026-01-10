@@ -8,6 +8,8 @@ import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { GetBlogsQueryParams } from 'src/modules/bloggers-platform/blogs/blogs-api/input-dto-blogs/get-blogs-query-params.input-dto';
 import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto';
 import { Blog, type BlogModelType } from 'src/modules/bloggers-platform/blogs/blogs-domain/blog.entity';
+import { HomePageBlogViewDto } from '../../../blogs-api/view-dto-blogs/homePageBlog.view-dto';
+import { AboutPageBlogViewDto } from '../../../blogs-api/view-dto-blogs/aboutPageBlog.view-dto';
 
 @Injectable()
 export class BlogsQueryRepository {
@@ -45,7 +47,7 @@ export class BlogsQueryRepository {
         // console.log('BlogsQueryRepository: getAllBlogRepository: normalizedQuery 😡 PREV REQ', normalizedQuery)
 
         const blogs = await this.BlogModel.find(filter)
-            .sort({ [normalizedQuery.sortBy]: normalizedQuery.sortDirection, _id: 1})
+            .sort({ [normalizedQuery.sortBy]: normalizedQuery.sortDirection, _id: 1 })
             .skip(normalizedQuery.calculateSkip())
             .limit(normalizedQuery.pageSize);
 
@@ -83,5 +85,47 @@ export class BlogsQueryRepository {
         }
 
         return BlogViewDto.mapToBlogsView(blog);
+    }
+    async getHomePageBlogByIdOrNotFoundFailQueryRepository(blogId: string): Promise<HomePageBlogViewDto> {
+        // console.log('BlogsQueryRepository: getHomePageBlogByIdOrNotFoundFailQueryRepository - RES blogId typeof 😡 ', blogId, typeof blogId)
+
+        // 'accountData.login': login,
+        // if (!blogId || !Types.ObjectId.isValid(blogId)) {
+        //     throw new NotFoundException('blog not found');
+        // }
+        if (!blogId) {
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'Корявый blogId ты мне пихаешь 😡!')
+        }
+        const blog = await this.BlogModel.findOne({
+            _id: blogId,
+            deletedAt: null,
+        });
+
+        if (!blog) {
+            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_BLOG_ID);
+        }
+
+        return HomePageBlogViewDto.mapToBlogsView(blog);
+    }
+    async getAboutPageBlogByIdOrNotFoundFailQueryRepository(blogId: string): Promise<AboutPageBlogViewDto> {
+        console.log('BlogsQueryRepository: getAboutPageBlogByIdOrNotFoundFailQueryRepository - RES blogId typeof 😡 ', blogId, typeof blogId)
+
+        // 'accountData.login': login,
+        // if (!blogId || !Types.ObjectId.isValid(blogId)) {
+        //     throw new NotFoundException('blog not found');
+        // }
+        if (!blogId) {
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'Корявый blogId ты мне пихаешь 😡!')
+        }
+        const blog = await this.BlogModel.findOne({
+            _id: blogId,
+            deletedAt: null,
+        });
+
+        if (!blog) {
+            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_BLOG_ID);
+        }
+
+        return AboutPageBlogViewDto.mapToBlogsView(blog);
     }
 }

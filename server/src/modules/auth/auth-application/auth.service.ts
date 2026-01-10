@@ -46,7 +46,7 @@ export class AuthService {
         private filesService: FilesService,
     ) { }
     async registrationService(dto: Omit<CreateUserDto, 'createdAt' | 'updatedAt' | 'deletedAt'>, avatar: Multer.File | null) {
-        console.log('registrationUserService - dto 😡😡', dto)
+        // console.log('registrationUserService - dto 😡😡', dto)
         // console.log('AuthService: registrationService - avatar 👽 😡 👽', avatar)
         const confirmationCode = uuid.v4()
         const date = new Date()
@@ -78,7 +78,7 @@ export class AuthService {
 
         // <a href="${process.env.API_URL}/auth/confirm-email?code=${confirmationCode}">Подтвердить регистрацию</a>
 
-        const isSendEmail = await this.emailService.sendConfirmationEmail(
+        const isSendEmail = this.emailService.sendConfirmationEmail(
             from,
             to,
             subject,
@@ -89,7 +89,7 @@ export class AuthService {
                 Упс, что-то пошло не так во время отправки сообщения на E-Mail: ${to}. Возможно сервис отправки 
                 писем перегружен, просим Вас повторить запрос чуть позже.`))
 
-        const expirationDate = await this.confirmationsCodesService.createConfirmationsCodesService(
+        const isCreateConfirmation = await this.confirmationsCodesService.createConfirmationsCodesService(
             {
                 confirmationCode: confirmationCode,
                 isBlocked: false,
@@ -100,13 +100,14 @@ export class AuthService {
                 field: 'registration'
             }
         )
-        if (expirationDate) {
-            console.log('registrationUserService: - isSendEmail 😡 ', isSendEmail)
-            console.log('registrationUserService: - return user._id.toString(); 😡 ', user._id.toString())
+        if (isCreateConfirmation) {
+            // console.log('registrationUserService: - isSendEmail 😡 ', isSendEmail)
+            // console.log('registrationUserService: - isCreateConfirmation 😡 ', isCreateConfirmation)
+            // console.log('registrationUserService: - return user._id.toString(); 😡 ', user._id.toString())
             // return user._id.toString()
             return {
                 done: true,
-                data: user._id.toString(),
+                data: { id: user._id.toString(), code: confirmationCode },
                 code: INTERNAL_STATUS_CODE.SUCCESS,
                 serviceMessage: `Сообщение успешно отправлено на E-Mail: ${to}. Проверьте почту и следуйте дальнейшим инструкциям в письме.`
             };
@@ -225,14 +226,18 @@ export class AuthService {
         }
     }
 
-    async registrationEmailResendingService(email: any): Promise<{ done: boolean, data: string | null, code: number, serviceMessage: string }> {
+    async registrationEmailResendingService(email: string): Promise<{ done: boolean, data: { expirationISO: string, code: string } | null, code: number, serviceMessage: string }> {
         const confirmationCode = uuid.v4()
         const date = new Date().toISOString()
         const getUser = await this.usersService._getUserByEmailService(email)
-        // console.log('registrationEmailResendingService: - getUser 😡😡😡', getUser)
 
         if (!getUser) {
-            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
+            // console.log('registrationEmailResendingService: - getUser 😡😡😡', getUser)
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORECT_E_MAIL)
+        }
+        if (getUser && getUser.systemUserData.isEmailConfirmed === true) {
+            // console.log('registrationEmailResendingService: - getUser 😡😡😡', getUser.systemUserData.isEmailConfirmed)
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_THE_CONFIRMATION_EMAIL_ALREADY_CONFIRMED)
         }
         await this.isBlockedEmailResendingService.isBlockedResending({
             getUser,
@@ -245,23 +250,32 @@ export class AuthService {
             maxRequests: 5
         })
 
+        const expirationDate = await this.confirmationsCodesService.createConfirmationsCodesService({
+            confirmationCode: confirmationCode,
+            isBlocked: false,
+            isCooldown: true,
+            add: date,
+            minutes: 3,
+            userId: getUser.id,
+            field: 'registration'
+        })
+
         const nameProjekt = `<span style="color: #FEA930; font-size: 18px;">Web</span><span style="color: #15c; font-size: 18px;">Mars</span>`
         const from = `${process.env.PROJEKT_NAME}<${process.env.SMTP_USER}>`
         const to = email
         const subject = `Повторный запрос на активацию аккаунта в проекте ${process.env.PROJEKT_NAME}`
         const text = confirmationCode
-        const html =
-            `<div>
-                    <h1>Повторный запрос на активацию аккаунта ${process.env.PROJEKT_NAME} перейдите по ссылке</h1>
-                    <h2>${confirmationCode}</h2>
-                    <p>
-                        To finish registration please follow the link below:
-                        <a href="${process.env.API_URL}/auth/registration-confirmation">Сбросить пароль</a>
-                    </p>
-                    <button>
-                        <a href="${process.env.API_URL}/auth/registration-confirmation">Сбросить пароль</a>
-                    </button>
-                </div>`
+        const html = `<div>
+                        <h1>Повторный запрос на активацию аккаунта ${process.env.PROJEKT_NAME} перейдите по ссылке</h1>
+                        <h2>${confirmationCode}</h2>
+                        <p>
+                            To finish registration please follow the link below:
+                            <a href="${process.env.API_URL}/auth/registration-confirmation?code=${confirmationCode}">Сбросить пароль</a>
+                        </p>
+                        <button>
+                            <a href="${process.env.API_URL}/auth/registration-confirmation?code=${confirmationCode}">Сбросить пароль</a>
+                        </button>
+                    </div>`
 
         // const html = mailResendingEmailMessageHTMLDocument(
         //     nameProjekt,
@@ -269,7 +283,7 @@ export class AuthService {
         //     text,
         //     `${process.env.API_URL}/auth/registration-confirmation/${confirmationCode}`
         // )
-        const isSendEmail = await this.emailService.sendConfirmationEmail(
+        const isSendEmail = this.emailService.sendConfirmationEmail(
             from,
             to,
             subject,
@@ -280,21 +294,14 @@ export class AuthService {
                 Упс, что-то пошло не так во время отправки сообщения на E-Mail: ${email}. Возможно сервис отправки 
                 писем перегружен, просим Вас повторить запрос чуть позже.`))
 
-        const expirationDate = await this.confirmationsCodesService.createConfirmationsCodesService({
-            confirmationCode: confirmationCode,
-            isBlocked: false,
-            isCooldown: true,
-            add: date,
-            minutes: 3,
-            userId: getUser.id,
-            field: 'registration'
-        })
+
         if (expirationDate) {
-            console.log('AuthService registrationEmailResendingService: - isSendEmail res 200', expirationDate.expirationDate)
+            // console.log('AuthService registrationEmailResendingService: - isSendEmail res', isSendEmail)
+            // console.log('AuthService registrationEmailResendingService: - expirationDate res', expirationDate.expirationDate)
             const expirationISO = new Date(expirationDate.expirationDate).toISOString();
             return {
                 done: true,
-                data: expirationISO,
+                data: { expirationISO: expirationISO, code: confirmationCode },
                 code: INTERNAL_STATUS_CODE.SUCCESS,
                 serviceMessage: `Сообщение успешно отправлено на E-Mail: ${email}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${expirationISO}`
             };
@@ -303,23 +310,36 @@ export class AuthService {
         }
     }
     async confirmationCodeRegistrationService(confirmationCode: string): Promise<any> {
-        const сonfirmation = await this.confirmationRepository.findByCodeConfirmationRepository(confirmationCode)
-        if (сonfirmation) {
-            if (new Date().toISOString() > сonfirmation.expirationDate) {
-                console.log('UsersService confirmationCode: - EXPIRATION', сonfirmation.expirationDate)
+        // console.log('UsersService confirmationCode: - сonfirmation', confirmationCode)
+        const isConfirmationCode = await this.confirmationRepository.findByCodeConfirmationRepository(confirmationCode)
+        // console.log('UsersService confirmationCode: - isConfirmationCode', isConfirmationCode)
+
+        if (isConfirmationCode) {
+            if (new Date().toISOString() > isConfirmationCode.expirationDate) {
+                // console.log('UsersService confirmationCode: - EXPIRATION', isConfirmationCode.expirationDate)
                 throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_EXPIRATION_TIME_PASSED)
             } else {
-                return await this.usersService.makeUpdatedConfirmedAccount(сonfirmation.userId)
+                const updatedConfirmed = await this.usersService.makeUpdatedConfirmedAccount(isConfirmationCode.userId)
+                if (updatedConfirmed) {
+                    return {
+                        done: true,
+                        data: updatedConfirmed,
+                        code: INTERNAL_STATUS_CODE.SUCCESS,
+                        serviceMessage: ``
+                    };
+                } else {
+                    throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, `Что-то пошло не так при обновлении isEmailConfirmed!`)
+                }
             }
         } else {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_CONFIRMATION_CODE)
         }
     }
-    async passwordRecoverySendEmailService(email: string): Promise<{ done: boolean, data: string | null, code: number, serviceMessage: string }> {
+    async passwordRecoverySendEmailService(email: string): Promise<{ done: boolean, data: { code: string; expirationISO: string; } | null, code: number, serviceMessage: string }> {
         return await this.usersService.ressetPasswordService(email)
     }
-    async ressetPasswordService(email: string, code: string): Promise<any> {
-        return await this.usersService.updatePasswordService(email, code)
+    async ressetPasswordService(password: string, code: string): Promise<{ done: boolean; data: string; code: number; serviceMessage: string; }> {
+        return await this.usersService.updatePasswordService(password, code)
     }
     async validateUserService(login: string, password: string): Promise<UserContextDto | null> {
         // console.log('AuthService → validateUser: login, password 👍', login, password);

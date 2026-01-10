@@ -63,7 +63,7 @@ export class IsBlockedEmailResendingService {
             for (let i = 0; block.length > i; i++) {
                 const confirmation = block[i]
                 if (date < confirmation.expirationDate) {
-                    console.log('ressetPasswordService blocked length: ', block.length)
+                    // console.log('ressetPasswordService blocked length: ', block.length)
                     throw new DomainException(
                         INTERNAL_STATUS_CODE.BAD_REQUEST_FUNCTION_BLOCKED,
                         `⛔️ Функция отпрвки сообщения на E-Mail временно заблокирована в связи с частыми запросами! ${confirmation.expirationDate}`
@@ -83,7 +83,7 @@ export class IsBlockedEmailResendingService {
             for (let i = 0; cooldown.length > i; i++) {
                 const confirmation = cooldown[i]
                 if (date < confirmation.expirationDate) {
-                    console.log('ressetPasswordService cooldown.length: ', cooldown.length)
+                    // console.log('ressetPasswordService cooldown.length: ', cooldown.length)
                     throw new DomainException(
                         INTERNAL_STATUS_CODE.BAD_REQUEST_TIME_HASNT_PASSED_YET,
                         `⛔️ Время еще не истекло до следующего запроса! ${confirmation.expirationDate}`
@@ -102,7 +102,7 @@ export class IsBlockedEmailResendingService {
         if (active) {
             for (let i = 0; active.length > i; i++) {
                 if (date < active[i].expirationDate) {
-                    console.log('ressetPasswordService _checkActiveCodes: ', active[i].expirationDate)
+                    // console.log('ressetPasswordService _checkActiveCodes: ', active[i].expirationDate)
                     throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_TIME_HASNT_PASSED_YET, `${active[i].expirationDate}`)
                 }
             }
@@ -122,7 +122,7 @@ export class IsBlockedEmailResendingService {
 
         // Тут 3 - это просто проверка, есть ли смысл фильтровать дальше, можно оставить хардкод или заменить на maxRequests - 2, но лучше не трогать логику "если мало запросов - не паримся"
         if (active.length > 3) {
-            console.log('UsersService ressetPasswordService: - ⛔️⛔️ Блокировка сброса пароля', active.length)
+            // console.log('UsersService ressetPasswordService: - ⛔️⛔️ Блокировка сброса пароля', active.length)
 
             // Используем windowMinutes вместо хардкода 18
             const timeWindowAgo = Date.now() - windowMinutes * 60 * 1000;
@@ -134,7 +134,7 @@ export class IsBlockedEmailResendingService {
 
             // Используем maxRequests вместо хардкода 5
             if (confirTime.length >= maxRequests) {
-                console.log('UsersService ressetPasswordService: - ⛔️⛔️⛔️ Блокировка!', confirTime.length);
+                // console.log('UsersService ressetPasswordService: - ⛔️⛔️⛔️ Блокировка!', confirTime.length);
 
                 for (let i = 0; cooldown.length > i; i++) {
                     await this.confirmationRepository.deleteConfirmationIdRepository(cooldown[i].id);

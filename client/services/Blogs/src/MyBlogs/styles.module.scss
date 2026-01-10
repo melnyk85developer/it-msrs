@@ -1,0 +1,100 @@
+@import '../../../host/src/mixins.scss';
+@import '../../../host/src/variables.scss';
+
+.wrapContentBlog.light,
+.wrapContentBlog.dark {
+    overflow: auto;
+    overflow-x: hidden;
+    @include custom-scrollbar();
+}
+.wrapContentBlog.light {
+    width: 100%;
+    padding: 10px;
+    height: 86vh;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+.wrapContentBlog.dark {
+    width: 100%;
+    padding: 10px;
+    height: 85vh;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+
+    .sectionContentBlog {
+        .headerBlog {
+            h1 {
+                color: #FEA930;
+            }
+
+            h2 {
+                margin-top: 10px;
+                color: wheat;
+            }
+
+            h4 {
+                margin-top: 10px;
+                text-align: right;
+                color: #D55612;
+            }
+        }
+
+        .wrapBlogTopNav {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 7px 1px;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+
+            .blogTopNav {
+                display: flex;
+                justify-content: space-between;
+
+                li a {
+                    margin-right: 10px;
+                    color: wheat;
+                }
+            }
+        }
+
+        .sectionBlogContent {
+            min-height: 60vh;
+            max-height: 100%;
+            // border: 1px solid black;
+
+            h2 {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .wrapBlockOfNoBlogs {
+        min-height: 58vh;
+        display: flex;
+        justify-content: center;
+        /* Центрируем контент по горизонтали */
+        align-items: center;
+
+        /* Центрируем контент по вертикали */
+        .blockOfNoBlogs {
+            text-align: center;
+            /* Выравниваем текст заголовков по центру */
+            border: 2px dashed #8a8a8a;
+            padding: 15px;
+            opacity: 0.5;
+
+            h1 {
+                color: #D55612;
+            }
+
+            h2 {
+                color: #5B5B5B;
+            }
+        }
+    }
+}

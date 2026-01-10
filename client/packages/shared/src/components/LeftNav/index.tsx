@@ -6,6 +6,7 @@ import { GrBlog } from "react-icons/gr";
 import { routeMain as routeMyProfile } from '../../../../../services/MyProfile/src/MyProfile/MyProfileContainer';
 import { routeMain as routeMessages } from '../../../../../services/Message/src/StartMessage/startMessage';
 import { routeMain as routeShop } from '../../../../../services/MyShops/src/Shop/myShopsContainer';
+import { routeMain as routeBlogs } from '../../../../../services/Blogs/src/MyBlogs/BlogsContainer';
 import { routeMain as routeUsers } from '../../../../../services/Users/src/Users/UsersContainer';
 import { routeMain as routeSettings } from '../../../../../services/SettingsMyProfile/src/SettingsMyProfile/SettingsProfile';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -30,7 +31,10 @@ const LeftNav: React.FC = () => {
     const items: Item[] = [
         {
             to: routeMyProfile(authorizedUser && authorizedUser.id),
-            icon: <><RiHome4Fill className={classes.icon} /><RiHome4Line className={classes.icon} /></>, //<HomeOutlined className={classes.icon} />, //<><RiCriminalFill className={classes.icon}/><RiCriminalLine className={classes.icon}/></>, //<><RiAliensLine className={classes.icon}/><RiAliensFill className={classes.icon}/></>
+            icon: <span className={classes.iconProfileWrap}>
+                <RiHome4Line className={classes.iconProfile} />
+                <RiHome4Fill className={classes.iconProfileHover} />
+            </span>, //<HomeOutlined className={classes.icon} />, //<><RiCriminalFill className={classes.icon}/><RiCriminalLine className={classes.icon}/></>, //<><RiAliensLine className={classes.icon}/><RiAliensFill className={classes.icon}/></>
             label: 'Profile',
         },
         {
@@ -50,8 +54,8 @@ const LeftNav: React.FC = () => {
             label: 'Shops',
         },
         {
-            to: routeShop(myblogs?.[0]?.blogId || 'fallback'),
-            icon: <GrBlog className={classes.icon} />,
+            to: routeBlogs(),
+            icon: <GrBlog className={classes.iconGrBlog} />,
             label: 'Blogs',
         },
         {
@@ -61,22 +65,22 @@ const LeftNav: React.FC = () => {
         },
         {
             to: routeSettings(),
-            icon: <ImFilm className={classes.icon} />, // <MdOutlineSubscriptions className={classes.icon}/>, //<VideoCameraOutlined className={classes.icon} />,
+            icon: <ImFilm className={classes.iconVideo} />,
             label: 'Video',
         },
         {
             to: routeUsers(),
-            icon: <TeamOutlined className={classes.icon} />,
+            icon: <TeamOutlined className={classes.iconUsers} />,
             label: 'Users',
         },
         {
             to: routeSettings(),
-            icon: <SettingOutlined className={classes.icon} />,
+            icon: <SettingOutlined className={classes.iconSettings} />,
             label: 'Settings',
         },
         {
             to: routeSettings(),
-            icon: <IoMdChatboxes className={classes.icon} />, //<CommentOutlined className={classes.icon} />,
+            icon: <IoMdChatboxes className={classes.iconChats} />,
             label: 'Chats',
         },
     ];

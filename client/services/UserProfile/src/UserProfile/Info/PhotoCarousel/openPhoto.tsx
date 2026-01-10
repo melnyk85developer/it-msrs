@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CloseOutlined, LeftOutlined, RightOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { addPhotoAlbumMyProfileAC, addPhotoMyProfileAC, setPhotoCarouselMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import MyCropperUploadMiniature from "./uploadMiniature";
@@ -11,7 +11,7 @@ import { API_URL } from "@packages/shared/src/http";
 
 type PropsType = {
     profile: IProfile;
-    authorizedUser: IProfile
+    authorizedUser: IUser
     dispatch: AppDispatch;
     isDarkTheme: string;
     setModalOpenPhoto: any

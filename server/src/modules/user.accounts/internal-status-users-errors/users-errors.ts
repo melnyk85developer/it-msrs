@@ -31,4 +31,8 @@ export const USERS_ERRORS = {
         messages: { message: 'Произошла ошибка при удалении пользователя!', field: 'user' },
         statusCode: HTTP_STATUSES.BAD_REQUEST_400,
     },
+    [INTERNAL_STATUS_CODE.BAD_REQUEST_INCORECT_E_MAIL]: {
+        messages: { message: 'Не корректный email!', field: 'email' },
+        statusCode: HTTP_STATUSES.BAD_REQUEST_400,
+    },
 }

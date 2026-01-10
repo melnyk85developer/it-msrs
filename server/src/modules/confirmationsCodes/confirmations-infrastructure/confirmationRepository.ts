@@ -15,7 +15,7 @@ export class ConfirmationRepository {
         await confirmation.save();
     }
     async findConfirmationById(id: string): Promise<ConfirmationDocument | null> {
-        return this.ConfirmationModel.findOne({
+        return await this.ConfirmationModel.findOne({
             _id: id,
             // deletedAt: null,
         });
@@ -28,27 +28,30 @@ export class ConfirmationRepository {
 
         return user;
     }
-    async findByCodeConfirmationRepository(confirmationCode: string): Promise<Confirmation | null> {
-        return await this.ConfirmationModel.findOne(
+    async findByCodeConfirmationRepository(confirmationCode: string): Promise<ConfirmationDocument | null> {
+        // console.log('ConfirmationRepository confirmationCode: - сonfirmation', confirmationCode)
+        const isCoonf = await this.ConfirmationModel.findOne(
             {
                 confirmationCode: confirmationCode
             }
         )
+        // console.log('ConfirmationRepository confirmationCode: - isCoonf', isCoonf)
+        return isCoonf
     }
     async findAllConfirmationsCodesByUserIdRepository(userId: string): Promise<Confirmation[]> {
-        return await this.ConfirmationModel.find(
+        return this.ConfirmationModel.find(
             {
                 userId: userId
             }
         )
     }
     async deleteConfirmationUserIdRepository(userId: number): Promise<DeleteResult> {
-        return await this.ConfirmationModel.deleteOne({
+        return this.ConfirmationModel.deleteOne({
             userId: userId,
         })
     }
     async deleteConfirmationIdRepository(id: number): Promise<DeleteResult> {
-        return await this.ConfirmationModel.deleteOne({
+        return this.ConfirmationModel.deleteOne({
             id: id
         })
     }

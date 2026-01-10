@@ -11,7 +11,7 @@ export class EmailService {
         private readonly config: ConfigService,
     ) { }
 
-    async sendConfirmationEmail(from: string, to: string, subject: string, text: string, html: any): Promise<void> {
+    async sendConfirmationEmail(from: string, to: string, subject: string, text: string, html: any): Promise<any> {
         try {
             const result = await this.mailerService.sendMail({from, to, subject, text, html});
             this.logger.log(`✅ Письмо отправлено на ${to}`);

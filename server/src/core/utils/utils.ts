@@ -4,6 +4,7 @@ import { POSTS_INTERNAL_STATUS } from "src/modules/bloggers-platform/posts/inter
 import { SESSIONS_INTERNAL_STATUS } from "src/modules/usersSessions/session-internal-status-errors/sessions-status"
 import { USERS_INTERNAL_STATUS } from "src/modules/user.accounts/internal-status-users-errors/users-status"
 import { AUTH_INTERNAL_STATUS } from "src/modules/auth/auth-internal-status-errors/authStatus"
+import { CONFIRMATIONS_INTERNAL_STATUS } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsStatus"
 
 export const HTTP_STATUSES = {
     OK_200: 200,
@@ -26,6 +27,7 @@ export const INTERNAL_STATUS_CODE = {
     ...BLOGS_INTERNAL_STATUS,
     ...POSTS_INTERNAL_STATUS,
     ...COMMENT_INTERNAL_STATUS,
+    ...CONFIRMATIONS_INTERNAL_STATUS,
     // ...LIKES_INTERNAL_STATUS,
 
     SUCCESS: 900, // Успешное создание с оправкой ответа!

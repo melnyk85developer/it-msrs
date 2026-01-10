@@ -175,7 +175,7 @@ export const setAllShopsAC = (click_shop_typeId?: number, page?: number, limit?:
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
     }  
 }
-export const getMyAllShopsByIdAC = (userId: number) => async (dispatch: AppDispatch) => {
+export const getMyAllShopsByIdAC = (userId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyShopsAPI.getMyShopsByIdAPI(userId)
         // console.log('setMyShopsAC res - ', data.data)

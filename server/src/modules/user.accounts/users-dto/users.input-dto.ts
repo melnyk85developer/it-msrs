@@ -22,9 +22,10 @@ export class CreateUserInputDto {
     @Length(6, 20, { message: 'Пароль должен быть не меньше 6 и не больше 20 символов!' })
     readonly password: string;
 
-    @ApiProperty({ example: 'isBot', description: 'Является ли пользователь ботом?!' })
+    @ApiProperty({ example: 'avatar', description: 'Имя файла в базе данных avatar пользователя!' })
+    @IsString({ message: 'avatar должен быть строкой!' })
     @IsOptional()
-    readonly isBot?: boolean;
+    avatar?: string;
 
     @ApiProperty({ example: 'name', description: 'Имя пользователя!' })
     @IsString({ message: 'name должен быть строкой!' })
@@ -36,4 +37,7 @@ export class CreateUserInputDto {
     @Length(1, 16, { message: 'Фамилия должна быть не меньше 1 и не больше 16 символов!' })
     @IsOptional()
     readonly surname?: string;
+    @ApiProperty({ example: 'isBot', description: 'Является ли пользователь ботом?!' })
+    @IsOptional()
+    readonly isBot?: boolean;
 }

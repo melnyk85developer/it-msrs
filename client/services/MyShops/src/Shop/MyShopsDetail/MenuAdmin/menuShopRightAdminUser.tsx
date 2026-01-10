@@ -13,7 +13,7 @@ type PropsTypeMenuShopRight = {
     setModalActiveDevice: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const MenuShopRightAdminUser: React.FC<PropsTypeMenuShopRight> = ({ 
+export const MenuShopRightAdminUser: React.FC<PropsTypeMenuShopRight> = ({
     setModalActiveCreateShop, setModalActiveUpdateShop, setModalActiveBrand, setModalActiveDevice, 
     setModalActiveType, setModalActiveBasket }) => {
     const [isOpen, setIsOpen] = useState(false);

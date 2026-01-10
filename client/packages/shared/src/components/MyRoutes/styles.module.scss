@@ -13,12 +13,14 @@
     width: 100%;
     min-height: calc(99.9vh - 123px);
     max-height: 100%;
+
     // outline: 1px solid rgb(255, 3, 3);
     .colAside.fixed {
         display: flex;
         flex-direction: column;
         height: calc(99.999vh - 123px);
         min-height: 0px;
+
         aside {
             display: flex;
             flex-direction: column;
@@ -26,10 +28,12 @@
             min-height: 0px;
         }
     }
+
     .colAside.stretch {
         display: flex;
         flex-direction: column;
         flex: 1;
+
         aside {
             display: flex;
             flex-direction: column;
@@ -37,28 +41,34 @@
             min-height: 0px;
         }
     }
+
     .contentBlockRoutes.fixed {
         display: flex;
         flex-direction: column;
         width: 100%;
         min-height: 0;
         max-height: calc((99.9vh) - 123px);
+
         // outline: 1px solid rgb(255, 153, 0);
         .section {
             flex: 1;
         }
     }
+
     .contentBlockRoutes.stretch {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        min-width: 1%;
+        max-width: 100%;
         flex: 1;
         min-height: 0;
         // outline: 1px solid rgb(255, 153, 0);
         .section {
+            // outline: 1px solid rgb(255, 153, 0);
             flex: 1;
         }
     }
+
     .off {
         display: none;
     }

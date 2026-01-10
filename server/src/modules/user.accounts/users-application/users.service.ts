@@ -31,7 +31,7 @@ export class UsersService {
         const { email, login, password } = dto
         let role: any
         let isBot: boolean
-        console.log('createUserService - email, login, password 😡 avatar', email, login, password, avatar)
+        // console.log('createUserService - email, login, password 😡 avatar', email, login, password, avatar)
         const isLogin = await this.usersRepository.findByLoginOrEmail(login)
         if (isLogin) {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_TНE_LOGIN_ALREADY_EXISTS);
@@ -61,7 +61,7 @@ export class UsersService {
         });
         // console.log('createUserService - user 😡 ', user)
         await this.usersRepository.save(user);
-        console.log('createUserService - user._id.toString() 😡 ', user._id.toString())
+        // console.log('createUserService - user._id.toString() 😡 ', user._id.toString())
         return user._id.toString();
     }
     async updateUserService(id: string, dto: Omit<UpdateUserDto, 'deletedAt' | 'updatedAt'>): Promise<string> {
@@ -90,11 +90,13 @@ export class UsersService {
     }
     async makeUpdatedConfirmedAccount(userId: string): Promise<any> {
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
-        const updateConfirmedStatusUser = await this.UserModel.makeUpdatedConfirmedAccount(userId)
+        user.makeUpdatedConfirmedAccount(userId);
+        // console.log('UsersService: makeUpdatedConfirmedAccount - user1 😡 ', user)
         await this.usersRepository.save(user);
-        return updateConfirmedStatusUser
+        // console.log('UsersService: makeUpdatedConfirmedAccount - user2 😡 ', user)
+        return user
     }
-    async ressetPasswordService(email: any): Promise<{ done: boolean, data: string | null, code: number, serviceMessage: string }> {
+    async ressetPasswordService(email: any): Promise<{ done: boolean, data: { code: string; expirationISO: string; } | null, code: number, serviceMessage: string }> {
         const confirmationCode = uuid.v4();
         const date = new Date().toISOString()
         const getUser = await this._getUserByEmailService(email);
@@ -133,7 +135,7 @@ export class UsersService {
 
         // const html = resetPasswordEmailMessageHTMLDocument(nameProjekt, to, text, `${process.env.CLIENT_URL}/new-password?code=${confirmationCode}`, getUser)
 
-        const isSendEmail = await this.emailService.sendConfirmationEmail(
+        const isSendEmail = this.emailService.sendConfirmationEmail(
             from,
             to,
             subject,
@@ -154,24 +156,27 @@ export class UsersService {
             userId: getUser.id,
         })
         if (expirationDate) {
-            console.log('UsersService ressetPasswordService: - isSendEmail res 200', expirationDate)
+            // console.log('UsersService ressetPasswordService: - isSendEmail res 200', isSendEmail)
+            // console.log('UsersService ressetPasswordService: - isSendEmail res 200', expirationDate)
             const expirationISO = new Date(expirationDate.expirationDate).toISOString();
             return {
                 done: true,
-                data: expirationISO,
+                data: { expirationISO: expirationISO, code: confirmationCode },
                 code: INTERNAL_STATUS_CODE.SUCCESS,
                 serviceMessage: `Сообщение успешно отправлено на E-Mail: ${email}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${expirationISO}`
             };
         } else {
-            console.log('UNPROCESSABLE_ENTITY: - isSendEmail', isSendEmail)
+            // console.log('UNPROCESSABLE_ENTITY: - isSendEmail', isSendEmail)
             throw new DomainException(INTERNAL_STATUS_CODE.UNPROCESSABLE_ENTITY)
         }
     }
-    async updatePasswordService(password: string, code: string): Promise<string> {
+    async updatePasswordService(password: string, code: string): Promise<{ done: boolean; data: string; code: number; serviceMessage: string; }> {
+        // console.log('updatePasswordService: - password', password)
+
         const passwordHash = await this.cryptoService.createPasswordHash(password);
         const confirmation = await this.confirmationRepository.findByCodeConfirmationRepository(code)
         if (confirmation) {
-            // console.log('updatePasswordService: - passwordConfirmationByCode', passwordConfirmationByCode)
+            // console.log('updatePasswordService: - confirmation', confirmation)
             const user = await this.usersRepository.findUserByIdOrNotFoundFail(confirmation.userId)
             if (user) {
                 if (new Date().toISOString() > confirmation.expirationDate) {
@@ -180,7 +185,12 @@ export class UsersService {
                 } else {
                     user.updateUserPassword(passwordHash, confirmation.userId)
                     await this.usersRepository.save(user);
-                    return user.id
+                    return {
+                        done: true,
+                        data: user.id,
+                        code: INTERNAL_STATUS_CODE.SUCCESS,
+                        serviceMessage: `Пароль успешно обновлен!`
+                    };
                 }
             } else {
                 throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND)

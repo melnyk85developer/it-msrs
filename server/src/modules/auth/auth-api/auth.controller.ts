@@ -32,8 +32,8 @@ export class AuthController {
     @Post('/registration')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     @UseInterceptors(FileInterceptor('image'))
-    async registrationController(@Body() body: CreateUserInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<{ done: boolean; data: string; code: number; serviceMessage: string; }> {
-        console.log('registrationController: registrationController - body 👽 😡 👽', body)
+    async registrationController(@Body() body: CreateUserInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<{ done: boolean; data: {id: string, code: string}; code: number; serviceMessage: string; }> {
+        // console.log('registrationController: registrationController - body 👽 😡 👽', body)
         const avatar = image ? image : null
         return this.authService.registrationService(
             body,
@@ -60,7 +60,7 @@ export class AuthController {
         // console.log('AuthController: login - user 😡 REQ', user)
         // console.log('AuthController: login - deviceInfo 😡 REQ', deviceInfo)
         const { remember } = authDto;
-        console.log('AuthController: login - remember 😡 REQ', remember)
+        // console.log('AuthController: login - remember 😡 REQ', remember)
 
         const { accessToken, refreshToken } = await this.authService.loginService(
             deviceInfo.ip,
@@ -115,35 +115,35 @@ export class AuthController {
     @ApiResponse({ status: 204, description: 'Повторная отправка для активации аккаунта!' })
     @Post('/registration-email-resending')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async registrationEmailResendingController(@Body() body: EmailResendingDto): Promise<{ done: boolean, data: string | null, code: number, serviceMessage: string }> {
-        console.log('AuthController: registrationEmailResendingController - body.email 😡 ', body.email)
+    async registrationEmailResendingController(@Body() body: EmailResendingDto): Promise<{ done: boolean, data: {expirationISO: string, code: string} | null, code: number, serviceMessage: string }> {
+        // console.log('AuthController: registrationEmailResendingController - body.email 😡 ', body.email)
         return await this.authService.registrationEmailResendingService(body.email)
     }
-    // @Redirect(process.env.CLIENT_URL, 3000) // Указываем дефолтный URL для редиректа
+    @Redirect(process.env.CLIENT_URL, 3000) // Указываем дефолтный URL для редиректа
     @Post('/registration-confirmation')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async registrationСonfirmationController(@Body() body: ConfirmationCodeDto) {
-        console.log('AuthController: registrationСonfirmationController - body.code 😡 ', body.code)
+        // console.log('AuthController: registrationСonfirmationController - body.code 😡 ', body.code)
         const isActivated = await this.authService.confirmationCodeRegistrationService(body.code);
         if (isActivated === true) {
-            return { url: process.env.API_URL } // URL для перенаправления
-            // return { url: process.env.CLIENT_URL }; // URL для перенаправления
+            // return { url: process.env.API_URL } // URL для перенаправления
+            return { url: process.env.CLIENT_URL }; // URL для перенаправления
         }
     }
     @ApiResponse({ status: 204, description: 'Отправка письма для сбросса пароля!' })
     @Post('/password-recovery')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async passwordRecoverySendEmailController(@Body() body: EmailResendingDto) {
-        console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 body.email', body.email)
+        // console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 body.email', body.email)
         const isSend = await this.authService.passwordRecoverySendEmailService(body.email)
-        console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 isSend', isSend)
+        // console.log('AuthController: passwordRecoverySendEmailController 👽👽😡👽👽 isSend', isSend)
         return isSend
     }
     @ApiResponse({ status: 204, description: 'Ожидаем новый пароль и код подтверждения для обновления пароля!' })
     @Post('/new-password')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async ressetPasswordController(@Body() body: RessetPasswordDto) {
-        console.log('AuthController: ressetPasswordController - body 😡 ', body)
+        // console.log('AuthController: ressetPasswordController - body 😡 ', body)
         return await this.authService.ressetPasswordService(body.newPassword, body.recoveryCode)
     }
     @ApiBearerAuth()
@@ -157,8 +157,8 @@ export class AuthController {
                 login: 'anonymous',
                 id: null,
                 email: null,
-                createdAt: null
-                // avatar: null,
+                createdAt: null,
+                avatar: null,
                 // name: null,
                 // surname: null,
                 // isBot: false

@@ -9,12 +9,16 @@ import { routeMain as routeAdmin } from '../../../../../services/Admin/src/Admin
 import MyProfileContainer, { routeMain as routeMyProfile } from '../../../../../services/MyProfile/src/MyProfile/MyProfileContainer';
 import AppMessages from '../../../../../services/Message/src/router/Router';
 import { routeMain as routeMessage } from '../../../../../services/Message/src/StartMessage/startMessage';
+import AppBlogs from '../../../../../services/Blogs/src/router/Router';
+// import { routeMain as routeMyBlog } from '../../../../../services/Blogs/src/MyBlogs/HomePage/homePage';
+import { routeMain as routeMyBlog } from '../../../../../services/Blogs/src/MyBlogs/BlogsContainer';
 import AppSettings from '../../../../../services/SettingsMyProfile/src/router/Router';
 import { routeMain as routeSettingsMyProfile } from '../../../../../services/SettingsMyProfile/src/SettingsMyProfile/SettingsProfile';
 import UserProfileContainer, { routeMain as routeUserProfile } from '../../../../../services/UserProfile/src/UserProfile/UserProfileContainer';
 import MyShopsContainer from '../../../../../services/MyShops/src/Shop/myShopsContainer';
 import { routeMain as routeMyShop } from '../../../../../services/MyShops/src/Shop/routes';
-import ShopsContainer, { routeMain as routeShop } from '../../../../../services/ShopsList/src/ShopListContainer';
+import ShopsListContainer, { routeMain as routeShopsList } from '../../../../../services/ShopsList/src/ShopListContainer';
+import BlogsListContainer, { routeMain as routeBlogsList } from '../../../../../services/BlogsList/src/BlogListContainer';
 import AuthContainer, { routeMain as routeAuth } from '../../../../../services/Auth/src/AuthContainer';
 import Registration, { routeMain as routeRegistration } from '../../../../../services/Auth/src/pages/Registration';
 import FinishRegistration, { routeMain as routeFinishRegistration } from '../../../../../services/Auth/src/pages/FinishRegistration';
@@ -162,10 +166,13 @@ const MyRoutes: React.FC = () => {
                             <Route index element={<Navigate to={routeMyProfile()} />} />
                             <Route path={`${routeMyProfile()}/*`} element={<MyProfileContainer />} />
                             <Route path={`${routeMessage()}/*`} element={<AppMessages />} />
+                            <Route path={`${routeMyBlog()}/*`} element={<AppBlogs />} />
+
                             <Route path={`${routeSettingsMyProfile()}/*`} element={<AppSettings />} />
                             <Route path={`${routeUserProfile()}/*`} element={<UserProfileContainer />} />
                             <Route path={`${routeMyShop()}/*`} element={<MyShopsContainer />} />
-                            <Route path={`${routeShop()}/*`} element={<ShopsContainer />} />
+                            <Route path={`${routeShopsList()}/*`} element={<ShopsListContainer />} />
+                            <Route path={`${routeBlogsList()}/*`} element={<BlogsListContainer />} />
                             <Route path={`${routeMusicContainer()}/*`} element={<MusicContainer />} />
                             <Route path={`${routeAuth()}/*`} element={<AuthContainer />} />
                             <Route path={`${routeRegistration()}/*`} element={<Registration />} />

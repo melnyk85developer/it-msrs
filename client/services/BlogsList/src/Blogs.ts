@@ -1,0 +1,1 @@
+export {LazyBlogs as Blogs} from './Blog.lazy'

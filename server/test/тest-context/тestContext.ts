@@ -34,6 +34,7 @@ import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastru
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
+import { CodeConfirmationContextClass } from './context-module/code-confirmation-context';
 
 export class TestContext {
     public app: INestApplication;
@@ -72,7 +73,8 @@ export class TestContext {
     public users: UserContextClass;
     public blogs: BlogsContextClass;
     public posts: PostsContextClass;
-    public comments: CommentsContextClass
+    public comments: CommentsContextClass;
+    public codeConfirmation: CodeConfirmationContextClass;
 
     constructor() {
         this.constants = new ConstantsContextClass();
@@ -81,5 +83,6 @@ export class TestContext {
         this.blogs = new BlogsContextClass();
         this.posts = new PostsContextClass();
         this.comments = new CommentsContextClass();
+        this.codeConfirmation = new CodeConfirmationContextClass();
     }
 }

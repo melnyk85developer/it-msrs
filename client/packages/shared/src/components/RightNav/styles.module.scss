@@ -26,7 +26,7 @@
 
 .Right_nav.dark {
 	width: 100%;
-	padding-top: 10px;
+	padding-top: 5px;
 
 	li {
 		width: 99%;
@@ -34,6 +34,12 @@
 		text-align: left;
 		font-size: 16px;
 		font-weight: 400;
+		padding-left: 5px;
+
+		.iconGrBlog {
+			margin-right: 4px;
+			margin-bottom: -4px;
+		}
 
 		.icon {
 			margin-right: 3px;

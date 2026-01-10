@@ -105,7 +105,7 @@ export class User {
             this.profileData.name = dto.name === undefined ? this.profileData.name : dto.name;
             this.profileData.surname = dto.surname === undefined ? this.profileData.surname : dto.surname;
             this.profileData.gender = dto.gender === undefined ? this.profileData.gender : dto.gender;
-            this.profileData.liveIn = dto.liveIn === undefined ? this.profileData.liveIn  : dto.liveIn;
+            this.profileData.liveIn = dto.liveIn === undefined ? this.profileData.liveIn : dto.liveIn;
             this.profileData.originallyFrom = dto.originallyFrom === undefined ? this.profileData.originallyFrom : dto.originallyFrom;
             this.profileData.status = dto.status === undefined ? this.profileData.status : dto.status;
             this.profileData.imWorkingIn = dto.imWorkingIn === undefined ? this.profileData.imWorkingIn : dto.imWorkingIn;
@@ -121,7 +121,7 @@ export class User {
             this.systemUserData.isBanned = dto.isBanned === undefined ? this.systemUserData.isBanned : dto.isBanned;
             this.systemUserData.bannReason = dto.bannReason === undefined ? this.systemUserData.bannReason : dto.bannReason;
             this.systemUserData.banneds = dto.banneds === undefined ? this.systemUserData.banneds : dto.banneds;
-            
+
             this.updatedAt = updatedAt;
             this.deletedAt = null;
         }
@@ -131,15 +131,24 @@ export class User {
             this.passwordHash = passwordHash;
         }
     }
-    static async makeUpdatedConfirmedAccount(userId: string) {
-        const user = new this();
-        if (userId === user.id) {
-            // console.log('UsersService: deleteUserService - this.deletedAt 😡 ', this.accountData.deletedAt)
-            if (user.systemUserData.isEmailConfirmed !== true) {
-                user.systemUserData.isEmailConfirmed = true;
-            } else {
-                throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
-            }
+    makeUpdatedConfirmedAccount(userId: string) {
+        if (this.id === userId && this.systemUserData.isEmailConfirmed === false) {
+            this.accountData.email = this.accountData.email;
+            this.accountData.login = this.accountData.login;
+
+            this.profileData = this.profileData;
+
+            this.systemUserData.isBot = this.systemUserData.isBot;
+            this.systemUserData.isEmailConfirmed = true;
+            this.systemUserData.roles = this.systemUserData.roles;
+            this.systemUserData.isBanned = this.systemUserData.isBanned;
+            this.systemUserData.bannReason = this.systemUserData.bannReason;
+            this.systemUserData.banneds = this.systemUserData.banneds;
+
+            this.updatedAt = this.updatedAt;
+            this.deletedAt = null;
+        } else {
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_THE_CONFIRMATION_CODE_IS_INCORRECT)
         }
     }
     static async addRole(role: Role) {

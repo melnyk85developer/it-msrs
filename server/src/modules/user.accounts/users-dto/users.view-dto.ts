@@ -3,7 +3,7 @@ import { UserDocument } from "../users-domain/user.entity";
 
 export class UserViewDto {
     id: string;
-    // avatar: string | null;
+    avatar: string | null;
     login: string;
     email: string;
     // name: string | null
@@ -14,7 +14,7 @@ export class UserViewDto {
         // console.log('UsersController: mapToView - user 😡 ', user)
         const dto = new UserViewDto();
         dto.id = user._id.toString();
-        // dto.avatar = user.profileData.avatar;
+        dto.avatar = user.profileData.avatar;
         dto.email = user.accountData.email;
         dto.login = user.accountData.login;
         // dto.name = user.profileData.name;
@@ -30,7 +30,7 @@ export class MeViewDto extends OmitType(UserViewDto, ['id'] as const) {
     static mapToView(user: UserDocument): MeViewDto {
         const dto = new MeViewDto();
         dto.id = user._id.toString();
-        // dto.avatar = user.profileData.avatar;
+        dto.avatar = user.profileData.avatar;
         dto.email = user.accountData.email;
         dto.login = user.accountData.login;
         dto.createdAt = user.createdAt;

@@ -1,0 +1,179 @@
+.wrapPostItemForBlog.light {
+    margin: 3px;
+    padding: 5px;
+    width: 99%;
+    border: 1px solid black;
+
+    .usersItem {
+        display: flex;
+        height: 80px;
+
+        .wrapUserBlock_1 {
+            width: 30%;
+            height: 100px;
+
+            .wrapUsersAvatar {
+                width: 60px;
+
+                .usersAvatar {
+                    margin-bottom: 5px;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 100%;
+                }
+            }
+        }
+
+        .userData {
+            text-align: left;
+
+            .wrapUserBlock_2 {
+                width: 160px;
+                margin-top: 10px;
+
+                p {
+                    text-align: left;
+                    font-size: 16px;
+                }
+
+                .userName {
+                    display: inline;
+                    width: 100%;
+                    margin-bottom: 5px;
+                }
+            }
+
+            .userFamilyStatus {
+                width: 380px;
+                margin-top: -15px;
+
+                p {
+                    font-size: 16px;
+                    margin: 20px 0 0 0px;
+                    color: #D55612;
+                }
+            }
+        }
+    }
+
+    .wrapAllButton {
+        display: flex;
+        justify-content: space-between;
+
+        .wrapButton {
+            margin-top: 5px;
+            width: 100%;
+
+            .btnFriendsTrue {
+                width: 100%;
+                padding: 5px;
+                border-radius: 8px;
+                background-color: #454545;
+                color: var(--main-text-color);
+            }
+        }
+
+        .wrapBtnMsg {
+            margin: 5px 0 0 15px;
+            width: 100%;
+
+            .btnFriendsMessage {
+                width: 100%;
+                padding: 5px;
+                border-radius: 8px;
+                background-color: #454545;
+                color: var(--main-text-color);
+            }
+        }
+    }
+}
+
+.wrapPostItemForBlog.dark {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid black;
+
+    .postItem {
+        display: flex;
+        width: 100%;
+        min-height: 10vh;
+        max-height: 30vh;
+
+        .postData {
+            .wrapImgBlock {
+                margin: 10px 10px 0 0;
+                min-height: 0px;
+                max-height: 100px;
+
+                .wrapImg {
+                    min-width: 0px;
+                    max-width: 60px;
+
+                    .usersAvatar {
+                        margin-bottom: 5px;
+                        min-width: 0px;
+                        max-width: 60px;
+                        min-height: 0px;
+                        max-height: 60px;
+                        border-radius: 100%;
+                    }
+                }
+            }
+
+            .wrapHeaderPost {
+                width: 100%;
+                // margin-top: 10px;
+                // outline: 1px solid rgb(146, 6, 6);
+
+                // padding-bottom: 1px;
+                // margin-bottom: 10px;
+                .h1 {
+                    width: 100%;
+                    // margin-bottom: 5px;
+                    text-align: center;
+                }
+            }
+
+            .shortDescription {
+                // outline: 1px solid rgb(29, 146, 6);
+
+                p {
+                    font-size: 16px;
+                    color: #D55612;
+                }
+            }
+
+            .postContent {
+                // outline: 1px solid rgb(219, 150, 0);
+                p {
+                    font-size: 16px;
+                    margin: 10px 0;
+                    color: wheat;
+                }
+            }
+
+            .wrapFooterPost {
+                width: 100%;
+                // margin-top: 10px;
+                // outline: 1px solid rgb(146, 6, 6);
+
+                // padding-bottom: 1px;
+                // margin-bottom: 10px;
+                .h1 {
+                    width: 100%;
+                    // margin-bottom: 5px;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+.wrapPostItemForBlog.light:hover {
+    background-color: #fff;
+}
+
+.wrapPostItemForBlog.dark:hover {
+    background-color: #353535;
+}

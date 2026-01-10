@@ -36,6 +36,7 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
     const { contentTopNav } = content;
 
     // console.log('Header: - authorizedUser', authorizedUser)
+    // console.log('Header: - `${API_URL}/` + authorizedUser.avatar', `${API_URL}/` + authorizedUser.avatar)
 
     const userId = authorizedUser?.id
 

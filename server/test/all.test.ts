@@ -11,7 +11,7 @@ import { authUnitTest } from "src/modules/auth/auth-testing/testing-Unit-Auth.ap
 import { userSessionE2eTest } from "src/modules/usersSessions/sessions-testing/testing-E2E-Sessions.api";
 import { usersE2eTest } from "src/modules/user.accounts/testing-users/testing-E2E-Users.api";
 import { resetPasswordInegrationTest } from "src/modules/user.accounts/testing-users/testing-RESET-PASSWORD-INTEGRATION";
-import { registrationEmailResendingInegrationTest } from "src/modules/user.accounts/testing-users/testing-REGISTRATION-EMAIL-RESSENDING-INTEGRATION";
+import { registrEmailResendingAndConfirmIntegrationTest } from "src/modules/user.accounts/testing-users/testing-REGISTRATION-EMAIL-RESSENDING-INTEGRATION";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     beforeAll(async () => {
@@ -59,7 +59,7 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         commentsE2eTest()
     })
     describe('CONFIRMATION-BLOCK-TESTS', () => {
-        registrationEmailResendingInegrationTest()
+        registrEmailResendingAndConfirmIntegrationTest()
         resetPasswordInegrationTest()
     })
     // describe('LIKES-BLOCK-TESTS', () => {

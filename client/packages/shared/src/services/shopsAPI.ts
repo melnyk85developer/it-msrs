@@ -14,7 +14,7 @@ export default class MyShopsAPI {
     static async getAllShopsAPI(click_shop_typeId: number, page: number, limit: number): Promise<AxiosResponse<any>> {
         return await $api.get<any>(`/shops`, {params: { click_shop_typeId, page, limit }})
     }
-    static async getMyShopsByIdAPI(userId: number): Promise<AxiosResponse<any>> {
+    static async getMyShopsByIdAPI(userId: string): Promise<AxiosResponse<any>> {
         const shops = await $api.get<any>(`/myshops/${userId}`)
         // console.log('getMyShopsAPI: - ', shops)
         return shops

@@ -5,6 +5,6 @@ export const BLOGS_INTERNAL_STATUS = {
 
     
 
-    BLOG_NOT_FOUND_BLOG_ID: 954, // Такого блога не обнаружено!
+    BLOG_NOT_FOUND_BLOG_ID: 1954, // Такого блога не обнаружено!
     BLOG_NOT_FOUND_ID: 955, // Такого блога не обнаружено!
 }

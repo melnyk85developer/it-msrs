@@ -33,15 +33,16 @@ export class BlogsTestManager {
     }
     async createBlogs(
         data: { name: string | null, description: string | null, websiteUrl: string | null },
+        accessToken: string,
         codedAuth: string | null,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('blogsTestManager: createBlogs data 😡', data)
         const response = await request(this.app.getHttpServer())
             .post(SETTINGS.RouterPath.blogs)
-            // .set('Authorization', `Bearer ${accessToken}`)
-            // .set('User-Agent', 'TestDevice/1.0')
-            .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
+            .set('User-Agent', 'TestDevice/1.0')
             .send(data)
             .expect(expectedStatusCode)
         // console.log('blogsTestManager: createBlogs response.body 😡', response.body)
@@ -67,31 +68,32 @@ export class BlogsTestManager {
     }
     async updateBlogs(
         data: any,
+        accessToken: string,
         codedAuth: string | undefined = undefined,
         blogId: string | null,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204
     ) {
-        // console.log('blogsTestManager: updateBlogs data 😡', data)
+        console.log('blogsTestManager: updateBlogs data 😡', data)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.blogs}/${blogId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .set('User-Agent', 'TestDevice/1.0')
-            // .set('Authorization', `Bearer ${accessToken}`)
-            .set('Authorization', `Basic ${codedAuth}`)
             .send(data)
             .expect(expectedStatusCode)
     }
     async deleteBlogs(
         id: string,
+        accessToken: string,
         codedAuth: string | undefined = undefined,
-        // accessToken: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('deleteBlogs: - accessToken', blogId, accessToken)
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.blogs}/${id}`)
             .set('User-Agent', 'TestDevice/1.0')
-            // .set('Authorization', `Bearer ${accessToken}`)
-            .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .expect(expectedStatusCode)
     }
 }

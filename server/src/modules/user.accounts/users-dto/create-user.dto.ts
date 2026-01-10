@@ -21,6 +21,10 @@ export class CreateUserDto {
     @Length(6, 20, { message: 'Пароль должен быть не меньше 6 и не больше 20 символов!' })
     readonly password: string;
 
+    @ApiProperty({ example: 'avatar', description: 'Имя файла в базе данных avatar пользователя!' })
+    @IsString({ message: 'avatar должен быть строкой!' })
+    @IsOptional()
+    avatar?: string;
     @ApiProperty({ example: 'name', description: 'Имя пользователя!' })
     @IsString({ message: 'name должен быть строкой!' })
     @Length(1, 16, { message: 'Пароль должен быть не меньше 6 и не больше 16 символов!' })

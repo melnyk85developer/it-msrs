@@ -29,7 +29,7 @@ const Dialog: React.FC = React.memo(() => {
     const recipient = interlocutors.find(i => i.chat.dialogId === Number(dialogId));
 
     useEffect(() => {
-        const isNewMsg = messages.find(m => m.read === false && m.senderId !== authorizedUser.userId);
+        const isNewMsg = messages.find(m => m.read === false && m.senderId !== authorizedUser.id);
 
         const timeoutId = setTimeout(() => {
             if (isNewMsg && newMessageAnchorRef.current) {
@@ -46,7 +46,7 @@ const Dialog: React.FC = React.memo(() => {
         if (dialogId && recipient) {
             dispatch(getDialogMessagesAC(
                 Number(dialogId),
-                Number(authorizedUser.userId),
+                Number(authorizedUser.id),
                 Number(recipient.userId)
             ))
         }
@@ -55,7 +55,7 @@ const Dialog: React.FC = React.memo(() => {
     const addNewMessage = (messageText: string) => {
         const message = {
             message: messageText,
-            senderId: Number(authorizedUser.userId),
+            senderId: Number(authorizedUser.id),
             receiverId: Number(recipient.userId),
             read: false,
             createdAt: new Date().toISOString(),
@@ -107,7 +107,7 @@ const Dialog: React.FC = React.memo(() => {
         }
 
         // Проверка на новые сообщения
-        if (!messages[i].read && authorizedUser.userId !== messages[i].senderId && isNewMessageInserted) {
+        if (!messages[i].read && authorizedUser.id !== messages[i].senderId && isNewMessageInserted) {
             renderItems.push(
                 <div key={`new-msg-${i}`} className={classes.dateLabel} ref={newMessageAnchorRef}>
                     <span className={classes.systemMsg}>
@@ -125,7 +125,7 @@ const Dialog: React.FC = React.memo(() => {
                 key={currentMessage.localId || currentMessage.smsId || i}
                 dispatch={dispatch}
                 msgId={currentMessage.msgId}
-                userId={authorizedUser.userId}
+                userId={Number(authorizedUser.id)}
                 interlocutorId={(recipient.userId)}
                 senderId={currentMessage.senderId}
                 message={currentMessage.message}

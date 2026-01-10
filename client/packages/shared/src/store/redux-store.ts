@@ -11,6 +11,7 @@ import trackSlice from "./MusicReducers/trackSlice";
 import myAdminSlice from "./MyAdminReducers/myAdminSlice";
 import messagesSlice from "./MessagesReducers/messagesSlice";
 import settingMyProfileSlice  from "./SettingsMyProfileReducers/settingsMyProfileSlice";
+import blogsSlice from "./BlogsReducers/blogsSlice";
 
 // Корневой редюсер
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     messagesPage: messagesSlice,
     settingMyProfilePage: settingMyProfileSlice,
     myShopsPage: myShopsSlice,
+    blogsPage: blogsSlice,
     userProfilePage: userProfileSlice,
     page_elements: pageElementsSlice,
     playlist: playlistSlice,

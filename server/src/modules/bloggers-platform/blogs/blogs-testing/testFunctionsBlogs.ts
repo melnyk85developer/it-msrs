@@ -1,7 +1,12 @@
 import { HTTP_STATUSES } from "src/core/utils/utils";
 import { contextTests } from "test/helpers/init-settings";
 
-export const isCreatedBlog = async (numBlog: number, name: string, description: string, websiteUrl: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
+export const isCreatedBlog = async (
+    numBlog: number, 
+    name: string, 
+    description: string, 
+    websiteUrl: string, 
+    statusCode: number = HTTP_STATUSES.CREATED_201) => {
     if (contextTests.blogs.createdBlogs[numBlog] === undefined || contextTests.blogs.createdBlogs[numBlog] === null) {
         // console.log('isCreatedBlog: - contextTests.createdBlogs[num]', contextTests.createdBlogs[num])
         const blogData = {
@@ -11,6 +16,7 @@ export const isCreatedBlog = async (numBlog: number, name: string, description: 
         };
         const { bodyBlog, response } = await contextTests.blogsTestManager.createBlogs(
             blogData,
+            contextTests.sessions.accessTokenUser1Devices[0],
             contextTests.constants.codedAuth,
             HTTP_STATUSES.CREATED_201
         );

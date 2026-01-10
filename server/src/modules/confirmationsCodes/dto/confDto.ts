@@ -4,7 +4,7 @@ import { IsBoolean, IsEmail, IsOptional, IsString, Length, } from "class-validat
 export class ConfDto {
     @ApiProperty({ example: 'confirmationCode', description: 'Код подтверждения!' })
     @IsString({ message: 'Код подтверждения!' })
-    readonly confirmationCode: string;
+    confirmationCode: string;
     
     @ApiProperty({ example: 'isBlocked', description: 'Включена ли блокировка.' })
     @IsBoolean({ message: 'Блокировка!' })
@@ -16,21 +16,21 @@ export class ConfDto {
 
     @ApiProperty({ example: 'add', description: 'Время отсчета до окончания блокировки!' })
     @IsString({ message: 'Блокировка!' })
-    readonly add: string;
+    add: string;
 
     @ApiProperty({ example: 'password-authorization-qwerty', description: 'Пароль' })
     @IsString({ message: 'Пароль должен быть строкой (авторизация)!' })
     @Length(3, 16, { message: 'Вообще-то при авторизации необходимо вводить пароль!' })
-    readonly minutes: number;
+    minutes: number;
 
     @ApiProperty({ example: 'password-authorization-qwerty', description: 'Пароль' })
     @IsString({ message: 'Пароль должен быть строкой (авторизация)!' })
     @Length(3, 16, { message: 'Вообще-то при авторизации необходимо вводить пароль!' })
-    readonly field: string;
+    field: string;
 
     @ApiProperty({ example: 'userId', description: 'Пароль' })
     @IsString()
-    readonly userId: string;
+    userId: string;
 }
 export class UodateConfDto {
     @ApiProperty({ example: 'id', description: 'Уникальный идентификатор подтверждения!' })

@@ -18,6 +18,7 @@ interface EnvVariables {
     MUSIC_REMOTE_URL?: string;
     AUTH_REMOTE_URL?: string;
     USERS_MESSAGES_REMOTE_URL?: string;
+    BLOGS_REMOTE_URL?: string
 }
 
 export default (env: EnvVariables) => {
@@ -46,6 +47,8 @@ export default (env: EnvVariables) => {
     const MUSIC_REMOTE_URL = env.MUSIC_REMOTE_URL ?? 'http://localhost:3008'
     const SETTINGS_MY_PROFILE_REMOTE_URL = env.SETTINGS_MY_PROFILE_REMOTE_URL ?? 'http://localhost:3009'
     const USERS_MESSAGES_REMOTE_URL = env.USERS_MESSAGES_REMOTE_URL ?? 'http://localhost:3010'
+    const BLOGS_REMOTE_URL = env.BLOGS_REMOTE_URL ?? 'http://localhost:3011'
+
 
 
     config.plugins.push(new webpack.container.ModuleFederationPlugin({
@@ -59,6 +62,7 @@ export default (env: EnvVariables) => {
             userprofile: `userprofile@${USER_PROFILE_REMOTE_URL}/remoteEntry.js`,
             shop: `shop@${SHOP_REMOTE_URL}/remoteEntry.js`,
             shops: `shops@${SHOPS_REMOTE_URL}/remoteEntry.js`,
+            blogs: `blogs@${BLOGS_REMOTE_URL}/remoteEntry.js`,
             auth: `auth@${AUTH_REMOTE_URL}/remoteEntry.js`,
             users: `users@${USERS_REMOTE_URL}/remoteEntry.js`,
             music: `music@${MUSIC_REMOTE_URL}/remoteEntry.js`,

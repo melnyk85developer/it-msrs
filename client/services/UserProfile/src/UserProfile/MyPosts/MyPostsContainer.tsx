@@ -2,10 +2,10 @@ import React from 'react';
 import MyPosts from './MyPosts';
 import { AppDispatch } from '@packages/shared/src/store/redux-store';
 import { PostsType } from '@packages/shared/src/types/types';
-import { IUser } from '@packages/shared/src/types/IUser';
+import { IProfile, IUser } from '@packages/shared/src/types/IUser';
 
 type PropsType = {
-    profile: IUser;
+    profile: IProfile;
     authorizedUser: IUser;
     dispatch: AppDispatch;
 }

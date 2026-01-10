@@ -55,7 +55,7 @@ const MyPosts: React.FC<PropsType> = React.memo(({dispatch, authorizedUser, prof
                                 createdAt={item.createdAt}
                                 updatedAt={item.updatedAt}
                                 profileId={profile.userId}
-                                authorizedUserId={authorizedUser.userId}              
+                                authorizedUserId={Number(authorizedUser.id)}              
                             />
                         ))}
                     </Col>
