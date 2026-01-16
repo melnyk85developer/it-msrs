@@ -11,6 +11,7 @@ type PropsType = {
     setTitle: any;
     content: any;
     setContent: any;
+    
     nameImg: any;
     setNameImg: any;
     imgFile: any;
@@ -21,7 +22,17 @@ type PropsType = {
 }
 
 const ModalAddPost: React.FC<PropsType> = React.memo(({
-    setModalActive, setPost, content, setContent, title, setTitle, nameImg, setImgFile, setNameImg, titleModal}) => {
+    setModalActive, 
+    setPost, 
+    content, 
+    setContent, 
+    title, 
+    setTitle, 
+    nameImg, 
+    setImgFile, 
+    setNameImg, 
+    titleModal
+}) => {
 
     const cleanUpThePhoto = () => {
         setImgFile(null)

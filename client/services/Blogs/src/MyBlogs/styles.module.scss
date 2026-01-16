@@ -7,6 +7,7 @@
     overflow-x: hidden;
     @include custom-scrollbar();
 }
+
 .wrapContentBlog.light {
     width: 100%;
     padding: 10px;
@@ -16,51 +17,62 @@
     border-left: 1px solid black;
 }
 
-.wrapContentBlog.dark {
-    width: 100%;
-    padding: 10px;
-    height: 85vh;
-    border-top: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+.wrapHeaderBlog {
+    margin-top: 6px;
+    padding: 10px 10px 0px;
+    // outline: 1px solid rgb(146, 6, 6);
+    // border-bottom: 1px solid black;
 
-    .sectionContentBlog {
-        .headerBlog {
-            h1 {
-                color: #FEA930;
-            }
+    .headerBlog {
+        h1 {
+            color: #FEA930;
+        }
 
-            h2 {
-                margin-top: 10px;
+        h2 {
+            margin-top: 10px;
+            color: wheat;
+        }
+
+        h4 {
+            margin-top: 10px;
+            text-align: right;
+            color: #D55612;
+        }
+    }
+
+    .wrapBlogTopNav {
+        margin-top: 10px;
+        // margin-bottom: 10px;
+        padding: 7px 1px;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+
+        .blogTopNav {
+            display: flex;
+            justify-content: space-between;
+
+            li a {
+                margin-right: 10px;
                 color: wheat;
             }
-
-            h4 {
-                margin-top: 10px;
-                text-align: right;
-                color: #D55612;
-            }
         }
+    }
+}
 
-        .wrapBlogTopNav {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding: 7px 1px;
-            border-top: 1px solid black;
-            border-bottom: 1px solid black;
+.wrapContentBlog.dark {
+    margin-top: 6px;
+    padding: 10px 10px 10px;
 
-            .blogTopNav {
-                display: flex;
-                justify-content: space-between;
+    // outline: 1px solid rgb(146, 6, 6);
 
-                li a {
-                    margin-right: 10px;
-                    color: wheat;
-                }
-            }
-        }
+    width: 100%;
+    height: 69.4vh;
+    // border: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    // border-bottom: 1px solid black;
 
+    .sectionContentBlog {
         .sectionBlogContent {
             min-height: 60vh;
             max-height: 100%;

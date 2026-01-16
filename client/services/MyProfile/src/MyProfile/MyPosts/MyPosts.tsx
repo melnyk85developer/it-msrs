@@ -1,76 +1,152 @@
 import React, { useEffect, useRef, useState } from "react";
-import AddPostForm from "./AddNewFormPost/AddNewPostForm";
 import { Col } from "antd";
-import PostItem from "./PostItem";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import classes from './styles.module.scss';
+import PostItemForBlog from "./PostItemForBlog/postItemForBlog";
+import PostForProfileItem from "./PostItemForProfile";
+import { PostBlogType } from "@packages/shared/src/types/blogTypes";
+import { PostsType } from "@packages/shared/src/types/types";
 
 type PropsType = {
     profile: IProfile;
     authorizedUser: IUser;
     dispatch: AppDispatch;
+    postsProfileLoaded: boolean;
+    postsBlogLoaded: boolean;
+    combinedPostsForProfile: any[]
+    combinedPostsForBlog: any[]
+    isDarkTheme: string;
     error: string
 }
+type FeedItem =
+    | {
+        type: 'blog';
+        createdAt: string;
+        data: PostBlogType;
+    }
+    | {
+        type: 'profile';
+        createdAt: string;
+        data: PostsType;
+    };
 
-const MyPosts: React.FC<PropsType> = React.memo(({dispatch, authorizedUser, profile, error}) => {
-    const [posts, setPosts] = useState([]);
+const MyPosts: React.FC<PropsType> = React.memo(({
+    dispatch,
+    authorizedUser,
+    profile,
+    postsProfileLoaded,
+    postsBlogLoaded,
+    combinedPostsForProfile,
+    combinedPostsForBlog,
+    isDarkTheme,
+    error
+}) => {
 
+    const feed: FeedItem[] = [
+        ...combinedPostsForBlog.map(post => ({
+            type: 'blog' as const,
+            createdAt: post.createdAt,
+            data: post,
+        })),
+        ...combinedPostsForProfile.map(post => ({
+            type: 'profile' as const,
+            createdAt: post.createdAt,
+            data: post,
+        })),
+    ];
 
-    useEffect(() => {
-        if (profile && profile.posts) {
-            setPosts(profile.posts);
-        }
-    }, [profile, profile.posts]);
+    feed.sort(
+        (a, b) =>
+            new Date(b.createdAt).getTime() -
+            new Date(a.createdAt).getTime()
+    );
+    {
+        feed.map(item => {
+            switch (item.type) {
+                case 'blog':
+                    return (
+                        <PostItemForBlog
+                            key={item.data.id}
+                            post={item.data}
+                            isDarkTheme={isDarkTheme}
+                        />
+                    );
 
-    const postsLoaded = posts && posts.length > 0;
-    // Фильтрация постов на закрепленные и обычные посты
-    const pinnedPosts = posts.filter(post => post.pin);
-    const regularPosts = posts.filter(post => !post.pin);
+                case 'profile':
+                    return (
+                        <PostForProfileItem
+                            key={item.data.postId}
+                            post={item.data}
+                            dispatch={dispatch}
+                            postId={item.data.postId}
+                            title={item.data.title}
+                            likes={item.data.likes}
+                            image={item.data.image}
+                            content={item.data.content}
+                            author={item.data.authorPost}
+                            createdAt={item.createdAt}
+                            updatedAt={item.data.updatedAt}
+                            profileId={profile.id}
+                            authorizedUserId={authorizedUser.id}
+                        />
+                    );
 
-    // Инверсия порядка закрепленных постов и обычных постов
-    const invertedPinnedPosts = pinnedPosts.slice().reverse();
-    const invertedRegularPosts = regularPosts.slice().reverse();
+                default:
+                    return null;
+            }
+        })
+    }
 
-    // Объединение закрепленных и обычных постов
-    const combinedPosts = [...invertedPinnedPosts, ...invertedRegularPosts];
+    // console.log('MyPosts: - profile 😡 ', profile)
+    console.log('MyPosts: - combinedPostsForProfile 😡 ', combinedPostsForProfile)
 
     return (
-        <>
-            <AddPostForm dispatch={dispatch} profileId={profile.userId} authorizedUser={authorizedUser} error={error}/>
-            <Col className={classes.borderPosts} style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
-                {postsLoaded && (
-                    <Col className={classes.posts} >
-                        {combinedPosts.map(item => (
-                            <PostItem 
-                                key={item.postId}
-                                post={item}
-                                dispatch={dispatch} 
-                                postId={item.postId} 
-                                title={item.title}
-                                likes={item.likes}
-                                image={item.image}
-                                content={item.content}
-                                author={item.authorPost}
-                                createdAt={item.createdAt}
-                                updatedAt={item.updatedAt}
-                                profileId={profile.userId}
-                                authorizedUserId={Number(authorizedUser.id)}              
+        <Col className={classes.borderPosts} style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
+            {postsProfileLoaded && (
+                <Col className={classes.posts}>
+                    {feed.map(item => {
+                        if (item.type === 'blog') {
+                            return (
+                                <PostItemForBlog
+                                    key={item.data.id}
+                                    post={item.data}
+                                    isDarkTheme={isDarkTheme}
+                                />
+                            );
+                        }
+
+                        return (
+                            <PostForProfileItem
+                                key={item.data.postId}
+                                post={item.data}
+                                dispatch={dispatch}
+                                postId={item.data.postId}
+                                title={item.data.title}
+                                likes={item.data.likes}
+                                image={item.data.image}
+                                content={item.data.content}
+                                author={item.data.authorPost}
+                                createdAt={item.data.createdAt}
+                                updatedAt={item.data.updatedAt}
+                                profileId={profile.id}
+                                authorizedUserId={authorizedUser.id}
                             />
-                        ))}
-                    </Col>
-                )}
-                {!postsLoaded && (
-                    <div className={classes.wrapBlockOfNoPosts}>
-                        <div className={classes.blockOfNoPosts}>
-                            <h1>В данный момент у Вас нет ни одного поста!</h1>
-                            <h2>Создайте какой-нибудь пост на стене профиля, чтобы ваши 
-                                друзья могли почитать ваши мысли или новости.</h2>
-                        </div>
+                        );
+                    })}
+
+                </Col>
+            )}
+            {!postsProfileLoaded && (
+                <div className={classes.wrapBlockOfNoPosts}>
+                    <div className={classes.blockOfNoPosts}>
+                        <h1>В данный момент у Вас нет ни одного поста!</h1>
+                        <h2>Создайте какой-нибудь пост на стене профиля, чтобы ваши
+                            друзья могли почитать ваши мысли или новости.</h2>
                     </div>
-                )}
-            </Col>
-        </>
+                </div>
+            )}
+        </Col>
     )
 })
 

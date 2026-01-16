@@ -1,0 +1,266 @@
+@import '../../../../../../host/src/mixins.scss';
+@import '../../../../../../host/src/variables.scss';
+
+.row {
+    display: flex;
+    flex-direction: column;
+    min-width: 72vh;
+    max-width: 80vh;
+    min-height: 50vh;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    color: wheat;
+    // outline: 1px solid red;
+
+    .headerBlockModal {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 30px;
+        border-radius: 8px;
+        text-align: center;
+
+        .title {
+            width: 100%;
+            margin: 0 10px;
+            color: #FEA930;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .topIconWrapper {
+            width: 10%;
+            display: block;
+            margin-left: auto;
+            width: 30px;
+            font-size: 22px;
+            cursor: pointer;
+
+            .topIcon {
+                margin: 0 3px;
+                transition: opacity 0.2s ease;
+            }
+
+            .topIconNormal {
+                display: inline-block;
+            }
+
+            .topIconHover {
+                display: none;
+            }
+
+            &:hover {
+                .topIconNormal {
+                    display: none;
+                }
+
+                .topIconHover {
+                    color: #FEA930;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .wrapFormTabBlock {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        border-radius: 8px;
+        // border: 1px solid rgb(68, 68, 68);
+
+        .title {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .tabsModalAddPages {
+            border-top: 1px solid rgb(68, 68, 68);
+            // border-bottom: 1px solid rgb(68, 68, 68);
+            height: auto;
+
+            .wrapButtonTab {
+                width: auto;
+                margin: 1px auto;
+
+                // outline: 1px solid red;
+                .buttonTabModal {
+                    display: inline-block;
+                    height: 30px;
+                    width: 50%;
+                    border-radius: 8px;
+                    padding-top: 7px;
+                    font-size: 16px;
+                    font-weight: 400;
+                    border: 1px solid rgb(68, 68, 68);
+                    background-color: #282828;
+                    cursor: pointer;
+
+                    p {
+                        // margin: 7px auto;
+                        text-align: center;
+                    }
+                }
+
+                .buttonTabModal:hover {
+                    background-color: #454545;
+                    border: 1px solid rgb(24, 24, 24);
+                    color: #FEA930;
+                }
+            }
+        }
+
+        .wrapFileblock {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            // outline: 1px solid rgb(55, 184, 4);
+
+            .leftFileblock {
+                margin-top: 10px;
+                // outline: 1px solid rgb(55, 184, 4);
+
+                .fileBlock {
+                    display: flex;
+                    max-width: 200px;
+                    margin: auto;
+
+                    img {
+                        margin: auto 0;
+                        width: 30px;
+                        height: auto;
+                        // outline: 1px solid red;
+                    }
+
+                    strong {
+                        margin: auto 0 auto 5px;
+                        text-align: center;
+                        // outline: 1px solid red;
+                    }
+                }
+
+                .fileNameImg {
+                    width: 50%;
+                    margin-top: 15px;
+                    margin-left: auto;
+                    // outline: 1px solid red;
+                }
+            }
+
+            .centerFileblock {
+                margin: auto;
+
+                // outline: 1px solid rgb(255, 174, 0);
+                .butonDraft {
+                    display: block;
+                    border-radius: 8px;
+                    // width: 100%;
+                    height: 30px;
+                    margin: 0 5px;
+                    text-align: center;
+                    padding-top: 7px;
+                    font-size: 16px;
+                    font-weight: 400;
+                    border: 1px solid rgb(68, 68, 68);
+                    background-color: #282828;
+                    cursor: pointer;
+                }
+            }
+
+            .rightFileblock {
+                margin: auto;
+
+                // outline: 1px solid rgb(204, 3, 3);
+                .cleanButton {
+                    width: 100%;
+                    // height: 40px;
+                    color: #e2e2e2;
+                    background-color: rgb(223, 9, 9);
+                }
+            }
+        }
+    }
+
+    .futerAddPostModal {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        width: 100%;
+        min-height: 30px;
+        border-radius: 8px;
+        text-align: center;
+
+        .leftBlock {
+            display: block;
+            border-radius: 8px;
+            width: 30%;
+            padding-top: 7px;
+            font-size: 16px;
+            font-weight: 400;
+            border: 1px solid rgb(68, 68, 68);
+            background-color: #282828;
+            cursor: pointer;
+        }
+
+        .centerBlock {
+            display: block;
+            border-radius: 8px;
+            width: 30%;
+            font-size: 28px;
+
+            .iconWrapper {
+                display: block;
+                margin: 0 auto;
+                width: 30px;
+                cursor: pointer;
+
+                .icon {
+                    margin: 0 3px;
+                    transition: opacity 0.2s ease;
+                }
+
+                .iconNormal {
+                    display: inline-block;
+                }
+
+                .iconHover {
+                    display: none;
+                }
+
+                &:hover {
+                    .iconNormal {
+                        display: none;
+                    }
+
+                    .iconHover {
+                        color: #FEA930;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .rightBlock {
+            display: block;
+            border-radius: 8px;
+            width: 30%;
+            padding-top: 7px;
+            font-size: 16px;
+            font-weight: 400;
+            border: 1px solid rgb(68, 68, 68);
+            background-color: #282828;
+            cursor: pointer;
+        }
+
+        .leftBlock:hover,
+        .rightBlock:hover {
+            background-color: #454545;
+            border: 1px solid rgb(24, 24, 24);
+            color: #FEA930;
+        }
+    }
+}

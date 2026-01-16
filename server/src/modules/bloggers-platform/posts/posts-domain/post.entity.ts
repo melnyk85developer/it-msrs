@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Model, Types } from 'mongoose';
 import { CreatePostDomainDto } from './post-dto/create-post.domain.dto';
-import { UpdatePostDto } from '../posts-dto/create-post.dto';
+import { UpdatePostDomainDto } from '../posts-api/posts-input-dto/posts-update.input-dto';
 
 @Schema({
     // timestamps: true,
@@ -50,14 +50,15 @@ export class Post {
 
         return post as PostDocument;
     }
-    update(dto: Omit<UpdatePostDto, 'createdAt' | 'updatedAt' | 'deletedAt'>) {
+    update(dto: Omit<UpdatePostDomainDto, 'blogName' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
         // console.log('PostsEntity: dto 😡 ', dto)
         if (dto.id === this.id) {
             this.title = dto.title;
             this.shortDescription = dto.shortDescription;
             this.content = dto.content;
             this.blogId = dto.blogId;
-            // this.createdAt = new Date().toISOString();
+            this.blogName = this.blogName;
+            this.createdAt = this.createdAt;
             this.updatedAt = new Date().toISOString();
             this.deletedAt = null
         }

@@ -188,7 +188,6 @@ export const postsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 400, - Обновление поста не валидными данными! Дополнительные запросы: -> GET`, async () => {
             const data: UpdatePostInputDto = {
-                id: '',
                 title: '',
                 shortDescription: '',
                 content: '',
@@ -217,7 +216,6 @@ export const postsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего поста!`, async () => {
             const data: UpdatePostInputDto = {
-                id: contextTests.posts.createdBlog1Posts[0]!.id,
                 title: contextTests.posts.correctTitleBlog1Posts[0],
                 shortDescription: contextTests.posts.shortDescriptionBlog1Posts[0],
                 content: contextTests.posts.contentBlog1Posts[0],
@@ -235,7 +233,6 @@ export const postsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 204, - Обновление поста с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const updatedPost: UpdatePostInputDto = {
-                id: contextTests.posts.createdBlog1Posts[0]!.id,
                 title: contextTests.posts.correctTitleBlog1Posts[2],
                 shortDescription: contextTests.posts.shortDescriptionBlog1Posts[2],
                 content: contextTests.posts.contentBlog1Posts[2],

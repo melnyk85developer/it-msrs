@@ -9,10 +9,7 @@ type PropsType = {
     setBlogName: React.Dispatch<React.SetStateAction<string>>;
 
     setPostBlogTitle: React.Dispatch<React.SetStateAction<string>>;
-    postBlogTitle: React.Dispatch<React.SetStateAction<string>>;
-    postBlogText: React.Dispatch<React.SetStateAction<string>>;
     setPostBlogText: React.Dispatch<React.SetStateAction<string>>;
-    postBlogShortDescription: React.Dispatch<React.SetStateAction<string>>;
     setPostBlogShortDescription: React.Dispatch<React.SetStateAction<string>>;
     createPostBlog: () => void;
     createPostSaveAsDraft: () => void;
@@ -21,11 +18,8 @@ type PropsType = {
 const AddPostBlogFormModal: React.FC<PropsType> = React.memo(({
     setModalAddPostBlog,
     setBlogName,
-    postBlogTitle,
     setPostBlogTitle,
-    postBlogText,
     setPostBlogText,
-    postBlogShortDescription,
     setPostBlogShortDescription,
     createPostBlog,
     createPostSaveAsDraft

@@ -18,7 +18,7 @@ export class AboutPageBlogViewDto {
         dto.contentAbout = blog.aboutDataPageBlog.contentAbout;
         dto.missionAbout = blog.aboutDataPageBlog.missionAbout;
         dto.seoDescriptionAbout = blog.aboutDataPageBlog.seoDescriptionAbout;
-        console.log('AboutPageBlogViewDto 😡 ', dto, dto)
+        // console.log('AboutPageBlogViewDto 😡 ', dto, dto)
 
         return dto;
     }

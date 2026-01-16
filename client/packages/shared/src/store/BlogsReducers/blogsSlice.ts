@@ -2,7 +2,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../types/IUser"
 import { AppDispatch } from "../redux-store";
 import BlogsAPI from "../../services/blogsAPI";
-import { AboutPageBlogType, BlogType, CreateBlogType, CreatePostBlogType, HomePageBlogType, PostBlogType } from "../../types/blogTypes";
+import { AboutPageBlogType, BlogType, CreateBlogType, CreatePostBlogType, HomePageBlogType, PostBlogType, UpdatePostBlogType } from "../../types/blogTypes";
+import authSlice from "../AuthReducers/authSlice";
 
 interface BlogState {
     blogs: BlogType[];
@@ -41,15 +42,33 @@ export const blogsSlice = createSlice({
             state.error = ''
             state.blogs = action.payload
         },
+        setMyblogById(state, action: PayloadAction<BlogType>) {
+            state.isBlogsLoading = false
+            state.error = ''
+            state.currentBlog = action.payload
+        },
+        addPostForBlog(state, action: PayloadAction<PostBlogType>) {
+            state.error = '';
+            // Добавление нового поста в массив существующих постов профиля
+            state.posts.push(action.payload);
+        },
         setMyblogAllPosts(state, action: PayloadAction<PostBlogType[]>) {
             state.isBlogsLoading = false
             state.error = ''
             state.posts = action.payload
         },
-        setMyblogById(state, action: PayloadAction<BlogType>) {
-            state.isBlogsLoading = false
-            state.error = ''
-            state.currentBlog = action.payload
+        updatePost(state, action: PayloadAction<PostBlogType>) {
+            state.error = '';
+            state.posts = state.posts.map(post => post.id === action.payload.id
+                ? action.payload
+                : post
+            );
+        },
+        deletePost(state, action: PayloadAction<string>) {
+            state.error = '';
+            const postIdToDelete = action.payload;
+            console.log('myProfileSlice: deletePost - postIdToDelete 😡 ', postIdToDelete)
+            state.posts = state.posts.filter(post => post.id !== postIdToDelete);
         },
         setHomePageById(state, action: PayloadAction<HomePageBlogType>) {
             state.isBlogsLoading = false
@@ -105,7 +124,7 @@ export const getAboutPageBlogByIdAC = (id: string) => async (dispatch: AppDispat
     try {
         dispatch(blogsSlice.actions.blogFetching())
         const data = await BlogsAPI.getAboutPageBlogByIdAPI(id)
-        console.log('getAboutPageBlogByIdAC: - data', data.data)
+        // console.log('getAboutPageBlogByIdAC: - data', data.data)
         dispatch(blogsSlice.actions.setAboutPageById(data.data))
         // return data.data
     } catch (error: any) {
@@ -155,15 +174,48 @@ export const createPageForBlogAC = (id: string, page: HomePageBlogType & AboutPa
         dispatch(blogsSlice.actions.fetchingError(error.message))
     }
 }
+
 export const createPostAsBlogAC = (newPostBlog: CreatePostBlogType) => async (dispatch: AppDispatch) => {
     // console.log('blogsSlice: createBlogAC - ', newBlog)
     try {
         dispatch(blogsSlice.actions.postFetching())
         const data = await BlogsAPI.createPostAsBlogAPI(newPostBlog)
-        console.log('createBlogAC: - RES data', data.data)
+        // console.log('createBlogAC: - RES data', data.data)
+        dispatch(blogsSlice.actions.addPostForBlog(data.data))
         const blogs = data.data.items
         // dispatch(blogsSlice.actions.blogFetchingSuccess(blogs))
         return blogs
+    } catch (error: any) {
+        dispatch(blogsSlice.actions.fetchingError(error.message))
+    }
+}
+export const updatePostAsBlogAC = (newPostBlog: UpdatePostBlogType) => async (dispatch: AppDispatch) => {
+    // console.log('blogsSlice: createBlogAC - ', newBlog)
+    try {
+        dispatch(blogsSlice.actions.postFetching())
+        const data = await BlogsAPI.updatePostAsBlogAPI(newPostBlog)
+        console.log('updatePostAsBlogAC: - RES data', data.status)
+        if (data.status === 204) {
+            const data = await BlogsAPI.getPostByIdForBlogAPI(newPostBlog.id)
+            dispatch(blogsSlice.actions.updatePost(data.data))
+        }
+        return true
+    } catch (error: any) {
+        dispatch(blogsSlice.actions.fetchingError(error.message))
+    }
+}
+export const deletePostAsBlogAC = (postId: string) => async (dispatch: AppDispatch) => {
+    try {
+        const data = await BlogsAPI.deletePostAPI(postId)
+        console.log('deletePostAsBlogAC - status', data.status)
+        // Добавляем задержку в 1 секунду перед вызовом dispatch
+        if (data.status !== 204) return
+
+        setTimeout(() => {
+            // Если удаление прошло успешно, вызываем диспетчер для удаления поста
+            dispatch(blogsSlice.actions.deletePost(postId));
+        }, 2000);
+
     } catch (error: any) {
         dispatch(blogsSlice.actions.fetchingError(error.message))
     }

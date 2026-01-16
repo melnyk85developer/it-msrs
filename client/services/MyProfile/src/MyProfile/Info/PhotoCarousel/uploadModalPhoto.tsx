@@ -15,7 +15,7 @@ type PropsType = {
     setModalUploadPhoto: any
 }
 
-const UploadModalPhoto: React.FC<PropsType> = React.memo(({ 
+const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     dispatch, profile, authorizedUser, isDarkTheme, setModalUploadPhoto }) => {
     const [imgFile, setImgFile] = useState<File | null>(null)
     const [imgName, setImgName] = useState<string | null>(null)
@@ -27,7 +27,7 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
     const image = imgFile
-    const userId = profile ? profile.userId : undefined
+    const userId = profile ? profile.id : undefined
     const authorizedUserId = authorizedUser ? authorizedUser.id : undefined
 
     const handleClean = () => {
@@ -51,13 +51,15 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     const handleSend = async () => {
         if (imgFile) {
             await handleCrop();
-            dispatch(addPhotoMyProfileAC(                
-                userId, 
-                Number(authorizedUserId),
-                image, 
-                miniature,
-                albumName
-            )).then(() => handleClean())
+            dispatch(
+                addPhotoMyProfileAC(
+                    userId,
+                    authorizedUserId,
+                    image,
+                    miniature,
+                    albumName
+                )
+            ).then(() => handleClean())
         }
     }
     const handleCrop = async () => {
@@ -76,8 +78,8 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     }
 
     const handleAddAlbum = () => {
-        dispatch(addPhotoAlbumMyProfileAC(userId, Number(authorizedUserId), newAlbumName))
-        .then(() => setNewAlbumName(''))
+        dispatch(addPhotoAlbumMyProfileAC(userId, authorizedUserId, newAlbumName))
+            .then(() => setNewAlbumName(''))
     }
 
     return (
@@ -98,20 +100,20 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
                 </div>
                 <div className={classes.addAlbums}>
                     <h3>Coздать новый альбом</h3>
-                    <input 
+                    <input
                         value={newAlbumName}
                         onChange={(e) => setNewAlbumName(e.target.value)}
                         className={classes.input
-                    }/>
+                        } />
                     <Button onClick={() => handleAddAlbum()} type="primary">Добавить</Button>
                 </div>
             </div>
             <div className={classes.maketCarusel}>
-                {imgName && <img src={croppedImage} alt={croppedImage}/>}
+                {imgName && <img src={croppedImage} alt={croppedImage} />}
             </div>
             <div className={classes.wrapMiniatureBlock}>
-                { nameImg &&
-                    <MyCropperUploadMiniature 
+                {nameImg &&
+                    <MyCropperUploadMiniature
                         nameImg={nameImg}
                         setCropper={setCropper}
                     />

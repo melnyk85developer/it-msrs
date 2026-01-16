@@ -14,6 +14,7 @@ import { FilesModule } from './modules/files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import path from 'path';
 import * as dotenv from 'dotenv'
+import { PostForProfileModule } from './modules/posts-for-profile/posts-for-profile.module';
 
 dotenv.config({ quiet: true });
 
@@ -43,6 +44,7 @@ dotenv.config({ quiet: true });
         NotificationsModule,
         UserAccountsModule,
         BloggersPlatformModule,
+        PostForProfileModule,
         TestingModule,
         CoreModule,
         TokenModule,

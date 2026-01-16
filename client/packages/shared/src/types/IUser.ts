@@ -25,7 +25,7 @@ export interface IUser {
     // isConfirmed: boolean;
 }
 export interface IProfile {
-    userId: number;
+    id: string;
     avatar: string | null;
     name: string;
     surname: string;
@@ -43,13 +43,13 @@ export interface IProfile {
     photoAlbums?: IPhotoAlbum[];
     email: string;
     friends: Array<number>;
-    posts: Array<PostsType>
+    // posts: Array<PostsType>
     isConfirmed: boolean;
     isActivated: boolean;
 }
 export interface IAnketaProfile {
-    userId: number;
-    authorizedUserId: number;
+    userId: string;
+    authorizedUserId: string;
     name: string;
     surname: string;
     gender: string;
@@ -65,7 +65,7 @@ export interface IAnketaProfile {
 }
 export interface IUpdateStatus {
     userId: number;
-    authorizedUserId: number;
+    authorizedUserId: string;
     status: string;
 }
 export interface IPhotoAlbum {

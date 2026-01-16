@@ -284,128 +284,128 @@ const BlogsContainer = () => {
 
     return (
         isAuth ?
-            <div className={`${classes.wrapContentBlog} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
-                {!myCurrentBlog && !blogs.length
-                    ?
-                    <section className={classes.wrapBlockOfNoBlogs}>
-                        <div className={classes.blockOfNoBlogs}>
-                            <h1>В данный момент у Вас нет ни одного блога в нашем проекте!</h1>
-                            <h2>Вы можете создать собственный блог в несколько кликов, совершенно бесплатно и занять свою нишу подписчиков нашего проекта.</h2>
-                        </div>
-                    </section>
-                    :
-                    <section className={classes.sectionContentBlog}>
-                        <div className={classes.headerBlog}>
-                            <h1>{myCurrentBlog && myCurrentBlog.name}</h1>
-                            <h2>{myCurrentBlog && myCurrentBlog.description}</h2>
-                            <h4>Наш сайт: {myCurrentBlog && myCurrentBlog.websiteUrl}</h4>
-                        </div>
-                        <div className={classes.wrapBlogTopNav}>
-                            <ul className={classes.blogTopNav}>
-                                {items.map(item => (
-                                    <li key={item.label} >
-                                        <NavLink
-                                            to={item.to}
-                                            className={({ isActive }) => (isActive ? classes.active : '')}
-                                            end={false}
-                                        >
-                                            {item.icon}
-                                            <span className={classes.label}>{item.label}</span>
-                                        </NavLink>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <Outlet
-                            context={{
-                                blogId,
-                                blogs,
-                                posts,
-                                myCurrentBlog,
-                                setMyCurrentBlog,
-                                addBlog,
-                                setModalAddBlog,
-                                isUpdateBlog,
-                                setModalIsUpdateBlog,
-                                blogName,
-                                setBlogName,
-                                blogDescription,
-                                setBlogDescription,
-                                websiteUrl,
-                                setWebsiteUrl,
-                                homePage,
-                                createPageForBlog,
-                                setContentHome,
-                                setCtaLinkHome,
-                                setCtaTextHome,
-                                setSeoDescriptionHome,
-                                setSubtitleHome,
-                                setTitleHome,
-
-                                about,
-                                createBlog,
-                                updateBlog,
-                                error
-                            }}
+            <div className={classes.wrapBlog}>
+                <div className={classes.wrapHeaderBlog}>
+                    <div className={classes.headerBlog}>
+                        <h1>{myCurrentBlog && myCurrentBlog.name}</h1>
+                        <h2>{myCurrentBlog && myCurrentBlog.description}</h2>
+                        <h4>Наш сайт: {myCurrentBlog && myCurrentBlog.websiteUrl}</h4>
+                    </div>
+                    <div className={classes.wrapBlogTopNav}>
+                        <ul className={classes.blogTopNav}>
+                            {items.map(item => (
+                                <li key={item.label} >
+                                    <NavLink
+                                        to={item.to}
+                                        className={({ isActive }) => (isActive ? classes.active : '')}
+                                        end={false}
+                                    >
+                                        {item.icon}
+                                        <span className={classes.label}>{item.label}</span>
+                                    </NavLink>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+                <div className={`${classes.wrapContentBlog} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
+                    {!myCurrentBlog && !blogs.length
+                        ?
+                        <section className={classes.wrapBlockOfNoBlogs}>
+                            <div className={classes.blockOfNoBlogs}>
+                                <h1>В данный момент у Вас нет ни одного блога в нашем проекте!</h1>
+                                <h2>Вы можете создать собственный блог в несколько кликов, совершенно бесплатно и занять свою нишу подписчиков нашего проекта.</h2>
+                            </div>
+                        </section>
+                        :
+                        <section className={classes.sectionContentBlog}>
+                            <Outlet
+                                context={{
+                                    blogId,
+                                    blogs,
+                                    posts,
+                                    myCurrentBlog,
+                                    setMyCurrentBlog,
+                                    addBlog,
+                                    setModalAddBlog,
+                                    isUpdateBlog,
+                                    setModalIsUpdateBlog,
+                                    blogName,
+                                    setBlogName,
+                                    blogDescription,
+                                    setBlogDescription,
+                                    websiteUrl,
+                                    setWebsiteUrl,
+                                    homePage,
+                                    createPageForBlog,
+                                    setContentHome,
+                                    setCtaLinkHome,
+                                    setCtaTextHome,
+                                    setSeoDescriptionHome,
+                                    setSubtitleHome,
+                                    setTitleHome,
+                                    addPostBlog,
+                                    about,
+                                    createBlog,
+                                    updateBlog,
+                                    error
+                                }}
+                            />
+                        </section>
+                    }
+                    <ModalWindow modalActive={addBlog} setModalActive={setModalAddBlog} isSetModal={0}>
+                        <AddBlogFormModal
+                            setModalAddBlog={setModalAddBlog}
+                            setBlogName={setBlogName}
+                            setBlogDescription={setBlogDescription}
+                            setWebsiteUrl={setWebsiteUrl}
+                            createBlog={createBlog}
                         />
+                    </ModalWindow>
+                    <ModalWindow modalActive={isUpdateBlog} setModalActive={setModalIsUpdateBlog} isSetModal={0}>
+                        <UpdateBlogFormModal
+                            myCurrentBlog={myCurrentBlog}
+                            setMyCurrentBlog={setMyCurrentBlog}
+                            setModalIsUpdateBlog={setModalIsUpdateBlog}
+                            blogName={blogName}
+                            setBlogName={setBlogName}
+                            blogDescription={blogDescription}
+                            setBlogDescription={setBlogDescription}
+                            websiteUrl={websiteUrl}
+                            setWebsiteUrl={setWebsiteUrl}
+                            updateBlog={updateBlog}
+                        />
+                    </ModalWindow>
+                    <ModalWindow modalActive={createPages} setModalActive={setCreatePages} isSetModal={0}>
+                        <AddPagesForBlogFormModal
+                            setCreatePages={setCreatePages}
+                            createPageForBlog={createPageForBlog}
+                            setContentHome={setContentHome}
+                            setCtaLinkHome={setCtaLinkHome}
+                            setCtaTextHome={setCtaTextHome}
+                            setSeoDescriptionHome={setSeoDescriptionHome}
+                            setSubtitleHome={setSubtitleHome}
+                            setTitleHome={setTitleHome}
 
-                    </section>
-                }
-                <ModalWindow modalActive={addBlog} setModalActive={setModalAddBlog} isSetModal={0}>
-                    <AddBlogFormModal
-                        setModalAddBlog={setModalAddBlog}
-                        setBlogName={setBlogName}
-                        setBlogDescription={setBlogDescription}
-                        setWebsiteUrl={setWebsiteUrl}
-                        createBlog={createBlog}
-                    />
-                </ModalWindow>
-                <ModalWindow modalActive={isUpdateBlog} setModalActive={setModalIsUpdateBlog} isSetModal={0}>
-                    <UpdateBlogFormModal
-                        myCurrentBlog={myCurrentBlog}
-                        setMyCurrentBlog={setMyCurrentBlog}
-                        setModalIsUpdateBlog={setModalIsUpdateBlog}
-                        blogName={blogName}
-                        setBlogName={setBlogName}
-                        blogDescription={blogDescription}
-                        setBlogDescription={setBlogDescription}
-                        websiteUrl={websiteUrl}
-                        setWebsiteUrl={setWebsiteUrl}
-                        updateBlog={updateBlog}
-                    />
-                </ModalWindow>
-                <ModalWindow modalActive={createPages} setModalActive={setCreatePages} isSetModal={0}>
-                    <AddPagesForBlogFormModal
-                        setCreatePages={setCreatePages}
-                        createPageForBlog={createPageForBlog}
-                        setContentHome={setContentHome}
-                        setCtaLinkHome={setCtaLinkHome}
-                        setCtaTextHome={setCtaTextHome}
-                        setSeoDescriptionHome={setSeoDescriptionHome}
-                        setSubtitleHome={setSubtitleHome}
-                        setTitleHome={setTitleHome}
-
-                        setTitleAbout={setTitleAbout}
-                        setSubtitleAbout={setSubtitleAbout}
-                        setContentAbout={setContentAbout}
-                        setMissionAbout={setMissionAbout}
-                        setSeoDescriptionAbout={setSeoDescriptionAbout}
-                    />
-                </ModalWindow>
-                <ModalWindow modalActive={addPostBlog} setModalActive={setModalAddPostBlog} isSetModal={0}>
-                    <AddPostBlogFormModal
-                        setModalAddPostBlog={setModalAddPostBlog}
-                        setBlogName={setBlogName}
-                        postBlogTitle={postBlogTitle}
-                        setPostBlogTitle={setPostBlogTitle}
-                        postBlogText={postBlogText}
-                        setPostBlogText={setPostBlogText}
-                        postBlogShortDescription={postBlogShortDescription}
-                        setPostBlogShortDescription={setPostBlogShortDescription}
-                        createPostBlog={createPostBlog}
-                        createPostSaveAsDraft={createPostSaveAsDraft}
-                    />
-                </ModalWindow>
+                            setTitleAbout={setTitleAbout}
+                            setSubtitleAbout={setSubtitleAbout}
+                            setContentAbout={setContentAbout}
+                            setMissionAbout={setMissionAbout}
+                            setSeoDescriptionAbout={setSeoDescriptionAbout}
+                        />
+                    </ModalWindow>
+                    <ModalWindow modalActive={addPostBlog} setModalActive={setModalAddPostBlog} isSetModal={0}>
+                        <AddPostBlogFormModal
+                            createPostBlog={createPostBlog}
+                            setModalAddPostBlog={setModalAddPostBlog}
+                            setBlogName={setBlogName}
+                            setPostBlogTitle={setPostBlogTitle}
+                            setPostBlogText={setPostBlogText}
+                            setPostBlogShortDescription={setPostBlogShortDescription}
+                            createPostSaveAsDraft={createPostSaveAsDraft}
+                        />
+                    </ModalWindow>
+                </div>
             </div>
             :
             <Navigate to={routeAuth()} />

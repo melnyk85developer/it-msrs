@@ -32,7 +32,10 @@ export class AuthController {
     @Post('/registration')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     @UseInterceptors(FileInterceptor('image'))
-    async registrationController(@Body() body: CreateUserInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<{ done: boolean; data: {id: string, code: string}; code: number; serviceMessage: string; }> {
+    async registrationController(
+        @Body() body: CreateUserInputDto, 
+        @UploadedFile() image?: Multer.File | undefined
+    ): Promise<{ done: boolean; data: {id: string, code: string}; code: number; serviceMessage: string; }> {
         // console.log('registrationController: registrationController - body 👽 😡 👽', body)
         const avatar = image ? image : null
         return this.authService.registrationService(

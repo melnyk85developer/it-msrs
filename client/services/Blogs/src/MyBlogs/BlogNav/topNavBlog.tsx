@@ -17,8 +17,7 @@ export const BlogTopNav: React.FC<PropsTypeBlogTopNav> = ({
     openModalCreatePagesForBlog,
     openModalCreatePostForBlog
 }) => {
-    const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage)
-    const { blogs, error } = useAppSelector(state => state.blogsPage);
+    const { isDarkTheme } = useAppSelector(state => state.authPage)
 
     return (
         <Col className={`${classes.wrapTopNavBlog} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>

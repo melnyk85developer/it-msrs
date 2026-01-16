@@ -49,7 +49,7 @@ import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
     controllers: [
         AuthController,
         AdminController,
-        UsersController,
+        UsersController
     ],
     providers: [
         UsersService,

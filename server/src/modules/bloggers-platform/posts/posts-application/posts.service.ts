@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post } from '../posts-domain/post.schema';
-import { CreatePostDto, CreatePostForBlogDto, UpdatePostDto } from '../posts-dto/create-post.dto';
+import { CreatePostDto } from '../posts-dto/create-post.dto';
 import { type PostModelType } from '../posts-domain/post.entity';
 import { PostsRepository } from '../posts-infrastructure/posts.repository';
 import { BlogsRepository } from '../../blogs/blogs-infrastructure/blogs.repository';
+import { UpdatePostDto } from '../posts-api/posts-input-dto/posts-update.input-dto';
 
 @Injectable()
 export class PostsService {
@@ -28,10 +29,10 @@ export class PostsService {
         // console.log('PostsService: createPostService: post RES 😡 ', post)
         return post._id.toString();
     }
-    async createPostOneBlogService(dto: Omit<CreatePostForBlogDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, blogId: string): Promise<string> {
-        console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
+    async createPostOneBlogService(dto: Omit<CreatePostDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, blogId: string): Promise<string> {
+        // console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
         const isBlog = await this.blogsRepository.findBlogOrNotFoundFailRepository(blogId);
-        console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
+        // console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
         const post = this.PostModel.createPostInstance({
             ...dto,
             blogId: blogId,
@@ -40,11 +41,15 @@ export class PostsService {
         await this.postsRepository.save(post);
         return post._id.toString();
     }
-    async updatePostService(id: string, dto: Omit<UpdatePostDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<string> {
-        // console.log('PostsService: updatePostService: id REQ dto 😡 ', id, dto)
+    async updatePostService(id: string, dto: Omit<UpdatePostDto, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<string> {
+        console.log('PostsService: updatePostService: id REQ dto 😡 ', id, dto)
         const post = await this.postsRepository.findPostOrNotFoundFail(id);
-        // console.log('PostsService: updatePostService: IsPost 😡 ', post)
-        post.update({ ...dto, id });
+        console.log('PostsService: updatePostService: IsPost 😡 ', post)
+        post.update({
+            ...dto,
+            id
+        });
+        console.log('PostsService: updatePostService: post 😡 ', post)
         await this.postsRepository.save(post);
         return post._id.toString();
     }

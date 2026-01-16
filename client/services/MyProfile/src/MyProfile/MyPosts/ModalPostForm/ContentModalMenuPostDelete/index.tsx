@@ -5,15 +5,22 @@ import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { deletePostMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 
 type PropsType = {
-    postId: number
+    postId: string
     setModalActive: any
-    authorizedUserId: number
+    authorizedUserId: string
     dispatch: AppDispatch
-    setHandleDeletePostId: Dispatch<number>
+    setHandleDeletePostId: Dispatch<string>
     setShowDeletedMessage: Dispatch<boolean>
 }
 
-const ContentModalMenuPostDelete: React.FC<PropsType> = React.memo(({ dispatch, postId, authorizedUserId, setModalActive, setHandleDeletePostId, setShowDeletedMessage }) => {
+const ContentModalMenuPostDelete: React.FC<PropsType> = React.memo(({ 
+    dispatch, 
+    postId, 
+    authorizedUserId, 
+    setModalActive, 
+    setHandleDeletePostId, 
+    setShowDeletedMessage 
+}) => {
 
     const happyEndDeletePost = () => {
         console.log('HAPPY END')

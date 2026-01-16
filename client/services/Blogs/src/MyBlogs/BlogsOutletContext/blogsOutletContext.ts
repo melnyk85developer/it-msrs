@@ -2,6 +2,9 @@ import { AboutPageBlogType, BlogType, HomePageBlogType, PostBlogType } from "@pa
 import { Dispatch, SetStateAction } from "react"
 
 export type BlogsOutletContext = {
+    createBlog: () => void;
+    updateBlog: () => void;
+    
     blogId: string;
     blogs: BlogType[];
     posts: PostBlogType[];
@@ -19,8 +22,8 @@ export type BlogsOutletContext = {
     setWebsiteUrl: Dispatch<SetStateAction<string | null>>;
     homePage: HomePageBlogType,
     about: AboutPageBlogType,
-    createBlog: () => void;
-    updateBlog: () => void;
+
+    addPostBlog: boolean;
     error: string;
     isDarkTheme: string;
 }

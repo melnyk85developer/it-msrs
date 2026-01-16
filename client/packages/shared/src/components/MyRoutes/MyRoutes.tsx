@@ -6,11 +6,11 @@ import { useAppContext } from "../contexts/AppContext";
 import { useAppSelector } from "../hooks/redux";
 import AppMyAdminRout from '../../../../../services/Admin/src/router/Router'
 import { routeMain as routeAdmin } from '../../../../../services/Admin/src/AdminPanel'
-import MyProfileContainer, { routeMain as routeMyProfile } from '../../../../../services/MyProfile/src/MyProfile/MyProfileContainer';
+import AppProfile from '../../../../../services/MyProfile/src/router/Router';
 import AppMessages from '../../../../../services/Message/src/router/Router';
+import { routeMain as routeMyProfile } from '../../../../../services/MyProfile/src/MyProfile/MyProfileContainer';
 import { routeMain as routeMessage } from '../../../../../services/Message/src/StartMessage/startMessage';
 import AppBlogs from '../../../../../services/Blogs/src/router/Router';
-// import { routeMain as routeMyBlog } from '../../../../../services/Blogs/src/MyBlogs/HomePage/homePage';
 import { routeMain as routeMyBlog } from '../../../../../services/Blogs/src/MyBlogs/BlogsContainer';
 import AppSettings from '../../../../../services/SettingsMyProfile/src/router/Router';
 import { routeMain as routeSettingsMyProfile } from '../../../../../services/SettingsMyProfile/src/SettingsMyProfile/SettingsProfile';
@@ -163,8 +163,7 @@ const MyRoutes: React.FC = () => {
                 <section className={classes.section}>
                     <React.Suspense fallback="Loading">
                         <Routes>
-                            <Route index element={<Navigate to={routeMyProfile()} />} />
-                            <Route path={`${routeMyProfile()}/*`} element={<MyProfileContainer />} />
+                            <Route path={`${routeMyProfile()}/*`} element={<AppProfile />} />
                             <Route path={`${routeMessage()}/*`} element={<AppMessages />} />
                             <Route path={`${routeMyBlog()}/*`} element={<AppBlogs />} />
 
@@ -181,6 +180,7 @@ const MyRoutes: React.FC = () => {
                             <Route path={`${routeRessetPassword()}/*`} element={<RessetPassword />} />
                             <Route path={`${routeNewPassword()}/*`} element={<NewPssword />} />
                             <Route path={`${routeAdmin()}/*`} element={<AppMyAdminRout />} />
+                            <Route index element={<Navigate to={routeMyProfile()} />} />
                         </Routes>
                     </React.Suspense>
                 </section>

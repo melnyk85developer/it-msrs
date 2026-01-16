@@ -73,7 +73,7 @@ export class BlogsTestManager {
         blogId: string | null,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204
     ) {
-        console.log('blogsTestManager: updateBlogs data 😡', data)
+        // console.log('blogsTestManager: updateBlogs data 😡', data)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.blogs}/${blogId}`)
             .set('Authorization', `Bearer ${accessToken}`)

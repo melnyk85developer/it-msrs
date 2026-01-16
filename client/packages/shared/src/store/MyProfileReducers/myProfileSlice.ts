@@ -2,18 +2,18 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IAnketaProfile, IPhoto, IPhotoAlbum, IProfile, IUpdateStatus, IUser } from "../../types/IUser"
 import { AppDispatch, RootState } from "../redux-store";
 import MyProfileAPI from "../../services/myProfileAPI";
-import { IsLikesType, PinPostType, PostsType } from "@/types/types";
+import { CreatePostsType, IsLikesType, PinPostType, PostsType } from "@/types/types";
 import { authSlice, systemSuccessMsgServerAC } from "../AuthReducers/authSlice";
 
 interface ProfileState {
     profile: IProfile;
+    posts: PostsType[],
     openPhoto: string;
     error: string;
 }
 const initialState: ProfileState = {
-    profile: {
-        posts: [] as PostsType[],
-    } as IProfile,
+    profile: null as IProfile,
+    posts: [] as PostsType[],
     openPhoto: '',
     error: '',
 }
@@ -37,10 +37,14 @@ export const myProfileSlice = createSlice({
             state.error = ''
             state.profile.status = action.payload
         },
-        addPost(state, action: PayloadAction<PostsType>) {
+        setPostsForProfile(state, action: PayloadAction<PostsType[]>) {
+            state.error = ''
+            state.posts = action.payload
+        },
+        addPostForProfile(state, action: PayloadAction<PostsType>) {
             state.error = '';
             // Добавление нового поста в массив существующих постов профиля
-            state.profile.posts.push(action.payload);
+            state.posts.push(action.payload);
         },
         openPhoto(state, action: PayloadAction<any>) {
             state.error = '';
@@ -78,38 +82,35 @@ export const myProfileSlice = createSlice({
         },
         updatePost(state, action: PayloadAction<PostsType>) {
             state.error = '';
-            // Обновление поста в массиве существующих постов профиля
-            const { postId, title, content, image } = action.payload;
-            const updatepost = state.profile.posts.find(post => post.postId === postId);
-            if (updatepost) {
-                updatepost.title = title,
-                    updatepost.content = content,
-                    updatepost.image = image
-            }
+            state.posts = state.posts.map(post => post.postId === action.payload.postId
+                ? action.payload
+                : post
+            );
         },
         pinPost(state, action: PayloadAction<PostsType[]>) {
             state.error = '';
-            state.profile.posts = action.payload
+            state.posts = action.payload
         },
-        deletePost(state, action: PayloadAction<number>) {
+        deletePost(state, action: PayloadAction<string>) {
             state.error = '';
             const postIdToDelete = action.payload;
-            state.profile.posts = state.profile.posts.filter(post => post.postId !== postIdToDelete);
+            console.log('myProfileSlice: deletePost - postIdToDelete 😡 ', postIdToDelete)
+            state.posts = state.posts.filter(post => post.postId !== postIdToDelete);
         },
-        addLikeToPost(state, action: PayloadAction<{ postId: number, like: IsLikesType }>) {
+        addLikeToPost(state, action: PayloadAction<{ postId: string, like: IsLikesType }>) {
             state.error = '';
             const { postId, like } = action.payload;
             // Найти пост в массиве по идентификатору postId
-            const postIndex = state.profile.posts.findIndex(post => post.postId === postId);
+            const postIndex = state.posts.findIndex(post => post.postId === postId);
             // Если пост найден, добавить лайк к нему
             if (postIndex !== -1) {
-                state.profile.posts[postIndex].likes.push(like);
+                state.posts[postIndex].likes.push(like);
             }
         },
-        updatePostLikes(state, action: PayloadAction<{ postId: number, isLike: IsLikesType[] }>) {
+        updatePostLikes(state, action: PayloadAction<{ postId: string, isLike: IsLikesType[] }>) {
             state.error = '';
             const { postId, isLike } = action.payload;
-            const post = state.profile.posts.find(post => post.postId === postId);
+            const post = state.posts.find(post => post.postId === postId);
             if (post) {
                 post.likes = isLike;
             }
@@ -122,7 +123,10 @@ export const myProfileSlice = createSlice({
 export const myProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
     // console.log('myProfileAC: - userId 😡😡😡😡😡 ', userId)
     try {
-        const [userData] = await Promise.all([MyProfileAPI.getMyProfileAPI(userId)]);
+        const [userData] = await Promise.all([
+            MyProfileAPI.getMyProfileAPI(userId)
+        ]);
+        // console.log('myProfileAC: - userData 😡😡😡😡😡 ', userData)
         dispatch(myProfileSlice.actions.setMyProfile(userData.data));
     } catch (error: any) {
         if (error.response?.status === 401) {
@@ -203,14 +207,28 @@ export const deleteMyProfileAC = (userId: number) => async (dispatch: AppDispatc
     }
 }
 
-export const addPostMyProfileAC = (post: PostsType) => async (dispatch: AppDispatch) => {
+export const getAllPostsForProfileAC = () => async (dispatch: AppDispatch) => {
+    // console.log('getPostForProfileAC - req: ')
+    try {
+        const data = await MyProfileAPI.getAllPostsForProfileAPI()
+        // console.log('getPostForProfileAC - res: ', data.data)
+        dispatch(myProfileSlice.actions.setPostsForProfile(data.data.items))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+export const addPostMyProfileAC = (post: CreatePostsType) => async (dispatch: AppDispatch) => {
     // console.log('addPostAC - req: ', post)
     try {
         const data = await MyProfileAPI.addPostAPI(post)
+
         const likes = [] as Array<IsLikesType>
         const newPost: PostsType = { ...data.data, likes }
         // console.log('addPostAC - res: ', data.data)
-        dispatch(myProfileSlice.actions.addPost(newPost))
+        dispatch(myProfileSlice.actions.addPostForProfile(newPost))
     } catch (error: any) {
         if (error.response?.status === 401) {
             dispatch(authSlice.actions.userIsAuth(false))
@@ -222,7 +240,12 @@ export const updatePostMyProfileAC = (post: PostsType) => async (dispatch: AppDi
     // console.log('updatePostMyProfileAC - post req', post)
     try {
         const data = await MyProfileAPI.updatePostAPI(post);
-        dispatch(myProfileSlice.actions.updatePost(data.data))
+        // console.log('updatePostMyProfileAC - res', data.status)
+        if (data.status === 204) {
+            const data = await MyProfileAPI.getPostByIdForProfileAPI(post.postId)
+            dispatch(myProfileSlice.actions.updatePost(data.data))
+        }
+        // return data.data
     } catch (error: any) {
         if (error.response?.status === 401) {
             dispatch(authSlice.actions.userIsAuth(false))
@@ -230,11 +253,13 @@ export const updatePostMyProfileAC = (post: PostsType) => async (dispatch: AppDi
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const deletePostMyProfileAC = (postId: number, authorizedUserId: number) => async (dispatch: AppDispatch) => {
+export const deletePostMyProfileAC = (postId: string, authorizedUserId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyProfileAPI.deletePostAPI(postId, authorizedUserId)
-        // console.log('deletePostMyProfileAC - post', data.data)
+        // console.log('deletePostMyProfileAC - status', data.status)
         // Добавляем задержку в 1 секунду перед вызовом dispatch
+        if(data.status !== 204) return
+
         setTimeout(() => {
             // Если удаление прошло успешно, вызываем диспетчер для удаления поста
             dispatch(myProfileSlice.actions.deletePost(postId));
@@ -273,7 +298,7 @@ export const addPhotoMyProfileAC = (userId: string, authorizedUserId: string, im
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const addPhotoAlbumMyProfileAC = (userId: number, authorizedUserId: number, albumName: string) => async (dispatch: AppDispatch) => {
+export const addPhotoAlbumMyProfileAC = (userId: string, authorizedUserId: string, albumName: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyProfileAPI.addPhotoAlbumAPI(userId, authorizedUserId, albumName)
         dispatch(myProfileSlice.actions.addNewPhotoAlbum(data.data))
@@ -288,9 +313,9 @@ export const addPhotoAlbumMyProfileAC = (userId: number, authorizedUserId: numbe
 export const addLikeToPostAC = (like: IsLikesType) => async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
         const state = getState();
-        const profile = state.myProfilePage.profile;
+        let posts = state.myProfilePage.posts;
         // Находим пост, к которому относится лайк
-        const post = profile.posts.find(post => post.postId === like.postId);
+        const post = posts.find(post => post.postId === like.postId);
 
         if (!post) {
             console.log('Нет такого поста!');
@@ -320,11 +345,9 @@ export const addLikeToPostAC = (like: IsLikesType) => async (dispatch: AppDispat
             const newLike = data.data;
             return dispatch(myProfileSlice.actions.addLikeToPost({ postId, like: newLike }));
         }
-        const updatedProfile = {
-            ...profile,
-            posts: profile.posts.map(post => post.postId === postId ? { ...post, likes: updatedLikes } : post)
-        }
-        dispatch(myProfileSlice.actions.setMyProfile(updatedProfile));
+        posts = posts.map(post => post.postId === postId ? { ...post, likes: updatedLikes } : post)
+        dispatch(myProfileSlice.actions.setPostsForProfile(posts));
+        // dispatch(myProfileSlice.actions.setMyProfile(updatedProfile));
     } catch (error) {
         if (error.response?.status === 401) {
             dispatch(authSlice.actions.userIsAuth(false))
@@ -339,12 +362,12 @@ export const pinPostMyProfileAC = (pinPost: PinPostType) => async (dispatch: App
         const data = await MyProfileAPI.pinPostAPI(pinPost.pin, pinPost);
         const { pin, postId } = data.data;
         const state = getState();
-        const posts = state.myProfilePage.profile.posts;
+        const posts = state.myProfilePage.posts;
 
         // Создаем копию массива постов для безопасной работы с ним
         let updatedPosts = [...posts];
 
-        const index = updatedPosts.findIndex(post => post.postId === postId);
+        const index = updatedPosts.findIndex(post => post.postId === String(postId));
         if (pin && index !== -1) {
             // Если пост был закреплен (pin=true) и был найден в массиве (index не равен -1)
             const pinnedPost = updatedPosts[index];

@@ -12,6 +12,8 @@ const PostListBlog: React.FC = React.memo(() => {
     const dispatch = useAppDispatch()
 
     const {
+        createBlog,
+        updateBlog,
         blogId,
         blogs,
         posts,
@@ -27,8 +29,7 @@ const PostListBlog: React.FC = React.memo(() => {
         setBlogDescription,
         websiteUrl,
         setWebsiteUrl,
-        createBlog,
-        updateBlog,
+        addPostBlog,
         error,
         isDarkTheme
     } = useOutletContext<BlogsOutletContext>();
@@ -38,6 +39,12 @@ const PostListBlog: React.FC = React.memo(() => {
             dispatch(getAllPostsForBlogAC(blogId))
         }
     }, []);
+
+    useEffect(() => {
+        if (myCurrentBlog && blogId !== ':blogId') {
+            dispatch(getAllPostsForBlogAC(blogId))
+        }
+    }, [addPostBlog]);
 
     // console.log('PostListBlog: - myCurrentBlog', myCurrentBlog)
     console.log('PostListBlog: - posts', posts)
@@ -49,7 +56,7 @@ const PostListBlog: React.FC = React.memo(() => {
                     ?
                     <Navigate to={routeBlog(myCurrentBlog.id)} />
                     :
-                    <section className={classes.sectionContentBlog}>
+                    <>
                         {
                             posts.length
                                 ?
@@ -65,7 +72,7 @@ const PostListBlog: React.FC = React.memo(() => {
                                     <h2>Для создания поста перейдите в правое верхнее меню и создайте пост.</h2>
                                 </div>
                         }
-                    </section>
+                    </>
             }
         </div>
     )

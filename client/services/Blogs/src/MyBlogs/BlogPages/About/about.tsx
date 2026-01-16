@@ -45,8 +45,8 @@ const About: React.FC = React.memo(() => {
         }
     }, [myCurrentBlog])
 
-    console.log('About: about - 😡 ', about)
-    console.log('About: myCurrentBlog - 😡 ', myCurrentBlog)
+    // console.log('About: about - 😡 ', about)
+    // console.log('About: myCurrentBlog - 😡 ', myCurrentBlog)
 
     return (
         <div className={`${classes.wrapContentBlog} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>

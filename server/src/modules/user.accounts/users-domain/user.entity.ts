@@ -16,11 +16,11 @@ import { SystemUserData, SystemUserSchema } from './system-user.data';
     toJSON: { virtuals: true }
 })
 export class User {
-    @ApiProperty({ example: 'AccountData', description: 'Главные регистрационные данные пользователя в проекте.' })
+    @ApiProperty({ example: 'accountData', description: 'Главные регистрационные данные пользователя в проекте.' })
     @Prop({ type: AccountDataSchema, required: true })
     accountData: AccountData;
 
-    @ApiProperty({ example: 'ProfileData', description: 'Главные анкетные данные пользователя в проекте.' })
+    @ApiProperty({ example: 'profileData', description: 'Главные анкетные данные пользователя в проекте.' })
     @Prop({ type: ProfileDataSchema, required: true })
     profileData: ProfileData;
 

@@ -21,16 +21,28 @@ export type PhotosType = {
     small: string | null
     large: string | null
 }
-export type PostsType = {
-    authorPost: AuthorPostType
-    postId: number
+export type CreatePostsType = {
     image: any
+    title: string
+    content: string | null
+    profileId: string
+}
+export type PostsType = {
+    postId: string;
+    authorPost: AuthorPostType
+    extendedLikesInfo: {
+        dislikesCount: number;
+        likesCount: number;
+        myStatus: "None" | "Like" | "Dislike"
+    },
+    // postId: string
+    image: string;
     title: string
     content: string | null
     pin: boolean
     likes: IsLikesType[];
-    profileId: number
-    postedByUserId: number
+    profileId: string
+    // postedByUserId: number
     createdAt: string
     updatedAt: string
     // authorizedUserId?: number

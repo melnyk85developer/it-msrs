@@ -34,10 +34,18 @@ export type CreatePostBlogType = {
     content: string;
     blogId: string;
 }
-export type PostBlogType = {
-    blogName: string;
+export type UpdatePostBlogType = {
+    id: string;
+    title: string;
+    shortDescription: string;
+    content: string;
     blogId: string;
+}
+export type PostBlogType = {
     id: string
+
+    blogName: string;
+    // blogId: string;
     title: string;
     shortDescription: string;
     content: string;

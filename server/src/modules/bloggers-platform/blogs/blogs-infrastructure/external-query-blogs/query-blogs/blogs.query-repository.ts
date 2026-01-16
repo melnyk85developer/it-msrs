@@ -108,7 +108,7 @@ export class BlogsQueryRepository {
         return HomePageBlogViewDto.mapToBlogsView(blog);
     }
     async getAboutPageBlogByIdOrNotFoundFailQueryRepository(blogId: string): Promise<AboutPageBlogViewDto> {
-        console.log('BlogsQueryRepository: getAboutPageBlogByIdOrNotFoundFailQueryRepository - RES blogId typeof 😡 ', blogId, typeof blogId)
+        // console.log('BlogsQueryRepository: getAboutPageBlogByIdOrNotFoundFailQueryRepository - RES blogId typeof 😡 ', blogId, typeof blogId)
 
         // 'accountData.login': login,
         // if (!blogId || !Types.ObjectId.isValid(blogId)) {
@@ -121,6 +121,7 @@ export class BlogsQueryRepository {
             _id: blogId,
             deletedAt: null,
         });
+        // console.log('BlogsQueryRepository: getAboutPageBlogByIdOrNotFoundFailQueryRepository - RES blog 😡 ', blog)
 
         if (!blog) {
             throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_BLOG_ID);

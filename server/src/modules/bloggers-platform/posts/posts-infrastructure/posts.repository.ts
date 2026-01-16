@@ -26,7 +26,7 @@ export class PostsRepository {
         // console.log('PostsRepository: findPostOrNotFoundFail - id 😡 ', id)
         const post = await this.findById(id);
         if (!post) {
-            throw new DomainException(INTERNAL_STATUS_CODE.POST_NOT_FOUND_ID, 'post not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_POST, 'post not found');
         }
         // console.log('PostsRepository: findPostOrNotFoundFail - post 😡 ', !!post)
         return post;

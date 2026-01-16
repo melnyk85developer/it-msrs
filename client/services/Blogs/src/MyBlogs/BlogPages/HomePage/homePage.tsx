@@ -46,11 +46,16 @@ const HomePage: React.FC = React.memo(() => {
         }
     }, [myCurrentBlog])
 
-    console.log('HomePage: - homePage', homePage)
-    console.log('HomePage: - myCurrentBlog', myCurrentBlog)
+    // console.log('HomePage: - homePage', homePage)
+    // console.log('HomePage: - myCurrentBlog', myCurrentBlog)
 
     return (
-        <div className={`${classes.wrapHomePageBlog} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
+        <div className={`
+            ${classes.wrapHomePageBlog} 
+            ${isDarkTheme !== "light" 
+                ? classes.dark 
+                : classes.light}`
+        }>
             {
                 myCurrentBlog && blogId === ':blogId'
                     ?

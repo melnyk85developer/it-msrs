@@ -83,8 +83,10 @@ export class PostsQueryRepository {
             deletedAt: null,
         });
 
+        // console.log('getPostByIdOrNotFoundFailQueryRepository: 😡 post', post)
+
         if (!post) {
-            throw new DomainException(INTERNAL_STATUS_CODE.POST_NOT_FOUND_ID, 'post not found');
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_POST, 'post not found');
         }
 
         return await this.postMapper.toExtendedView(post as PostDocument, null)

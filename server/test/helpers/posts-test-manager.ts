@@ -28,7 +28,7 @@ export class PostsTestManager {
         refreshToken: string | null,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200
     ) {
-        // console.log('postsTestManager: - postId', postId)
+        // console.log('PostsTestManager: getPostsById - id', id)
         // console.log('postsTestManager: - accessToken', accessToken)
 
         const response = await request(this.app.getHttpServer())

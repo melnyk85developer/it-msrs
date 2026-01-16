@@ -157,9 +157,9 @@ export class BlogsController {
     @Get('/about-page/:id')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAboutPageBlogByIdController(@Param('id') id: string): Promise<AboutPageBlogViewDto> {
-        console.log('BlogsController: getAboutPageBlogByIdController - id 😡 ', id)
+        // console.log('BlogsController: getAboutPageBlogByIdController - id 😡 ', id)
         const isAboutPage = await this.blogsQueryRepository.getAboutPageBlogByIdOrNotFoundFailQueryRepository(id);
-        console.log('BlogsController: isAboutPage - 😡 ', isAboutPage)
+        // console.log('BlogsController: isAboutPage - 😡 ', isAboutPage)
         return isAboutPage
     }
     @ApiOperation({ summary: 'Получить все посты определенного блога!' })

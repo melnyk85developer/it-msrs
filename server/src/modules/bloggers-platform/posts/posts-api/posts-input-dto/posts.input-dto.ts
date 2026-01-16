@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from "@nestjs/swagger";
-import { CreatePostDto, CreatePostForBlogDto } from "../../posts-dto/create-post.dto";
+import { CreatePostDto } from "../../posts-dto/create-post.dto";
 import { IsNotEmpty, IsString, Length } from "class-validator";
 
 //dto для боди при создании юзера. Сюда могут быть добавлены декораторы swagger

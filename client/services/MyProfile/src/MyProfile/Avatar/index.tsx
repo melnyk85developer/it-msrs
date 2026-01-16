@@ -18,7 +18,12 @@ type PropsType = {
 
 }
 
-const Avatar: React.FC<PropsType> = ({ dispatch, profile, avatar, authorizedUser }) => {
+const Avatar: React.FC<PropsType> = ({ 
+    dispatch, 
+    profile, 
+    avatar, 
+    authorizedUser 
+}) => {
     const { isDarkTheme } = useAppSelector(state => state.authPage)
     const [modalActive, setModalActive] = useState(false);
 
