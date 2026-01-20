@@ -11,6 +11,7 @@ export const SETTINGS = {
         users: '/users',
         blogs: '/blogs',
         posts: '/posts',
+        photos: '/photos',
         comments: '/comments',
         security: '/security',
         devices: '/devices',

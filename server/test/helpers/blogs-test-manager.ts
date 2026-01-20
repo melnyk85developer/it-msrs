@@ -81,6 +81,8 @@ export class BlogsTestManager {
             .set('User-Agent', 'TestDevice/1.0')
             .send(data)
             .expect(expectedStatusCode)
+
+        return { bodyBlog: response.body, createdEntity: response.body }
     }
     async deleteBlogs(
         id: string,
@@ -95,5 +97,7 @@ export class BlogsTestManager {
             .set('Authorization', `Bearer ${accessToken}`)
             // .set('Authorization', `Basic ${codedAuth}`)
             .expect(expectedStatusCode)
+
+        return { bodyBlog: response.body, createdEntity: response.body }
     }
 }

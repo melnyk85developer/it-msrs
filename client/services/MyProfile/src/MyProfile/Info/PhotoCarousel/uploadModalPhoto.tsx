@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import FileUpload from "@packages/shared/src/components/FileUpload/fileUpload";
 import { Button } from "antd";
-import { IProfile, IUser } from "@packages/shared/src/types/IUser";
+import { IPhotoAlbum, IProfile, IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { addPhotoAlbumMyProfileAC, addPhotoMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import MyCropperUploadMiniature from "./uploadMiniature";
 import classes from './styles.module.scss'
 
 type PropsType = {
-    profile: IProfile;
+    photoAlbums: IPhotoAlbum[];
     authorizedUser: IUser
     dispatch: AppDispatch;
     isDarkTheme: string;
@@ -16,7 +16,11 @@ type PropsType = {
 }
 
 const UploadModalPhoto: React.FC<PropsType> = React.memo(({
-    dispatch, profile, authorizedUser, isDarkTheme, setModalUploadPhoto }) => {
+    dispatch,
+    photoAlbums,
+    authorizedUser,
+    setModalUploadPhoto,
+}) => {
     const [imgFile, setImgFile] = useState<File | null>(null)
     const [imgName, setImgName] = useState<string | null>(null)
     const [albumName, setAlbumName] = useState<string | null>('defaultAlbum')
@@ -27,8 +31,6 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
     const image = imgFile
-    const userId = profile ? profile.id : undefined
-    const authorizedUserId = authorizedUser ? authorizedUser.id : undefined
 
     const handleClean = () => {
         setImgName(null)
@@ -53,11 +55,11 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
             await handleCrop();
             dispatch(
                 addPhotoMyProfileAC(
-                    userId,
-                    authorizedUserId,
+                    authorizedUser.id,
                     image,
                     miniature,
-                    albumName
+                    albumName,
+                    // photoAlbums[0].albumId
                 )
             ).then(() => handleClean())
         }
@@ -78,7 +80,7 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
     }
 
     const handleAddAlbum = () => {
-        dispatch(addPhotoAlbumMyProfileAC(userId, authorizedUserId, newAlbumName))
+        dispatch(addPhotoAlbumMyProfileAC(authorizedUser.id, newAlbumName))
             .then(() => setNewAlbumName(''))
     }
 
@@ -89,11 +91,11 @@ const UploadModalPhoto: React.FC<PropsType> = React.memo(({
                     <h3>Выбрать альбом</h3>
                     <select onChange={(e) => setAlbumName(e.target.value)}>
                         {/* Опция по умолчанию для defaultAlbum */}
-                        {profile.photoAlbums && profile.photoAlbums.length > 0 && (
-                            <option value="defaultAlbum">{profile.photoAlbums[0].albumName}</option>
+                        {photoAlbums && photoAlbums.length > 0 && (
+                            <option value="defaultAlbum">{photoAlbums[0].albumName}</option>
                         )}
                         {/* Мапим остальные альбомы в опции */}
-                        {profile.photoAlbums?.slice(1).map(album => (
+                        {photoAlbums?.slice(1).map(album => (
                             <option key={album.albumId} value={album.albumName}>{album.albumName}</option>
                         ))}
                     </select>

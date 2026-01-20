@@ -1,7 +1,7 @@
 import $api from "../http";
 import { AxiosResponse } from "axios";
 import { IAnketaProfile, IPhoto, IPhotoAlbum, IProfile, IUpdateStatus } from "../types/IUser";
-import { CreatePostsType, IsLikesType, PinPostType, PostsType } from "@/types/types";
+import { CreatePostsType, IsLikesType, PinPostType, PostsType, UpdatePostType } from "@/types/types";
 
 export default class MyProfileAPI {
     static async getMyProfileAPI(userId: string): Promise<AxiosResponse<IProfile>> {
@@ -37,7 +37,7 @@ export default class MyProfileAPI {
         formData.append('userId', userId.toString())
         formData.append('authorizedUserId', authorizedUserId.toString())
 
-        console.log('updateMyProfileAPI - formData avatar', formData)
+        // console.log('updateMyProfileAPI - formData avatar', formData)
         return $api.put<Object>(`/users/profile/update/avatar/${userId}`, formData)
     }
     static async updateStatusMyProfileAPI(userId: number, authorizedUserId: number, status: string): Promise<AxiosResponse<any>> {
@@ -66,7 +66,7 @@ export default class MyProfileAPI {
         // console.log('MyProfileAPI - addPostAPI post: ', post)
         return $api.post<PostsType>(`/posts-for-profile`, formData)
     }
-    static async updatePostAPI(post: PostsType): Promise<AxiosResponse<any>> {
+    static async updatePostAPI(post: UpdatePostType): Promise<AxiosResponse<any>> {
 
         // console.log('MyProfileAPI - updatePostAPI post: ', post)
         const formData = new FormData()
@@ -79,38 +79,57 @@ export default class MyProfileAPI {
     }
     static async deletePostAPI(postId: string, authorizedUserId: string): Promise<AxiosResponse<PostsType>> {
         return $api.delete<PostsType>(`/posts-for-profile/${postId}`, {
-            data: { postId, authorizedUserId } 
+            data: { postId, authorizedUserId }
         });
     }
 
     static async pinPostAPI(pin: boolean, pinData: PinPostType): Promise<AxiosResponse<PinPostType>> {
-        console.log('updatePinAPI - pin, pinData', pin, pinData);
+        // console.log('updatePinAPI - pin, pinData', pin, pinData);
         return $api.put<any>(`/posts/pined/${pin}`, pinData);
     }
-    static async getPhotoByIdAPI(photoId: number): Promise<AxiosResponse<IPhoto>> {
-        // console.log('MyProfileAPI - getPhotoByIdAPI: ', photoId)
-        return $api.get<IPhoto>(`/users/photo/${photoId}`)
-    }
-    static async addPhotoAPI(userId: string, authorizedUserId: string, imgFile: File, miniature: File, albumName: string): Promise<AxiosResponse<IPhoto>> {
 
-        // console.log('addPhotoAPI: ', image, albumName, userId, authorizedUserId)
+    static async getAllPhotoAlbumsByUserIdAPI(userId: string): Promise<AxiosResponse<any>> {
+        console.log('MyProfileAPI: getAllPhotoAlbumsAPI - 😡😡😡😡😡 ')
+        return $api.get<any>(`/photo-albums/all/${userId}`);
+    }
+    static async getAllPhotoMiniatureForCarouselAPI(userId: string): Promise<AxiosResponse<any>> {
+        console.log('MyProfileAPI: getAllPhotoMiniatureForCarouselAPI - 😡😡😡😡😡 ')
+        return $api.get<any>(`/photos/miniature/${userId}`);
+    }
+    static async getPhotoByIdForCarouselAPI(photoId: string): Promise<AxiosResponse<IPhoto>> {
+        // console.log('MyProfileAPI - getPhotoByIdForCarouselAPI: ', photoId)
+        return $api.get<IPhoto>(`/photos/${photoId}`);
+    }
+
+    static async getPhotoAlbumByIdAPI(albumId: string): Promise<AxiosResponse<any>> {
+        console.log('MyProfileAPI: getAllPhotoAlbumsAPI - 😡😡😡😡😡 ')
+        return $api.get<any>(`/photos/${albumId}`);
+    }
+
+    static async addPhotoAPI(userId: string, imgFile: File, miniature: File, albumName: string, albumId?: string): Promise<AxiosResponse<IPhoto>> {
+
+        console.log('addPhotoAPI: ', userId, imgFile, albumName, albumId)
+
         const formData = new FormData()
         formData.append('image', imgFile)
         formData.append('miniature', miniature)
         formData.append('userId', userId.toString())
-        formData.append('authorizedUserId', authorizedUserId.toString())
         formData.append('albumName', albumName)
+        // formData.append('albumId', albumId.toString())
         // console.log('addPhotoAPI - formData: ', formData)
 
-        return $api.post<IPhoto>(`/users/photo/${userId}`, formData)
+        return $api.post<IPhoto>(`/photos`, formData)
     }
-    static async addPhotoAlbumAPI(userId: string, authorizedUserId: string, albumName: string): Promise<AxiosResponse<IPhotoAlbum>> {
+    static async addPhotoAlbumAPI(userId: string, albumName: string): Promise<AxiosResponse<IPhotoAlbum>> {
+        // console.log('addPhotoAPI: userId, albumName - ', userId, albumName)
+
         const formData = new FormData()
         formData.append('userId', userId.toString())
-        formData.append('authorizedUserId', authorizedUserId.toString())
         formData.append('albumName', albumName)
-        return $api.post<IPhotoAlbum>(`/photo-albums/${userId}`, formData)
+
+        return $api.post<IPhotoAlbum>(`/photo-albums`, formData);
     }
+
     static async likesAPI(like: IsLikesType): Promise<AxiosResponse<IsLikesType>> {
         return $api.post<IsLikesType>(`/like/`, like)
     }

@@ -5,6 +5,7 @@ import { SESSIONS_INTERNAL_STATUS } from "src/modules/usersSessions/session-inte
 import { USERS_INTERNAL_STATUS } from "src/modules/user.accounts/internal-status-users-errors/users-status"
 import { AUTH_INTERNAL_STATUS } from "src/modules/auth/auth-internal-status-errors/authStatus"
 import { CONFIRMATIONS_INTERNAL_STATUS } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsStatus"
+import { PHOTO_INTERNAL_STATUS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoStatus"
 
 export const HTTP_STATUSES = {
     OK_200: 200,
@@ -24,6 +25,7 @@ export const INTERNAL_STATUS_CODE = {
     ...AUTH_INTERNAL_STATUS,
     ...SESSIONS_INTERNAL_STATUS,
     ...USERS_INTERNAL_STATUS,
+    ...PHOTO_INTERNAL_STATUS,
     ...BLOGS_INTERNAL_STATUS,
     ...POSTS_INTERNAL_STATUS,
     ...COMMENT_INTERNAL_STATUS,

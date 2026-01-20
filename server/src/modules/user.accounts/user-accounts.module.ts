@@ -24,6 +24,7 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 import { FilesService } from '../files/files.service';
 import { AdminController } from './users-api/admin.controller';
 import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
+import { GalleryModule } from '../gallery/gallery.module';
 
 @Module({
     imports: [
@@ -44,7 +45,8 @@ import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
 
         TokenModule,   // НУЖЕН для AuthService, стратегий, blacklist
         SessionModule, // СЕССИИ ИСПОЛЬЗУЮТСЯ ПРИ АВТОРИЗАЦИИ
-        ConfirmationModule
+        ConfirmationModule,
+        // GalleryModule
     ],
     controllers: [
         AuthController,

@@ -1,9 +1,9 @@
-import React, { ReactElement, useState } from "react";
-import { BiDownvote, BiDuplicate } from "react-icons/bi";
+import React, { useEffect, useState } from "react";
+import { BiDownvote } from "react-icons/bi";
 import { IoDuplicate, IoDuplicateOutline } from "react-icons/io5";
-import { LeftOutlined, RightOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { IProfile, IUser } from "@packages/shared/src/types/IUser";
+import { IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { API_URL } from "@packages/shared/src/http";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
@@ -14,25 +14,43 @@ import NoBakcgroundModalWindow from "./modalNoBakcground";
 import classes from './styles.module.scss'
 
 type PropsType = {
-    profile: IProfile;
     authorizedUser: IUser
     dispatch: AppDispatch;
     isDarkTheme: string;
 }
 
 const PhotoCarousel: React.FC<PropsType> = React.memo(({
-    dispatch, authorizedUser, isDarkTheme }) => {
-    const { profile } = useAppSelector(state => state.myProfilePage);
+    dispatch,
+    authorizedUser,
+    isDarkTheme
+}) => {
+    const { photoAlbums, photos } = useAppSelector(state => state.myProfilePage);
     const [modalUploadPhoto, setModalUploadPhoto] = useState(false);
     const [modalOpenPhoto, setModalOpenPhoto] = useState(false);
     const [openPhotoId, setOpenPhotoId] = useState(null);
-    const defaultAlbum = profile.photoAlbums ? profile.photoAlbums.find(
-        album => album.albumName === "defaultAlbum"
-    ) : undefined;
-    let totalItems = defaultAlbum ? defaultAlbum.photos : [];
+    const [allPhotos, setAllPhotos] = useState(photos);
+
+    console.log('PhotoCarousel: photos 😡 ', photos)
+    console.log('PhotoCarousel: photoAlbums 😡 ', photoAlbums)
+
+    // useEffect(() => {
+    //     if (authorizedUser) {
+    //         setAllPhotos(photos)
+    //         // dispatch(getAllPhotoAlbumsMyProfileAC(authorizedUser.id));
+    //         dispatch(getAllMiniaturePhotosForCarouselMyProfileAC(authorizedUser.id));
+    //     }
+    // }, [])
+
+    // const defaultAlbum = photoAlbums ? photoAlbums.find(
+    //     album => album.albumName === "defaultAlbum"
+    // ) : undefined;
+
+    // console.log('PhotoCarousel: defaultAlbum 😡 ', defaultAlbum)
+
+    let totalItems = allPhotos ? allPhotos : [];
     const [startIndex, setStartIndex] = useState(0);
 
-    const openPhoto = (photoId: number) => {
+    const openPhoto = (photoId: string) => {
         setModalOpenPhoto(true)
         setOpenPhotoId(photoId)
     }
@@ -52,18 +70,18 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
     };
     const defaultPhotoArray = [] as any;
     const miniatyrePhoto = [] as any;
-    for(let i = 0; i < totalItems.length; i++){
+    for (let i = 0; i < totalItems.length; i++) {
         totalItems[i].photoId
         miniatyrePhoto.push(
-            <img 
-                onClick={() => openPhoto(totalItems[i].photoId)} 
-                key={i} 
+            <img
+                onClick={() => openPhoto(totalItems[i].photoId)}
+                key={i}
                 src={
-                    totalItems[i].miniature !== null 
+                    totalItems[i].miniature !== null
                         ? `${API_URL}/` + totalItems[i].miniature
                         : defaultUserAvatar
-                } 
-                alt={`Photo ${totalItems[i].image}`} 
+                }
+                alt={`Photo ${totalItems[i].image}`}
             />
         )
     }
@@ -72,10 +90,10 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
     // Добавляем необходимое количество дефолтных фотографий
     for (let i = 0; i < remainingDefaultPhotos; i++) {
         defaultPhotoArray.push(
-            <img 
-                key={`default_${i}`} 
-                src={defaultUserAvatar} 
-                alt={`Default Photo ${i}`} 
+            <img
+                key={`default_${i}`}
+                src={defaultUserAvatar}
+                alt={`Default Photo ${i}`}
             />
         );
     }
@@ -85,7 +103,7 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
         <div className={classes.wrapPhotoBlock}>
             {/* Иконка для перехода к предыдущим миниатюрам */}
             <div className={classes.leftIcon} onClick={handlePrevClick}>
-                <LeftOutlined className={classes.icon}/>
+                <LeftOutlined className={classes.icon} />
             </div>
             {/* Область для отображения миниатюр */}
             <div className={classes.wrapItems}>
@@ -94,7 +112,7 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
                     <img src={defaultUserAvatar} alt={`Default Photo`} />
                     <div className={classes.wrapBlockIconsPlusphoto}>
                         {/* <UploadOutlined className={classes.uploadIcon} />  */}
-                        <BiDownvote className={classes.uploadIcon}/>
+                        <BiDownvote className={classes.uploadIcon} />
                         <div className={classes.IconPlusPhoto}>
                             {/* <PlusOutlined /> */}
                             {/* <BiDuplicate /> */}
@@ -104,36 +122,34 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
                         </div>
                     </div>
                 </div>
-                {collectionsFotoWithDefaults.slice(startIndex, startIndex + 6).map((photo, index) => 
+                {collectionsFotoWithDefaults.slice(startIndex, startIndex + 6).map((photo, index) =>
                     <div key={index} className={classes.wrapImg}>
                         {photo ? photo : <img src={defaultUserAvatar} alt={`Default Photo`} />}
                     </div>
-                )} 
+                )}
             </div>
             {/* Иконка для перехода к следующим миниатюрам */}
             <div className={classes.rightIcon} onClick={handleNextClick}>
-                <RightOutlined className={classes.icon}/>
+                <RightOutlined className={classes.icon} />
             </div>
-            <NoBakcgroundModalWindow 
-                profile={profile} 
-                modalActive={modalOpenPhoto} 
+            <NoBakcgroundModalWindow
+                // photoAlbums={photoAlbums}
+                allPhotos={allPhotos}
+                modalActive={modalOpenPhoto}
                 setModalActive={setModalOpenPhoto}
                 openPhotoId={openPhotoId}
                 setOpenPhotoId={setOpenPhotoId}
             >
-                <OpenModalPhoto 
+                <OpenModalPhoto
                     dispatch={dispatch}
-                    profile={profile}
-                    authorizedUser={authorizedUser}
-                    isDarkTheme={isDarkTheme}
                     openPhotoId={openPhotoId}
                     setModalOpenPhoto={setModalOpenPhoto}
                 />
             </NoBakcgroundModalWindow>
             <ModalWindow modalActive={modalUploadPhoto} setModalActive={setModalUploadPhoto}>
-                <UploadModalPhoto 
+                <UploadModalPhoto
                     dispatch={dispatch}
-                    profile={profile}
+                    photoAlbums={photoAlbums}
                     authorizedUser={authorizedUser}
                     isDarkTheme={isDarkTheme}
                     setModalUploadPhoto={setModalUploadPhoto}

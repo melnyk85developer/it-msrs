@@ -1,15 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { EllipsisOutlined, FrownOutlined, ExclamationOutlined, MoreOutlined, DeleteOutlined, EditOutlined, PushpinOutlined, RestOutlined, MenuOutlined } from "@ant-design/icons";
-import editThePostMarker from "@packages/shared/src/assets/editTheAvatar.png"
+import React, { Dispatch, useEffect, useRef, useState } from 'react';
+import { EllipsisOutlined, FrownOutlined, DeleteOutlined, EditOutlined, PushpinOutlined, MenuOutlined } from "@ant-design/icons";
 import ModalWindow from '@packages/shared/src/components/ModalWindows';
 import ContentModalMenuPostDelete from '../../ModalPostForm/ContentModalMenuPostDelete/index'
-import classes from './styles.module.scss';
 import ContentModalMenuPostAppeal from '../../ModalPostForm/ContentModalMenuPostAppeal';
 import { AppDispatch } from '@packages/shared/src/store/redux-store';
-import { IProfile } from '@packages/shared/src/types/IUser';
-import { AuthorPostType, PostsType } from '@packages/shared/src/types/types';
-import { addPostMyProfileAC, pinPostMyProfileAC, updatePostMyProfileAC } from '@packages/shared/src/store/MyProfileReducers/myProfileSlice';
+import { PostsType } from '@packages/shared/src/types/types';
+import { pinPostMyProfileAC, updatePostMyProfileAC } from '@packages/shared/src/store/MyProfileReducers/myProfileSlice';
 import UpdatePostFormModal from '../../ModalPostForm/FormUpdatePostForProfile/formUpdatePostForProfile';
+import classes from './styles.module.scss';
 
 type PropsType = {
     postId: string
@@ -50,7 +48,7 @@ const PostMenu: React.FC<PropsType> = React.memo(({
         setIsOpen(!isOpen);
     };
 
-    console.log('PostMenu: - profileId, postId 😡 ', profileId, postId)
+    // console.log('PostMenu: - profileId, postId 😡 ', profileId, postId)
 
     const setPost = () => {
         const post = {

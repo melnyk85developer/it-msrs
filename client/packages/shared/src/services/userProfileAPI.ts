@@ -27,7 +27,7 @@ export default class UserProfileAPI {
 
         return $api.put<PostsType>(`/posts/${postId}`, formData)
     }
-    static deletePostAPI(postId: number, authorizedUserId: number): Promise<AxiosResponse<PostsType>> {
+    static deletePostAPI(postId: string, authorizedUserId: number): Promise<AxiosResponse<PostsType>> {
         return $api.delete<PostsType>(`/posts/${postId}`, { data: { postId, authorizedUserId } });
     }
     static likesAPI(like: IsLikesType): Promise<AxiosResponse<IsLikesType>> {

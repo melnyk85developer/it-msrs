@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect } from "react";
-import { LeftOutlined, RightOutlined, CloseOutlined } from "@ant-design/icons";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { IPhotoAlbum } from "@packages/shared/src/types/IUser";
 import classes from './styles.module.scss';
 
 type PropsType = {
-    profile: IProfile
+    photoAlbums: IPhotoAlbum[];
     modalActive: any
     setModalActive: any
     children: ReactElement
@@ -12,9 +12,16 @@ type PropsType = {
     setOpenPhotoId: (id: number) => void
 }
 
-const NoBakcgroundModalWindow: React.FC<PropsType> = ({ profile, modalActive, setModalActive, children, openPhotoId, setOpenPhotoId }) => {
+const NoBakcgroundModalWindow: React.FC<PropsType> = ({ 
+    photoAlbums, 
+    modalActive, 
+    setModalActive, 
+    children, 
+    openPhotoId, 
+    setOpenPhotoId 
+}) => {
     // ВСЕ ФОТО СО ВСЕХ АЛЬБОМОВ
-    const photo = profile.photoAlbums?.flatMap(album => album.photos) || [];
+    const photo = photoAlbums.flatMap(album => album.photos) || [];
     // ТЕКУЩИЙ ИНДЕКС
     const currentIndex = photo.findIndex(p => p.photoId === openPhotoId);
     // ПЕРЕКЛЮЧАТЕЛИ

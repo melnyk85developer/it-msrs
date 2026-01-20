@@ -47,7 +47,7 @@ const PostListBlog: React.FC = React.memo(() => {
     }, [addPostBlog]);
 
     // console.log('PostListBlog: - myCurrentBlog', myCurrentBlog)
-    console.log('PostListBlog: - posts', posts)
+    // console.log('PostListBlog: - posts', posts)
 
     return (
         <div>

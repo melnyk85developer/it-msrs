@@ -99,7 +99,7 @@ const MyPosts: React.FC<PropsType> = React.memo(({
     }
 
     // console.log('MyPosts: - profile 😡 ', profile)
-    console.log('MyPosts: - combinedPostsForProfile 😡 ', combinedPostsForProfile)
+    // console.log('MyPosts: - combinedPostsForProfile 😡 ', combinedPostsForProfile)
 
     return (
         <Col className={classes.borderPosts} style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}>

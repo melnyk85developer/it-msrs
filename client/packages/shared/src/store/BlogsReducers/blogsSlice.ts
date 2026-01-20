@@ -67,7 +67,6 @@ export const blogsSlice = createSlice({
         deletePost(state, action: PayloadAction<string>) {
             state.error = '';
             const postIdToDelete = action.payload;
-            console.log('myProfileSlice: deletePost - postIdToDelete 😡 ', postIdToDelete)
             state.posts = state.posts.filter(post => post.id !== postIdToDelete);
         },
         setHomePageById(state, action: PayloadAction<HomePageBlogType>) {
@@ -137,7 +136,7 @@ export const createBlogAC = (newBlog: CreateBlogType) => async (dispatch: AppDis
     try {
         dispatch(blogsSlice.actions.blogFetching())
         const data = await BlogsAPI.createBlogAPI(newBlog)
-        console.log('createBlogAC: - RES data', data.data)
+        // console.log('createBlogAC: - RES data', data.data)
         const blogs = data.data.items
         // dispatch(blogsSlice.actions.blogFetchingSuccess(blogs))
         return blogs
@@ -150,7 +149,7 @@ export const updateBlogAC = (id: string, newBlog: CreateBlogType) => async (disp
     try {
         dispatch(blogsSlice.actions.blogFetching())
         const response = await BlogsAPI.updateBlogAPI(id, newBlog)
-        console.log('updateBlogAC: - RES data', response.status)
+        // console.log('updateBlogAC: - RES data', response.status)
         if (response.status === 204) {
             const data = await BlogsAPI.getBlogByIdAPI(id)
             console.log('getUsersAC: - data', data.data)
@@ -194,7 +193,7 @@ export const updatePostAsBlogAC = (newPostBlog: UpdatePostBlogType) => async (di
     try {
         dispatch(blogsSlice.actions.postFetching())
         const data = await BlogsAPI.updatePostAsBlogAPI(newPostBlog)
-        console.log('updatePostAsBlogAC: - RES data', data.status)
+        // console.log('updatePostAsBlogAC: - RES data', data.status)
         if (data.status === 204) {
             const data = await BlogsAPI.getPostByIdForBlogAPI(newPostBlog.id)
             dispatch(blogsSlice.actions.updatePost(data.data))
@@ -207,7 +206,7 @@ export const updatePostAsBlogAC = (newPostBlog: UpdatePostBlogType) => async (di
 export const deletePostAsBlogAC = (postId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await BlogsAPI.deletePostAPI(postId)
-        console.log('deletePostAsBlogAC - status', data.status)
+        // console.log('deletePostAsBlogAC - status', data.status)
         // Добавляем задержку в 1 секунду перед вызовом dispatch
         if (data.status !== 204) return
 
@@ -226,7 +225,7 @@ export const getAllPostsForBlogAC = (blogId: string) => async (dispatch: AppDisp
         dispatch(blogsSlice.actions.postFetching())
         const data = await BlogsAPI.getAllPostsForBlogAPI(blogId)
         const posts = data.data.items
-        console.log('getAllPostsForBlogAC: - RES data', data.data)
+        // console.log('getAllPostsForBlogAC: - RES data', data.data)
         dispatch(blogsSlice.actions.setMyblogAllPosts(posts))
     } catch (error: any) {
         dispatch(blogsSlice.actions.fetchingError(error.message))

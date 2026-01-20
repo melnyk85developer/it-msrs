@@ -30,12 +30,12 @@ export default class BlogsAPI {
         formData.append('description', newBlog.description)
         formData.append('websiteUrl', newBlog.websiteUrl)
         // formData.append('profileId', post.profileId.toString())
-        console.log('BlogsAPI: updateBlogAPI - ', formData)
+        // console.log('BlogsAPI: updateBlogAPI - ', formData)
 
         return $api.put<BlogType>(`/blogs/${id}`, newBlog)
     }
     static createPageForBlogAPI(id: string, page: HomePageBlogType & AboutPageBlogType): Promise<AxiosResponse<any>> {
-        console.log('BlogsAPI: createPageForBlogAPI - page, id', page, id)
+        // console.log('BlogsAPI: createPageForBlogAPI - page, id', page, id)
         const formData = new FormData()
 
         formData.append('titleHome', page.titleHome)
@@ -65,29 +65,29 @@ export default class BlogsAPI {
     }
     static createPostAsBlogAPI(newPostBlog: CreatePostBlogType): Promise<AxiosResponse<any>> {
         const blogId = newPostBlog.blogId
-        console.log('BlogsAPI: createPostAsBlogAPI - ', newPostBlog)
-        console.log('BlogsAPI: blogId - ', blogId)
+        // console.log('BlogsAPI: createPostAsBlogAPI - ', newPostBlog)
+        // console.log('BlogsAPI: blogId - ', blogId)
 
         const formData = new FormData()
         formData.append('title', newPostBlog.title)
         formData.append('shortDescription', newPostBlog.shortDescription)
         formData.append('content', newPostBlog.content)
         formData.append('blogId', newPostBlog.blogId.toString())
-        console.log('BlogsAPI: createPostAsBlogAPI - ', formData)
+        // console.log('BlogsAPI: createPostAsBlogAPI - ', formData)
 
         return $api.post<PostBlogType>(`/blogs/${blogId}/posts`, newPostBlog)
     }
     static updatePostAsBlogAPI(newPostBlog: UpdatePostBlogType): Promise<AxiosResponse<any>> {
         const id = newPostBlog.id
-        console.log('BlogsAPI: updatePostAsBlogAPI - ', newPostBlog)
-        console.log('BlogsAPI: postId - ', id)
+        // console.log('BlogsAPI: updatePostAsBlogAPI - ', newPostBlog)
+        // console.log('BlogsAPI: postId - ', id)
 
         const formData = new FormData()
         formData.append('title', newPostBlog.title)
         formData.append('shortDescription', newPostBlog.shortDescription)
         formData.append('content', newPostBlog.content)
         formData.append('blogId', newPostBlog.blogId.toString())
-        console.log('BlogsAPI: updatePostAsBlogAPI - ', formData)
+        // console.log('BlogsAPI: updatePostAsBlogAPI - ', formData)
 
         return $api.put<PostBlogType>(`/posts/${id}`, newPostBlog)
     }
@@ -95,11 +95,11 @@ export default class BlogsAPI {
         return $api.delete<PostBlogType>(`/posts/${id}`);
     }
     static getPostByIdForBlogAPI(id: string): Promise<AxiosResponse<any>> {
-        console.log('BlogsAPI: id - ', id)
+        // console.log('BlogsAPI: id - ', id)
         return $api.get<PostBlogType>(`/posts/${id}`)
     }
     static getAllPostsForBlogAPI(blogId: string): Promise<AxiosResponse<any>> {
-        console.log('BlogsAPI: blogId - ', blogId)
+        // console.log('BlogsAPI: blogId - ', blogId)
         return $api.get<PostBlogType>(`/blogs/${blogId}/posts`)
     }
 }

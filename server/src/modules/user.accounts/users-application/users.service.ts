@@ -74,6 +74,12 @@ export class UsersService {
         // console.log('UsersService: updateUserService - user3 😡 ', user)
         return user._id.toString();
     }
+    async deleteUserService(id: string) {
+        const user = await this.usersRepository.findUserByIdOrNotFoundFail(id);
+        // console.log('UsersService: deleteUserService - user 😡 ', user)
+        user.makeDeletedAccount();
+        await this.usersRepository.save(user);
+    }
     async updateLastSeenUserService(userId: string): Promise<string> {
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
 
@@ -81,12 +87,6 @@ export class UsersService {
 
         await this.usersRepository.save(user);
         return user._id.toString();
-    }
-    async deleteUserService(id: string) {
-        const user = await this.usersRepository.findUserByIdOrNotFoundFail(id);
-        // console.log('UsersService: deleteUserService - user 😡 ', user)
-        user.makeDeletedAccount();
-        await this.usersRepository.save(user);
     }
     async makeUpdatedConfirmedAccount(userId: string): Promise<any> {
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);

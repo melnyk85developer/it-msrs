@@ -53,7 +53,6 @@ const Info: React.FC<PropsType> = React.memo(({
             </div>
             <PhotoCarousel 
                 dispatch={dispatch}
-                profile={profile}
                 authorizedUser={authorizedUser}
                 isDarkTheme={isDarkTheme}
             />

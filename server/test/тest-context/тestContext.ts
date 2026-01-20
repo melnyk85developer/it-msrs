@@ -35,6 +35,7 @@ import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmat
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 import { CodeConfirmationContextClass } from './context-module/code-confirmation-context';
+import { UserPhotosTestManager } from 'test/helpers/userPhotosTestManager';
 
 export class TestContext {
     public app: INestApplication;
@@ -61,6 +62,7 @@ export class TestContext {
     public postsTestManager: PostsTestManager;
     public userSessionTestManager: UserSessionTestManager;
     public usersTestManager: UsersTestManager;
+    public userPhotosTestManager: UserPhotosTestManager;
 
     // TODO - Добавить
     public createdDialog1: any

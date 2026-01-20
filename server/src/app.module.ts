@@ -15,6 +15,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import path from 'path';
 import * as dotenv from 'dotenv'
 import { PostForProfileModule } from './modules/posts-for-profile/posts-for-profile.module';
+import { GalleryModule } from './modules/gallery/gallery.module';
+import { PhotoModule } from './modules/gallery/photos/photos.module';
 
 dotenv.config({ quiet: true });
 
@@ -45,6 +47,7 @@ dotenv.config({ quiet: true });
         UserAccountsModule,
         BloggersPlatformModule,
         PostForProfileModule,
+        PhotoModule,
         TestingModule,
         CoreModule,
         TokenModule,

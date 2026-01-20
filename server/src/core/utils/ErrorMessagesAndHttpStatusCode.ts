@@ -6,6 +6,7 @@ import { COMMENTS_ERRORS, COMMENTS_STATUS_POSITIVE } from "src/modules/bloggers-
 import { SESSIONS_ERRORS, SESSIONS_STATUS_POSITIVE } from "src/modules/usersSessions/session-internal-status-errors/sessions-errors";
 import { AUTH_ERRORS, AUTH_STATUS_POSITIVE } from "src/modules/auth/auth-internal-status-errors/authErrors";
 import { CONFIRMATIONS_ERRORS, CONFIRMATIONS_STATUS_POSITIVE } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsErrors";
+import { PHOTO_ERRORS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoErrors";
 
 interface ErrorResponse {
     messages: { message: string; field: string };
@@ -19,6 +20,7 @@ export const ErMsgAndHttpStatusCodeArr: Record<number, ErrorResponse> = {
     ...AUTH_ERRORS,
     ...SESSIONS_ERRORS,
     ...USERS_ERRORS,
+    ...PHOTO_ERRORS,
     ...BLOGS_ERRORS,
     ...POSTS_ERRORS,
     ...COMMENTS_ERRORS,

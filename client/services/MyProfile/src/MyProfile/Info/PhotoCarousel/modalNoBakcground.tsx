@@ -1,20 +1,30 @@
 import React, { ReactElement, useEffect } from "react";
 import { LeftOutlined, RightOutlined, CloseOutlined } from "@ant-design/icons";
-import { IProfile } from "@packages/shared/src/types/IUser";
+import { IPhoto, IPhotoAlbum, IProfile } from "@packages/shared/src/types/IUser";
 import classes from './styles.module.scss';
 
 type PropsType = {
-    profile: IProfile
+    allPhotos: IPhoto[];
+    // photoAlbums: IPhotoAlbum[];
     modalActive: any
     setModalActive: any
     children: ReactElement
-    openPhotoId: number | null
-    setOpenPhotoId: (id: number) => void
+    openPhotoId: string | null
+    setOpenPhotoId: (id: string) => void
 }
 
-const NoBakcgroundModalWindow: React.FC<PropsType> = ({ profile, modalActive, setModalActive, children, openPhotoId, setOpenPhotoId }) => {
+const NoBakcgroundModalWindow: React.FC<PropsType> = ({ 
+    // photoAlbums, 
+    allPhotos,
+    modalActive, 
+    setModalActive, 
+    children, 
+    openPhotoId, 
+    setOpenPhotoId 
+}) => {
     // ВСЕ ФОТО СО ВСЕХ АЛЬБОМОВ
-    const photo = profile.photoAlbums?.flatMap(album => album.photos) || [];
+    // const photo = photoAlbums?.flatMap(album => album.photos) || [];
+    const photo = allPhotos?.flatMap(album => album) || [];
     // ТЕКУЩИЙ ИНДЕКС
     const currentIndex = photo.findIndex(p => p.photoId === openPhotoId);
     // ПЕРЕКЛЮЧАТЕЛИ

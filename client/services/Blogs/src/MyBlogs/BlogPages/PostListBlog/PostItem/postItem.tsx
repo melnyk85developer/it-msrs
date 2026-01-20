@@ -57,7 +57,7 @@ const PostItem: React.FC<PropsType> = React.memo(({ post }) => {
     const [content, setContent] = useState('');
     const formattedTime: string = formatTimeAgo(myCurrentPost.createdAt);
 
-    console.log('PostItem: - newestLikes', myCurrentPost.extendedLikesInfo.newestLikes)
+    // console.log('PostItem: - newestLikes', myCurrentPost.extendedLikesInfo.newestLikes)
 
     const openModalUpdatePost = () => {
         if (myCurrentPost) {

@@ -27,6 +27,15 @@ export type CreatePostsType = {
     content: string | null
     profileId: string
 }
+export type UpdatePostType = {
+    postId: string;
+    image: File;
+    title: string
+    content: string | null
+    profileId: string
+    createdAt?: string
+    updatedAt?: string
+}
 export type PostsType = {
     postId: string;
     authorPost: AuthorPostType
@@ -39,7 +48,7 @@ export type PostsType = {
     image: string;
     title: string
     content: string | null
-    pin: boolean
+    pin?: boolean
     likes: IsLikesType[];
     profileId: string
     // postedByUserId: number
@@ -48,9 +57,9 @@ export type PostsType = {
     // authorizedUserId?: number
 }
 export type PinPostType = {
-    pin: boolean
-    postId: number
-    authorizedUserId: number
+    pin: boolean;
+    postId: string;
+    authorizedUserId: string;
 }
 export type AuthorPostType = {
     avatar: string;

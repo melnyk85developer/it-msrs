@@ -2,18 +2,22 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IAnketaProfile, IPhoto, IPhotoAlbum, IProfile, IUpdateStatus, IUser } from "../../types/IUser"
 import { AppDispatch, RootState } from "../redux-store";
 import MyProfileAPI from "../../services/myProfileAPI";
-import { CreatePostsType, IsLikesType, PinPostType, PostsType } from "@/types/types";
+import { CreatePostsType, IsLikesType, PinPostType, PostsType, UpdatePostType } from "../../types/types";
 import { authSlice, systemSuccessMsgServerAC } from "../AuthReducers/authSlice";
 
 interface ProfileState {
     profile: IProfile;
-    posts: PostsType[],
+    posts: PostsType[];
+    photoAlbums: IPhotoAlbum[];
+    photos: IPhoto[];
     openPhoto: string;
     error: string;
 }
 const initialState: ProfileState = {
     profile: null as IProfile,
     posts: [] as PostsType[],
+    photoAlbums: [] as IPhotoAlbum[],
+    photos: [] as IPhoto[],
     openPhoto: '',
     error: '',
 }
@@ -46,6 +50,14 @@ export const myProfileSlice = createSlice({
             // Добавление нового поста в массив существующих постов профиля
             state.posts.push(action.payload);
         },
+        setPhotoAlbums(state, action: PayloadAction<IPhotoAlbum[]>) {
+            state.error = ''
+            state.photoAlbums = action.payload
+        },
+        setPhotos(state, action: PayloadAction<IPhoto[]>) {
+            state.error = ''
+            state.photos = action.payload
+        },
         openPhoto(state, action: PayloadAction<any>) {
             state.error = '';
             state.openPhoto = action.payload
@@ -54,14 +66,14 @@ export const myProfileSlice = createSlice({
             state.error = '';
             const { albumId, userId } = action.payload
             // Найти photoAlbums в массиве по идентификатору albumId
-            const photoAlbumsIndexId = state.profile.photoAlbums.findIndex(album => album.albumId === albumId);
+            const photoAlbumsIndexId = state.photoAlbums.findIndex(album => album.albumId === albumId);
             // Если пост найден, добавить лайк к нему
             if (photoAlbumsIndexId !== -1) {
-                state.profile.photoAlbums[photoAlbumsIndexId].photos.push(action.payload);
+                state.photoAlbums[photoAlbumsIndexId].photos.push(action.payload);
             } else {
-                const photoAlbumsIndexName = state.profile.photoAlbums.findIndex(album => album.albumName === "defaultAlbum");
+                const photoAlbumsIndexName = state.photoAlbums.findIndex(album => album.albumName === "defaultAlbum");
                 if (photoAlbumsIndexName === -1) {
-                    state.profile.photoAlbums.push({
+                    state.photoAlbums.push({
                         albumId: null,
                         albumName: "defaultAlbum",
                         createdAt: null,
@@ -72,13 +84,13 @@ export const myProfileSlice = createSlice({
                     })
                 }
                 if (photoAlbumsIndexName !== -1) {
-                    state.profile.photoAlbums[photoAlbumsIndexName].photos.push(action.payload);
+                    state.photoAlbums[photoAlbumsIndexName].photos.push(action.payload);
                 }
             }
         },
         addNewPhotoAlbum(state, action: PayloadAction<IPhotoAlbum>) {
             state.error = '';
-            state.profile.photoAlbums.push(action.payload);
+            state.photoAlbums.push(action.payload);
         },
         updatePost(state, action: PayloadAction<PostsType>) {
             state.error = '';
@@ -236,7 +248,7 @@ export const addPostMyProfileAC = (post: CreatePostsType) => async (dispatch: Ap
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const updatePostMyProfileAC = (post: PostsType) => async (dispatch: AppDispatch) => {
+export const updatePostMyProfileAC = (post: UpdatePostType) => async (dispatch: AppDispatch) => {
     // console.log('updatePostMyProfileAC - post req', post)
     try {
         const data = await MyProfileAPI.updatePostAPI(post);
@@ -258,7 +270,7 @@ export const deletePostMyProfileAC = (postId: string, authorizedUserId: string) 
         const data = await MyProfileAPI.deletePostAPI(postId, authorizedUserId)
         // console.log('deletePostMyProfileAC - status', data.status)
         // Добавляем задержку в 1 секунду перед вызовом dispatch
-        if(data.status !== 204) return
+        if (data.status !== 204) return
 
         setTimeout(() => {
             // Если удаление прошло успешно, вызываем диспетчер для удаления поста
@@ -273,10 +285,36 @@ export const deletePostMyProfileAC = (postId: string, authorizedUserId: string) 
     }
 }
 
-export const setPhotoCarouselMyProfileAC = (photoId: number) => async (dispatch: AppDispatch) => {
+export const getAllPhotoAlbumsMyProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
     // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
     try {
-        const res = await MyProfileAPI.getPhotoByIdAPI(photoId)
+        const res = await MyProfileAPI.getAllPhotoAlbumsByUserIdAPI(userId)
+        console.log('res setPhotoCarouselMyProfileAC: ', res.data.items)
+        dispatch(myProfileSlice.actions.setPhotoAlbums(res.data.items))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+export const getAllMiniaturePhotosForCarouselMyProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
+    // console.log('getAllMiniaturePhotosForCarouselMyProfileAC res userId: ', userId)
+    try {
+        const res = await MyProfileAPI.getAllPhotoMiniatureForCarouselAPI(userId)
+        console.log('res setPhotoCarouselMyProfileAC: ', res.data.items)
+        dispatch(myProfileSlice.actions.setPhotos(res.data.items))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+export const getPhotoByIdForCarouselMyProfileAC = (photoId: string) => async (dispatch: AppDispatch) => {
+    // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
+    try {
+        const res = await MyProfileAPI.getPhotoByIdForCarouselAPI(photoId)
         // console.log('res setPhotoCarouselMyProfileAC: ', res.data.image)
         dispatch(myProfileSlice.actions.openPhoto(res.data.image))
     } catch (error: any) {
@@ -286,10 +324,25 @@ export const setPhotoCarouselMyProfileAC = (photoId: number) => async (dispatch:
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const addPhotoMyProfileAC = (userId: string, authorizedUserId: string, image: File, miniature: File, albumName: string) => async (dispatch: AppDispatch) => {
+
+export const getPhotoAlbumByIdMyProfileAC = (albumId: string) => async (dispatch: AppDispatch) => {
+    // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
     try {
-        const res = await MyProfileAPI.addPhotoAPI(userId, authorizedUserId, image, miniature, albumName)
-        // console.log('addPhotoMyProfileAC res', res.data)
+        const res = await MyProfileAPI.getPhotoAlbumByIdAPI(albumId)
+        console.log('res setPhotoCarouselMyProfileAC: ', res.data)
+        dispatch(myProfileSlice.actions.openPhoto(res.data.image))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
+
+export const addPhotoMyProfileAC = (userId: string, image: File, miniature: File, albumName: string, albumId?: string) => async (dispatch: AppDispatch) => {
+    try {
+        const res = await MyProfileAPI.addPhotoAPI(userId, image, miniature, albumName, albumId)
+        console.log('addPhotoMyProfileAC res', res.data)
         dispatch(myProfileSlice.actions.addNewPhoto(res.data))
     } catch (error: any) {
         if (error.response?.status === 401) {
@@ -298,9 +351,9 @@ export const addPhotoMyProfileAC = (userId: string, authorizedUserId: string, im
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const addPhotoAlbumMyProfileAC = (userId: string, authorizedUserId: string, albumName: string) => async (dispatch: AppDispatch) => {
+export const addPhotoAlbumMyProfileAC = (userId: string, albumName: string) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyProfileAPI.addPhotoAlbumAPI(userId, authorizedUserId, albumName)
+        const data = await MyProfileAPI.addPhotoAlbumAPI(userId, albumName)
         dispatch(myProfileSlice.actions.addNewPhotoAlbum(data.data))
     } catch (error: any) {
         if (error.response?.status === 401) {

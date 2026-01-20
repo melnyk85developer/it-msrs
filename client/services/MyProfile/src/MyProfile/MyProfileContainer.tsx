@@ -9,7 +9,7 @@ import WidgetPeople from "@packages/shared/src/components/Widgets/WidgetsPeople"
 import WidgetPerhapsYoureFamiliar from "@packages/shared/src/components/Widgets/WidgetPerhapsYoureFamiliar";
 import { routeMain as routeAuth } from '../../../Auth/src/pages/Auth';
 import { Col } from "antd";
-import { myProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
+import { getAllMiniaturePhotosForCarouselMyProfileAC, getAllPhotoAlbumsMyProfileAC, myProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import { FOOTER_ON, setContentSpanAC, setFooterAC, setLSidebarAC, setLSidebarSpanAC, setRSidebarAC, setRSidebarSpanAC, SIDEBAR_ON } from "@packages/shared/src/store/PageElementsSlice/pageElementsSlice";
 import { Navigate, Outlet } from "react-router-dom";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
@@ -30,6 +30,8 @@ const MyProfileContainer: React.FC = React.memo(() => {
     useEffect(() => {
         if (isAuth && authorizedUser && authorizedUser.id !== undefined) {
             dispatch(myProfileAC(authorizedUser.id));
+            dispatch(getAllPhotoAlbumsMyProfileAC(authorizedUser.id));
+            dispatch(getAllMiniaturePhotosForCarouselMyProfileAC(authorizedUser.id));
             dispatch(setLSidebarAC(SIDEBAR_ON));
             dispatch(setLSidebarSpanAC(5));
             dispatch(setContentSpanAC(10));
@@ -91,7 +93,7 @@ const MyProfileContainer: React.FC = React.memo(() => {
 
     useEffect(() => {
         setContent(newContent);
-    }, [isAuth, authorizedUser.id, profile, setContent]);
+    }, [isAuth, authorizedUser.id, profile]);
 
     useEffect(() => {
         if (error) {

@@ -22,6 +22,7 @@ import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastru
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
+import { UserPhotosTestManager } from './userPhotosTestManager';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -65,6 +66,7 @@ export const initSettings = async (
     contextTests.postsTestManager = new PostsTestManager(contextTests.app);
     contextTests.userSessionTestManager = new UserSessionTestManager(contextTests.app);
     contextTests.usersTestManager = new UsersTestManager(contextTests.app);
+    contextTests.userPhotosTestManager = new UserPhotosTestManager(contextTests.app);
 
     await deleteAllData(contextTests.app);
 
@@ -79,5 +81,6 @@ export const initSettings = async (
         postsTestManager: contextTests.postsTestManager,
         userSessionTestManager: contextTests.userSessionTestManager,
         usersTestManager: contextTests.usersTestManager,
+        userPhotosTestManager: contextTests.userPhotosTestManager,
     };
 };

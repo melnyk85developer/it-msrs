@@ -27,10 +27,11 @@ type PropsType = {
     dispatch: AppDispatch;
 }
 
-const UserProfile: React.FC<PropsType> = React.memo(({dispatch, error, profile}) => {
+const UserProfile: React.FC<PropsType> = React.memo(({ dispatch, error, profile }) => {
     const { content, setContent, setPageType } = useAppContext();
-    const {isAuth, authorizedUser, isDarkTheme} = useAppSelector(state => state.authPage)
-    const {id} = useParams();
+    const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage)
+    const { photoAlbums } = useAppSelector(state => state.userProfilePage);
+    const { id } = useParams();
     let userId = Number(id);
 
     const [reloadProfile, setReloadProfile] = useState(false);
@@ -39,28 +40,28 @@ const UserProfile: React.FC<PropsType> = React.memo(({dispatch, error, profile})
     const newContent = {
         contentTopNav: [] as React.ReactNode[],
         contentLsidebar: [
-            <div> 
-                <Avatar 
-                    key={profile?.userId}
-                    avatar={profile.avatar} 
+            <div>
+                <Avatar
+                    key={profile?.id}
+                    avatar={profile.avatar}
                 />
-            <div className={classes.wrapWidgetFriendsProfile}>
-                <WidgetFriends />
-            </div>
-            <div className={classes.wrapWidgetPeopleProfile}>
-                <WidgetPeople />
-            </div>
+                <div className={classes.wrapWidgetFriendsProfile}>
+                    <WidgetFriends />
+                </div>
+                <div className={classes.wrapWidgetPeopleProfile}>
+                    <WidgetPeople />
+                </div>
             </div>
         ],
         contentRsidebar: [
-            <WidgetPerhapsYoureFamiliar/>
+            <WidgetPerhapsYoureFamiliar />
         ],
         contentFooter: [
             <div className={`
                 ${classes.wrapFooterSectionsForUserProfile}
-                ${isDarkTheme !== "light" 
-                    ? classes.dark 
-                    : classes.light 
+                ${isDarkTheme !== "light"
+                    ? classes.dark
+                    : classes.light
                 }
             `}>
                 <Col className={classes.footer_sections}>
@@ -80,7 +81,7 @@ const UserProfile: React.FC<PropsType> = React.memo(({dispatch, error, profile})
     };
 
     useEffect(() => {
-        if(userId){
+        if (userId) {
             dispatch(userProfileAC(userId))
             dispatch(setLSidebarAC(SIDEBAR_ON));
             dispatch(setLSidebarSpanAC(5));
@@ -90,7 +91,7 @@ const UserProfile: React.FC<PropsType> = React.memo(({dispatch, error, profile})
             dispatch(setFooterAC(FOOTER_ON));
             setPageType('stretch');
         }
-    },[userId, reloadProfile])
+    }, [userId, reloadProfile])
 
     useEffect(() => {
         setContent(newContent);
@@ -98,33 +99,34 @@ const UserProfile: React.FC<PropsType> = React.memo(({dispatch, error, profile})
 
     useEffect(() => {
         if (error) {
-          setModalActiveError(true);
+            setModalActiveError(true);
         }
     }, [error]);
 
     return (
         <div className={`${classes.wrapContentProfiles} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
-            {profile ? 
+            {profile ?
                 (
                     <Col className={classes.contentProfiles}>
-                        <Info 
-                            key={profile.userId}
-                            authorizedUser={authorizedUser}
+                        <Info
+                            key={profile.id}
                             profile={profile}
+                            photoAlbums={photoAlbums}
+                            authorizedUser={authorizedUser}
                             dispatch={dispatch}
                             error={error}
                             isDarkTheme={isDarkTheme}
                         />
-                        <MyPostsContainer 
-                            dispatch={dispatch} 
-                            profile={profile} 
+                        <MyPostsContainer
+                            dispatch={dispatch}
+                            profile={profile}
                             authorizedUser={authorizedUser}
                         />
                     </Col>
                 ) : <Preloader />
-            } 
+            }
             <ModalWindow modalActive={modalActiveError} setModalActive={setModalActiveError}>
-                <ErrorsContent error={error} setReloadProfile={setReloadProfile} setModalActiveError={setModalActiveError}/>
+                <ErrorsContent error={error} setReloadProfile={setReloadProfile} setModalActiveError={setModalActiveError} />
             </ModalWindow>
         </div>
 

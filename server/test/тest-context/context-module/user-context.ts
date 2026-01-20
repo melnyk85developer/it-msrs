@@ -8,6 +8,8 @@ export class UserContextClass {
 
     public correctUserNames: string[];
     public correctUserSurNames: string[];
+
+    public correctUserLogins: string[];
     public correctUserEmails: string[];
     public correctUserPasswords: string[];
 
@@ -23,6 +25,11 @@ export class UserContextClass {
         ]
         this.correctUserSurNames = [
             'Melnyk'
+        ]
+        this.correctUserLogins = [
+            'Karsik',
+            'Okun\'',
+            'vikram'
         ]
         this.correctUserEmails = [
             'webmars1@example.com',

@@ -40,10 +40,9 @@ export interface IProfile {
     aboutMe: string;
     telephone: string;
     website: string;
-    photoAlbums?: IPhotoAlbum[];
+    // photoAlbums?: IPhotoAlbum[];
     email: string;
     friends: Array<number>;
-    // posts: Array<PostsType>
     isConfirmed: boolean;
     isActivated: boolean;
 }
@@ -69,17 +68,17 @@ export interface IUpdateStatus {
     status: string;
 }
 export interface IPhotoAlbum {
-    albumId: number | null;
-    userId: number | null;
+    albumId: string | null;
+    userId: string;
     albumName: string;
     photos: Array<IPhoto>
     createdAt?: string | null;
     updatedAt?: string | null;
 }
 export interface IPhoto {
-    photoId: number
-    albumId: number;
-    userId: number;
+    photoId: string
+    albumId: string;
+    userId: string;
     image: string;
     miniature: string;
     albumName?: string;

@@ -1,102 +1,110 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IProfile, IUser } from "../../types/IUser"
+import { IPhoto, IPhotoAlbum, IProfile, IUser } from "../../types/IUser"
 import { AppDispatch, RootState } from "../redux-store";
 import UserProfileAPI from "../../services/userProfileAPI";
 import { IsLikesType, PostsType } from "@/types/types";
 
 interface ProfileState {
     profile: IProfile;
+    posts: PostsType[];
+    photoAlbums: IPhotoAlbum[];
+    photos: IPhoto[];
+    openPhoto: string;
     error: string;
 }
-
 const initialState: ProfileState = {
-    profile: {
-        posts: [] as PostsType[],
-    } as IProfile,
+    profile: null as IProfile,
+    posts: [] as PostsType[],
+    photoAlbums: [] as IPhotoAlbum[],
+    photos: [] as IPhoto[],
+    openPhoto: '',
     error: '',
 }
-
 export const userProfileSlice = createSlice({
     name: 'userProfile',
     initialState,
     reducers: {
-        setUserProfile(state, action: PayloadAction<IProfile>){
+        setUserProfile(state, action: PayloadAction<IProfile>) {
             state.error = ''
             state.profile = action.payload
         },
-        addPost(state, action: PayloadAction<PostsType>){
+        setPostsForProfile(state, action: PayloadAction<PostsType[]>) {
+            state.error = ''
+            state.posts = action.payload
+        },
+        addPost(state, action: PayloadAction<PostsType>) {
             state.error = '';
             // Добавление нового поста в массив существующих постов профиля
-            state.profile.posts.push(action.payload);
+            state.posts.push(action.payload);
         },
-        updatePost(state, action: PayloadAction<PostsType>){
+        updatePost(state, action: PayloadAction<PostsType>) {
             state.error = '';
             // Обновление поста в массиве существующих постов профиля
             const { postId, title, content, image } = action.payload;
-            const updatepost = state.profile.posts.find(post => post.postId === postId);
+            const updatepost = state.posts.find(post => post.postId === postId);
             if (updatepost) {
                 updatepost.title = title,
-                updatepost.content = content,
-                updatepost.image = image
+                    updatepost.content = content,
+                    updatepost.image = image
             }
         },
-        deletePost(state, action: PayloadAction<number>) {
+        deletePost(state, action: PayloadAction<string>) {
             const postIdToDelete = action.payload;
-            state.profile.posts = state.profile.posts.filter(post => post.postId !== postIdToDelete);
+            state.posts = state.posts.filter(post => post.postId !== postIdToDelete);
         },
-        addLikeToPost(state, action: PayloadAction<{ postId: number, like: IsLikesType }>) {
+        addLikeToPost(state, action: PayloadAction<{ postId: string, like: IsLikesType }>) {
             state.error = '';
             const { postId, like } = action.payload;
             // Найти пост в массиве по идентификатору postId
-            const postIndex = state.profile.posts.findIndex(post => post.postId === postId);
+            const postIndex = state.posts.findIndex(post => post.postId === postId);
             // Если пост найден, добавить лайк к нему
             if (postIndex !== -1) {
-                state.profile.posts[postIndex].likes.push(like);
+                state.posts[postIndex].likes.push(like);
             }
         },
-        updatePostLikes(state, action: PayloadAction<{ postId: number, isLike: IsLikesType[] }>) {
+        updatePostLikes(state, action: PayloadAction<{ postId: string, isLike: IsLikesType[] }>) {
             const { postId, isLike } = action.payload;
-            const post = state.profile.posts.find(post => post.postId === postId);
+            const post = state.posts.find(post => post.postId === postId);
             if (post) {
                 post.likes = isLike;
             }
         },
-        userProfileFetchingError(state, action: PayloadAction<string>){
+        userProfileFetchingError(state, action: PayloadAction<string>) {
             state.error = action.payload
         },
     }
 })
 export const userProfileAC = (userId: number) => async (dispatch: AppDispatch) => {
-    try{
+    try {
         const data = await UserProfileAPI.getUserProfileAPI(userId)
         // console.log(data.data)
         dispatch(userProfileSlice.actions.setUserProfile(data.data))
-    }catch(e: any){
+    } catch (e: any) {
         dispatch(userProfileSlice.actions.userProfileFetchingError(e.response?.data?.message))
     }
 }
 export const addPostUserProfileAC = (post: PostsType) => async (dispatch: AppDispatch) => {
-    try{
+    try {
         const data = await UserProfileAPI.addPostAPI(post)
         const likes = [] as Array<IsLikesType>
-        const newPost: PostsType = {...data.data,likes}
+        const newPost: PostsType = { ...data.data, likes }
         // console.log('addPostAC - post', data.data)
         dispatch(userProfileSlice.actions.addPost(newPost))
-    }catch(e: any){
+    } catch (e: any) {
         dispatch(userProfileSlice.actions.userProfileFetchingError(e.response?.data?.message))
     }
 }
 export const updatePostUserProfileAC = (post: PostsType) => async (dispatch: AppDispatch) => {
     // console.log('updatePostMyProfileAC - post req', post)
-    try{
+    try {
         const data = await UserProfileAPI.updatePostAPI(post);
         dispatch(userProfileSlice.actions.updatePost(data.data))
-    }catch(e: any){
+    } catch (e: any) {
         dispatch(userProfileSlice.actions.userProfileFetchingError(e.response?.data?.message))
     }
 }
-export const deletePostUserProfileAC = (postId: number, authorizedUserId: number) => async (dispatch: AppDispatch) => {
-    try{
+export const deletePostUserProfileAC = (postId: string, authorizedUserId: number) => async (dispatch: AppDispatch) => {
+    try {
         const data = await UserProfileAPI.deletePostAPI(postId, authorizedUserId)
         // console.log('deletePostMyProfileAC - post', data.data)
         // dispatch(myProfileSlice.actions.deletePost(postId));
@@ -107,16 +115,16 @@ export const deletePostUserProfileAC = (postId: number, authorizedUserId: number
             dispatch(userProfileSlice.actions.deletePost(postId));
         }, 2000);
 
-    }catch(e: any){
+    } catch (e: any) {
         dispatch(userProfileSlice.actions.userProfileFetchingError(e.response?.data?.message))
     }
 }
 export const addLikeToPostAC = (like: IsLikesType) => async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
         const state = getState();
-        const profile = state.userProfilePage.profile;
+        let posts = state.userProfilePage.posts;
         // Находим пост, к которому относится лайк
-        const post = profile.posts.find(post => post.postId === like.postId);
+        const post = posts.find(post => post.postId === like.postId);
 
         if (!post) {
             console.log('Нет такого поста!');
@@ -146,11 +154,9 @@ export const addLikeToPostAC = (like: IsLikesType) => async (dispatch: AppDispat
             const newLike = data.data;
             return dispatch(userProfileSlice.actions.addLikeToPost({ postId, like: newLike }));
         }
-        const updatedProfile = {
-            ...profile,
-            posts: profile.posts.map(post => post.postId === postId ? { ...post, likes: updatedLikes } : post)
-        }
-        dispatch(userProfileSlice.actions.setUserProfile(updatedProfile));
+        posts = posts.map(post => post.postId === postId ? { ...post, likes: updatedLikes } : post)
+
+        dispatch(userProfileSlice.actions.setPostsForProfile(posts));
     } catch (error) {
         dispatch(userProfileSlice.actions.userProfileFetchingError(error.response?.data?.message))
     }

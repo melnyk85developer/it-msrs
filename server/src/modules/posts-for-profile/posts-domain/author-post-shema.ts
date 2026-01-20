@@ -9,6 +9,7 @@ import { UpdatePostForProfileDto } from "../posts-for-profile-api/posts-for-prof
 @Schema({
     _id: false,
     // timestamps: true,
+    // collection: 'posts_for_profile',
     toJSON: { virtuals: true, versionKey: false }
 })
 export class AuthorPost {

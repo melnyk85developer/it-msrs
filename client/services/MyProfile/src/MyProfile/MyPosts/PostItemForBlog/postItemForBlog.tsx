@@ -57,7 +57,7 @@ const PostItemForBlog: React.FC<PropsType> = React.memo(({ post, isDarkTheme }) 
     const [content, setContent] = useState('');
     const formattedTime: string = formatTimeAgo(myCurrentPost.createdAt);
 
-    console.log('PostItemForBlog: - newestLikes', myCurrentPost.extendedLikesInfo.newestLikes)
+    // console.log('PostItemForBlog: - newestLikes', myCurrentPost.extendedLikesInfo.newestLikes)
 
     const openModalUpdatePost = () => {
         if (myCurrentPost) {
