@@ -5,11 +5,11 @@ export class UpdatePhotoInputDto {
     @ApiProperty({ example: 'image', description: 'Уникальный идентификатор фото' })
     @IsString({ message: 'image должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле image не должно быть пустым!' })
-    image: string;
+    imageName: string;
     @ApiProperty({ example: 'miniature', description: 'Уникальный идентификатор фото' })
     @IsString({ message: 'miniature должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле miniature не должно быть пустым!' })
-    miniature: string;
+    miniatureName: string;
 
     @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор фото' })
     @IsString({ message: 'userId должно быть строкой!' })

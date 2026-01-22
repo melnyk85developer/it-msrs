@@ -24,22 +24,27 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
     authorizedUser,
     isDarkTheme
 }) => {
-    const { photoAlbums, photos } = useAppSelector(state => state.myProfilePage);
+    const { photoAlbums, photos, carouselPhotos } = useAppSelector(state => state.myProfilePage);
     const [modalUploadPhoto, setModalUploadPhoto] = useState(false);
     const [modalOpenPhoto, setModalOpenPhoto] = useState(false);
     const [openPhotoId, setOpenPhotoId] = useState(null);
-    const [allPhotos, setAllPhotos] = useState(photos);
+    const [allPhotos, setAllPhotos] = useState(carouselPhotos);
 
-    console.log('PhotoCarousel: photos 😡 ', photos)
-    console.log('PhotoCarousel: photoAlbums 😡 ', photoAlbums)
+    // console.log('PhotoCarousel: carouselPhotos 😡 ', carouselPhotos)
+    // console.log('PhotoCarousel: photos 😡 ', photos)
+    // console.log('PhotoCarousel: photoAlbums 😡 ', photoAlbums)
 
     // useEffect(() => {
-    //     if (authorizedUser) {
-    //         setAllPhotos(photos)
-    //         // dispatch(getAllPhotoAlbumsMyProfileAC(authorizedUser.id));
-    //         dispatch(getAllMiniaturePhotosForCarouselMyProfileAC(authorizedUser.id));
+    //     if (carouselPhotos.length > 0) {
+    //         setAllPhotos(carouselPhotos)
     //     }
     // }, [])
+
+    useEffect(() => {
+        if (carouselPhotos.length > 0) {
+            setAllPhotos(carouselPhotos)
+        }
+    }, [carouselPhotos])
 
     // const defaultAlbum = photoAlbums ? photoAlbums.find(
     //     album => album.albumName === "defaultAlbum"

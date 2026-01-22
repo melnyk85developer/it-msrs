@@ -88,22 +88,31 @@ export default class MyProfileAPI {
         return $api.put<any>(`/posts/pined/${pin}`, pinData);
     }
 
-    static async getAllPhotoAlbumsByUserIdAPI(userId: string): Promise<AxiosResponse<any>> {
-        console.log('MyProfileAPI: getAllPhotoAlbumsAPI - 😡😡😡😡😡 ')
-        return $api.get<any>(`/photo-albums/all/${userId}`);
-    }
     static async getAllPhotoMiniatureForCarouselAPI(userId: string): Promise<AxiosResponse<any>> {
         console.log('MyProfileAPI: getAllPhotoMiniatureForCarouselAPI - 😡😡😡😡😡 ')
-        return $api.get<any>(`/photos/miniature/${userId}`);
+        return $api.get<any>(`/photos/all/${userId}`);
     }
     static async getPhotoByIdForCarouselAPI(photoId: string): Promise<AxiosResponse<IPhoto>> {
         // console.log('MyProfileAPI - getPhotoByIdForCarouselAPI: ', photoId)
         return $api.get<IPhoto>(`/photos/${photoId}`);
     }
 
+    static async getAllPhotoAlbumsByUserIdAPI(userId: string): Promise<AxiosResponse<any>> {
+        // console.log('MyProfileAPI: getAllPhotoAlbumsAPI - 😡😡😡😡😡 ')
+        return $api.get<any>(`/photo-albums/all/${userId}`);
+    }
     static async getPhotoAlbumByIdAPI(albumId: string): Promise<AxiosResponse<any>> {
-        console.log('MyProfileAPI: getAllPhotoAlbumsAPI - 😡😡😡😡😡 ')
+        // console.log('MyProfileAPI: getAllPhotoAlbumsAPI - 😡😡😡😡😡 ')
         return $api.get<any>(`/photos/${albumId}`);
+    }
+
+    static async getAllPhotosByUserIdAPI(userId: string): Promise<AxiosResponse<any>> {
+        console.log('MyProfileAPI: getAllPhotosByUserIdAPI - 😡😡😡😡😡 ')
+        return $api.get<any>(`/photos/all/${userId}`);
+    }
+    static async getPhotoByIdAPI(photoId: string): Promise<AxiosResponse<any>> {
+        console.log('MyProfileAPI: getPhotoByIdAPI - 😡😡😡😡😡 ')
+        return $api.get<any>(`/photos/${photoId}`);
     }
 
     static async addPhotoAPI(userId: string, imgFile: File, miniature: File, albumName: string, albumId?: string): Promise<AxiosResponse<IPhoto>> {

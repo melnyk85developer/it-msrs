@@ -74,15 +74,25 @@ export class Photo {
         const updatedAt = date.toISOString();
 
         if (this.id === dto.photoId) {
-            this.image = dto.image;
-            this.miniature = dto.miniature;
-            this.albumId = dto.albumId;
-            this.albumName = dto.albumName;
-            this.userId = dto.userId;
+            this.image = dto.image ? dto.image : this.image;
+            this.miniature = dto.miniature ? dto.miniature : this.miniature;
+            this.albumId = dto.albumId ? dto.albumId : this.albumId;
+            this.albumName = dto.albumName ? dto.albumName : this.albumName;
+            this.userId = this.userId;
             this.createdAt = this.createdAt;
             this.updatedAt = updatedAt;
-            this.deletedAt = null;
+            this.deletedAt = this.deletedAt;
         }
+    }
+    makeDeletedPhoto() {
+        const date = new Date();
+        // console.log('UsersService: deleteUserService - this.deletedAt 😡 ', this.accountData.deletedAt)
+        if (this.deletedAt !== null) {
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_PHOTO)
+        }
+        // console.log('UsersService: deleteUserService - this.deletedAt 😡 PREV', this.accountData.deletedAt)
+        this.deletedAt = date.toISOString();
+        // console.log('UsersService: deleteUserService - this.deletedAt 😡 ', this.accountData.deletedAt)
     }
 }
 export const PhotoSchema = SchemaFactory.createForClass(Photo);

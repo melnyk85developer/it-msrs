@@ -10,6 +10,7 @@ interface ProfileState {
     posts: PostsType[];
     photoAlbums: IPhotoAlbum[];
     photos: IPhoto[];
+    carouselPhotos: IPhoto[];
     openPhoto: string;
     error: string;
 }
@@ -18,6 +19,7 @@ const initialState: ProfileState = {
     posts: [] as PostsType[],
     photoAlbums: [] as IPhotoAlbum[],
     photos: [] as IPhoto[],
+    carouselPhotos: [] as IPhoto[],
     openPhoto: '',
     error: '',
 }
@@ -49,6 +51,14 @@ export const myProfileSlice = createSlice({
             state.error = '';
             // Добавление нового поста в массив существующих постов профиля
             state.posts.push(action.payload);
+        },
+        setCarouselPhotos(state, action: PayloadAction<IPhoto[]>) {
+            state.error = ''
+            state.carouselPhotos = action.payload
+        },
+        addNewPhotoCarousel(state, action: PayloadAction<IPhoto>) {
+            state.error = '';
+            state.carouselPhotos.push(action.payload)
         },
         setPhotoAlbums(state, action: PayloadAction<IPhotoAlbum[]>) {
             state.error = ''
@@ -285,11 +295,24 @@ export const deletePostMyProfileAC = (postId: string, authorizedUserId: string) 
     }
 }
 
+export const getAllMiniaturePhotosForCarouselMyProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
+    // console.log('getAllMiniaturePhotosForCarouselMyProfileAC res userId: ', userId)
+    try {
+        const res = await MyProfileAPI.getAllPhotoMiniatureForCarouselAPI(userId)
+        // console.log('res setPhotoCarouselMyProfileAC: ', res.data.items)
+        dispatch(myProfileSlice.actions.setCarouselPhotos(res.data.items))
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            dispatch(authSlice.actions.userIsAuth(false))
+        }
+        dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
+    }
+}
 export const getAllPhotoAlbumsMyProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
     // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
     try {
         const res = await MyProfileAPI.getAllPhotoAlbumsByUserIdAPI(userId)
-        console.log('res setPhotoCarouselMyProfileAC: ', res.data.items)
+        // console.log('res setPhotoCarouselMyProfileAC: ', res.data.items)
         dispatch(myProfileSlice.actions.setPhotoAlbums(res.data.items))
     } catch (error: any) {
         if (error.response?.status === 401) {
@@ -298,11 +321,11 @@ export const getAllPhotoAlbumsMyProfileAC = (userId: string) => async (dispatch:
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const getAllMiniaturePhotosForCarouselMyProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
-    // console.log('getAllMiniaturePhotosForCarouselMyProfileAC res userId: ', userId)
+export const getAllPhotosMyProfileAC = (userId: string) => async (dispatch: AppDispatch) => {
+    // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
     try {
-        const res = await MyProfileAPI.getAllPhotoMiniatureForCarouselAPI(userId)
-        console.log('res setPhotoCarouselMyProfileAC: ', res.data.items)
+        const res = await MyProfileAPI.getAllPhotosByUserIdAPI(userId)
+        // console.log('res getAllPhotosMyProfileAC: ', res.data.items)
         dispatch(myProfileSlice.actions.setPhotos(res.data.items))
     } catch (error: any) {
         if (error.response?.status === 401) {
@@ -342,8 +365,8 @@ export const getPhotoAlbumByIdMyProfileAC = (albumId: string) => async (dispatch
 export const addPhotoMyProfileAC = (userId: string, image: File, miniature: File, albumName: string, albumId?: string) => async (dispatch: AppDispatch) => {
     try {
         const res = await MyProfileAPI.addPhotoAPI(userId, image, miniature, albumName, albumId)
-        console.log('addPhotoMyProfileAC res', res.data)
-        dispatch(myProfileSlice.actions.addNewPhoto(res.data))
+        // console.log('addPhotoMyProfileAC res', res.data)
+        dispatch(myProfileSlice.actions.addNewPhotoCarousel(res.data))
     } catch (error: any) {
         if (error.response?.status === 401) {
             dispatch(authSlice.actions.userIsAuth(false))

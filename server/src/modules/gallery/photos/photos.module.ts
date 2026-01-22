@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Photo, PhotoSchema } from './photos-domain/photos-entity';
 import { PhotoService } from './photos-application/photos-service';
-import { PhotoRepository } from './photos-infrastructure/photos.repository';
+import { PhotoRepository } from './photos-infrastructure/photos-repository';
 import { PhotoController } from './photos-api/photos.controller';
 import { PhotoAlbumRepositoryModule } from '../photoAlbums/photo-album.module';
 import { UserAccountsModule } from 'src/modules/user.accounts/user-accounts.module';

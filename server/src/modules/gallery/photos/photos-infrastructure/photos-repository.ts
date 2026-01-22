@@ -11,9 +11,9 @@ export class PhotoRepository {
         @InjectModel(Photo.name) private photoModel: PhotoModelType
     ) { }
 
-    async findPhotoById(id: string): Promise<PhotoDocument | null> {
+    async findPhotoById(photoId: string): Promise<PhotoDocument | null> {
         return this.photoModel.findOne({
-            _id: new Types.ObjectId(id),
+            _id: new Types.ObjectId(photoId),
             deletedAt: null,
         });
     }
@@ -22,24 +22,24 @@ export class PhotoRepository {
         await photo.save();
     }
 
-    async findPhotoByIdOrNotFoundFailRepository(id: string): Promise<PhotoDocument> {
+    async findPhotoByIdOrNotFoundFailRepository(photoId: string): Promise<PhotoDocument> {
         let photo
-        if (!id || id === undefined || id === 'undefined') {
-            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - IF id 😡😡😡 typeof', id, typeof id)
+        if (!photoId || photoId === undefined || photoId === 'undefined') {
+            // console.log('PhotoRepository: findPhotoByIdOrNotFoundFailRepository - IF photoId 😡😡😡 typeof', photoId, typeof photoId)
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'id сука говняный 😡😡😡😡😡😡');
         } else {
-            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - ELSE id 😡😡😡 typeof', id, typeof id)
-            photo = await this.findPhotoById(id);
+            // console.log('PhotoRepository: findPhotoByIdOrNotFoundFailRepository - ELSE photoId 😡😡😡 typeof', photoId, typeof photoId)
+            photo = await this.findPhotoById(photoId);
         }
         if (!photo) {
-            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_ID);
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_PHOTO);
         }
         return photo;
     }
 
-    async deletePhoto(token: string): Promise<any> {
+    async deletePhoto(photoId: string): Promise<any> {
         return this.photoModel.deleteOne({
-            token: token,
+            _id: new Types.ObjectId(photoId)
         });
     }
 }

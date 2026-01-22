@@ -22,7 +22,8 @@ import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastru
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
-import { UserPhotosTestManager } from './userPhotosTestManager';
+import { UserPhotosTestManager } from './user-photos-test-manager';
+import { UserPhotoAlbumsTestManager } from './user-photo-albums-test-manager';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -67,6 +68,7 @@ export const initSettings = async (
     contextTests.userSessionTestManager = new UserSessionTestManager(contextTests.app);
     contextTests.usersTestManager = new UsersTestManager(contextTests.app);
     contextTests.userPhotosTestManager = new UserPhotosTestManager(contextTests.app);
+    contextTests.userPhotoAlbumsTestManager = new UserPhotoAlbumsTestManager(contextTests.app);
 
     await deleteAllData(contextTests.app);
 
@@ -82,5 +84,6 @@ export const initSettings = async (
         userSessionTestManager: contextTests.userSessionTestManager,
         usersTestManager: contextTests.usersTestManager,
         userPhotosTestManager: contextTests.userPhotosTestManager,
+        userPhotoAlbumsTestManager: contextTests.userPhotoAlbumsTestManager,
     };
 };

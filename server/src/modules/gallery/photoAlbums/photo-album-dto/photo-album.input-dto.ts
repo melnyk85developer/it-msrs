@@ -9,9 +9,4 @@ export class CreatePhotoAlbumInputDto {
     @IsString({ message: 'albumName должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле albumName не должно быть пустым!' })
     readonly albumName: string;
-
-    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя' })
-    @IsString({ message: 'login должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле login не должно быть пустым!' })
-    readonly userId: string
 }

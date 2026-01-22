@@ -9,7 +9,7 @@ import WidgetPeople from "@packages/shared/src/components/Widgets/WidgetsPeople"
 import WidgetPerhapsYoureFamiliar from "@packages/shared/src/components/Widgets/WidgetPerhapsYoureFamiliar";
 import { routeMain as routeAuth } from '../../../Auth/src/pages/Auth';
 import { Col } from "antd";
-import { getAllMiniaturePhotosForCarouselMyProfileAC, getAllPhotoAlbumsMyProfileAC, myProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
+import { getAllMiniaturePhotosForCarouselMyProfileAC, getAllPhotoAlbumsMyProfileAC, getAllPhotosMyProfileAC, myProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import { FOOTER_ON, setContentSpanAC, setFooterAC, setLSidebarAC, setLSidebarSpanAC, setRSidebarAC, setRSidebarSpanAC, SIDEBAR_ON } from "@packages/shared/src/store/PageElementsSlice/pageElementsSlice";
 import { Navigate, Outlet } from "react-router-dom";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
@@ -20,7 +20,7 @@ const MyProfileContainer: React.FC = React.memo(() => {
     const dispatch = useAppDispatch()
     const { content, setContent, setPageType } = useAppContext();
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage);
-    const { profile, posts, error } = useAppSelector(state => state.myProfilePage);
+    const { profile, posts, carouselPhotos, error } = useAppSelector(state => state.myProfilePage);
     const [reloadProfile, setReloadProfile] = useState(false);
     const [modalActiveError, setModalActiveError] = useState(false);
 
@@ -32,6 +32,7 @@ const MyProfileContainer: React.FC = React.memo(() => {
             dispatch(myProfileAC(authorizedUser.id));
             dispatch(getAllPhotoAlbumsMyProfileAC(authorizedUser.id));
             dispatch(getAllMiniaturePhotosForCarouselMyProfileAC(authorizedUser.id));
+            // dispatch(getAllPhotosMyProfileAC(authorizedUser.id));
             dispatch(setLSidebarAC(SIDEBAR_ON));
             dispatch(setLSidebarSpanAC(5));
             dispatch(setContentSpanAC(10));
@@ -93,7 +94,7 @@ const MyProfileContainer: React.FC = React.memo(() => {
 
     useEffect(() => {
         setContent(newContent);
-    }, [isAuth, authorizedUser.id, profile]);
+    }, [isAuth, authorizedUser.id, profile, carouselPhotos]);
 
     useEffect(() => {
         if (error) {

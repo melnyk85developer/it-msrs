@@ -29,7 +29,7 @@ export class PhotoAlbumRepository {
             photoAlbum = await this.findPhotoAlbumById(albumId);
         }
         if (!photoAlbum) {
-            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_ID);
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_ALBUM_NAME);
         }
         return photoAlbum;
     }
@@ -57,7 +57,7 @@ export class PhotoAlbumRepository {
     }
     async deletePhotoAlbum(albumId: string): Promise<any> {
         return this.photoAlbumModel.deleteOne({
-            albumId: albumId,
+            _id: new Types.ObjectId(albumId),
         });
     }
 }

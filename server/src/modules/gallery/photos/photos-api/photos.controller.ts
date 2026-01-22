@@ -39,22 +39,30 @@ export class PhotoController {
     async createPhotoController(
         @Body() dto: CreatePhotoInputDto,
         @ExtractUserFromRequest() user: UserContextDto,
-        @UploadedFiles() files: Multer.File
+        @UploadedFiles() files: { image?: Multer.File[], miniature?: Multer.File[] }
     ): Promise<PhotoViewDto> {
         const { image, miniature } = files;
+
+        const imageFile = files?.image?.[0] || null;
+        const miniatureFile = files?.miniature?.[0] || null;
+
         // console.log('PhotoController: createPhotoController - dto', dto)
+        // console.log('PhotoController: createPhotoController - imageFile', imageFile)
         const photoId = await this.photoService.createPhotoService(
             user.id,
             dto,
-            image[0],
-            miniature[0]
+            imageFile,
+            miniatureFile
         )
         // console.log('PhotoController: createPhotoController - photoId', photoId)
 
         return await this.photoQueryRepository.findPhotoByIdOrNotFoundFailRepository(photoId);
     }
+    @ApiOperation({ summary: 'Обновление фото!' })
+    @ApiResponse({ status: 201, type: Photo })
     @UseGuards(AuthAccessGuard)
     @Put('/:photoId')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'image', maxCount: 1 },
         { name: 'miniature', maxCount: 1 },
@@ -62,40 +70,48 @@ export class PhotoController {
     async updatePhotoController(
         @Param('photoId') photoId: string,
         @Body() dto: UpdatePhotoInputDto,
-        @UploadedFiles() files: Multer.File
+        @UploadedFiles() files: { image?: Multer.File[], miniature?: Multer.File[] }
     ) {
-        console.log('updatePhotoController: - dto', dto)
+        // console.log('updatePhotoController: - dto', dto)
         // console.log('FILES:', files)
         if (files === undefined) {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_UPDATED_PHOTO)
         }
+
+        const imageFile = files?.image?.[0] || null;
+        const miniatureFile = files?.miniature?.[0] || null;
+
         const { image, miniature } = files;
         const { albumName } = dto
 
         return await this.photoService.updatePhotoService(
             photoId,
-            image[0],
-            miniature[0],
-            albumName
+            dto,
+            imageFile,
+            miniatureFile
         );
     }
     @ApiOperation({ summary: 'Удаление фото!' })
     @ApiResponse({ status: 204, type: Photo })
     @UseGuards(AuthAccessGuard)
     @Delete('/:photoId')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deletePhotoController(@Param('photoId') photoId: string) {
+        // console.log('PhotoController: - deletePhotoController photoId', photoId)
         return await this.photoService.deletePhotoService(photoId)
     }
 
     @ApiOperation({ summary: 'Получение одного фото!' })
     @ApiResponse({ status: 200, type: Photo })
     @Get('/:photoId')
+    @HttpCode(HTTP_STATUSES.OK_200)
     async getPhotoByIdController(@Param('photoId') photoId: string) {
         return await this.photoQueryRepository.findPhotoByIdOrNotFoundFailRepository(photoId);
     }
     @ApiOperation({ summary: 'Создание всех фото!' })
     @ApiResponse({ status: 200, type: Photo })
-    @Get('/miniatures/:userId')
+    @Get('/all/:userId')
+    @HttpCode(HTTP_STATUSES.OK_200)
     async getAllPhotoController(@Param('userId') userId: string, @Query() query: GetPhotoQueryParams): Promise<PaginatedViewDto<PhotoViewDto[]>> {
         // console.log('PhotoController: - getAllPhotoController userId', userId)
         return await this.photoQueryRepository.getAllPhotoQueryRepository(query, userId)

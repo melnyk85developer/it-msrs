@@ -184,6 +184,11 @@ UserSchema.virtual('blogs', {
     localField: '_id',
     foreignField: 'blogId',
 });
+UserSchema.virtual('photo_album', {
+    ref: 'PhotoAlbum',
+    localField: '_id',
+    foreignField: 'albumId',
+});
 //Типизация документа
 export type UserDocument = HydratedDocument<User>;
 //Типизация модели + статические методы

@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Photo, PhotoSchema } from "./photos-domain/photos-entity";
-import { PhotoRepository } from "./photos-infrastructure/photos.repository";
+import { PhotoRepository } from "./photos-infrastructure/photos-repository";
 
 
 @Module({

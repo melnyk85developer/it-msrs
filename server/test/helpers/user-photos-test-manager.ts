@@ -10,7 +10,7 @@ export class UserPhotosTestManager {
         userId: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200) {
         const response = await request(this.app.getHttpServer())
-            .get(`${SETTINGS.RouterPath.photos}/miniatures/${userId}`)
+            .get(`${SETTINGS.RouterPath.photos}/all/${userId}`)
             .expect(expectedStatusCode);
         let getEntity
         if (expectedStatusCode === HTTP_STATUSES.OK_200) {
@@ -37,7 +37,6 @@ export class UserPhotosTestManager {
         accessToken: string,
         expectedStatusCode: HttpStatusType = HttpStatus.CREATED) {
         // console.log('userPhotosTestManager: - data1', data)
-
         let response
         if (data.userId === '' && data.albumName === '') {
             response = await request(this.app.getHttpServer())
@@ -90,9 +89,11 @@ export class UserPhotosTestManager {
             const req = request(this.app.getHttpServer())
                 .put(`${SETTINGS.RouterPath.photos}/${photoId}`)
                 .set('Authorization', `Bearer ${accessToken}`)
-                .set('Content-Type', 'multipart/form-data') // 👈 вручную форсируем
-                .field('image', data.image?.toString() ?? '')
-                .field('miniature', data.miniature?.toString() ?? '')
+                // .set('Content-Type', 'multipart/form-data') // 👈 вручную форсируем
+
+                .field('imageName', data.imageName?.toString() ?? '')
+                .field('miniatureName', data.miniatureName?.toString() ?? '')
+
                 .field('userId', data.userId?.toString() ?? '')
                 .field('albumId', data.albumId?.toString() ?? '')
                 .field('albumName', data.albumName?.toString() ?? '')
@@ -117,10 +118,12 @@ export class UserPhotosTestManager {
         return { response, updatedEntity: updateEntity }
     }
     async deletePhoto(
-        photoId: number,
+        photoId: string,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HttpStatus.OK) {
         const response = await request(this.app.getHttpServer())
-            .delete(`${SETTINGS.RouterPath.users}/delphoto/${photoId}`)
+            .delete(`${SETTINGS.RouterPath.photos}/${photoId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .expect(expectedStatusCode);
 
         let getEntity

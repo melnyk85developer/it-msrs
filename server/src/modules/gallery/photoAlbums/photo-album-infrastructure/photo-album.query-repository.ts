@@ -21,7 +21,7 @@ export class PhotoAlbumQueryRepository {
         });
     }
 
-    async findPhotoAlbumByIdOrNotFoundFailRepository(albumId: string): Promise<PhotoAlbumDocument> {
+    async findPhotoAlbumByIdOrNotFoundFailRepository(albumId: string): Promise<PhotoAlbumViewDto> {
         let photoAlbum
         if (!albumId || albumId === undefined || albumId === 'undefined') {
             // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - IF albumId 😡😡😡 typeof', albumId, typeof albumId)
@@ -31,16 +31,16 @@ export class PhotoAlbumQueryRepository {
             photoAlbum = await this.findPhotoAlbumById(albumId);
         }
         if (!photoAlbum) {
-            throw new DomainException(INTERNAL_STATUS_CODE.BLOG_NOT_FOUND_ID);
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_ALBUM_NAME);
         }
-        return photoAlbum;
+        return PhotoAlbumViewDto.mapToView(photoAlbum);
     }
 
     async getAllPhotoAlbumsQueryRepository(query: GetPhotoAlbumQueryParams, userId?: string): Promise<PaginatedViewDto<PhotoAlbumViewDto[]>> {
-        console.log('getAllPhotoAlbumsQueryRepository: query, userId 😡 ', query, userId)
+        // console.log('getAllPhotoAlbumsQueryRepository: query, userId 😡 ', query, userId)
 
         const normalizedQuery = GetPhotoAlbumQueryParams.normalize(query);
-        console.log('getAllPhotoAlbumsQueryRepository: normalizedQuery 😡 ', normalizedQuery)
+        // console.log('getAllPhotoAlbumsQueryRepository: normalizedQuery 😡 ', normalizedQuery)
 
         const filter: FilterQuery<PhotoAlbum> = {
             deletedAt: null,
@@ -48,7 +48,7 @@ export class PhotoAlbumQueryRepository {
 
         if (userId) filter.userId = userId;
 
-        console.log('getAllPhotoAlbumsQueryRepository: base filter 😡 ', filter)
+        // console.log('getAllPhotoAlbumsQueryRepository: base filter 😡 ', filter)
 
         if (normalizedQuery.searchPhotoAlbum) {
             filter.$or = filter.$or || [];
@@ -66,7 +66,7 @@ export class PhotoAlbumQueryRepository {
 
         const items = photoAlbum.map(PhotoAlbumViewDto.mapToView);
 
-        console.log('getAllPhotoAlbumsQueryRepository: RES items 😡 ', items)
+        // console.log('getAllPhotoAlbumsQueryRepository: RES items 😡 ', items)
 
         // items.reverse()
 
