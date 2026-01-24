@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from "react";
 import { LeftOutlined, RightOutlined, CloseOutlined } from "@ant-design/icons";
 import { IPhoto, IPhotoAlbum, IProfile } from "@packages/shared/src/types/IUser";
-import classes from './styles.module.scss';
+import classes from '../styles.module.scss';
 
 type PropsType = {
     allPhotos: IPhoto[];

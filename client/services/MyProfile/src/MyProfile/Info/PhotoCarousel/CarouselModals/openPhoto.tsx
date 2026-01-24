@@ -5,7 +5,7 @@ import { API_URL } from "@packages/shared/src/http";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import defaultUserAvatar from "@packages/shared/src/assets/fonAvatars.png"
 import { getPhotoByIdForCarouselMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
-import classes from './styles.module.scss'
+import classes from '../styles.module.scss'
 
 type PropsType = {
     dispatch: AppDispatch;

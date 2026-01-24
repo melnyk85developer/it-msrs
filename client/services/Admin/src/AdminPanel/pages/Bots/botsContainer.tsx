@@ -195,7 +195,7 @@ const BotsContainer = () => {
                 const albumName = '';
 
                 setCandincatPhotos((prev) => prev + 1);
-                await dispatch(addPhotoMyProfileAC(userId, userId, croppedFile, croppedFile, albumName));
+                await dispatch(addPhotoMyProfileAC(userId, croppedFile, croppedFile, albumName));
             }
         }
     };

@@ -7,10 +7,10 @@ import { IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { API_URL } from "@packages/shared/src/http";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
-import UploadModalPhoto from "./uploadModalPhoto";
 import defaultUserAvatar from "@packages/shared/src/assets/fonAvatars.png"
-import OpenModalPhoto from "./openPhoto";
-import NoBakcgroundModalWindow from "./modalNoBakcground";
+import OpenModalPhoto from "./CarouselModals/openPhoto";
+import NoBakcgroundModalWindow from "./CarouselModals/modalNoBakcground";
+import PhotoCarouselFormModal from "./CarouselModals/FormModalPhotoCarousel/addPhotoCarouselFormModal";
 import classes from './styles.module.scss'
 
 type PropsType = {
@@ -25,10 +25,11 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
     isDarkTheme
 }) => {
     const { photoAlbums, photos, carouselPhotos } = useAppSelector(state => state.myProfilePage);
-    const [modalUploadPhoto, setModalUploadPhoto] = useState(false);
     const [modalOpenPhoto, setModalOpenPhoto] = useState(false);
     const [openPhotoId, setOpenPhotoId] = useState(null);
     const [allPhotos, setAllPhotos] = useState(carouselPhotos);
+
+    const [addPhotoForSlider, setAddPhotoForSlider] = useState(false);
 
     // console.log('PhotoCarousel: carouselPhotos 😡 ', carouselPhotos)
     // console.log('PhotoCarousel: photos 😡 ', photos)
@@ -113,7 +114,7 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
             {/* Область для отображения миниатюр */}
             <div className={classes.wrapItems}>
                 {/* Область для загрузки фотографий */}
-                <div onClick={() => setModalUploadPhoto(true)} className={classes.wrapImgPlus}>
+                <div onClick={() => setAddPhotoForSlider(true)} className={classes.wrapImgPlus}>
                     <img src={defaultUserAvatar} alt={`Default Photo`} />
                     <div className={classes.wrapBlockIconsPlusphoto}>
                         {/* <UploadOutlined className={classes.uploadIcon} />  */}
@@ -151,13 +152,13 @@ const PhotoCarousel: React.FC<PropsType> = React.memo(({
                     setModalOpenPhoto={setModalOpenPhoto}
                 />
             </NoBakcgroundModalWindow>
-            <ModalWindow modalActive={modalUploadPhoto} setModalActive={setModalUploadPhoto}>
-                <UploadModalPhoto
+            <ModalWindow modalActive={addPhotoForSlider} setModalActive={setAddPhotoForSlider} isSetModal={0}>
+                <PhotoCarouselFormModal
+                    setAddPhotoForSlider={setAddPhotoForSlider}
                     dispatch={dispatch}
                     photoAlbums={photoAlbums}
                     authorizedUser={authorizedUser}
                     isDarkTheme={isDarkTheme}
-                    setModalUploadPhoto={setModalUploadPhoto}
                 />
             </ModalWindow>
         </div>

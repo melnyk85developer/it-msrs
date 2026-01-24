@@ -23,7 +23,7 @@ export class PhotoAlbum {
     albumName: string;
 
     @ApiProperty({ example: 'albumCoverName.jpg', description: 'Имя файла миниатюры' })
-    @Prop({ type: String, required: true, nullable: true })
+    @Prop({ type: String, nullable: true })
     albumCoverName: string | null;
 
     @ApiProperty({ example: 'createdAt', description: 'Число создания аккаунта.' })

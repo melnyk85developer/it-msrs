@@ -107,7 +107,7 @@ export default class MyProfileAPI {
     }
 
     static async getAllPhotosByUserIdAPI(userId: string): Promise<AxiosResponse<any>> {
-        console.log('MyProfileAPI: getAllPhotosByUserIdAPI - 😡😡😡😡😡 ')
+        // console.log('MyProfileAPI: getAllPhotosByUserIdAPI - 😡😡😡😡😡 ')
         return $api.get<any>(`/photos/all/${userId}`);
     }
     static async getPhotoByIdAPI(photoId: string): Promise<AxiosResponse<any>> {
@@ -117,7 +117,7 @@ export default class MyProfileAPI {
 
     static async addPhotoAPI(userId: string, imgFile: File, miniature: File, albumName: string, albumId?: string): Promise<AxiosResponse<IPhoto>> {
 
-        console.log('addPhotoAPI: ', userId, imgFile, albumName, albumId)
+        // console.log('addPhotoAPI: ', userId, imgFile, albumName, albumId)
 
         const formData = new FormData()
         formData.append('image', imgFile)
@@ -129,12 +129,13 @@ export default class MyProfileAPI {
 
         return $api.post<IPhoto>(`/photos`, formData)
     }
-    static async addPhotoAlbumAPI(userId: string, albumName: string): Promise<AxiosResponse<IPhotoAlbum>> {
+    static async addPhotoAlbumAPI(userId: string, albumName: string, albumCoverFile: File): Promise<AxiosResponse<IPhotoAlbum>> {
         // console.log('addPhotoAPI: userId, albumName - ', userId, albumName)
 
         const formData = new FormData()
         formData.append('userId', userId.toString())
         formData.append('albumName', albumName)
+        formData.append('albumCoverFile', albumCoverFile)
 
         return $api.post<IPhotoAlbum>(`/photo-albums`, formData);
     }

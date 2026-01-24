@@ -19,27 +19,41 @@ export class PhotoAlbumService {
     ) { }
 
     async createPhotoAlbumService(userId: string, albumCoverName: Multer.File, dto: Omit<CreateAlbumDto, 'userId'>): Promise<string> {
-        console.log('PhotoAlbumService: createPhotoAlbumService - dto 😡 ', dto)
+        // console.log('PhotoAlbumService: createPhotoAlbumService - dto 😡 1', dto)
+        // console.log('PhotoAlbumService: createPhotoAlbumService - albumCoverName 😡 2', albumCoverName)
         let isAlbum
         let imageName
 
         if (albumCoverName) {
             imageName = await this.filesService.createPostFile(albumCoverName);
+        } else {
+            imageName = null
         }
 
-        isAlbum = await this.getPhotoAlbumNameOrCreatedService(userId, dto.albumName, imageName)
+        if (dto.albumName === 'defaultAlbum') {
+            // console.log('PhotoAlbumService: createPhotoAlbumService - albumName 😡 3', albumCoverName)
+            isAlbum = await this.photoAlbumRepository.findPhotoAlbumByName(userId, 'defaultAlbum');
 
-        const photoAlbum = this.photoAlbumModel.createPhotoAlbumInstance(
-            {
-                albumName: isAlbum.albumName,
-                albumCoverName: imageName ? imageName : null,
-                userId
-            }
-        )
-        // console.log('PhotoAlbumService: createPhotoAlbumService - photoAlbum 😡 save', photoAlbum)
-        await this.photoAlbumRepository.save(photoAlbum);
-        // console.log('PhotoAlbumService: createPhotoAlbumService - photoAlbum 😡 res', photoAlbum)
-        return photoAlbum._id.toString();
+        }
+        if (dto.albumName !== 'defaultAlbum') {
+            // console.log('PhotoAlbumService: createPhotoAlbumService - albumName 😡 4', albumCoverName)
+            isAlbum = await this.photoAlbumRepository.findPhotoAlbumByName(userId, dto.albumName);
+        }
+        if (!isAlbum) {
+            const photoAlbum = this.photoAlbumModel.createPhotoAlbumInstance(
+                {
+                    albumName: dto.albumName,
+                    albumCoverName: imageName,
+                    userId
+                }
+            )
+            // console.log('PhotoAlbumService: createPhotoAlbumService - photoAlbum 😡 save', photoAlbum)
+            await this.photoAlbumRepository.save(photoAlbum);
+            // console.log('PhotoAlbumService: createPhotoAlbumService - photoAlbum 😡 res', photoAlbum)
+            return photoAlbum._id.toString();
+        } else {
+            return isAlbum._id.toString();
+        }
     }
 
     async updatePhotoAlbumService(albumId: string, dto: Omit<UpdatePhotoAlbumDto, 'albumId'>, albumCoverFile: Multer.File): Promise<string> {
@@ -76,7 +90,7 @@ export class PhotoAlbumService {
         let isAlbumName
         let photoAlbum
 
-        // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - !defaultAlbum 😡 1', photoAlbum)
+        // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - albumName 😡 1', albumName)
 
         if (albumName === 'defaultAlbum') {
             isAlbumName = await this.photoAlbumRepository.findPhotoAlbumByName(userId, 'defaultAlbum');
@@ -90,20 +104,22 @@ export class PhotoAlbumService {
             photoAlbum = this.photoAlbumModel.createPhotoAlbumInstance(
                 {
                     albumName,
-                    albumCoverName: imageName ? imageName : null,
+                    albumCoverName: imageName,
                     userId
                 }
             )
+            // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - photoAlbum 😡 3', photoAlbum)
+
             await this.photoAlbumRepository.save(photoAlbum);
 
-            // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - photoAlbum 😡 3', photoAlbum)
+            // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - photoAlbum 😡 4', photoAlbum)
 
             if (photoAlbum) {
                 isAlbumName = await this.photoAlbumRepository.findPhotoAlbumById(photoAlbum._id);
-                // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - photoAlbum 😡 4', photoAlbum)
+                // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - photoAlbum 😡 5', photoAlbum)
             }
         }
-        console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - isAlbumName 😡 5', isAlbumName)
+        // console.log('PhotoAlbumService: getPhotoAlbumNameOrCreatedService - isAlbumName 😡 6', isAlbumName)
         return isAlbumName
     }
 }

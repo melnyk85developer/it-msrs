@@ -9,7 +9,7 @@ export default class MyAdminAPI {
     }
     static createUsersAdminAPI(user: any): Promise<AxiosResponse<any>> {
         const { name, surname, email, password, isBot, avatar } = user
-        // console.log('createUsersAPI: - isBot', isBot)
+        console.log('createUsersAPI: - isBot', isBot)
 
         const formData = new FormData()
         formData.append('name', name)

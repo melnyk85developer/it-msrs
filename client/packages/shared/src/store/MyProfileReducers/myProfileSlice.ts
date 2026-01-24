@@ -352,7 +352,7 @@ export const getPhotoAlbumByIdMyProfileAC = (albumId: string) => async (dispatch
     // console.log('setPhotoCarouselMyProfileAC res photoId: ', photoId)
     try {
         const res = await MyProfileAPI.getPhotoAlbumByIdAPI(albumId)
-        console.log('res setPhotoCarouselMyProfileAC: ', res.data)
+        // console.log('res setPhotoCarouselMyProfileAC: ', res.data)
         dispatch(myProfileSlice.actions.openPhoto(res.data.image))
     } catch (error: any) {
         if (error.response?.status === 401) {
@@ -374,9 +374,9 @@ export const addPhotoMyProfileAC = (userId: string, image: File, miniature: File
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const addPhotoAlbumMyProfileAC = (userId: string, albumName: string) => async (dispatch: AppDispatch) => {
+export const addPhotoAlbumMyProfileAC = (userId: string, albumName: string, albumCoverFile: File) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyProfileAPI.addPhotoAlbumAPI(userId, albumName)
+        const data = await MyProfileAPI.addPhotoAlbumAPI(userId, albumName, albumCoverFile)
         dispatch(myProfileSlice.actions.addNewPhotoAlbum(data.data))
     } catch (error: any) {
         if (error.response?.status === 401) {
