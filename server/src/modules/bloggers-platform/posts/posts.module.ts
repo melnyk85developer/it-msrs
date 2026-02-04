@@ -10,7 +10,7 @@ import { CommentModule } from '../comments/comments.module';
 import { BlogsRepositoryModule } from '../blogs/blogs-repository.module';
 import { PostsRepositoryModule } from './posts-repository.module';
 import { PostMapper } from './posts-api/posts-view-dto/post.mapper';
-import { UserAccountsModule } from 'src/modules/user.accounts/user-accounts.module';
+import { UserAccountsModule } from 'src/modules/user-accounts/user-accounts.module';
 
 @Module({
     imports: [

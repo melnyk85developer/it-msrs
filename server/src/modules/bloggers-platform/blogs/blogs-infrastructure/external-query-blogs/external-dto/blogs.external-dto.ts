@@ -1,5 +1,5 @@
 import { BlogDocument } from "src/modules/bloggers-platform/blogs/blogs-domain/blog.entity";
-import { UserDocument } from "src/modules/user.accounts/users-domain/user.entity";
+import { UserDocument } from "src/modules/user-accounts/users-domain/user.entity";
 
 export class BlogExternalDto {
     id: string;

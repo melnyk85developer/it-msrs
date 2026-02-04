@@ -10,6 +10,9 @@ export const Interlocutors = () => {
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage)
     const { interlocutors, currentChat } = useAppSelector(state => state.messagesPage)
 
+    // console.log('Interlocutors: - interlocutors', interlocutors)
+    // console.log('Interlocutors: - currentChat', currentChat)
+
     useEffect(() => {
         dispatch(getInterlocutorAC())
     }, [currentChat])
@@ -31,9 +34,9 @@ export const Interlocutors = () => {
                             avatar={companion.avatar}
                             name={companion.name}
                             surname={companion.surname}
-                            dialogId={Number(companion.chat.dialogId)}
+                            dialogId={companion.lastMessage.dialogId}
                             msg={companion.lastMessage}
-                            // read={companion.lastMessage.read}
+                        // read={companion.lastMessage.read}
                         />)
                 }
             </ul>

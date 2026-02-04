@@ -16,10 +16,10 @@ import { GetPostsQueryParams } from '../../posts/posts-api/posts-input-dto/get-p
 import { PostViewDto } from '../../posts/posts-api/posts-view-dto/posts.view-dto';
 import { CreatePostForBlogInputDto } from './input-dto-blogs/posts-for-blog.input-dto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { AuthAccessGuard } from 'src/modules/user.accounts/users-guards/bearer/jwt-auth.guard';
-import { BasicAuthGuard } from 'src/modules/user.accounts/users-guards/basic/basic-auth.guard';
-import { ExtractUserFromRequest } from 'src/modules/user.accounts/users-guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from 'src/modules/user.accounts/users-guards/dto/user-context.dto';
+import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
+import { BasicAuthGuard } from 'src/modules/user-accounts/users-guards/basic/basic-auth.guard';
+import { ExtractUserFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { HomePageBlogViewDto } from './view-dto-blogs/homePageBlog.view-dto';
 import { UpdateHomePageBlogDto } from './input-dto-blogs/update-HomePageblog-dto';

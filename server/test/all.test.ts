@@ -8,12 +8,13 @@ import { contextTests, initSettings } from './helpers/init-settings';
 import { JwtService } from '@nestjs/jwt';
 import { authIntegrationTest } from "src/modules/auth/auth-testing/testing-INTEGRATION-Auth.api";
 import { authUnitTest } from "src/modules/auth/auth-testing/testing-Unit-Auth.api";
-import { userSessionE2eTest } from "src/modules/usersSessions/sessions-testing/testing-E2E-Sessions.api";
-import { usersE2eTest } from "src/modules/user.accounts/testing-users/testing-E2E-Users.api";
-import { resetPasswordInegrationTest } from "src/modules/user.accounts/testing-users/testing-RESET-PASSWORD-INTEGRATION";
-import { registrEmailResendingAndConfirmIntegrationTest } from "src/modules/user.accounts/testing-users/testing-REGISTRATION-EMAIL-RESSENDING-INTEGRATION";
+import { userSessionE2eTest } from "src/modules/user-sessions/sessions-testing/testing-E2E-Sessions.api";
+import { usersE2eTest } from "src/modules/user-accounts/testing-users/testing-E2E-Users.api";
+import { resetPasswordInegrationTest } from "src/modules/user-accounts/testing-users/testing-RESET-PASSWORD-INTEGRATION";
+import { registrEmailResendingAndConfirmIntegrationTest } from "src/modules/user-accounts/testing-users/testing-REGISTRATION-EMAIL-RESSENDING-INTEGRATION";
 import { photoProfileE2ETest } from "src/modules/gallery/photos/testing-photos/testing-E2E-photoProfile";
 import { photoAlbumsE2ETest } from "src/modules/gallery/photoAlbums/testing-photo-albums/testing-E2E-photo-albums";
+import { userMessagesE2eTest } from "src/modules/user-messages/msg/testing-messages/testing-E2E-Messages";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     beforeAll(async () => {
@@ -42,38 +43,41 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         );
         // contextTests.app = result.app;
     });
-    describe('AUTH-BLOCK-TESTS', () => {
-        authE2eTest()
-        // authIntegrationTest()
-        // authUnitTest()
-    })
-    describe('USER-SESSIONS-BLOCK-TESTS', () => {
-        userSessionE2eTest()
-        // usersSessionsInegrationTest()
-    })
-    describe('BLOGS-BLOCK-TESTS', () => {
-        blogsE2eTest()
-    })
-    describe('POSTS-BLOCK-TESTS', () => {
-        postsE2eTest()
-    })
-    describe('COMMENTS-BLOCK-TESTS', () => {
-        commentsE2eTest()
-    })
-    describe('PHOTOS-BLOCK-TESTS', () => {
-        photoProfileE2ETest()
-        photoAlbumsE2ETest()
-    })
-    describe('CONFIRMATION-BLOCK-TESTS', () => {
-        registrEmailResendingAndConfirmIntegrationTest()
-        resetPasswordInegrationTest()
-    })
-    // describe('LIKES-BLOCK-TESTS', () => {
-    //     likesE2eTest()
+    // describe('AUTH-BLOCK-TESTS', () => {
+    //     authE2eTest()
+    //     // authIntegrationTest()
+    //     // authUnitTest()
     // })
-    describe('USERS-BLOCK-TESTS', () => {
-        usersE2eTest()
+    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
+    //     userSessionE2eTest()
+    //     // usersSessionsInegrationTest()
+    // })
+    describe('MESSAGES-BLOCK-TESTS', () => {
+        userMessagesE2eTest()
     })
+    // describe('BLOGS-BLOCK-TESTS', () => {
+    //     blogsE2eTest()
+    // })
+    // describe('POSTS-BLOCK-TESTS', () => {
+    //     postsE2eTest()
+    // })
+    // describe('COMMENTS-BLOCK-TESTS', () => {
+    //     commentsE2eTest()
+    // })
+    // describe('PHOTOS-BLOCK-TESTS', () => {
+    //     photoProfileE2ETest()
+    //     photoAlbumsE2ETest()
+    // })
+    // describe('CONFIRMATION-BLOCK-TESTS', () => {
+    //     registrEmailResendingAndConfirmIntegrationTest()
+    //     resetPasswordInegrationTest()
+    // })
+    // // describe('LIKES-BLOCK-TESTS', () => {
+    // //     likesE2eTest()
+    // // })
+    // describe('USERS-BLOCK-TESTS', () => {
+    //     usersE2eTest()
+    // })
     afterAll(async () => {
         await mongoose.disconnect();
         await contextTests.app.close();

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserAccountsModule } from '../user.accounts/user-accounts.module';
+import { UserAccountsModule } from '../user-accounts/user-accounts.module';
 import { PhotoAlbumRepositoryModule } from './photoAlbums/photo-album.module';
 import { PhotoAlbumController } from './photoAlbums/photo-album-api/photo-album.controller';
 import { PhotoAlbumService } from './photoAlbums/photo-album-application/photo-album-service';

@@ -7,9 +7,8 @@ import { IProfile, IUser } from "@packages/shared/src/types/IUser";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import SendMessageFormModal from "./ModalContentMsg/messageFormModal";
 import { sendMessageAC } from "@packages/shared/src/store/MessagesReducers/messagesSlice";
-import { v4 as uuidv4 } from 'uuid';
-import classes from './styles.module.scss'
 import { API_URL } from "@packages/shared/src/http";
+import classes from './styles.module.scss'
 
 type PropsType = {
     user: IUser
@@ -31,10 +30,9 @@ const UsersItem: React.FC<PropsType> = React.memo(({ user }) => {
             senderId: authorizedUser.id,
             receiverId: user.id,
             read: false,
-            createdAt: new Date().toISOString(),
-            replyToMessageId: '',
+            // createdAt: new Date().toISOString(),
             attachments: null as [],
-            localId: Number(`${Date.now()}`),
+            localId: String(`${Date.now()}`),
         };
 
         dispatch(sendMessageAC(message))

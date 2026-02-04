@@ -10,6 +10,9 @@ const LastSeenLabel: React.FC<PropsType> = ({ lastSeenAt }): ReactElement => {
     const now = new Date();
     const lastSeen = new Date(lastSeenAt);
 
+    // console.log('LastSeenLabel: - lastSeenAt', lastSeenAt)
+    // console.log('LastSeenLabel: - lastSeen', lastSeen)
+
     const diffMs = now.getTime() - lastSeen.getTime();
     const diffSec = Math.floor(diffMs / 1000);
     const diffMin = Math.floor(diffSec / 60);

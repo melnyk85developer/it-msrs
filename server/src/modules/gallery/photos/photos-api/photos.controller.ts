@@ -6,11 +6,11 @@ import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express
 import { PhotoService } from '../photos-application/photos-service';
 import { PhotoQueryRepository } from '../photos-infrastructure/photos.query-repository';
 import { Photo } from '../photos-domain/photos-entity';
-import { UsersQueryRepository } from 'src/modules/user.accounts/users-infrastructure/users.query-repository';
+import { UsersQueryRepository } from 'src/modules/user-accounts/users-infrastructure/users.query-repository';
 import { CreatePhotoDto } from '../photos-dto/create-photo-dto';
-import { AuthAccessGuard } from 'src/modules/user.accounts/users-guards/bearer/jwt-auth.guard';
-import { ExtractUserFromRequest } from 'src/modules/user.accounts/users-guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from 'src/modules/user.accounts/users-guards/dto/user-context.dto';
+import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
+import { ExtractUserFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
 import { CreatePhotoInputDto } from '../photos-dto/create-photo-input-dto';
 import { GetPhotoQueryParams } from '../photos-dto/get-photos-query-params.input-dto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';

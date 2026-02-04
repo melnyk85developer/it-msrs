@@ -1,10 +1,10 @@
 import { Body, Controller, Post, UseGuards, Get, HttpCode, HttpStatus, UseInterceptors, Redirect, Param, Put, UploadedFile, Query, Delete } from '@nestjs/common';
-import { AuthAccessGuard } from '../../user.accounts/users-guards/bearer/jwt-auth.guard';
+import { AuthAccessGuard } from '../../user-accounts/users-guards/bearer/jwt-auth.guard';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { PostForProfileService } from '../posts-application/post-for-profile-service';
-import { ExtractUserFromRequest } from '../../user.accounts/users-guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from '../../user.accounts/users-guards/dto/user-context.dto';
+import { ExtractUserFromRequest } from '../../user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from '../../user-accounts/users-guards/dto/user-context.dto';
 import { PostsForProfileQueryRepository } from '../posts-infrastructure/posts.query-repository';
 import { PostForProfileViewDto } from './posts-for-profile-view-dto/posts-for-profile.view-dto';
 import { CreatePostForProfileInputDto } from './posts-for-profile-input-dto/posts.input-dto';

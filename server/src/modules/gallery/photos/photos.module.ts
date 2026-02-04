@@ -5,7 +5,7 @@ import { PhotoService } from './photos-application/photos-service';
 import { PhotoRepository } from './photos-infrastructure/photos-repository';
 import { PhotoController } from './photos-api/photos.controller';
 import { PhotoAlbumRepositoryModule } from '../photoAlbums/photo-album.module';
-import { UserAccountsModule } from 'src/modules/user.accounts/user-accounts.module';
+import { UserAccountsModule } from 'src/modules/user-accounts/user-accounts.module';
 import { PhotoRepositoryModule } from './photos-repository.module';
 import { PhotoQueryRepository } from './photos-infrastructure/photos.query-repository';
 import { GalleryModule } from '../gallery.module';

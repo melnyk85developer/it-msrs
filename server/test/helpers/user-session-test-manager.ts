@@ -2,7 +2,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
-import { CreateUserInputDto } from 'src/modules/user.accounts/users-dto/users.input-dto';
+import { CreateUserInputDto } from 'src/modules/user-accounts/users-dto/users.input-dto';
 
 export class UserSessionTestManager {
     constructor(private app: INestApplication) { }

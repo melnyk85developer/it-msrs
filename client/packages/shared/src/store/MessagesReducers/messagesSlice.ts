@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../types/IUser"
 import { AppDispatch } from "../redux-store";
-import { Interlocutor, MessagesType } from "@/types/types";
+import { ChatType, Interlocutor, MessagesType } from "@/types/types";
 import UserMessageAPI from "../../services/userMessagesAPI";
 
 interface IMessageState {
@@ -18,9 +18,9 @@ interface IMessageState {
     isSending: boolean;
     isDeleting: Boolean;
     isSpiner: boolean;
-    sendingMessages: number[];
-    updatingMessages: number[];
-    deletingMessages: number[];
+    sendingMessages: string[];
+    updatingMessages: string[];
+    deletingMessages: string[];
     isLoading: Boolean;
     filter: any;
     error: string;
@@ -46,9 +46,9 @@ const initialState: IMessageState = {
         term: '',
         friend: undefined as undefined | boolean
     },
-    sendingMessages: [] as number[],
-    updatingMessages: [] as number[],
-    deletingMessages: [] as number[],
+    sendingMessages: [] as string[],
+    updatingMessages: [] as string[],
+    deletingMessages: [] as string[],
     error: '',
 }
 
@@ -83,7 +83,7 @@ export const messagesSlice = createSlice({
             state.currentInterlocutor = action.payload
             state.isLoading = false
         },
-        setCurrentChat(state, action: PayloadAction<IUser>) {
+        setCurrentChat(state, action: PayloadAction<ChatType>) {
             state.error = ''
             state.currentChat = action.payload
             state.isLoading = false
@@ -136,17 +136,17 @@ export const messagesSlice = createSlice({
             state.updatingMessages.push(action.payload.msgId);
             const index = state.messages.findIndex(m => m.msgId === action.payload.msgId);
             if (index !== -1) {
-                console.log('updateResponceMessage: - IF action.payload', action.payload)
+                // console.log('updateResponceMessage: - IF action.payload', action.payload)
                 state.messages[index] = {
                     ...state.messages[index],
                     ...action.payload
                 };
             } else {
-                console.log('updateResponceMessage: - ELSE action.payload', action.payload)
+                // console.log('updateResponceMessage: - ELSE action.payload', action.payload)
                 state.messages.push(action.payload)
             }
         },
-        updateRead(state, action: PayloadAction<{ msgId: number, read: boolean }>) {
+        updateRead(state, action: PayloadAction<{ msgId: string, read: boolean }>) {
             // console.log('updateMessage: - action.payload', action.payload)
             state.error = ''
             state.isSpiner = true
@@ -162,7 +162,7 @@ export const messagesSlice = createSlice({
             state.deletingMessages.push(action.payload.msgId);
             state.isDeleting = true
         },
-        removeMessage(state, action: PayloadAction<number>) {
+        removeMessage(state, action: PayloadAction<string>) {
             console.log('removeMessage: - action.payload', action.payload)
             state.messages = state.messages.filter(m => m.msgId !== action.payload);
             state.deletingMessages = state.deletingMessages.filter(msgId => msgId !== action.payload);
@@ -197,20 +197,31 @@ export const getInterlocutorAC = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(messagesSlice.actions.meagsesIsSending())
         const response = await UserMessageAPI.getInterlocutorAPI()
-        dispatch(messagesSlice.actions.setAllInterlocutors(response.data))
-        // console.log('getInterlocutorAC: - RES', response.data)
+        dispatch(messagesSlice.actions.setAllInterlocutors(response.data.items))
+        // console.log('getInterlocutorAC: - RES', response.data.items)
     } catch (error: any) {
         dispatch(messagesSlice.actions.usersFetchingError(error.message))
     }
 }
-export const getDialogMessagesAC = (dialogId: number, senderId: number, receiverId: number) => async (dispatch: AppDispatch) => {
+export const getDialogMessagesAC = (dialogId: string, senderId: string, receiverId: string) => async (dispatch: AppDispatch) => {
     // console.log('getDialogMessagesAC: - REQ senderId, receiverId', senderId, receiverId)
     try {
-        const response = await UserMessageAPI.getDialogAPI(dialogId, senderId, receiverId)
-        // console.log('getDialogMessagesAC: - RES', response.data)
-        dispatch(messagesSlice.actions.setMessagesCurrentChat(response.data.allMsg))
-        dispatch(messagesSlice.actions.setCurrentChat(response.data.currentChat))
-        dispatch(messagesSlice.actions.setCurrentInterlocutor(response.data.interlocutor))
+        const response = await UserMessageAPI.getDialogAPI(dialogId, {
+            receiverId,
+            pageNumber: 1,
+            pageSize: 30
+        })
+        // console.log('getDialogMessagesAC: - RES data', response.data)
+        const allMsg = response.data.allMsg
+        // console.log('getDialogMessagesAC: - RES allMsg', allMsg)
+        const chat = response.data.currentChat
+        // console.log('getDialogMessagesAC: - RES chat', chat)
+        const currentInterlocutor = response.data.interlocutor
+        // console.log('getDialogMessagesAC: - RES currentInterlocutor', currentInterlocutor)
+
+        dispatch(messagesSlice.actions.setMessagesCurrentChat(allMsg))
+        dispatch(messagesSlice.actions.setCurrentChat(chat))
+        dispatch(messagesSlice.actions.setCurrentInterlocutor(currentInterlocutor))
     } catch (error: any) {
         dispatch(messagesSlice.actions.usersFetchingError(error.message))
     }
@@ -228,7 +239,7 @@ export const sendMessageAC = (message: MessagesType) => async (dispatch: AppDisp
     }
 }
 export const updateMessageAC = (newMsg: MessagesType, oldMsg: MessagesType) => async (dispatch: AppDispatch) => {
-    console.log('updateMessageAC newMsg: - req', newMsg)
+    // console.log('updateMessageAC newMsg: - req', newMsg)
     try {
         dispatch(messagesSlice.actions.updateMessage(newMsg));
         const response = await UserMessageAPI.updateMessageAPI(newMsg);
@@ -246,7 +257,7 @@ export const updateMessageAC = (newMsg: MessagesType, oldMsg: MessagesType) => a
         dispatch(messagesSlice.actions.usersFetchingError(error.message));
     }
 }
-export const updateReadAC = (msgId: number, read: boolean) => async (dispatch: AppDispatch) => {
+export const updateReadAC = (msgId: string, read: boolean) => async (dispatch: AppDispatch) => {
     // console.log('updateReadAC: - msgId, read - REQ', msgId, read)
     try {
         const response = await UserMessageAPI.updateReadAPI(msgId, read);
@@ -257,7 +268,7 @@ export const updateReadAC = (msgId: number, read: boolean) => async (dispatch: A
         } else {
             // console.log('updateMessageAC message: - ELSE ', response.data);
             dispatch(messagesSlice.actions.updateRead({
-                msgId: Number(msgId),
+                msgId: msgId,
                 read: false,
             }));
         }
@@ -266,7 +277,7 @@ export const updateReadAC = (msgId: number, read: boolean) => async (dispatch: A
         dispatch(messagesSlice.actions.usersFetchingError(error.message));
     }
 }
-export const deleteMessageAC = (msgId: number, deleteOption: string) => async (dispatch: AppDispatch) => {
+export const deleteMessageAC = (msgId: string, deleteOption: string) => async (dispatch: AppDispatch) => {
     try {
         dispatch(messagesSlice.actions.meagseIsDeleting(msgId));
         const response = await UserMessageAPI.deleteMessageAPI(msgId, deleteOption);
@@ -275,12 +286,12 @@ export const deleteMessageAC = (msgId: number, deleteOption: string) => async (d
         dispatch(messagesSlice.actions.usersFetchingError(error.message))
     }
 }
-export const deleteAllMessagesAC = (senderId: number, receiverId: number, deleteOption: string) => async (dispatch: AppDispatch) => {
+export const deleteAllMessagesAC = (senderId: string, receiverId: string, deleteOption: string) => async (dispatch: AppDispatch) => {
     try {
         // dispatch(messagesSlice.actions.meagsesIsDeleting(msgId));
         const response = await UserMessageAPI.deleteAllMessagesAPI(senderId, receiverId, deleteOption);
         if (response.status === 204) {
-            // console.log('deleteAllMessagesAC: response.status - ', response.status)
+            console.log('deleteAllMessagesAC: response.status - ', response.status)
             dispatch(messagesSlice.actions.clearChat())
         }
         return response.status
@@ -288,7 +299,7 @@ export const deleteAllMessagesAC = (senderId: number, receiverId: number, delete
         dispatch(messagesSlice.actions.usersFetchingError(error.message))
     }
 }
-export const deleteDialogAC = (dialogId: number, senderId: number, receiverId: number) => async (dispatch: AppDispatch) => {
+export const deleteDialogAC = (dialogId: string, senderId: string, receiverId: string) => async (dispatch: AppDispatch) => {
     // console.log('deleteDialogAC: senderId, receiverId - ', senderId, receiverId)
     try {
         // dispatch(messagesSlice.actions.meagsesIsDeleting(msgId));
@@ -301,7 +312,7 @@ export const deleteDialogAC = (dialogId: number, senderId: number, receiverId: n
         dispatch(messagesSlice.actions.usersFetchingError(error.message))
     }
 }
-export const clearMessageStateAC = (msgId: number) => async (dispatch: AppDispatch) => {
+export const clearMessageStateAC = (msgId: string) => async (dispatch: AppDispatch) => {
     // console.log('clearMessageStateAC smsId', msgId)
     dispatch(messagesSlice.actions.removeMessage(msgId));
 }

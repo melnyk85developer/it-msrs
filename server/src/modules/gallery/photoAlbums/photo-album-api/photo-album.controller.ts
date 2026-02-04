@@ -6,9 +6,9 @@ import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express
 import { PhotoAlbumService } from '../photo-album-application/photo-album-service';
 import { PhotoAlbumQueryRepository } from '../photo-album-infrastructure/photo-album.query-repository';
 import { CreatePhotoAlbumInputDto } from '../photo-album-dto/photo-album.input-dto';
-import { AuthAccessGuard } from 'src/modules/user.accounts/users-guards/bearer/jwt-auth.guard';
-import { ExtractUserFromRequest } from 'src/modules/user.accounts/users-guards/decorators/param/extract-user-from-request.decorator';
-import { UserContextDto } from 'src/modules/user.accounts/users-guards/dto/user-context.dto';
+import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
+import { ExtractUserFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
 import { PhotoAlbum } from '../photo-album-domain/photo-album-entity';
 import { GetPhotoAlbumQueryParams } from '../photo-album-dto/get-photo-album-query-params.input-dto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';

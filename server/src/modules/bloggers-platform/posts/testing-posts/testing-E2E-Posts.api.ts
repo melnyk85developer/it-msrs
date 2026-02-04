@@ -7,7 +7,7 @@ import { UpdatePostInputDto } from '../posts-api/posts-input-dto/posts-update.in
 import { contextTests } from 'test/helpers/init-settings';
 import { isLoginUser } from 'src/modules/auth/auth-testing/testFunctionsAuth';
 import { Types } from 'mongoose';
-import { isCreatedUser } from 'src/modules/user.accounts/testing-users/testFunctionsUser';
+import { isCreatedUser } from 'src/modules/user-accounts/testing-users/testFunctionsUser';
 
 export const postsE2eTest = () => {
     describe('E2E-POSTS', () => {

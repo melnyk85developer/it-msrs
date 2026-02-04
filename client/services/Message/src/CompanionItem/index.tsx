@@ -5,16 +5,16 @@ import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { formatTimeOfPublication } from "@packages/shared/src/components/utils/timeOfPublication";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
 import { LoadingOutlined } from "@ant-design/icons";
-import defaultUserAvatar from "@packages/shared/src/assets/fonAvatars.png"
-import classes from './styles.module.scss'
 import { MessagesType } from "@packages/shared/src/types/types";
 import { API_URL } from "@packages/shared/src/http";
+import defaultUserAvatar from "@packages/shared/src/assets/fonAvatars.png"
+import classes from './styles.module.scss'
 
 type PropsType = {
     avatar: string;
     name: string;
     surname: string;
-    dialogId: number;
+    dialogId: string;
     msg: MessagesType
     // read: boolean
 }
@@ -28,6 +28,7 @@ const CompanionItem: React.FC<PropsType> = ({ avatar, name, surname, dialogId, m
     const year = lastSeen.getFullYear();
 
     // console.log('CompanionItem: - lastSeen', lastSeen)
+    // console.log('CompanionItem: - avatar, name, surname, dialogId, msg', avatar, name, surname, dialogId, msg)
 
     useEffect(() => {
         if (msg) {
@@ -46,7 +47,7 @@ const CompanionItem: React.FC<PropsType> = ({ avatar, name, surname, dialogId, m
         }
     }, [messages, dialogId]);
 
-    // console.log('CompanionItem: - currentMsg', currentMsg)
+    // console.log('CompanionItem: - currentChat', currentChat)
     return (
         <li className={classes.companion}>
             <NavLink
@@ -78,7 +79,7 @@ const CompanionItem: React.FC<PropsType> = ({ avatar, name, surname, dialogId, m
                             }
                             <span className={classes.wrapIconBlock}>
                                 {
-                                    currentChat.dialogId === dialogId
+                                    currentChat && currentChat.dialogId === dialogId
                                         &&
                                         sendingMessages.includes(lastMessage.localId)
                                         ||

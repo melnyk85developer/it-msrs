@@ -7,7 +7,7 @@ import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes'
 import { PostForProfileRepository } from '../posts-infrastructure/posts.repository';
 import { CreatePostForProfileDomainDto } from '../posts-dto/posts.dto';
 import { CreatePostForProfileDto } from '../posts-for-profile-api/posts-for-profile-input-dto/posts.input-dto';
-import { UsersRepository } from 'src/modules/user.accounts/users-infrastructure/users.repository';
+import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
 import { Multer } from 'multer';
 import { FilesService } from 'src/modules/files/files.service';
 import { UpdatePostForProfileDto } from '../posts-for-profile-api/posts-for-profile-input-dto/posts-update.input-dto';

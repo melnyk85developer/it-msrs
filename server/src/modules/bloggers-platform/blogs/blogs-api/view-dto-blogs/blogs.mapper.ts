@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users.query-repository";
+import { UsersQueryRepository } from "src/modules/user-accounts/users-infrastructure/users.query-repository";
 
 import { BlogViewDto } from "./blogs.view-dto";
 import { BlogDocument } from "../../blogs-domain/blog.entity";

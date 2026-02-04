@@ -1,11 +1,12 @@
 import { BLOGS_INTERNAL_STATUS } from "src/modules/bloggers-platform/blogs/internal-status-blogs-errors/blogs-etatus"
 import { COMMENT_INTERNAL_STATUS } from "src/modules/bloggers-platform/comments/internal-status-comments-errors/comment-status"
 import { POSTS_INTERNAL_STATUS } from "src/modules/bloggers-platform/posts/internal-status-posts-errors/posts-status"
-import { SESSIONS_INTERNAL_STATUS } from "src/modules/usersSessions/session-internal-status-errors/sessions-status"
-import { USERS_INTERNAL_STATUS } from "src/modules/user.accounts/internal-status-users-errors/users-status"
+import { SESSIONS_INTERNAL_STATUS } from "src/modules/user-sessions/session-internal-status-errors/sessions-status"
+import { USERS_INTERNAL_STATUS } from "src/modules/user-accounts/internal-status-users-errors/users-status"
 import { AUTH_INTERNAL_STATUS } from "src/modules/auth/auth-internal-status-errors/authStatus"
 import { CONFIRMATIONS_INTERNAL_STATUS } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsStatus"
 import { PHOTO_INTERNAL_STATUS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoStatus"
+import { MESSAGES_INTERNAL_STATUS } from "src/modules/user-messages/msg/internal-status-msg-errors/user-msg-status"
 
 export const HTTP_STATUSES = {
     OK_200: 200,
@@ -24,6 +25,7 @@ export type HttpStatusType = (typeof HTTP_STATUSES)[HttpStatusKeys]
 export const INTERNAL_STATUS_CODE = {
     ...AUTH_INTERNAL_STATUS,
     ...SESSIONS_INTERNAL_STATUS,
+    ...MESSAGES_INTERNAL_STATUS,
     ...USERS_INTERNAL_STATUS,
     ...PHOTO_INTERNAL_STATUS,
     ...BLOGS_INTERNAL_STATUS,

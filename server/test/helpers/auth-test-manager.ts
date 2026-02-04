@@ -1,11 +1,11 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { delay } from './delay';
-import { MeViewDto, UserViewDto } from 'src/modules/user.accounts/users-dto/users.view-dto';
+import { MeViewDto, UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
 import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { contextTests } from './init-settings';
-import { CreateUserInputDto } from 'src/modules/user.accounts/users-dto/users.input-dto';
+import { CreateUserInputDto } from 'src/modules/user-accounts/users-dto/users.input-dto';
 
 export class AuthTestManager {
     constructor(private app: INestApplication) { }

@@ -18,10 +18,10 @@ import { API_URL } from "@packages/shared/src/http";
 
 type PropsType = {
     dispatch: AppDispatch;
-    msgId: number;
-    userId: number;
-    interlocutorId: number;
-    senderId: number;
+    msgId: string;
+    userId: string;
+    interlocutorId: string;
+    senderId: string;
     message: string;
     read: boolean;
     createdAt: string;
@@ -30,10 +30,10 @@ type PropsType = {
     attachments: any[];
     avatar: string;
     isSending: boolean;
-    sendingMessages: number[];
-    updatingMessages: number[];
-    deletingMessages: number[];
-    localId: number;
+    sendingMessages: string[];
+    updatingMessages: string[];
+    deletingMessages: string[];
+    localId: string;
     index: number;
 }
 const MessageItemDialog: React.FC<PropsType> = (props) => {
@@ -42,7 +42,7 @@ const MessageItemDialog: React.FC<PropsType> = (props) => {
         messages, sendingMessages, updatingMessages } = props
 
     const nextMsg = messages[index + 1];
-    const isLastFromSender = !nextMsg || Number(nextMsg.senderId) !== senderId;
+    const isLastFromSender = !nextMsg || nextMsg.senderId !== senderId;
     const [showDeletedMessageLeft, setShowDeletedMessageLeft] = useState<boolean>(false);
     const [showDeletedMessageRight, setShowDeletedMessageRight] = useState<boolean>(false);
     const [textMessage, setTextMessage] = useState<string>(message);
@@ -55,7 +55,6 @@ const MessageItemDialog: React.FC<PropsType> = (props) => {
 
     useEffect(() => {
         if (read || senderId === userId || wasRead) return;
-
         const observer = new IntersectionObserver(([entry]) => {
             if (entry.isIntersecting && !wasRead) {
                 dispatch(updateReadAC(msgId, true));
@@ -65,11 +64,9 @@ const MessageItemDialog: React.FC<PropsType> = (props) => {
         }, {
             threshold: 1.0,
         });
-
         if (itemRef.current) {
             observer.observe(itemRef.current);
         }
-
         return () => observer.disconnect();
     }, [read, senderId, userId, msgId, wasRead]);
 
@@ -103,8 +100,8 @@ const MessageItemDialog: React.FC<PropsType> = (props) => {
             senderId: userId,
             receiverId: interlocutorId,
             read: false,
-            createdAt: new Date().toISOString(),
-            replyToMessageId: '',
+            // createdAt: new Date().toISOString(),
+            replyToMessageId: null as string,
             attachments: null as [],
         };
         const oldMsg = messages.filter(m => m.msgId === msgId)

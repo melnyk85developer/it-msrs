@@ -1,12 +1,13 @@
-import { USERS_ERRORS, USERS_STATUS_POSITIVE } from "src/modules/user.accounts/internal-status-users-errors/users-errors";
+import { USERS_ERRORS, USERS_STATUS_POSITIVE } from "src/modules/user-accounts/internal-status-users-errors/users-errors";
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "./utils";
 import { BLOGS_ERRORS, BLOGS_STATUS_POSITIVE } from "src/modules/bloggers-platform/blogs/internal-status-blogs-errors/blogs-errors";
 import { POSTS_ERRORS, POSTS_STATUS_POSITIVE } from "src/modules/bloggers-platform/posts/internal-status-posts-errors/posts-errors";
 import { COMMENTS_ERRORS, COMMENTS_STATUS_POSITIVE } from "src/modules/bloggers-platform/comments/internal-status-comments-errors/comments-errors";
-import { SESSIONS_ERRORS, SESSIONS_STATUS_POSITIVE } from "src/modules/usersSessions/session-internal-status-errors/sessions-errors";
+import { SESSIONS_ERRORS, SESSIONS_STATUS_POSITIVE } from "src/modules/user-sessions/session-internal-status-errors/sessions-errors";
 import { AUTH_ERRORS, AUTH_STATUS_POSITIVE } from "src/modules/auth/auth-internal-status-errors/authErrors";
 import { CONFIRMATIONS_ERRORS, CONFIRMATIONS_STATUS_POSITIVE } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsErrors";
 import { PHOTO_ERRORS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoErrors";
+import { MESSAGES_ERRORS, MESSAGES_STATUS_POSITIVE } from "src/modules/user-messages/msg/internal-status-msg-errors/user-msg-errors";
 
 interface ErrorResponse {
     messages: { message: string; field: string };
@@ -19,6 +20,7 @@ interface SuccessResponse {
 export const ErMsgAndHttpStatusCodeArr: Record<number, ErrorResponse> = {
     ...AUTH_ERRORS,
     ...SESSIONS_ERRORS,
+    ...MESSAGES_ERRORS,
     ...USERS_ERRORS,
     ...PHOTO_ERRORS,
     ...BLOGS_ERRORS,
@@ -52,6 +54,7 @@ export const ErMsgAndHttpStatusCodeArr: Record<number, ErrorResponse> = {
 export const SuccessfulResAndHttpStatusCodeArr: Record<number, SuccessResponse> = {
     ...AUTH_STATUS_POSITIVE,
     ...SESSIONS_STATUS_POSITIVE,
+    ...MESSAGES_STATUS_POSITIVE,
     ...USERS_STATUS_POSITIVE,
     ...BLOGS_STATUS_POSITIVE,
     ...POSTS_STATUS_POSITIVE,

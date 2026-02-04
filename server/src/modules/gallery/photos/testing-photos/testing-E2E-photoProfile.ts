@@ -1,6 +1,6 @@
 import { HTTP_STATUSES } from "src/core/utils/utils"
 import { isLoginUser } from "src/modules/auth/auth-testing/testFunctionsAuth"
-import { isCreatedUser } from "src/modules/user.accounts/testing-users/testFunctionsUser"
+import { isCreatedUser } from "src/modules/user-accounts/testing-users/testFunctionsUser"
 import { contextTests } from "test/helpers/init-settings"
 import * as fs from 'fs';
 

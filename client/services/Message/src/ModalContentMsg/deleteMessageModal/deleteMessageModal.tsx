@@ -4,8 +4,8 @@ import { IoCloseOutline, IoCloseSharp } from "react-icons/io5";
 import classes from "./styles.module.scss";
 
 type PropsType = {
-    userId: number;
-    senderId: number;
+    userId: string;
+    senderId: string;
     deleteOption: string;
     setDeleteOption: Dispatch<SetStateAction<"me" | "all">>;
     setOpenDeleteModalMessage: Dispatch<SetStateAction<boolean>>;

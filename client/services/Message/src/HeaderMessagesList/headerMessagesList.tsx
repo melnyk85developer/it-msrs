@@ -18,20 +18,22 @@ const HeaderMessagesList = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // console.log('HeaderMessagesList currentChat: - dialogId', currentChat.dialogId)
+    // console.log('HeaderMessagesList currentChat: - currentChat', currentChat)
+    // console.log('HeaderMessagesList: - currentInterlocutor', currentInterlocutor)
 
     const clearChat = () => {
         setDeleteOption('all')
         dispatch(deleteAllMessagesAC(
-            Number(authorizedUser.userId),
-            Number(currentInterlocutor.userId),
+            authorizedUser.id,
+            currentInterlocutor.id,
             deleteOption
         ))
     }
     const deleteChat = () => {
         dispatch(deleteDialogAC(
-            Number(currentChat.dialogId),
-            Number(authorizedUser.userId),
-            Number(currentInterlocutor.userId)
+            currentChat.dialogId,
+            authorizedUser.id,
+            currentInterlocutor.id
         ))
     }
 

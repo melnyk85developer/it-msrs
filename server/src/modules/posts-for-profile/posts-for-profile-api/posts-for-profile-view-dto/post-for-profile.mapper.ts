@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UsersQueryRepository } from "src/modules/user.accounts/users-infrastructure/users.query-repository";
+import { UsersQueryRepository } from "src/modules/user-accounts/users-infrastructure/users.query-repository";
 import { PostForProfileExtendedViewDto } from "./post-for-profile-extended-view.dto";
 import { PostForProfileViewDto } from "./posts-for-profile.view-dto";
 import { PostForProfileDocument } from "../../posts-domain/posts-for-profile-entity";

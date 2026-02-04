@@ -5,7 +5,7 @@ import HeaderMessagesList from "./HeaderMessagesList/headerMessagesList";
 import { AudioOutlined, PaperClipOutlined, SendOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
 import { getDialogMessagesAC, sendMessageAC } from "@packages/shared/src/store/MessagesReducers/messagesSlice";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { FaRegSmile } from "react-icons/fa";
 import { formatDayLabel, formatYearLabel } from "@packages/shared/src/components/utils/timeOfPublication";
 import routeMain from "./routes";
@@ -13,8 +13,15 @@ import classes from './styles.module.scss'
 
 const Dialog: React.FC = React.memo(() => {
     const dispatch = useAppDispatch()
-    const { messages, interlocutors, currentInterlocutor, isSending, deletingMessages, sendingMessages, updatingMessages } = useAppSelector(state => state.messagesPage)
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage)
+    const {
+        messages,
+        interlocutors,
+        currentInterlocutor,
+        isSending,
+        deletingMessages,
+        sendingMessages,
+        updatingMessages } = useAppSelector(state => state.messagesPage)
     const messagesAnchorRef = useRef<HTMLDivElement>(null)
     const newMessageAnchorRef = useRef<HTMLDivElement | null>(null)
     const [isAutoScroll, setIsAutoScroll] = useState(false)
@@ -25,8 +32,10 @@ const Dialog: React.FC = React.memo(() => {
 
     // console.log('isNewMessageInserted: - ', isNewMessageInserted)
     // console.log('Dialog - currentInterlocutor', currentInterlocutor)
+    // console.log('Dialog - interlocutors', interlocutors)
 
-    const recipient = interlocutors.find(i => i.chat.dialogId === Number(dialogId));
+    const recipient = interlocutors.find(i => i.chat.dialogId === dialogId);
+    // console.log('Dialog - recipient', recipient)
 
     useEffect(() => {
         const isNewMsg = messages.find(m => m.read === false && m.senderId !== authorizedUser.id);
@@ -45,9 +54,9 @@ const Dialog: React.FC = React.memo(() => {
     useEffect(() => {
         if (dialogId && recipient) {
             dispatch(getDialogMessagesAC(
-                Number(dialogId),
-                Number(authorizedUser.id),
-                Number(recipient.userId)
+                dialogId,
+                authorizedUser.id,
+                recipient.userId
             ))
         }
     }, [dialogId]);
@@ -55,15 +64,14 @@ const Dialog: React.FC = React.memo(() => {
     const addNewMessage = (messageText: string) => {
         const message = {
             message: messageText,
-            senderId: Number(authorizedUser.id),
-            receiverId: Number(recipient.userId),
+            senderId: authorizedUser.id,
+            receiverId: recipient.userId,
             read: false,
             createdAt: new Date().toISOString(),
-            replyToMessageId: null as number,
+            replyToMessageId: null as string,
             attachments: null as [],
-            localId: Date.now(),
+            localId: String(Date.now()),
         };
-
         dispatch(sendMessageAC(message));
         setAddMessageText('')
         // setIsAutoScroll(prev => !prev)
@@ -78,7 +86,7 @@ const Dialog: React.FC = React.memo(() => {
         }
     };
 
-    for (let i = 0; i < messages.length; i++) {
+    for (let i = 0; i < messages?.length; i++) {
         const currentMessage = messages[i];
 
         const currentDayLabel = formatDayLabel(currentMessage.createdAt);
@@ -120,12 +128,12 @@ const Dialog: React.FC = React.memo(() => {
             isNewMessageInserted = false
         }
 
-        renderItems.push(
+        recipient && renderItems.push(
             <MessageItemDialog
                 key={currentMessage.localId || currentMessage.smsId || i}
                 dispatch={dispatch}
                 msgId={currentMessage.msgId}
-                userId={Number(authorizedUser.id)}
+                userId={authorizedUser.id}
                 interlocutorId={(recipient.userId)}
                 senderId={currentMessage.senderId}
                 message={currentMessage.message}
@@ -150,24 +158,30 @@ const Dialog: React.FC = React.memo(() => {
             <HeaderMessagesList />
             <div className={classes.messagesClass}>
                 <div className={classes.wrapMessages} onScroll={scrollHandler}>
-                    {renderItems.length > 0
-                        ? renderItems
-                        :
-                        <div className={classes.wrapStartMessages}>
-                            <div className={classes.wrapBlockOfNoPosts}>
-                                <div className={classes.blockOfNoPosts}>
-                                    <h1><strong>Сообщений нет пока</strong></h1>
-                                    <h2>Вы еще не переписывались с
-                                        <strong className={classes.strongInterlocutor}>
-                                            {' '}
-                                            {currentInterlocutor.name}
-                                            {' '}
-                                            {currentInterlocutor.surname}
-                                        </strong>
-                                    </h2>
+                    {
+                        !dialogId || recipient === undefined
+                            ?
+                            <Navigate to={"/messages"} />
+                            :
+                            renderItems.length > 0
+                                ? renderItems
+                                :
+                                <div className={classes.wrapStartMessages}>
+                                    <div className={classes.wrapBlockOfNoPosts}>
+                                        <div className={classes.blockOfNoPosts}>
+                                            <h1><strong>Сообщений нет пока</strong></h1>
+                                            <h2>Вы еще не переписывались с
+                                                <strong className={classes.strongInterlocutor}>
+                                                    {' '}
+                                                    {currentInterlocutor.name}
+                                                    {' '}
+                                                    {currentInterlocutor.surname}
+                                                </strong>
+                                            </h2>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+
                     }
                     <div ref={messagesAnchorRef}></div>
                 </div>

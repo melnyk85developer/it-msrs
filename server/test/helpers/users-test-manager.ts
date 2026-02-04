@@ -3,9 +3,9 @@ import request from 'supertest';
 import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { contextTests } from './init-settings';
-import { GetUsersQueryParams } from 'src/modules/user.accounts/users-dto/get-users-query-params.input-dto';
-import { CreateUserInputDto } from 'src/modules/user.accounts/users-dto/users.input-dto';
-import { UpdateUserInputDto } from 'src/modules/user.accounts/users-dto/update-user.input-dto';
+import { GetUsersQueryParams } from 'src/modules/user-accounts/users-dto/get-users-query-params.input-dto';
+import { CreateUserInputDto } from 'src/modules/user-accounts/users-dto/users.input-dto';
+import { UpdateUserInputDto } from 'src/modules/user-accounts/users-dto/update-user.input-dto';
 
 export class UsersTestManager {
     constructor(private app: INestApplication) { }

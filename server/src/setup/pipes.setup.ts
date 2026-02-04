@@ -36,6 +36,9 @@ export function pipesSetup(app: INestApplication) {
     app.useGlobalPipes(
         new ValidationPipe({
             transform: true,
+            transformOptions: {
+                enableImplicitConversion: true,
+            },
             whitelist: true,
             stopAtFirstError: true,
             exceptionFactory: (errors) => {

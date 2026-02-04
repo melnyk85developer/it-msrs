@@ -14,16 +14,17 @@ import { CommentsTestManager } from './comments-test-manager';
 import { LikesTestManager } from './likes-test-manager';
 import { PostsTestManager } from './posts-test-manager';
 import { UserSessionTestManager } from './user-session-test-manager';
-import { UsersRepository } from 'src/modules/user.accounts/users-infrastructure/users.repository';
+import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
 import { AuthService } from 'src/modules/auth/auth-application/auth.service';
-import { UsersService } from 'src/modules/user.accounts/users-application/users.service';
+import { UsersService } from 'src/modules/user-accounts/users-application/users.service';
 import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
-import { SessionsRepository } from 'src/modules/usersSessions/sessions-infrastructure/session.repository';
+import { SessionsRepository } from 'src/modules/user-sessions/sessions-infrastructure/session.repository';
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
 import { ConfirmationsCodesService } from 'src/modules/confirmationsCodes/confirmations-application/confirmations.service';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 import { UserPhotosTestManager } from './user-photos-test-manager';
 import { UserPhotoAlbumsTestManager } from './user-photo-albums-test-manager';
+import { UserMessagesTestManager } from './messages-test-manager';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -66,6 +67,7 @@ export const initSettings = async (
     contextTests.likesTestManager = new LikesTestManager(contextTests.app);
     contextTests.postsTestManager = new PostsTestManager(contextTests.app);
     contextTests.userSessionTestManager = new UserSessionTestManager(contextTests.app);
+    contextTests.userMessagesTestManager = new UserMessagesTestManager(contextTests.app);
     contextTests.usersTestManager = new UsersTestManager(contextTests.app);
     contextTests.userPhotosTestManager = new UserPhotosTestManager(contextTests.app);
     contextTests.userPhotoAlbumsTestManager = new UserPhotoAlbumsTestManager(contextTests.app);
@@ -82,6 +84,7 @@ export const initSettings = async (
         likesTestManager: contextTests.likesTestManager,
         postsTestManager: contextTests.postsTestManager,
         userSessionTestManager: contextTests.userSessionTestManager,
+        userMessagesTestManager: contextTests.userMessagesTestManager,
         usersTestManager: contextTests.usersTestManager,
         userPhotosTestManager: contextTests.userPhotosTestManager,
         userPhotoAlbumsTestManager: contextTests.userPhotoAlbumsTestManager,

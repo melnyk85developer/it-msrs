@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserAccountsModule } from '../user.accounts/user-accounts.module';
+import { UserAccountsModule } from '../user-accounts/user-accounts.module';
 import { BlogsService } from './blogs/blogs-application/blogs.service';
 import { BlogsController } from './blogs/blogs-api/blogs.controller';
 import { BlogsQueryRepository } from './blogs/blogs-infrastructure/external-query-blogs/query-blogs/blogs.query-repository';

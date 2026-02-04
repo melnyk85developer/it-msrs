@@ -5,7 +5,7 @@ import { CreateCommentInputDto } from "../comments-api/comments-input-dto/commen
 import { UpdateCommentInputDto } from "../comments-api/comments-input-dto/comments-update.input-dto"
 import { contextTests } from "test/helpers/init-settings"
 import { isLoginUser } from "src/modules/auth/auth-testing/testFunctionsAuth"
-import { isCreatedUser } from "src/modules/user.accounts/testing-users/testFunctionsUser"
+import { isCreatedUser } from "src/modules/user-accounts/testing-users/testFunctionsUser"
 
 export const commentsE2eTest = () => {
     describe('E2E-COMMENTS', () => {

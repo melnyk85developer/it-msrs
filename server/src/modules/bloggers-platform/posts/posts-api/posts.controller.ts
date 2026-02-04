@@ -14,8 +14,8 @@ import { CommentViewDto } from '../../comments/comments-api/comments-view-dto/co
 import { CommentsService } from '../../comments/comments-application/comments.service';
 import { CreateCommentInputDto } from '../../comments/comments-api/comments-input-dto/comments.input-dto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { BasicAuthGuard } from 'src/modules/user.accounts/users-guards/basic/basic-auth.guard';
-import { AuthAccessGuard } from 'src/modules/user.accounts/users-guards/bearer/jwt-auth.guard';
+import { BasicAuthGuard } from 'src/modules/user-accounts/users-guards/basic/basic-auth.guard';
+import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
 
 @Controller('posts')
 export class PostsController {

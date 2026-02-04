@@ -72,7 +72,7 @@ export type IsLikesType = {
     userId: number | any
 }
 export type UserType = {
-    id: number
+    id: string;
     name: string
     surname: string
     status: string
@@ -80,7 +80,7 @@ export type UserType = {
     followed: boolean
 }
 export type FriendsType = {
-    id: number
+    id: string
     name: string
     surname: string
     status: string
@@ -88,26 +88,26 @@ export type FriendsType = {
     followed: boolean
 }
 export type MiniUserType = {
-    userId: number;
+    userId: string;
     avatar: string;
     name: string;
     surname: string;
     email: string;
 }
 export type MessagesType = {
-    localId: number;
-    msgId: number;
+    localId: string;
+    msgId: string;
     message: string;
-    senderId: number;
-    receiverId: number;
+    senderId: string;
+    receiverId: string;
     createdAt: string;
     read: boolean;
-    dialogId: number;
-    replyToMessageId?: number;
+    dialogId: string;
+    replyToMessageId: string | null;
     attachments: any[];
 }
 export type Interlocutor = {
-    userId: number;
+    userId: string;
     avatar: string;
     name: string;
     surname: string;
@@ -115,9 +115,9 @@ export type Interlocutor = {
     lastMessage: MessagesType;
 }
 export type ChatType = {
-    dialogId: number;
-    userAId: number;
-    userBId: number;
+    dialogId: string;
+    userAId: string;
+    userBId: string;
     createdAt: string;
     updatedAt: string;
 }

@@ -1,4 +1,4 @@
-import { Session } from "src/modules/usersSessions/sessions-domain/sessions.entity";
+import { Session } from "src/modules/user-sessions/sessions-domain/sessions.entity";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
 import { DomainExceptionCode } from "src/core/exceptions/domain-exception-codes";
 import { contextTests } from "test/helpers/init-settings";

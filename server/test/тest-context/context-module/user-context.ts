@@ -1,7 +1,7 @@
 import { DomainExceptionCode } from "src/core/exceptions/domain-exception-codes";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
-import { MeViewDto, UserViewDto } from "src/modules/user.accounts/users-dto/users.view-dto";
-import { UsersRepository } from "src/modules/user.accounts/users-infrastructure/users.repository";
+import { MeViewDto, UserViewDto } from "src/modules/user-accounts/users-dto/users.view-dto";
+import { UsersRepository } from "src/modules/user-accounts/users-infrastructure/users.repository";
 
 export class UserContextClass {
     public usersRepository: UsersRepository;
