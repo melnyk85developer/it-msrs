@@ -8,7 +8,7 @@ export const isCreatedMsg1 = async (msg: any, access: string, refresh: string, s
             access,
             refresh,
             msg,
-            contextTests.constants.userAgent[10],
+            contextTests.sessions.userAgent[10],
             statusCode
         )
         // console.log('TEST - isCreatedUser', isCreatedUser)
@@ -31,7 +31,7 @@ export const isCreatedMsg2 = async (msg: any, access: string, refresh: string, s
             access,
             refresh,
             msg,
-            contextTests.constants.userAgent[10],
+            contextTests.sessions.userAgent[10],
             statusCode
         )
         // console.log('TEST - isCreatedUser', isCreatedUser)
@@ -54,7 +54,7 @@ export const isCreatedMsg3 = async (msg: any, access: string, refresh: string, s
             access,
             refresh,
             msg,
-            contextTests.constants.userAgent[10],
+            contextTests.sessions.userAgent[10],
             statusCode
         )
         // console.log('TEST - isCreatedUser', isCreatedUser)

@@ -16,7 +16,7 @@ export class ConstantsContextClass {
     public readonly incorectData: any[];
     public readonly invalidId: string;
     public readonly randomId: string;
-    public readonly userAgent: string[];
+    // public readonly userAgent: string[];
 
     public readonly image1Path: string; // Храним путь, а не стрим
     public readonly image2Path: string;

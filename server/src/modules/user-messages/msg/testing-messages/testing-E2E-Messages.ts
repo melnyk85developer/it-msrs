@@ -61,7 +61,7 @@ export const userMessagesE2eTest = () => {
         const { getAllInterlocutors } = await contextTests.userMessagesTestManager.getAllInterlocutors(
             contextTests.sessions.accessTokenUser1Devices[0],
             contextTests.sessions.refreshTokenUser1Devices[0],
-            contextTests.constants.userAgent[1],
+            contextTests.sessions.userAgent[1],
             HTTP_STATUSES.OK_200
         )
         expect(getAllInterlocutors.length).toEqual(1);
@@ -80,7 +80,7 @@ export const userMessagesE2eTest = () => {
                 receiverId: contextTests.users.createdUsers[1]!.id,
             },
             'me',
-            contextTests.constants.userAgent[6],
+            contextTests.sessions.userAgent[6],
             HTTP_STATUSES.NO_CONTENT_204
         )
     }
@@ -106,7 +106,7 @@ export const userMessagesE2eTest = () => {
             )
             // console.log('TEST: - blogsE2eTest: isLogin1.status 😡', isLogin1.authData)
             const isUser2 = await isCreatedUser(
-                0,
+                1,
                 contextTests.users.correctUserNames[1],
                 contextTests.users.correctUserEmails[1],
                 contextTests.users.correctUserPasswords[1],
@@ -114,8 +114,8 @@ export const userMessagesE2eTest = () => {
             )
             // console.log('TEST: - blogsE2eTest: isUser1 😡', isUser1)
             const isLogin2 = await isLoginUser(
-                0,
-                0,
+                1,
+                1,
                 contextTests.sessions.accessTokenUser1Devices[1],
                 contextTests.sessions.refreshTokenUser1Devices[1],
                 contextTests.users.correctUserEmails[1],
@@ -125,7 +125,7 @@ export const userMessagesE2eTest = () => {
             )
             // console.log('TEST: - blogsE2eTest: isLogin2.status 😡', isLogin2.authData)
             const isUser3 = await isCreatedUser(
-                0,
+                2,
                 contextTests.users.correctUserNames[2],
                 contextTests.users.correctUserEmails[2],
                 contextTests.users.correctUserPasswords[2],
@@ -133,8 +133,8 @@ export const userMessagesE2eTest = () => {
             )
             // console.log('TEST: - blogsE2eTest: isUser1 😡', isUser1)
             const isLogin3 = await isLoginUser(
-                0,
-                0,
+                2,
+                2,
                 contextTests.sessions.accessTokenUser1Devices[2],
                 contextTests.sessions.refreshTokenUser1Devices[2],
                 contextTests.users.correctUserEmails[2],
@@ -155,119 +155,119 @@ export const userMessagesE2eTest = () => {
             expect(response.body.items).toEqual(expect.arrayContaining([]));
             expect(response.body.items).toEqual([])
         })
-        // it('GET    - Ожидается статус код 404, - Запрос на не существующий диалог!', async () => {
-        //     await contextTests.userMessagesTestManager.getInterlocutorById(
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         contextTests.constants.invalidId,
-        //         contextTests.users.createdUsers[0]!.id,
-        //         contextTests.users.createdUsers[1]!.id,
-        //         contextTests.constants.userAgent[2],
-        //         HTTP_STATUSES.NOT_FOUND_404
-        //     )
-        // })
-        // it('GET    - Ожидается статус код 400, - Не валидный запрос на получение диалога с сообщениями!', async () => {
-        //     await contextTests.userMessagesTestManager.getInterlocutorById(
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         contextTests.constants.invalidId,
-        //         contextTests.constants.invalidId,
-        //         undefined,
-        //         contextTests.constants.userAgent[3],
-        //         HTTP_STATUSES.BAD_REQUEST_400
-        //     )
-        // })
+        it('GET    - Ожидается статус код 404, - Запрос на не существующий диалог!', async () => {
+            await contextTests.userMessagesTestManager.getInterlocutorById(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.constants.invalidId,
+                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[1]!.id,
+                contextTests.sessions.userAgent[2],
+                HTTP_STATUSES.NOT_FOUND_404
+            )
+        })
+        it('GET    - Ожидается статус код 400, - Не валидный запрос на получение диалога с сообщениями!', async () => {
+            await contextTests.userMessagesTestManager.getInterlocutorById(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.constants.invalidId,
+                contextTests.constants.invalidId,
+                undefined,
+                contextTests.sessions.userAgent[3],
+                HTTP_STATUSES.BAD_REQUEST_400
+            )
+        })
 
-        // it(`POST   - Ожидается статус код 400, - Не валидный запрос на создание сообщения ! Дополнительные запросы: -> GET, POST`, async () => {
-        //     const message = {
-        //         message: '',
-        //         senderId: contextTests.users.createdUsers[0]!.id,
-        //         receiverId: contextTests.users.createdUsers[1]!.id,
-        //         read: false,
-        //         createdAt: new Date().toISOString(),
-        //         replyToMessageId: null,
-        //         attachments: contextTests.constants.image1Path,
-        //         localId: Date.now(),
-        //     };
+        it(`POST   - Ожидается статус код 400, - Не валидный запрос на создание сообщения ! Дополнительные запросы: -> GET, POST`, async () => {
+            const message = {
+                message: '',
+                senderId: contextTests.users.createdUsers[0]!.id,
+                receiverId: contextTests.users.createdUsers[1]!.id,
+                read: false,
+                createdAt: new Date().toISOString(),
+                replyToMessageId: null,
+                attachments: contextTests.constants.image1Path,
+                localId: Date.now(),
+            };
 
-        //     await contextTests.userMessagesTestManager.createMessage(
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         message,
-        //         contextTests.constants.userAgent[4],
-        //         HTTP_STATUSES.BAD_REQUEST_400
-        //     )
-        // })
-        // it(`POST   - Ожидается статус код 401, - Попытка без авторизации создать сообщение! Дополнительные запросы: -> GET, POST`, async () => {
-        //     const message = {
-        //         message: 'UNAUTHORIZED_401',
-        //         senderId: contextTests.users.createdUsers[0]!.id,
-        //         receiverId: contextTests.users.createdUsers[1]!.id,
-        //         read: false,
-        //         createdAt: new Date().toISOString(),
-        //         replyToMessageId: null,
-        //         attachments: contextTests.constants.image2Path,
-        //         localId: Date.now(),
-        //     };
-        //     await contextTests.userMessagesTestManager.createMessage(
-        //         '',
-        //         contextTests.constants.expiredToken,
-        //         message,
-        //         contextTests.constants.userAgent[5],
-        //         HTTP_STATUSES.UNAUTHORIZED_401
-        //     )
-        // })
-        // it(`POST   - Ожидается статус код 201, - Успешное создание сообщения 1 (user 1 => user 2)! Дополнительные запросы: -> GET, POST`, async () => {
-        //     const msg1 = await isCreatedMsg1(
-        //         {
-        //             message: `Успешное создание сообщение 1 от пользователя senderId ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
-        //             senderId: contextTests.users.createdUsers[0]!.id,
-        //             receiverId: contextTests.users.createdUsers[1]!.id,
-        //             read: false,
-        //             createdAt: new Date().toISOString(),
-        //             replyToMessageId: null,
-        //             attachments: contextTests.constants.image2Path,
-        //             localId: Date.now(),
-        //         },
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         HTTP_STATUSES.CREATED_201
-        //     )
-        //     const { getEntity } = await contextTests.userMessagesTestManager.getInterlocutorById(
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         contextTests.createdMessage1.dialogId,
-        //         contextTests.users.createdUsers[0]!.id,
-        //         contextTests.users.createdUsers[1]!.id,
-        //         contextTests.constants.userAgent[7],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     // console.log('TEST: - getEntity', getEntity)
-        //     expect(getEntity.allMsg).toEqual([
-        //         {
-        //             msgId: contextTests.createdMessage1.msgId,
-        //             message: contextTests.createdMessage1.message,
-        //             senderId: contextTests.createdMessage1.senderId,
-        //             receiverId: contextTests.createdMessage1.receiverId,
-        //             read: contextTests.createdMessage1.read,
-        //             dialogId: contextTests.createdMessage1.dialogId,
-        //             replyToMessageId: null,
-        //             createdAt: expect.any(String),
-        //             updatedAt: expect.any(String)
-        //         }
-        //     ]);
+            await contextTests.userMessagesTestManager.createMessage(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                message,
+                contextTests.sessions.userAgent[4],
+                HTTP_STATUSES.BAD_REQUEST_400
+            )
+        })
+        it(`POST   - Ожидается статус код 401, - Попытка без авторизации создать сообщение! Дополнительные запросы: -> GET, POST`, async () => {
+            const message = {
+                message: 'UNAUTHORIZED_401',
+                senderId: contextTests.users.createdUsers[0]!.id,
+                receiverId: contextTests.users.createdUsers[1]!.id,
+                read: false,
+                createdAt: new Date().toISOString(),
+                replyToMessageId: null,
+                attachments: contextTests.constants.image2Path,
+                localId: Date.now(),
+            };
+            await contextTests.userMessagesTestManager.createMessage(
+                '',
+                contextTests.constants.expiredToken,
+                message,
+                contextTests.sessions.userAgent[5],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+        })
+        it(`POST   - Ожидается статус код 201, - Успешное создание сообщения 1 (user 1 => user 2)! Дополнительные запросы: -> GET, POST`, async () => {
+            const msg1 = await isCreatedMsg1(
+                {
+                    message: `Успешное создание сообщение 1 от пользователя senderId ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
+                    senderId: contextTests.users.createdUsers[0]!.id,
+                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    read: false,
+                    createdAt: new Date().toISOString(),
+                    replyToMessageId: null,
+                    attachments: contextTests.constants.image2Path,
+                    localId: Date.now(),
+                },
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                HTTP_STATUSES.CREATED_201
+            )
+            // const { getEntity } = await contextTests.userMessagesTestManager.getInterlocutorById(
+            //     contextTests.sessions.accessTokenUser1Devices[0],
+            //     contextTests.sessions.refreshTokenUser1Devices[0],
+            //     contextTests.createdMessage1.dialogId,
+            //     contextTests.users.createdUsers[0]!.id,
+            //     contextTests.users.createdUsers[1]!.id,
+            //     contextTests.sessions.userAgent[7],
+            //     HTTP_STATUSES.OK_200
+            // )
+            // // console.log('TEST: - getEntity', getEntity)
+            // expect(getEntity.allMsg).toEqual([
+            //     {
+            //         msgId: contextTests.createdMessage1.msgId,
+            //         message: contextTests.createdMessage1.message,
+            //         senderId: contextTests.createdMessage1.senderId,
+            //         receiverId: contextTests.createdMessage1.receiverId,
+            //         read: contextTests.createdMessage1.read,
+            //         dialogId: contextTests.createdMessage1.dialogId,
+            //         replyToMessageId: null,
+            //         createdAt: expect.any(String),
+            //         updatedAt: expect.any(String)
+            //     }
+            // ]);
 
-        //     const { getAllInterlocutors } = await contextTests.userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.sessions.accessTokenUser1Devices[0],
-        //         contextTests.sessions.refreshTokenUser1Devices[0],
-        //         contextTests.constants.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     // console.log('TEST: - getAllInterlocutors', getAllInterlocutors[0].chat)
-        //     contextTests.createdDialog1 = getAllInterlocutors[0].chat
-        //     expect(getAllInterlocutors.length).toEqual(1);
-        //     expect(getAllInterlocutors).toEqual(expect.arrayContaining([]));
-        // })
+            // const { getAllInterlocutors } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+            //     contextTests.sessions.accessTokenUser1Devices[0],
+            //     contextTests.sessions.refreshTokenUser1Devices[0],
+            //     contextTests.sessions.userAgent[1],
+            //     HTTP_STATUSES.OK_200
+            // )
+            // // console.log('TEST: - getAllInterlocutors', getAllInterlocutors[0].chat)
+            // contextTests.createdDialog1 = getAllInterlocutors[0].chat
+            // expect(getAllInterlocutors.length).toEqual(1);
+            // expect(getAllInterlocutors).toEqual(expect.arrayContaining([]));
+        })
         // it(`POST   - Ожидается статус код 201, - Успешное создание сообщения 2 (user 2 => user 1)! Дополнительные запросы: -> GET`, async () => {
         //     const msg2 = await isCreatedMsg2(
         //         {
@@ -1035,7 +1035,7 @@ export const userMessagesE2eTest = () => {
         // })
 
 
-        
+
         // it(`DELETE - Ожидается статус код 401, - Попытка удаления всей переписки без авторизации! Дополнительные запросы: -> GET, POST`, async () => {
         //     await prepareIsCreated3Msg()
 

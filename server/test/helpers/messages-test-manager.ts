@@ -29,7 +29,7 @@ export class UserMessagesTestManager {
         receiverId: string | undefined,
         userAgent: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200) {
-        // console.log('TEST userMessagesTestManager - dialogId ', dialogId)
+        console.log('TEST userMessagesTestManager - dialogId, senderId, receiverId', dialogId, senderId, receiverId)
         const response = await request(this.app.getHttpServer())
             .get(`${SETTINGS.RouterPath.messages}/dialog/${dialogId}`)
             .set('Authorization', `Bearer ${accessToken}`)
