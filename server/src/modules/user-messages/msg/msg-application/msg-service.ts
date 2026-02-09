@@ -20,16 +20,16 @@ export class MessageService {
         private messageRepository: MessageRepository,
         private dialogsService: DialogService,
     ) { }
-    async createMessageService(dto: CreateMessageDto, file?: [Multer.File]): Promise<MessageOneViewDto> {
+    async createMessageService(dto: Omit<CreateMessageDto, 'dialogId'>, file?: [Multer.File]): Promise<MessageOneViewDto> {
         const { localId, senderId, receiverId, message, replyToMessageId } = dto
-        // console.log('createMessageServices: - 👍🏻 dto ', dto)
+        console.log('createMessageServices: - 👍🏻 dto ', dto)
         const isDialog = await this.dialogsService._getOneDialogBySenderIdOrReceiverIdRepository(
             senderId,
             receiverId
         )
         if (isDialog) {
-            // console.log('createMessageServices: - 😜😜😜 isDialog', isDialog)
-            // console.log('createMessageServices: - 😡😡😡, senderId, receiverId', senderId, receiverId)
+            console.log('createMessageServices: - 😜😜😜 isDialog', isDialog)
+            console.log('createMessageServices: - 😡😡😡, senderId, receiverId', senderId, receiverId)
             if (isDialogDeletedForUser(isDialog.meta, senderId)) {
                 console.log('createMessageServices: - 😡😡😡, isDialogDeletedForUser(isDialog.meta, senderId)', isDialogDeletedForUser(isDialog.meta, senderId))
                 await this.dialogsService.updateDialogService(isDialog.id, senderId)
@@ -49,16 +49,16 @@ export class MessageService {
                     replyToMessageId: replyToMessageId ? replyToMessageId : null,
                 }
             )
-            // console.log('createMessageServices: msg1', msg)
+            console.log('createMessageServices: msg1', msg)
             await this.messageRepository.save(msg);
-            // console.log('createMessageServices: msg2', msg)
+            console.log('createMessageServices: msg2', msg)
             return MessageOneViewDto.mapToOneMessageView(msg, localId)
         } else {
-            // console.log('createMessageServices: - 😡😡😡, senderId, receiverId', senderId, receiverId)
+            console.log('createMessageServices: - 😡😡😡, senderId, receiverId', senderId, receiverId)
             const newUserDialog = await this.dialogsService.createDialogService(
                 { userAId: senderId, userBId: receiverId }
             )
-            // console.log('createMessageServices: newUserDialog', newUserDialog)
+            console.log('createMessageServices: newUserDialog', newUserDialog)
             const msg = this.MessageModel.createMessageInstance(
                 {
                     ...dto,
@@ -70,9 +70,9 @@ export class MessageService {
                     replyToMessageId: null,
                 }
             )
-            // console.log('createMessageServices: msg1', msg)
+            console.log('createMessageServices: msg1', msg)
             await this.messageRepository.save(msg);
-            // console.log('createMessageServices: msg2', msg)
+            console.log('createMessageServices: msg2', msg)
             return MessageOneViewDto.mapToOneMessageView(msg, localId)
         }
     }

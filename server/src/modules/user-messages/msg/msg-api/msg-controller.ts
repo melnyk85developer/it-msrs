@@ -77,12 +77,12 @@ export class UsersMessagesController {
     @HttpCode(HTTP_STATUSES.OK_200)
     async createMessageController(
         @Body() body: CreateInputMessageDto,
-        @UploadedFile() file?: [Multer.File]
+        @UploadedFile() attachments?: [Multer.File]
     ) {
-        // console.log('createMessageController file, body: 🔥', file, body);
+        console.log('createMessageController attachments, body: 🔥', attachments, body);
         const isCreated = await this.messagesService.createMessageService(
             body,
-            file
+            attachments
         )
         return isCreated
     }

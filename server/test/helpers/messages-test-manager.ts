@@ -52,14 +52,11 @@ export class UserMessagesTestManager {
         if (
             !data.attachments ||
             !data.localId ||
-            data.localId === '' ||
             !data.message ||
-            data.message === '' ||
             !data.senderId ||
-            !data.receiverId ||
-            !data.read ||
-            !data.createdAt
+            !data.receiverId
         ) {
+            console.log('TEST userMessagesTestManager - data req1', data)
             response = await request(this.app.getHttpServer())
                 .post(SETTINGS.RouterPath.messages)
                 .set('Authorization', `Bearer ${accessToken}`)
@@ -68,22 +65,29 @@ export class UserMessagesTestManager {
                 .set('User-Agent', `${userAgent}`)
                 .expect(expectedStatusCode);
         } else {
-            response = await request(this.app.getHttpServer())
+            console.log('TEST userMessagesTestManager - data req2', data)
+            const req = request(this.app.getHttpServer())
                 .post(SETTINGS.RouterPath.messages)
                 .set('Authorization', `Bearer ${accessToken}`)
                 .set('Cookie', `refreshToken=${refreshToken}`)
-                .field('localId', String(data.localId ?? ''))
-                .field('message', String(data.message ?? ''))
-                .field('senderId', String(data.senderId ?? ''))
-                .field('receiverId', String(data.receiverId ?? ''))
-                .field('read', String(data.read))
-                .field('createdAt', String(data.createdAt ?? ''))
-                .field('replyToMessageId', String(data.replyToMessageId ?? ''))
-                .attach('attachments', data.attachments ?? '')
                 .set('User-Agent', `${userAgent}`)
-                .expect(expectedStatusCode);
+
+                .field('localId', data.localId.toString())
+                .field('message', data.message.toString())
+                .field('senderId', data.senderId.toString())
+                .field('receiverId', data.receiverId.toString())
+
+            if (data.replyToMessageId !== undefined && data.replyToMessageId !== null) {
+                req.field('replyToMessageId', data.replyToMessageId.toString());
+            }
+
+            if (data.attachments) {
+                req.attach('attachments', data.attachments);
+            }
+
+            response = await req.expect(expectedStatusCode)
         }
-        // console.log('TEST userMessagesTestManager - BODY res', response.body);
+        console.log('TEST userMessagesTestManager - BODY res', response.body);
 
         return { response: response, createdMessage: response.body }
     }
