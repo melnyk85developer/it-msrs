@@ -27,4 +27,12 @@ export class CreateMessageDto {
     @IsString({ message: 'replyToMessageId должно быть строкой!' })
     @IsOptional()
     readonly replyToMessageId?: string;
+
+    // @ApiProperty({ example: 'true', description: 'Уникальный идентификатор диалога!' })
+    // @IsNotEmpty({ message: 'Поле dialogId не должно быть пустым!' })
+    // readonly meta: any[];
+
+    // @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
+    // @IsOptional()
+    // readonly attachments: Attachment[] | null;
 }

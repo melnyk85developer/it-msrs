@@ -113,7 +113,7 @@ export class MessageService {
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE)
         }
         const messages = await this.messageRepository.findMessagesBySenderIdOrReceiverIdOrNotFoundFailRepository(userId, receiverId);
-        // console.log('deleteAllMessagesServices - 🤪🤪🤪 - messages', messages)
+        console.log('deleteAllMessagesServices - 🤪🤪🤪 - messages.length', messages.length)
         // const isAdmin = user.roles.some(entry => entry.value === 'ADMIN')
         // if (isAdmin && messages) {
         //     return await this.usersMessagesRepository.deleteAllMessagesRepository(senderId, receiverId)
@@ -124,26 +124,24 @@ export class MessageService {
             if (userId === messages[i].senderId) {
                 // console.log('deleteAllMessagesServices: - deleteOption 😡 1', deleteOption)
                 const alreadyDeleted = messages[i].meta.some(entry => entry.userId === userId);
-                // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted, newMeta)
                 if (!alreadyDeleted) {
+                    console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted)
                     msgs.push(messages[i])
                 }
             }
             if (userId === messages[i].receiverId) {
-                // console.log('deleteAllMessagesServices: - deleteOption 😡 2', deleteOption)
                 const alreadyDeleted = messages[i].meta.some(entry => entry.userId === messages[i].receiverId);
                 if (!alreadyDeleted) {
+                    console.log('deleteAllMessagesServices: - alreadyDeleted 😡 2', alreadyDeleted)
                     msgs.push(messages[i])
                 }
             }
-            const msg = await this.messageRepository.findMessageByIdOrNotFoundFailRepository(messages[i].id)
-            msg.markMsgDeletedForUser({ msgId: messages[i].id, meta: newMeta });
-            await this.messageRepository.save(msg);
+            console.log('deleteAllMessagesServices: - msgs 😡 ', msgs)
         }
-
         if (msgs && msgs.length) {
             for (let i = 0; msgs.length > i; i++) {
                 const newMeta: any[] = [...msgs[i].meta];
+                console.log('deleteAllMessagesServices: - msgs 😡 for 2', msgs)
                 // console.log('deleteAllMessagesServices: - newMeta 😡 ', newMeta)
                 if (userId === msgs[i].senderId) {
                     // console.log('deleteAllMessagesServices: - deleteOption 😡 1', deleteOption)
