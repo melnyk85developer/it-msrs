@@ -20,24 +20,11 @@ export class CreateMessageDto {
     @IsString({ message: 'receiverId должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле receiverId не должно быть пустым!' })
     readonly receiverId: string;
-    // @ApiProperty({ example: 'true', description: 'Является ли сообщение прочитанным или нет?' })
-    // @IsBoolean({ message: 'read должно быть boolean!' })
-    // @IsNotEmpty({ message: 'Поле read не должно быть пустым!' })
-    // readonly read: boolean;
     @ApiProperty({ example: 'true', description: 'Уникальный идентификатор диалога!' })
     @IsOptional()
     readonly dialogId?: string;
-
     @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
     @IsString({ message: 'replyToMessageId должно быть строкой!' })
     @IsOptional()
     readonly replyToMessageId?: string;
-
-    // @ApiProperty({ example: 'true', description: 'Уникальный идентификатор диалога!' })
-    // @IsNotEmpty({ message: 'Поле dialogId не должно быть пустым!' })
-    // readonly meta: any[];
-
-    // @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
-    // @IsOptional()
-    // readonly attachments: Attachment[] | null;
 }

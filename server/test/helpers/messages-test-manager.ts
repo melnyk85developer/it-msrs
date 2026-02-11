@@ -18,7 +18,7 @@ export class UserMessagesTestManager {
             .set('User-Agent', `${userAgent}`)
             .expect(expectedStatusCode);
 
-        console.log('TEST UserMessagesTestManager - response.body:', response.body)
+        // console.log('TEST UserMessagesTestManager - response.body:', response.body)
         return { response: response, getAllInterlocutors: response.body }
     }
     async getInterlocutorById(
@@ -29,7 +29,7 @@ export class UserMessagesTestManager {
         receiverId: string | undefined,
         userAgent: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200) {
-        console.log('TEST userMessagesTestManager - dialogId, senderId, receiverId', dialogId, senderId, receiverId)
+        // console.log('TEST userMessagesTestManager - dialogId, senderId, receiverId', dialogId, senderId, receiverId)
         const response = await request(this.app.getHttpServer())
             .get(`${SETTINGS.RouterPath.messages}/dialog/${dialogId}`)
             .set('Authorization', `Bearer ${accessToken}`)
@@ -48,6 +48,8 @@ export class UserMessagesTestManager {
         userAgent: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         // console.log('TEST userMessagesTestManager - data req', data)
+        // console.log('TEST userMessagesTestManager - accessToken req', accessToken)
+        // console.log('TEST userMessagesTestManager - refreshToken req', refreshToken)
         let response
         if (
             !data.attachments ||
@@ -56,7 +58,7 @@ export class UserMessagesTestManager {
             !data.senderId ||
             !data.receiverId
         ) {
-            console.log('TEST userMessagesTestManager - data req1', data)
+            // console.log('TEST userMessagesTestManager - data req1', data)
             response = await request(this.app.getHttpServer())
                 .post(SETTINGS.RouterPath.messages)
                 .set('Authorization', `Bearer ${accessToken}`)
@@ -65,13 +67,12 @@ export class UserMessagesTestManager {
                 .set('User-Agent', `${userAgent}`)
                 .expect(expectedStatusCode);
         } else {
-            console.log('TEST userMessagesTestManager - data req2', data)
+            // console.log('TEST userMessagesTestManager - data req2', data)
             const req = request(this.app.getHttpServer())
                 .post(SETTINGS.RouterPath.messages)
                 .set('Authorization', `Bearer ${accessToken}`)
                 .set('Cookie', `refreshToken=${refreshToken}`)
                 .set('User-Agent', `${userAgent}`)
-
                 .field('localId', data.localId.toString())
                 .field('message', data.message.toString())
                 .field('senderId', data.senderId.toString())
@@ -80,15 +81,12 @@ export class UserMessagesTestManager {
             if (data.replyToMessageId !== undefined && data.replyToMessageId !== null) {
                 req.field('replyToMessageId', data.replyToMessageId.toString());
             }
-
             if (data.attachments) {
                 req.attach('attachments', data.attachments);
             }
-
             response = await req.expect(expectedStatusCode)
         }
-        console.log('TEST userMessagesTestManager - BODY res', response.body);
-
+        // console.log('TEST userMessagesTestManager - BODY res', response.body);
         return { response: response, createdMessage: response.body }
     }
     async updateMessage(
@@ -102,14 +100,11 @@ export class UserMessagesTestManager {
         if (
             !data.attachments ||
             !data.localId ||
-            data.localId === '' ||
             !data.message ||
-            data.message === '' ||
             !data.senderId ||
-            !data.receiverId ||
-            !data.read ||
-            !data.createdAt
+            !data.receiverId
         ) {
+            // console.log('TEST usersTestManager - data1 ', data)
             response = await request(this.app.getHttpServer())
                 .put(`${SETTINGS.RouterPath.messages}`)
                 .set('Authorization', `Bearer ${accessToken}`)
@@ -118,7 +113,8 @@ export class UserMessagesTestManager {
                 .set('User-Agent', `${userAgent}`)
                 .expect(expectedStatusCode);
         } else {
-            response = await request(this.app.getHttpServer())
+            // console.log('TEST usersTestManager - data2 ', data)
+            const req = request(this.app.getHttpServer())
                 .put(`${SETTINGS.RouterPath.messages}`)
                 .set('Authorization', `Bearer ${accessToken}`)
                 .set('Cookie', `refreshToken=${refreshToken}`)
@@ -126,12 +122,20 @@ export class UserMessagesTestManager {
                 .field('message', String(data.message ?? ''))
                 .field('senderId', String(data.senderId ?? ''))
                 .field('receiverId', String(data.receiverId ?? ''))
-                .field('read', String(data.read))
-                .field('createdAt', String(data.createdAt ?? ''))
                 .field('replyToMessageId', String(data.replyToMessageId ?? ''))
-                .attach('attachments', data.attachments ?? '')
                 .set('User-Agent', `${userAgent}`)
-                .expect(expectedStatusCode);
+
+            // .field('read', String(data.read))
+            // .field('createdAt', String(data.createdAt ?? ''))
+            // .attach('attachments', data.attachments ?? '')
+
+            if (data.replyToMessageId !== undefined && data.replyToMessageId !== null) {
+                req.field('replyToMessageId', data.replyToMessageId.toString());
+            }
+            if (data.attachments) {
+                req.attach('attachments', data.attachments);
+            }
+            response = await req.expect(expectedStatusCode)
         }
         // console.log('TEST userMessagesTestManager - response.body ', response.body)
         let updateEntity
@@ -186,17 +190,15 @@ export class UserMessagesTestManager {
     async deleteAllMessage(
         accessToken: string,
         refreshToken: string,
-        data: { senderId: string, receiverId: string },
-        deleteOption: string,
+        data: { senderId: string, receiverId: string, deleteOption: 'all' | 'me' },
         userAgent: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200) {
-        // console.log('TEST userMessagesTestManager - userId ', userId)
+        // console.log('TEST userMessagesTestManager - data ', data)
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.messages}/all`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Cookie', `refreshToken=${refreshToken}`)
             .query(data)
-            .query({ deleteOption })
             .set('User-Agent', `${userAgent}`)
             .expect(expectedStatusCode);
         // console.log('TEST userMessagesTestManager - response.body ', response.body)

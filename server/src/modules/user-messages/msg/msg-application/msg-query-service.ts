@@ -33,13 +33,12 @@ export class MessageQueryService {
     }
     async getMessageByIdOrNotFoundFailQueryService(msgId: string, userId: string): Promise<MessagesAllViewDto> {
         const message = await this.messageQueryRepository.findMessageByIdOrNotFoundFailRepository(msgId);
-
+        // console.log('MessageQueryService - RES getAllMessagesByDialogIdService message', message);
         const filtered = queryMaperUserMessage(message, userId);
-
+        // console.log('MessageQueryService - RES getAllMessagesByDialogIdService filtered', filtered);
         if (!filtered) {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_MESSAGE);
         }
-
         return MessagesAllViewDto.mapToMessagesAllView(filtered);
     }
     async _getMessage(msgId: string): Promise<Message | null> {

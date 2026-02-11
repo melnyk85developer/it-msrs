@@ -24,6 +24,10 @@ import { CreateInputMessageDto } from '../msg-dto/msg-input-dto/create-input-msg
 import { InterlocutorViewDto } from './viev-dto-msg/interlocutorViewDto';
 import { UpdateInputMessageDto } from '../msg-dto/msg-input-dto/update-input-msg.dto';
 import { MessageQueryService } from '../msg-application/msg-query-service';
+import { UpdateReadInputMessageDto } from '../msg-dto/msg-input-dto/update-read-input-msg.dto';
+import { MessageIdParamDto } from '../msg-dto/msg-input-dto/messageIdParamDto';
+import { DeleteMessageQueryDto } from '../msg-dto/msg-input-dto/deleteMessageQueryDto';
+import { DeleteAllMessagesQueryDto } from '../msg-dto/msg-input-dto/deleteAllMessagesQueryDto';
 
 @ApiTags('Messages')
 @Controller(SETTINGS.RouterPath.messages)
@@ -46,7 +50,7 @@ export class UsersMessagesController {
         @Query() query: GetDialogsQueryParams,
         @ExtractUserFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<any>> {
-        console.log('getAllInterlocutorsController user - ', user);
+        // console.log('getAllInterlocutorsController user - ', user);
         const interlocutors = await this.dialogQueryService.getAllInterlocutorsByUserIdQueryService(
             query,
             user.id
@@ -74,12 +78,12 @@ export class UsersMessagesController {
     @UseGuards(AuthAccessGuard)
     @UseInterceptors(FileInterceptor('file'))
     @Post()
-    @HttpCode(HTTP_STATUSES.OK_200)
+    @HttpCode(HTTP_STATUSES.CREATED_201)
     async createMessageController(
         @Body() body: CreateInputMessageDto,
         @UploadedFile() attachments?: [Multer.File]
     ) {
-        console.log('createMessageController attachments, body: 🔥', attachments, body);
+        // console.log('createMessageController attachments, body: 🔥', attachments, body);
         const isCreated = await this.messagesService.createMessageService(
             body,
             attachments
@@ -98,36 +102,27 @@ export class UsersMessagesController {
         @UploadedFile() file?: [Multer.File]
     ) {
         // console.log('updateMessageController file, body: 🔥', file, body);
-        const msgId = await this.messagesService.updateMessagesServices(body, file)
+        const msgId = await this.messagesService.updateMessagesServices(
+            user.id,
+            body,
+            file
+        )
         return await this.messagesQueryService.getMessageByIdOrNotFoundFailQueryService(msgId, user.id);
     }
     @ApiOperation({ summary: 'Обновить статус просмотренно в сообщении!' })
     @ApiResponse({ status: 200, type: [Message] })
     @UseGuards(AuthAccessGuard)
     @Put('/read')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateReadController(
-        @Body() body: { msgId: string, read: boolean },
+        @Body() body: UpdateReadInputMessageDto,
         @ExtractUserFromRequest() user: UserContextDto
     ) {
         // console.log('updateReadController body: 🔥', body);
-        const msgId = await this.messagesService.updateReadServices(body)
-        return await this.messagesQueryService.getMessageByIdOrNotFoundFailQueryService(msgId, user.id);
-    }
-    @ApiOperation({ summary: 'Удалить сообщение пользователя!' })
-    @ApiResponse({ status: 200, type: [Message] })
-    @UseGuards(AuthAccessGuard)
-    @Delete('/:msgId')
-    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async deleteMessagesByIdController(
-        @Param('msgId') msgId: string,
-        @Query('deleteOption') deleteOption: string,
-        @ExtractUserFromRequest() user: UserContextDto
-    ) {
-        return await this.messagesService.deleteMessageByMsgIdServices(
-            user.id,
-            msgId,
-            deleteOption
-        );
+        const msgId = await this.messagesService.updateReadServices(user.id, body)
+        const isUpdateRead = await this.messagesQueryService.getMessageByIdOrNotFoundFailQueryService(msgId, user.id);
+        // console.log('UsersMessagesController - RES updateReadController isUpdateRead', isUpdateRead);
+        return isUpdateRead
     }
     @ApiOperation({ summary: 'Удалить всю переписку пользователя!' })
     @ApiResponse({ status: 200, type: [Message] })
@@ -135,18 +130,34 @@ export class UsersMessagesController {
     @Delete('/all')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteAllMessagesByUserIdController(
-        @Query('senderId') senderId: string,
-        @Query('receiverId') receiverId: string,
-        @Query('deleteOption') deleteOption: string,
+        @Query() query: DeleteAllMessagesQueryDto,
         @ExtractUserFromRequest() user: UserContextDto
     ) {
-        console.log('deleteAllMessagesByUserIdController senderId, receiverId - 🤪🤪🤪 - deleteOption', senderId, receiverId, deleteOption)
+        console.log('deleteAllMessagesByUserIdController senderId, receiverId - 🤪🤪🤪 - deleteOption', query.senderId, query.receiverId, query.deleteOption)
         return await this.messagesService.deleteAllMessagesServices(
-            receiverId,
+            query.receiverId,
             user.id,
-            deleteOption
+            query.deleteOption
         );
     }
+    @ApiOperation({ summary: 'Удалить сообщение пользователя!' })
+    @ApiResponse({ status: 204, type: [Message] })
+    @UseGuards(AuthAccessGuard)
+    @Delete('/:msgId')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    async deleteMessagesByIdController(
+        @Param() params: MessageIdParamDto,
+        @Query() query: DeleteMessageQueryDto,
+        @ExtractUserFromRequest() user: UserContextDto
+    ) {
+        // console.log('deleteMessagesByIdController msgId, deleteOption: 🔥', params.msgId, query.deleteOption);
+        return await this.messagesService.deleteMessageByMsgIdServices(
+            user.id,
+            params.msgId,
+            query.deleteOption
+        );
+    }
+
     @ApiOperation({ summary: 'Удалить сообщение пользователя!' })
     @ApiResponse({ status: 200, type: [Message] })
     @UseGuards(AuthAccessGuard)

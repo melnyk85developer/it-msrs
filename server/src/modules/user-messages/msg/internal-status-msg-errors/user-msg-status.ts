@@ -7,7 +7,7 @@ export const MESSAGES_INTERNAL_STATUS = {
 
     NOT_FOUND_MESSAGE: 1204, // Сообщений не обнаружено!
     NOT_FOUND_MESSAGES_FOR_UPDATE: 1205, // Сообщения не найденно для его обновления!
-    NOT_FOUND_MESSAGES_FOR_DELETE: 1206, // Сообщения не обнаружено для его удаления!
+    NOT_FOUND_MESSAGES_FOR_DELETE: 11206, // Сообщения не обнаружено для его удаления!
     NOT_FOUND_DIALOG: 1207, // Диалога не найдено!
     NOT_FOUND_MESSAGES_FOR_UPDATE_READ: 1208, // Сообщения не найденно для обновления статуса просмотренно!
 
@@ -22,7 +22,7 @@ export const MESSAGES_INTERNAL_STATUS = {
     FORBIDEN_UPDATE_MSG_READ: 1411, // Вы не являетесь участником беседы, для обновления статуса просмтренно в сообщении!
     FORBIDEN_TO_UPDATE_YOU_ARE_NOT_A_MEMBER_OF_THIS_MESSAGE: 1216, // Не корректный запрос, Вы не являетесь владельцем сообщения для его обновления!
     FORBIDEN_TO_DELETE_YOU_ARE_NOT_A_MEMBER_OF_THIS_DIALOG: 1217, // Не корректный запрос, Вы не являетесь участником диалога для его удаления!
-    FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE: 1218, // Не корректный запрос, Вы не являетесь автором этого сообщения для его удаления!
+    FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE: 1318, // Не корректный запрос, Вы не являетесь автором этого сообщения для его удаления!
 
     ERROR_UPDATE_LAST_SEEN: 1218, // Ошибка обновления последней активности!
 }

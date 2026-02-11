@@ -27,13 +27,13 @@ export class DialogService {
         return dialog._id.toString();
     }
     async updateDialogService(dialogId: string, userId: string): Promise<string> {
-        console.log('updateDialogService: dialogId, userId', dialogId, userId);
+        // console.log('updateDialogService: dialogId, userId', dialogId, userId);
         const isDialog = await this.dialogRepository.findDialogByIdOrNotFoundFailRepository(dialogId)
-        console.log('updateDialogService: dialogId, userId', dialogId, userId);
+        // console.log('updateDialogService: dialogId, userId', dialogId, userId);
         isDialog.updateMarkDialogDeleted(dialogId, userId)
-        console.log('updateDialogService: dialogId, userId', dialogId, userId);
+        // console.log('updateDialogService: dialogId, userId', dialogId, userId);
         await this.dialogRepository.save(isDialog);
-        console.log('updateDialogService: dialogId, userId', dialogId, userId);
+        // console.log('updateDialogService: dialogId, userId', dialogId, userId);
         return isDialog.id.toString();
     }
     async deleteDialogService(dialogId: string, userId: string): Promise<any> {
