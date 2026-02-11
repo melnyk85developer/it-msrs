@@ -133,7 +133,7 @@ export class UsersMessagesController {
         @Query() query: DeleteAllMessagesQueryDto,
         @ExtractUserFromRequest() user: UserContextDto
     ) {
-        console.log('deleteAllMessagesByUserIdController senderId, receiverId - 🤪🤪🤪 - deleteOption', query.senderId, query.receiverId, query.deleteOption)
+        // console.log('deleteAllMessagesByUserIdController senderId, receiverId - 🤪🤪🤪 - deleteOption', query.senderId, query.receiverId, query.deleteOption)
         return await this.messagesService.deleteAllMessagesServices(
             query.receiverId,
             user.id,
@@ -167,7 +167,7 @@ export class UsersMessagesController {
         @Param('dialogId') dialogId: string,
         @ExtractUserFromRequest() user: UserContextDto
     ) {
-        console.log('😳😳 deleteDialogByIdController: dialogId - ', dialogId)
+        // console.log('😳😳 deleteDialogByIdController: dialogId - ', dialogId)
         return await this.messagesService.deleteDialogService(dialogId, user.id);
     }
 }

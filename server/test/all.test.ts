@@ -43,41 +43,41 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         );
         // contextTests.app = result.app;
     });
-    // describe('AUTH-BLOCK-TESTS', () => {
-    //     authE2eTest()
-    //     // authIntegrationTest()
-    //     // authUnitTest()
-    // })
-    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
-    //     userSessionE2eTest()
-    //     // usersSessionsInegrationTest()
-    // })
+    describe('AUTH-BLOCK-TESTS', () => {
+        authE2eTest()
+        // authIntegrationTest()
+        // authUnitTest()
+    })
+    describe('USER-SESSIONS-BLOCK-TESTS', () => {
+        userSessionE2eTest()
+        // usersSessionsInegrationTest()
+    })
     describe('MESSAGES-BLOCK-TESTS', () => {
         userMessagesE2eTest()
     })
-    // describe('BLOGS-BLOCK-TESTS', () => {
-    //     blogsE2eTest()
+    describe('BLOGS-BLOCK-TESTS', () => {
+        blogsE2eTest()
+    })
+    describe('POSTS-BLOCK-TESTS', () => {
+        postsE2eTest()
+    })
+    describe('COMMENTS-BLOCK-TESTS', () => {
+        commentsE2eTest()
+    })
+    describe('PHOTOS-BLOCK-TESTS', () => {
+        photoProfileE2ETest()
+        photoAlbumsE2ETest()
+    })
+    describe('CONFIRMATION-BLOCK-TESTS', () => {
+        registrEmailResendingAndConfirmIntegrationTest()
+        resetPasswordInegrationTest()
+    })
+    // describe('LIKES-BLOCK-TESTS', () => {
+    //     likesE2eTest()
     // })
-    // describe('POSTS-BLOCK-TESTS', () => {
-    //     postsE2eTest()
-    // })
-    // describe('COMMENTS-BLOCK-TESTS', () => {
-    //     commentsE2eTest()
-    // })
-    // describe('PHOTOS-BLOCK-TESTS', () => {
-    //     photoProfileE2ETest()
-    //     photoAlbumsE2ETest()
-    // })
-    // describe('CONFIRMATION-BLOCK-TESTS', () => {
-    //     registrEmailResendingAndConfirmIntegrationTest()
-    //     resetPasswordInegrationTest()
-    // })
-    // // describe('LIKES-BLOCK-TESTS', () => {
-    // //     likesE2eTest()
-    // // })
-    // describe('USERS-BLOCK-TESTS', () => {
-    //     usersE2eTest()
-    // })
+    describe('USERS-BLOCK-TESTS', () => {
+        usersE2eTest()
+    })
     afterAll(async () => {
         await mongoose.disconnect();
         await contextTests.app.close();

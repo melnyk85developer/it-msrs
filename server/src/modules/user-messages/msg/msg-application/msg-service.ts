@@ -97,15 +97,20 @@ export class MessageService {
     async updateReadServices(userId: string, dto: UpdateMessageReadDomainDto): Promise<string> {
         // console.log('updateReadServices: - 👍🏻 msg ', dto.msgId)
         const msg = await this.messageRepository.findMessageByIdOrNotFoundFailRepository(dto.msgId)
-        if (userId !== msg.senderId) {
+        // console.log('updateReadServices: - 👍🏻 msg 1', msg)
+        if (userId !== msg.receiverId && userId !== msg.senderId) {
+            // console.log('updateReadServices: - 👍🏻 userId !== msg.receiverId && userId !== msg.senderId 2', userId !== msg.receiverId && userId !== msg.senderId)
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_TO_UPDATE_YOU_ARE_NOT_A_MEMBER_OF_THIS_MESSAGE)
         }
+        // console.log('updateReadServices: - 👍🏻 msg 3', msg)
         msg.updateRead(dto);
+        // console.log('updateReadServices: - 👍🏻 msg 4', msg)
         await this.messageRepository.save(msg);
+        // console.log('updateReadServices: - 👍🏻 msg 5', msg)
         return msg._id.toString();
     }
     async deleteAllMessagesServices(receiverId: string, userId: string, deleteOption: string): Promise<boolean> {
-        let msgs
+        let msgs = [] as any
         // console.log('deleteAllMessagesServices - 🤪🤪🤪 - senderId, receiverId, userId, deleteOption', senderId, receiverId, userId, deleteOption)
         const isDialog = await this.dialogsService._getOneDialogBySenderIdOrReceiverIdRepository(userId, receiverId)
         // console.log('MessageService: deleteDialogService - 🤪🤪🤪 - isDialog', isDialog)
@@ -113,7 +118,7 @@ export class MessageService {
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE)
         }
         const messages = await this.messageRepository.findMessagesBySenderIdOrReceiverIdOrNotFoundFailRepository(userId, receiverId);
-        console.log('deleteAllMessagesServices - 🤪🤪🤪 - messages.length', messages.length)
+        // console.log('deleteAllMessagesServices - 🤪🤪🤪 - messages.length', messages.length)
         // const isAdmin = user.roles.some(entry => entry.value === 'ADMIN')
         // if (isAdmin && messages) {
         //     return await this.usersMessagesRepository.deleteAllMessagesRepository(senderId, receiverId)
@@ -125,23 +130,23 @@ export class MessageService {
                 // console.log('deleteAllMessagesServices: - deleteOption 😡 1', deleteOption)
                 const alreadyDeleted = messages[i].meta.some(entry => entry.userId === userId);
                 if (!alreadyDeleted) {
-                    console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted)
+                    // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted)
                     msgs.push(messages[i])
                 }
             }
             if (userId === messages[i].receiverId) {
                 const alreadyDeleted = messages[i].meta.some(entry => entry.userId === messages[i].receiverId);
                 if (!alreadyDeleted) {
-                    console.log('deleteAllMessagesServices: - alreadyDeleted 😡 2', alreadyDeleted)
+                    // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 2', alreadyDeleted)
                     msgs.push(messages[i])
                 }
             }
-            console.log('deleteAllMessagesServices: - msgs 😡 ', msgs)
+            // console.log('deleteAllMessagesServices: - msgs 😡 ', msgs)
         }
         if (msgs && msgs.length) {
             for (let i = 0; msgs.length > i; i++) {
                 const newMeta: any[] = [...msgs[i].meta];
-                console.log('deleteAllMessagesServices: - msgs 😡 for 2', msgs)
+                // console.log('deleteAllMessagesServices: - msgs 😡 for 2', msgs.length)
                 // console.log('deleteAllMessagesServices: - newMeta 😡 ', newMeta)
                 if (userId === msgs[i].senderId) {
                     // console.log('deleteAllMessagesServices: - deleteOption 😡 1', deleteOption)
@@ -224,41 +229,66 @@ export class MessageService {
         await this.messageRepository.save(msg);
         return msg._id.toString();
     }
-    async getAllMessagesByUserIdService(dialogId: string): Promise<Message[]> {
+    async getAllMessagesByDialogIdService(dialogId: string): Promise<Message[]> {
         const messages = await this.messageRepository.findMessagesByDialogIdOrNotFoundFailRepository(dialogId);
         return messages
     }
     async deleteDialogService(dialogId: string, userId: string): Promise<any> {
+        let msgs = [] as any
         // console.log('MessageService: dialogId', dialogId);
         const messages = await this.messageRepository.findMessagesByDialogIdOrNotFoundFailRepository(dialogId);
         // console.log('MessageService - 🤪🤪🤪 - messages', messages)
         const isDialog = await this.dialogsService._getDialogsByIdService(dialogId)
-        console.log('MessageService: deleteDialogService - 🤪🤪🤪 - isDialog', isDialog)
+        // console.log('MessageService: deleteDialogService - 🤪🤪🤪 - isDialog', isDialog)
+        if (!isDialog || isDialog && isDialog.userAId !== userId && isDialog.userBId !== userId) {
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE)
+        }
         // const isAdmin = user.roles.some(entry => entry.value === 'ADMIN')
         // if (isAdmin && messages) {
         //     return await this.usersMessagesRepository.deleteAllMessagesRepository(senderId, receiverId)
         // }
-        if (messages && messages.length) {
-            for (let i = 0; messages.length > i; i++) {
-                const newMeta: any[] = [...messages[i].meta];
+        for (let i = 0; messages.length > i; i++) {
+            const newMeta: any[] = [...messages[i].meta];
+            // console.log('deleteAllMessagesServices: - newMeta 😡 ', newMeta)
+            if (userId === messages[i].senderId) {
+                // console.log('deleteAllMessagesServices: - messages[i].senderId 😡 1', messages[i].senderId)
+                const alreadyDeleted = messages[i].meta.some(entry => entry.userId === userId);
+                if (!alreadyDeleted) {
+                    // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted)
+                    msgs.push(messages[i])
+                }
+            }
+            if (userId === messages[i].receiverId) {
+                const alreadyDeleted = messages[i].meta.some(entry => entry.userId === messages[i].receiverId);
+                if (!alreadyDeleted) {
+                    // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 2', alreadyDeleted)
+                    msgs.push(messages[i])
+                }
+            }
+            // console.log('deleteAllMessagesServices: - msgs 😡 ', msgs)
+        }
+        if (msgs && msgs.length) {
+            for (let i = 0; msgs.length > i; i++) {
+                const newMeta: any[] = [...msgs[i].meta];
+                // console.log('deleteAllMessagesServices: - msgs 😡 for 2', msgs.length)
                 // console.log('deleteAllMessagesServices: - newMeta 😡 ', newMeta)
-                if (userId === messages[i].senderId) {
-                    // console.log('deleteAllMessagesServices: - deleteOption 😡 1', deleteOption)
-                    const alreadyDeleted = messages[i].meta.some(entry => entry.userId === userId);
-                    // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted, newMeta)
+                if (userId === msgs[i].senderId) {
+                    // console.log('deleteAllMessagesServices: - msgs[i].senderId 😡 1', msgs[i].senderId)
+                    const alreadyDeleted = msgs[i].meta.some(entry => entry.userId === userId);
                     if (!alreadyDeleted) {
+                        // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 1', alreadyDeleted, newMeta)
                         newMeta.push({ userId: userId, deletedAt: new Date().toISOString() });
                     }
                 }
-                if (userId === messages[i].receiverId) {
-                    // console.log('deleteAllMessagesServices: - deleteOption 😡 2', deleteOption)
-                    const alreadyDeleted = messages[i].meta.some(entry => entry.userId === messages[i].receiverId);
+                if (userId === msgs[i].receiverId) {
+                    const alreadyDeleted = msgs[i].meta.some(entry => entry.userId === msgs[i].receiverId);
                     if (!alreadyDeleted) {
+                        // console.log('deleteAllMessagesServices: - alreadyDeleted 😡 2', alreadyDeleted)
                         newMeta.push({ userId: userId, deletedAt: new Date().toISOString() });
                     }
                 }
-                const msg = await this.messageRepository.findMessageByIdOrNotFoundFailRepository(messages[i].id)
-                msg.markMsgDeletedForUser({ msgId: messages[i].id, meta: newMeta });
+                const msg = await this.messageRepository.findMessageByIdOrNotFoundFailRepository(msgs[i].id)
+                msg.markMsgDeletedForUser({ msgId: msgs[i].id, meta: newMeta });
                 await this.messageRepository.save(msg);
             }
             return await this.dialogsService.deleteDialogService(dialogId, userId)

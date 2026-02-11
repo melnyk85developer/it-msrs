@@ -75,7 +75,6 @@ export class UserPhotosTestManager {
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204
     ) {
         // console.log('UserPhotosTestManager: updatePhoto - data', data)
-
         let response
         if ((data.userId === '' || data.userId === undefined) &&
             (data.albumName === '' || data.albumName === undefined)) {

@@ -79,9 +79,9 @@ export class PhotoAlbumService {
     }
     async deletePhotoAlbumService(albumId: string) {
         const photoAlbum = await this.photoAlbumRepository.findPhotoAlbumByIdOrNotFoundFailRepository(albumId);
-        console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
+        // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
         const isDeletedPhoto = await this.photoAlbumRepository.deletePhotoAlbum(albumId);
-        console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
+        // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
         // photoAlbum.makeDeletedPhotoAlbum();
         // await this.photoAlbumRepository.save(photoAlbum);
         return isDeletedPhoto._id

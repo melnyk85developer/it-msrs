@@ -29,8 +29,8 @@ export class PhotoService {
 
         const imageName = await this.filesService.createPostFile(image);
         const miniatureName = await this.filesService.createPostFile(miniature);
-        console.log('createPhotoService - imageName 😡 3', imageName)
-        console.log('createPhotoService - miniatureName 😡 4', miniatureName)
+        // console.log('createPhotoService - imageName 😡 3', imageName)
+        // console.log('createPhotoService - miniatureName 😡 4', miniatureName)
 
         isAlbum = await this.photoAlbumService.getPhotoAlbumNameOrCreatedService(userId, dto.albumName, miniatureName)
 

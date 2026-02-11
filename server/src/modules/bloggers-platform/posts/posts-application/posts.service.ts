@@ -42,14 +42,14 @@ export class PostsService {
         return post._id.toString();
     }
     async updatePostService(id: string, dto: Omit<UpdatePostDto, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<string> {
-        console.log('PostsService: updatePostService: id REQ dto 😡 ', id, dto)
+        // console.log('PostsService: updatePostService: id REQ dto 😡 ', id, dto)
         const post = await this.postsRepository.findPostOrNotFoundFail(id);
-        console.log('PostsService: updatePostService: IsPost 😡 ', post)
+        // console.log('PostsService: updatePostService: IsPost 😡 ', post)
         post.update({
             ...dto,
             id
         });
-        console.log('PostsService: updatePostService: post 😡 ', post)
+        // console.log('PostsService: updatePostService: post 😡 ', post)
         await this.postsRepository.save(post);
         return post._id.toString();
     }

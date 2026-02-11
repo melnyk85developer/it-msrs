@@ -37,15 +37,18 @@ export class DialogService {
         return isDialog.id.toString();
     }
     async deleteDialogService(dialogId: string, userId: string): Promise<any> {
+        // console.log('deleteDialogService: dialogId, userId', dialogId, userId);
         const isDialog = await this.dialogRepository.findDialogByIdOrNotFoundFailRepository(dialogId)
-        if (isDialog) {
-            isDialog.markDialogDeletedForUser(dialogId, userId)
-            await this.dialogRepository.save(isDialog);
-            if (isDialog.meta[0].userId === isDialog.userAId && isDialog.meta[1].userId === isDialog.userBId || isDialog.meta[0].userId === isDialog.userBId && isDialog.meta[1].userId === isDialog.userAId) {
-                return await this.dialogRepository.deleteDialog(dialogId)
-            }
+        // console.log('deleteDialogService: isDialog 1', isDialog);
+        isDialog.markDialogDeletedForUser(dialogId, userId)
+        // console.log('deleteDialogService: isDialog 2', isDialog);
+        await this.dialogRepository.save(isDialog);
+        // console.log('deleteDialogService: isDialog 3', isDialog);
+        if (isDialog && isDialog.meta[0]?.userId === isDialog.userAId && isDialog && isDialog.meta[1]?.userId === isDialog.userBId || isDialog && isDialog.meta[0]?.userId === isDialog.userBId && isDialog && isDialog.meta[1]?.userId === isDialog.userAId) {
+            // console.log('deleteDialogService: isDialog 4', isDialog);
+            return await this.dialogRepository.deleteDialog(dialogId)
         }
-        // console.log('deleteDialogService: dialogId', dialogId);
+        // console.log('deleteDialogService: isDialog 5', isDialog);
         return isDialog.id.toString();
     }
     async _getOneDialogBySenderIdOrReceiverIdRepository(senderId: string, receiverId: string): Promise<Dialog | null> {

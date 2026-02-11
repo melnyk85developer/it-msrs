@@ -36,16 +36,15 @@ export class UserPhotoAlbumsTestManager {
         data: any,
         accessToken: string,
         expectedStatusCode: HttpStatusType = HttpStatus.CREATED) {
-
         let response
         if (data.userId === '' && data.albumName === '') {
-            console.log('userPhotosTestManager: - data1', data.albumName)
+            // console.log('userPhotosTestManager: - data1', data.albumName)
             response = await request(this.app.getHttpServer())
                 .post(`${SETTINGS.RouterPath.photoalbums}`)
                 .set('Authorization', `Bearer ${accessToken}`)
                 .send(data)
         } else {
-            console.log('userPhotosTestManager: - data2', data.albumName)
+            // console.log('userPhotosTestManager: - data2', data.albumName)
             response = await request(this.app.getHttpServer())
                 .post(`${SETTINGS.RouterPath.photoalbums}`)
                 .set('Authorization', `Bearer ${accessToken}`)
@@ -54,7 +53,7 @@ export class UserPhotoAlbumsTestManager {
                 .attach('albumCoverFile', data.files.albumCoverFile ? data.files.albumCoverFile : '')
                 .expect(expectedStatusCode);
         }
-        console.log('userPhotosTestManager: - response', response.body)
+        // console.log('userPhotosTestManager: - response', response.body)
         if (expectedStatusCode === HttpStatus.CREATED) {
             expect(response.body).toEqual(
                 expect.objectContaining({
@@ -76,8 +75,7 @@ export class UserPhotoAlbumsTestManager {
         data: any,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204
     ) {
-        console.log('UserPhotosTestManager: updatePhoto - data', data)
-
+        // console.log('UserPhotosTestManager: updatePhoto - data', data)
         let response
         if ((data.userId === '' || data.userId === undefined) &&
             (data.albumName === '' || data.albumName === undefined)) {
@@ -103,7 +101,7 @@ export class UserPhotoAlbumsTestManager {
             }
             response = await req.expect(expectedStatusCode)
         }
-        console.log('userPhotosTestManager: - response', response.body)
+        // console.log('userPhotosTestManager: - response', response.body)
         let updateEntity
         if (expectedStatusCode === HTTP_STATUSES.OK_200) {
             updateEntity = response.body

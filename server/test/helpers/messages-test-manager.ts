@@ -207,7 +207,7 @@ export class UserMessagesTestManager {
     async deleteDialog(
         accessToken: string,
         refreshToken: string,
-        dialogId: string,
+        dialogId: string | undefined,
         userAgent: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200) {
         // console.log('TEST userMessagesTestManager - dialogId ', dialogId)

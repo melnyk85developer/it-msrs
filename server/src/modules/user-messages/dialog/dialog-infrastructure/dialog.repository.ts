@@ -15,6 +15,7 @@ export class DialogRepository {
         await dialog.save();
     }
     async deleteDialog(dialogId: string): Promise<any> {
+        console.log('BlogsRepository: deleteDialog 😡😡😡 - dialogId', dialogId)
         return this.DialogModel.deleteOne({
             _id: new Types.ObjectId(dialogId),
         });

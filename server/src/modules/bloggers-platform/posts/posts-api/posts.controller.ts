@@ -56,11 +56,11 @@ export class PostsController {
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updatePostController(@Param('id') id: string, @Body() body: UpdatePostInputDto): Promise<PostViewDto> {
-        console.log('PostsController: updatePostController - id, body 😡 ', id, body)
+        // console.log('PostsController: updatePostController - id, body 😡 ', id, body)
         const postId = await this.postsService.updatePostService(id, body);
-        console.log('PostsController: updatePostController - postId 😡 ', postId)
+        // console.log('PostsController: updatePostController - postId 😡 ', postId)
         const isPost = await this.postsQueryRepository.getPostByIdOrNotFoundFailQueryRepository(postId)
-        console.log('PostsController: updatePostController - isPost 😡 ', isPost)
+        // console.log('PostsController: updatePostController - isPost 😡 ', isPost)
         if (isPost.id) {
             return isPost
             // return SuccessResponse(INTERNAL_STATUS_CODE.SUCCESS_UPDATED_POST);
@@ -96,7 +96,7 @@ export class PostsController {
     @Get('/:id')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getPostByIdController(@Param('id') id: string): Promise<PostViewDto> {
-        console.log('PostsController: getPostByIdController - id 😡 ', id)
+        // console.log('PostsController: getPostByIdController - id 😡 ', id)
         return this.postsQueryRepository.getPostByIdOrNotFoundFailQueryRepository(id);
     }
     @ApiOperation({ summary: 'Получить все комментарии определенного поста!' })

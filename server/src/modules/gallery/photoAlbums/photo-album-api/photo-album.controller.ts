@@ -36,10 +36,8 @@ export class PhotoAlbumController {
         @ExtractUserFromRequest() user: UserContextDto,
         @UploadedFiles() files: { albumCoverFile?: Multer.File }
     ): Promise<PhotoAlbumViewDto> {
-        console.log('createPhotoAlbumController: - dto', dto)
-
+        // console.log('createPhotoAlbumController: - dto', dto)
         const albumCoverFile = files?.albumCoverFile?.[0] || null;
-
         const albumId = await this.photoAlbumService.createPhotoAlbumService(
             user.id,
             albumCoverFile,
@@ -62,14 +60,12 @@ export class PhotoAlbumController {
         @Body() dto: UpdatePhotoAlbumInputDto,
         @UploadedFiles() files: { albumCoverFile?: Multer.File }
     ) {
-        console.log('updatePhotoAlbumController: - dto', dto)
+        // console.log('updatePhotoAlbumController: - dto', dto)
         // console.log('FILES:', files)
         if (files === undefined) {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_UPDATED_PHOTO)
         }
-
         const albumCoverFile = files?.albumCoverFile?.[0] || null;
-
         return await this.photoAlbumService.updatePhotoAlbumService(
             albumId,
             dto,
@@ -82,7 +78,7 @@ export class PhotoAlbumController {
     @Delete('/:albumId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deletePhotoAlbumController(@Param('albumId') albumId: string) {
-        console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
+        // console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
         return await this.photoAlbumService.deletePhotoAlbumService(albumId)
     }
     @ApiOperation({ summary: 'Создание всех фото!' })

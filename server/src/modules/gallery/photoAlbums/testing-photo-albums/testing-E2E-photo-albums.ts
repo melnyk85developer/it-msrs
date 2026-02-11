@@ -175,8 +175,7 @@ export const photoAlbumsE2ETest = () => {
                 // albumId: contextTests.constants.invalidId,
                 albumName: contextTests.constants.createdPhotoAlbum2?.albumName
             }
-            console.log('TEST: PUT - data', data)
-
+            // console.log('TEST: PUT - data', data)
             await contextTests.userPhotoAlbumsTestManager.updatePhotoAlbum(
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.invalidId,

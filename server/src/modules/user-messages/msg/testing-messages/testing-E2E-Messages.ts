@@ -1310,159 +1310,153 @@ export const userMessagesE2eTest = () => {
                 HTTP_STATUSES.NO_CONTENT_204
             )
 
-            // const { response } = await contextTests.userMessagesTestManager.deleteAllMessage(
-            //     contextTests.sessions.accessTokenUser1Devices[0],
-            //     contextTests.sessions.refreshTokenUser1Devices[0],
-            //     {
-            //         senderId: contextTests.users.createdUsers[0]!.id,
-            //         receiverId: contextTests.users.createdUsers[1]!.id,
-            //         deleteOption: 'all'
-            //     },
-            //     contextTests.sessions.userAgent[6],
-            //     HTTP_STATUSES.NOT_FOUND_404
-            // )
-            // if (response.statusCode === HTTP_STATUSES.NOT_FOUND_404) {
-            //     contextTests.createdMessage1 = null
-            //     contextTests.createdMessage2 = null
-            //     contextTests.createdMessage3 = null
-            // }
+            const { response } = await contextTests.userMessagesTestManager.deleteAllMessage(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                {
+                    senderId: contextTests.users.createdUsers[0]!.id,
+                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    deleteOption: 'all'
+                },
+                contextTests.sessions.userAgent[6],
+                HTTP_STATUSES.NOT_FOUND_404
+            )
+            if (response.statusCode === HTTP_STATUSES.NOT_FOUND_404) {
+                contextTests.createdMessage1 = null
+                contextTests.createdMessage2 = null
+                contextTests.createdMessage3 = null
+            }
         })
 
-        // it(`DELETE - Ожидается статус код 400, - Не валидные данные при удалении диалога с собеседником! Дополнительные запросы: -> GET, POST`, async () => {
-        //     // await prepareIsCreatedDIalog()
-        //     await userMessagesTestManager.deleteDialog(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         undefined,
-        //         contextTests.userAgent[6],
-        //         HTTP_STATUSES.BAD_REQUEST_400
-        //     )
-        //     const { response } = await userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     expect(response.body).toEqual(expect.arrayContaining([]));
-        //     expect(response.body.length).toEqual(1);
-        //     expect(response.body).toEqual([
-        //         {
-        //             userId: contextTests.createdUser2.userId,
-        //             name: contextTests.createdUser2.name,
-        //             surname: contextTests.createdUser2.surname,
-        //             avatar: null,
-        //             chat: contextTests.createdDialog1,
-        //         }
-        //     ])
-        // })
-        // it(`DELETE - Ожидается статус код 401, - Удаление диалога с собеседником без авторизации! Дополнительные запросы: -> GET, POST`, async () => {
-        //     // await prepareIsCreatedDIalog()
-        //     await userMessagesTestManager.deleteDialog(
-        //         contextTests.app.getHttpServer(),
-        //         undefined,
-        //         undefined,
-        //         contextTests.createdDialog1.dialogId,
-        //         contextTests.userAgent[6],
-        //         HTTP_STATUSES.UNAUTHORIZED_401
-        //     )
+        it(`DELETE - Ожидается статус код 400, - Не валидные данные при удалении диалога с собеседником! Дополнительные запросы: -> GET, POST`, async () => {
+            // await prepareIsCreatedDIalog()
+            await contextTests.userMessagesTestManager.deleteDialog(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                undefined,
+                contextTests.sessions.userAgent[6],
+                HTTP_STATUSES.BAD_REQUEST_400
+            )
+            const { response } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.sessions.userAgent[1],
+                HTTP_STATUSES.OK_200
+            )
+            // console.log('😳😳 TEST: dialogId - response.body', response.body)
+            expect(response.body.items).toEqual(expect.arrayContaining([]));
+            expect(response.body.items.length).toEqual(1);
+            expect(response.body.items).toEqual([
+                {
+                    userId: contextTests.users.createdUsers[1]!.id,
+                    // login: contextTests.users.createdUsers[1]!.login,
+                    // email: contextTests.users.createdUsers[1]!.email,
+                    avatar: contextTests.users.createdUsers[1]!.avatar,
+                    chat: contextTests.createdDialog1,
+                    lastMessage: {},
+                    name: null,
+                    surname: null
+                }
+            ])
+        })
+        it(`DELETE - Ожидается статус код 401, - Удаление диалога с собеседником без авторизации! Дополнительные запросы: -> GET, POST`, async () => {
+            // await prepareIsCreatedDIalog()
+            await contextTests.userMessagesTestManager.deleteDialog(
+                contextTests.constants.expiredToken,
+                contextTests.constants.expiredToken,
+                contextTests.createdDialog1.dialogId,
+                contextTests.sessions.userAgent[6],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { response } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.sessions.userAgent[1],
+                HTTP_STATUSES.OK_200
+            )
+            // console.log('😳😳 TEST: dialogId - response.body', response.body)
+            expect(response.body.items).toEqual(expect.arrayContaining([]));
+            expect(response.body.items.length).toEqual(1);
+            expect(response.body.items).toEqual([
+                {
+                    userId: contextTests.users.createdUsers[1]!.id,
+                    // login: contextTests.users.createdUsers[1]!.login,
+                    // email: contextTests.users.createdUsers[1]!.email,
+                    avatar: contextTests.users.createdUsers[1]!.avatar,
+                    chat: contextTests.createdDialog1,
+                    lastMessage: {},
+                    name: null,
+                    surname: null
+                }
+            ])
+        })
+        it(`DELETE - Ожидается статус код 404, - Удаление не существующего диалога! Дополнительные запросы: -> GET, POST`, async () => {
+            await contextTests.userMessagesTestManager.deleteDialog(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.constants.invalidId,
+                contextTests.sessions.userAgent[6],
+                HTTP_STATUSES.NOT_FOUND_404
+            )
+        })
+        it(`DELETE - Ожидается статус код 403, - Попытка удаления чужого диалога! Дополнительные запросы: -> GET, POST`, async () => {
+            // await prepareIsCreatedDIalog()
+            const { getAllInterlocutors } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.sessions.userAgent[1],
+                HTTP_STATUSES.OK_200
+            )
+            expect(getAllInterlocutors.items.length).toEqual(1);
+            expect(getAllInterlocutors.items).toEqual(expect.arrayContaining([]));
 
-        //     const { response } = await userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     expect(response.body).toEqual(expect.arrayContaining([]));
-        //     expect(response.body.length).toEqual(1);
-        //     expect(response.body).toEqual([
-        //         {
-        //             userId: contextTests.createdUser2.userId,
-        //             name: contextTests.createdUser2.name,
-        //             surname: contextTests.createdUser2.surname,
-        //             avatar: null,
-        //             chat: contextTests.createdDialog1,
-        //         }
-        //     ])
-        // })
-        // it(`DELETE - Ожидается статус код 404, - Удаление не существующего диалога! Дополнительные запросы: -> GET, POST`, async () => {
-        //     await userMessagesTestManager.deleteDialog(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         -100,
-        //         contextTests.userAgent[6],
-        //         HTTP_STATUSES.NOT_FOUND_404
-        //     )
-        // })
-        // it(`DELETE - Ожидается статус код 403, - Попытка удаления чужого диалога! Дополнительные запросы: -> GET, POST`, async () => {
-        //     // await prepareIsCreatedDIalog()
+            await contextTests.userMessagesTestManager.deleteDialog(
+                contextTests.sessions.accessTokenUser3Devices[0],
+                contextTests.sessions.refreshTokenUser3Devices[0],
+                contextTests.createdDialog1.dialogId,
+                contextTests.sessions.userAgent[6],
+                HTTP_STATUSES.FORBIDDEN_403
+            )
 
-        //     const { getAllInterlocutors } = await userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     expect(getAllInterlocutors.length).toEqual(1);
-        //     expect(getAllInterlocutors).toEqual(expect.arrayContaining([]));
+            const { response } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.sessions.userAgent[1],
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items.length).toEqual(1);
+            expect(response.body.items).toEqual(expect.arrayContaining([]));
+        })
+        it(`DELETE - Ожидается статус код 204, - Должен удалить весь диалог с собеседником! Дополнительные запросы: -> GET, POST`, async () => {
+            // await prepareIsCreatedDIalog()
+            const { getAllInterlocutors } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.sessions.userAgent[1],
+                HTTP_STATUSES.OK_200
+            )
+            // console.log('TEST: - ', getAllInterlocutors)
+            expect(getAllInterlocutors.items.length).toEqual(1);
+            expect(getAllInterlocutors.items).toEqual(expect.arrayContaining([]));
 
-        //     await userMessagesTestManager.deleteDialog(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser3Device1,
-        //         contextTests.refreshTokenUser3Device1,
-        //         contextTests.createdDialog1.dialogId,
-        //         contextTests.userAgent[6],
-        //         HTTP_STATUSES.FORBIDDEN_403
-        //     )
+            await contextTests.userMessagesTestManager.deleteDialog(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.createdDialog1.dialogId,
+                contextTests.sessions.userAgent[6],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
 
-        //     const { response } = await userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     expect(response.body.length).toEqual(1);
-        //     expect(response.body).toEqual(expect.arrayContaining([]));
-        // })
-        // it(`DELETE - Ожидается статус код 204, - Должен удалить весь диалог с собеседником! Дополнительные запросы: -> GET, POST`, async () => {
-        //     // await prepareIsCreatedDIalog()
-
-        //     const { getAllInterlocutors } = await userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     // console.log('TEST: - ', getAllInterlocutors)
-        //     expect(getAllInterlocutors.length).toEqual(1);
-        //     expect(getAllInterlocutors).toEqual(expect.arrayContaining([]));
-
-        //     await userMessagesTestManager.deleteDialog(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.createdDialog1.dialogId,
-        //         contextTests.userAgent[6],
-        //         HTTP_STATUSES.NO_CONTENT_204
-        //     )
-
-        //     const { response } = await userMessagesTestManager.getAllInterlocutors(
-        //         contextTests.app.getHttpServer(),
-        //         contextTests.accessTokenUser1Device1,
-        //         contextTests.refreshTokenUser1Device1,
-        //         contextTests.userAgent[1],
-        //         HTTP_STATUSES.OK_200
-        //     )
-        //     // console.log('TEST: - ', getAllInterlocutors)
-        //     expect(response.body).toEqual([])
-        //     expect(response.body.length).toEqual(0);
-        //     expect(response.body).toEqual(expect.arrayContaining([]));
-        // })
+            const { response } = await contextTests.userMessagesTestManager.getAllInterlocutors(
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.sessions.userAgent[1],
+                HTTP_STATUSES.OK_200
+            )
+            // console.log('TEST: - ', getAllInterlocutors)
+            expect(response.body.items).toEqual([])
+            expect(response.body.items.length).toEqual(0);
+            expect(response.body.items).toEqual(expect.arrayContaining([]));
+        })
     })
 }
