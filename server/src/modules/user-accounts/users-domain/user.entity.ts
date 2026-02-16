@@ -133,13 +133,12 @@ export class User {
     }
     makeUpdatedConfirmedAccount(userId: string) {
         if (this.id === userId && this.systemUserData.isEmailConfirmed === false) {
+            this.systemUserData.isEmailConfirmed = true;
+
             this.accountData.email = this.accountData.email;
             this.accountData.login = this.accountData.login;
-
             this.profileData = this.profileData;
-
             this.systemUserData.isBot = this.systemUserData.isBot;
-            this.systemUserData.isEmailConfirmed = true;
             this.systemUserData.roles = this.systemUserData.roles;
             this.systemUserData.isBanned = this.systemUserData.isBanned;
             this.systemUserData.bannReason = this.systemUserData.bannReason;
@@ -156,12 +155,11 @@ export class User {
         user.systemUserData.roles.push(role)
         return user as UserDocument;
     }
-    static async updateLastSeen(userId: string) {
+    updateLastSeen(userId: string) {
         const date = new Date();
-        const user = new this();
 
-        if (user.id === userId) {
-            user.lastSeen = date.toISOString();
+        if (this.id === userId) {
+            this.lastSeen = date.toISOString();
         }
     }
     makeDeletedAccount() {

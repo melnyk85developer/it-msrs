@@ -24,10 +24,6 @@ export class TokenRepository {
         });
     }
 
-    async save(token: TokenDocument) {
-        await token.save();
-    }
-
     async findTokenByIdOrNotFoundFailRepository(id: string): Promise<TokenDocument> {
         let token
         if (!id || id === undefined || id === 'undefined') {
@@ -57,7 +53,9 @@ export class TokenRepository {
         }
         return isToken;
     }
-
+    async save(token: TokenDocument) {
+        await token.save();
+    }
     async deleteTokenInBlackList(token: string): Promise<any> {
         return this.TokenModel.deleteOne({
             token: token,

@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
-import { SessionService } from '../sessions-application/sessions.service';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { AuthRefreshGuard } from '../../user-accounts/users-guards/refreshTokenGuard';
@@ -15,12 +14,15 @@ import { SessionQueryRepository } from '../sessions-infrastructure/sessions.quer
 import { SessionDocument } from '../sessions-domain/sessions.entity';
 import { GetSessionsQueryParams } from '../sessions-dto/get-sessions-query-params.input-dto';
 import { SessionViewDto } from '../sessions-dto/sessions.view-dto';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
+import { DeleteSessionCommand } from '../sessions-application/sessions-use-cases/delete-session.use-case';
+import { DeleteAllSessionCommand } from '../sessions-application/sessions-use-cases/delete-all-sessions.use-case';
 
 @Controller('/security')
 export class SessionController {
     constructor(
+        private commandBus: CommandBus,
         private sessionsQueryRepository: SessionQueryRepository,
-        private usersSessionService: SessionService,
     ) { }
 
     @ApiOperation({ summary: 'Получить все сессии пользователя!' })
@@ -41,9 +43,11 @@ export class SessionController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteSessionByDeviceIdController(@Param('deviceId') deviceId: string, @ExtractUserIfExistsFromRequest() user: UserContextDto) {
         // console.log('SecurityDevicesQueryRepository: - deviceId 😡 ', deviceId)
-        const isDeleteSession = await this.usersSessionService.deleteSessionsByDeviceIdServices(
-            user.id,
-            deviceId,
+        const isDeleteSession = await this.commandBus.execute<DeleteSessionCommand, string>(
+            new DeleteSessionCommand(
+                user.id,
+                deviceId
+            )
         );
         // console.log('SecurityDevicesQueryRepository: - deviceId 😡 ', deviceId)
         return isDeleteSession
@@ -56,14 +60,16 @@ export class SessionController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteAllSessionByUserIdController(
         @ExtractUserIfExistsFromRequest() user: UserContextDto,
-        @ExtractDeviceInfo() deviceInfo: DeviceInfo, @ExtractRefreshPayload() refreshTokenPayload: any
+        @ExtractDeviceInfo() deviceInfo: DeviceInfo, 
+        @ExtractRefreshPayload() refreshTokenPayload: any
     ) {
         // console.log('deleteAllSessionByUserIdController: - refreshTokenPayload 😡 ', refreshTokenPayload)
         // console.log('deleteAllSessionByUserIdController: - deviceInfo.refreshToken 😡 ', deviceInfo.refreshToken)
-        return await this.usersSessionService.deleteAllSessionsServices(
-            user.id,
-            refreshTokenPayload.deviceId,
-            deviceInfo.refreshToken as string
+        return await this.commandBus.execute<DeleteAllSessionCommand, string>(
+            new DeleteAllSessionCommand(
+                user.id,
+                refreshTokenPayload.deviceId
+            )
         );
     }
 }

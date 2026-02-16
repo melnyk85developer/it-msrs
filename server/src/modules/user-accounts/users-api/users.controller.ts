@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { Multer } from 'multer';
 import { UserViewDto } from '../users-dto/users.view-dto';
-import { UsersService } from '../users-application/users.service';
 import { UsersQueryRepository } from '../users-infrastructure/users.query-repository';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
@@ -13,12 +13,16 @@ import { ExtractUserFromRequest } from '../users-guards/decorators/param/extract
 import { UserContextDto } from '../users-guards/dto/user-context.dto';
 import { UserProfileViewDto } from '../users-dto/user-profile.view-dto';
 import { BasicAuthGuard } from '../users-guards/basic/basic-auth.guard';
+import { CreateUserCommand } from '../users-application/user-use-cases/create-user.use-case';
+import { CommandBus } from '@nestjs/cqrs';
+import { UpdateUserCommand } from '../users-application/user-use-cases/update-user.use-case';
+import { DeleteUserCommand } from '../users-application/user-use-cases/delete-user.use-case';
 
 @Controller('/users')
 export class UsersController {
     constructor(
+        private commandBus: CommandBus,
         private usersQueryRepository: UsersQueryRepository,
-        private usersService: UsersService,
     ) { }
 
     @ApiOperation({ summary: 'Создать пользователя!' })
@@ -26,11 +30,18 @@ export class UsersController {
     // @UseGuards(BasicAuthGuard)
     @Post('/')
     @HttpCode(HTTP_STATUSES.CREATED_201)
-    async createUserController(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
+    async createUserController(
+        @Body() body: CreateUserInputDto,
+        @UploadedFile() image?: Multer.File | undefined
+    ): Promise<UserViewDto> {
         // console.log('UsersController: createUserController - body 😡 ', body)
-        const userId = await this.usersService.createUserService(body, null);
+        // const userId = await this.usersService.createUserService(body, null);
+        const avatar = image ? image : null
+        const userId = await this.commandBus.execute<CreateUserCommand, string>(
+            new CreateUserCommand(body, avatar),
+        );
         // console.log('UsersController: createUserController - RES userId 😡 ', userId)
-        return this.usersQueryRepository.getUserByIdOrNotFoundFail(String(userId));
+        return this.usersQueryRepository.getUserByIdOrNotFoundFail(userId);
     }
     @ApiOperation({ summary: 'Обновить пользователя по id.' })
     @ApiParam({ name: 'id' })
@@ -38,9 +49,16 @@ export class UsersController {
     // @UseGuards(BasicAuthGuard)
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async updateUserController(@Param('id') id: string, @Body() body: UpdateUserInputDto): Promise<string> {
+    async updateUserController(
+        @Param('id') id: string,
+        @Body() body: UpdateUserInputDto,
+        @UploadedFile() image?: Multer.File | undefined
+    ): Promise<string> {
         // console.log('UsersController: updateUserController - body 😡 ', body)
-        const userId = await this.usersService.updateUserService(id, body);
+        const avatar = image ? image : null
+        const userId = await this.commandBus.execute<UpdateUserCommand, string>(
+            new UpdateUserCommand(id, body, avatar),
+        );
         // console.log('UsersController: updateUserController - userId 😡 ', userId)
         return userId
         // return SuccessResponse(INTERNAL_STATUS_CODE.SUCCESS_UPDATED_USER);
@@ -54,7 +72,9 @@ export class UsersController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteUserController(@Param('id') id: string): Promise<void> {
         // console.log('UsersController: deleteUserController - id 😡 ', id)
-        return this.usersService.deleteUserService(id);
+        return this.commandBus.execute<DeleteUserCommand, void>(
+            new DeleteUserCommand(id)
+        );
     }
     @ApiOperation({ summary: 'Получить всех пользователей!' })
     @ApiResponse({ status: 200 })

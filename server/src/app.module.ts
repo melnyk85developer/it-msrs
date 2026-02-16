@@ -59,6 +59,8 @@ dotenv.config({ quiet: true });
         FilesModule
     ],
     providers: [
+        // ...useCases,
+
         {
             provide: APP_INTERCEPTOR,
             useClass: SuccessMessageInterceptor,

@@ -3,6 +3,7 @@ import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmat
 import { InjectModel } from '@nestjs/mongoose';
 import { Confirmation, ConfirmationDocument, type ConfirmationModelType } from '../confirmations-domain/confirmation-entity';
 import { ConfDto, UodateConfDto } from '../dto/confDto';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
 
 export type ParseDeviceNameType = {
     osName: string | null;
@@ -18,6 +19,9 @@ export type ParseDeviceNameType = {
 export class ConfirmationsCodesService {
     constructor(
         @InjectModel(Confirmation.name) private ConfirmationModel: ConfirmationModelType,
+        // private commandBus: CommandBus,
+        // private eventBus: EventBus,
+
         private confirmationRepository: ConfirmationRepository,
     ) { }
     async createConfirmationsCodesService(dto: ConfDto): Promise<Confirmation> {

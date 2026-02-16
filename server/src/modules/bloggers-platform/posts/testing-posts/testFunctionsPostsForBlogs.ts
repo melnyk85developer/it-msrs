@@ -2,7 +2,7 @@ import { CreatePostInputDto } from "../posts-api/posts-input-dto/posts.input-dto
 import { HTTP_STATUSES } from "src/core/utils/utils";
 import { contextTests } from "test/helpers/init-settings";
 
-export const isCreatedPost = async (
+export const isCreatedPostForBlog = async (
     numBlog: number,
     numPost: number,
     title: string,
@@ -11,7 +11,7 @@ export const isCreatedPost = async (
     blogId: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
-    const postKey = contextTests.posts[`createdBlog${numBlog + 1}Posts`]
+    const postKey = contextTests.posts_for_blog[`createdBlog${numBlog + 1}Posts`]
     const isPostTestStore = postKey[numPost + 1]
 
     if (isPostTestStore === undefined || isPostTestStore === null) {
@@ -30,7 +30,7 @@ export const isCreatedPost = async (
         );
         if (response.status === statusCode) {
             // console.log('TEST isCreatedPost1: - response.body 😡😡😡', response.body)
-            contextTests.posts.addPostsStateTest({
+            contextTests.posts_for_blog.addPostsForBlogStateTest({
                 numBlog,
                 numPost,
                 addPost: response.body
@@ -40,7 +40,7 @@ export const isCreatedPost = async (
             return response.body;
         }
     } else {
-        return contextTests.posts[`createdBlog${numBlog +1}Posts`][numPost]
+        return contextTests.posts_for_blog[`createdBlog${numBlog +1}Posts`][numPost]
         // return null
     }
 }

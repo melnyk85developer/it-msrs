@@ -7,11 +7,9 @@ import { BlogViewDto } from './view-dto-blogs/blogs.view-dto';
 import { BlogsQueryRepository } from '../blogs-infrastructure/external-query-blogs/query-blogs/blogs.query-repository';
 import { CreateBlogInputDto } from './input-dto-blogs/blogs.input-dto';
 import { UpdateBlogInputDto } from './input-dto-blogs/update-blogs.input-dto';
-import { BlogsService } from '../blogs-application/blogs.service';
 import { SuccessResponse } from 'src/core/utils/SuccessfulResponse';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { PostsQueryRepository } from '../../posts/posts-infrastructure/posts-external-query/posts-query/posts.query-repository';
-import { PostsService } from '../../posts/posts-application/posts.service';
 import { GetPostsQueryParams } from '../../posts/posts-api/posts-input-dto/get-posts-query-params.input-dto';
 import { PostViewDto } from '../../posts/posts-api/posts-view-dto/posts.view-dto';
 import { CreatePostForBlogInputDto } from './input-dto-blogs/posts-for-blog.input-dto';
@@ -24,14 +22,19 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { HomePageBlogViewDto } from './view-dto-blogs/homePageBlog.view-dto';
 import { UpdateHomePageBlogDto } from './input-dto-blogs/update-HomePageblog-dto';
 import { AboutPageBlogViewDto } from './view-dto-blogs/aboutPageBlog.view-dto';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateBlogCommand } from '../blogs-application/blogs.use-cases/create-blog.use-case';
+import { UpdateBlogCommand } from '../blogs-application/blogs.use-cases/update-blog.use-case';
+import { UpdateBlogHomePageCommand } from '../blogs-application/blogs.use-cases/update-blog-home-page.use-case';
+import { DeleteBlogCommand } from '../blogs-application/blogs.use-cases/delete-blog.use-case';
+import { CreatePostOneBlogCommand } from '../../posts/posts-application/posts.use-cases/create-post-one-blog.use-case';
 
 @Controller('/blogs')
 export class BlogsController {
     constructor(
+        private commandBus: CommandBus,
         private blogsQueryRepository: BlogsQueryRepository,
-        private blogsService: BlogsService,
         private postsQueryRepository: PostsQueryRepository,
-        private postsService: PostsService,
     ) { }
 
     @ApiOperation({ summary: 'Создать блог!' })
@@ -40,10 +43,16 @@ export class BlogsController {
     @UseGuards(AuthAccessGuard)
     @Post()
     @HttpCode(HTTP_STATUSES.CREATED_201)
-    // @UseInterceptors(FileInterceptor('image'))
-    async createBlogController(@Body() body: CreateBlogInputDto, @UploadedFile() image?: Multer.File | undefined): Promise<BlogViewDto> {
+    @UseInterceptors(FileInterceptor('image'))
+    async createBlogController(
+        @Body() body: CreateBlogInputDto,
+        @ExtractUserFromRequest() user: UserContextDto,
+        @UploadedFile() image?: Multer.File | undefined,
+    ): Promise<BlogViewDto> {
         // console.log('BlogsController: createBlogController - REQ body 😡 ', body)
-        const blogId = await this.blogsService.createBlogService(body);
+        const blogId = await this.commandBus.execute<CreateBlogCommand, string>(
+            new CreateBlogCommand(user.id, body, image)
+        );
         // console.log('BlogsController: createBlogController - RES blogId REQ 😡 ', blogId)
         const isCreatedBlog = await this.blogsQueryRepository.getBlogByIdOrNotFoundFailQueryRepository(blogId);
         // console.log('BlogsController: createBlogController - RES isCreatedBlog.id 😡 ', isCreatedBlog.id)
@@ -61,11 +70,14 @@ export class BlogsController {
     async createPostForBlogController(
         @Param('blogId') blogId: string,
         @Body() body: CreatePostForBlogInputDto,
+        @ExtractUserFromRequest() user: UserContextDto,
         @UploadedFile() image?: Multer.File | undefined
     ): Promise<BlogViewDto> {
-
         // console.log('BlogsController: createPostForBlogController - body, blogId 😡 ', body, blogId)
-        const postId = await this.postsService.createPostOneBlogService(body, blogId);
+        // const postId = await this.postsService.createPostOneBlogService(body, blogId);
+        const postId = await this.commandBus.execute<CreatePostOneBlogCommand, string>(
+            new CreatePostOneBlogCommand(user.id, body, blogId, image)
+        );
         // console.log('BlogsController: createPostForBlogController - postId 😡 ', postId)
         const isCreatedPost = await this.postsQueryRepository.getPostByIdOrNotFoundFailQueryRepository(postId);
         // console.log('BlogsController: createPostForBlogController - isCreatedPost 😡 ', isCreatedPost)
@@ -80,9 +92,16 @@ export class BlogsController {
     @UseGuards(AuthAccessGuard)
     @Put(':id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async updateBlogController(@Param('id') id: string, @Body() body: UpdateBlogInputDto): Promise<string> {
+    @UseInterceptors(FileInterceptor('image'))
+    async updateBlogController(
+        @Param('id') id: string,
+        @Body() body: UpdateBlogInputDto,
+        @UploadedFile() image?: Multer.File | undefined
+    ): Promise<string> {
         // console.log('BlogsController: updateBlogController - id 😡 body ', id, body)
-        const isUpdateBlog = await this.blogsService.updateBlogService(id, body);
+        const isUpdateBlog = await this.commandBus.execute<UpdateBlogCommand, string>(
+            new UpdateBlogCommand(id, body, image)
+        );
         // console.log('BlogsController: updateBlogController - isUpdateBlog 😡 ', isUpdateBlog)
         return isUpdateBlog
     }
@@ -92,11 +111,17 @@ export class BlogsController {
     @UseGuards(AuthAccessGuard)
     @Put('/home-page/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async updateBlogHomePageController(@Param('id') id: string, @Body() body: UpdateHomePageBlogDto): Promise<string> {
+    async updateBlogHomePageController(
+        @Param('id') id: string,
+        @Body() body: UpdateHomePageBlogDto,
+        @UploadedFile() image?: Multer.File | undefined
+    ): Promise<string> {
         // console.log('BlogsController: updateBlogHomePageController - id 😡 body ', id, body)
-        const isUpdateBlog = await this.blogsService.updateBlogHomePageService(id, body);
+        const isUpdateBlogHomePage = await this.commandBus.execute<UpdateBlogHomePageCommand, string>(
+            new UpdateBlogHomePageCommand(id, body, image)
+        );
         // console.log('BlogsController: updateBlogHomePageController - isUpdateBlog 😡 ', isUpdateBlog)
-        return isUpdateBlog
+        return isUpdateBlogHomePage
     }
     @ApiOperation({ summary: 'Удалить блог по id.' })
     @ApiParam({ name: 'id' })
@@ -107,7 +132,9 @@ export class BlogsController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteBlogController(@Param('id') id: string): Promise<void> {
         // console.log('PostsController: deleteBlogController - id 😡 ', id)
-        return this.blogsService.deleteBlogService(id);
+        return await this.commandBus.execute<DeleteBlogCommand, void>(
+            new DeleteBlogCommand(id)
+        );
     }
     @ApiOperation({ summary: 'Получить все блоги - всех пользователей!' })
     @ApiResponse({ status: 200 })

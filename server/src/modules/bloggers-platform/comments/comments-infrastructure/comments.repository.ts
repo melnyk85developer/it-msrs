@@ -10,9 +10,9 @@ export class CommentsRepository {
         @InjectModel(Comment.name) private CommentModel: CommentModelType
     ) { }
 
-    async findCommentByIdRepository(id: string): Promise<CommentDocument | null> {
+    async findCommentByIdRepository(commentId: string): Promise<CommentDocument | null> {
         return this.CommentModel.findOne({
-            _id: id,
+            _id: commentId,
             deletedAt: null,
         });
     }
@@ -21,12 +21,19 @@ export class CommentsRepository {
         await comment.save();
     }
 
-    async findCommentOrNotFoundFailRepository(id: string): Promise<CommentDocument> {
-        const comment = await this.findCommentByIdRepository(id);
+    async findCommentOrNotFoundFailRepository(commentId: string): Promise<CommentDocument> {
+        console.log('CommentsController: updateCommentController - commentId, dto 😡 ', commentId)
+        let comment
+        if (!commentId || commentId === undefined || commentId === 'undefined') {
+            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - IF id 😡😡😡 typeof', id, typeof id)
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'id сука говняный 😡😡😡😡😡😡');
+        } else {
+            // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - ELSE id 😡😡😡 typeof', id, typeof id)
+            comment = await this.findCommentByIdRepository(commentId);
+        }
         if (!comment) {
             throw new DomainException(INTERNAL_STATUS_CODE.COMMENT_NOT_FOUND)
         }
-
         return comment;
     }
 }

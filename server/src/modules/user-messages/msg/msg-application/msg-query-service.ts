@@ -6,7 +6,6 @@ import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
 import { MessageRepository } from '../msg-infrastructure/msg.repository';
 import { CreateMessageDto } from '../msg-dto/create-msg.dto';
-import { DialogService } from '../../dialog/dialog-application/dialog-service';
 import { Multer } from 'multer';
 import { MessageOneViewDto } from '../msg-api/viev-dto-msg/msg-one.view-dto';
 import { UpdateMessageDto } from '../msg-dto/update-msg.dto';
@@ -20,7 +19,6 @@ export class MessageQueryService {
     constructor(
         // @InjectModel(Message.name) private MessageModel: MessageModelType,
         private messageQueryRepository: MessageQueryRepository,
-        private dialogsService: DialogService,
     ) { }
     async getAllMessagesByDialogIdService(userId: string, dialogId: string): Promise<MessagesAllViewDto[]> {
         const messages = await this.messageQueryRepository.findMessagesByDialogIdOrNotFoundFailRepository(dialogId);

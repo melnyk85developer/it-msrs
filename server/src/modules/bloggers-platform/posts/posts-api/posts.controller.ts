@@ -1,39 +1,53 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { Multer } from 'multer';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { GetPostsQueryParams } from './posts-input-dto/get-posts-query-params.input-dto';
 import { PostViewDto } from './posts-view-dto/posts.view-dto';
 import { CreatePostInputDto } from './posts-input-dto/posts.input-dto';
 import { UpdatePostInputDto } from './posts-input-dto/posts-update.input-dto';
 import { PostsQueryRepository } from '../posts-infrastructure/posts-external-query/posts-query/posts.query-repository';
-import { PostsService } from '../posts-application/posts.service';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { GetCommentsQueryParams } from '../../comments/comments-api/comments-input-dto/get-comments-query-params.input-dto';
 import { CommentsQueryRepository } from '../../comments/comments-infrastructure/comments-external-query/comments-query/comments.query-repository';
 import { CommentViewDto } from '../../comments/comments-api/comments-view-dto/comments.view-dto';
-import { CommentsService } from '../../comments/comments-application/comments.service';
 import { CreateCommentInputDto } from '../../comments/comments-api/comments-input-dto/comments.input-dto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { BasicAuthGuard } from 'src/modules/user-accounts/users-guards/basic/basic-auth.guard';
 import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
+import { CreatePostCommand } from '../posts-application/posts.use-cases/create-post.use-case';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CommandBus } from '@nestjs/cqrs';
+import { ExtractUserFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
+import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
+import { UpdatePostCommand } from '../posts-application/posts.use-cases/update-post.use-case';
+import { DeletePostCommand } from '../posts-application/posts.use-cases/delete-post.use-case';
+import { CreateCommentCommand } from '../../comments/comments-application/comments.use-cases/create-comment.use-case';
 
 @Controller('posts')
 export class PostsController {
     constructor(
+        private commandBus: CommandBus,
         private postsQueryRepository: PostsQueryRepository,
         private commentsQueryRepository: CommentsQueryRepository,
-        private postsService: PostsService,
-        private commentsService: CommentsService
     ) { }
 
     @ApiOperation({ summary: 'Создать пост!' })
     @ApiResponse({ status: 201 })
     @UseGuards(BasicAuthGuard)
+    // @UseGuards(AuthAccessGuard)
     @Post()
     @HttpCode(HTTP_STATUSES.CREATED_201)
-    async createPostController(@Body() body: CreatePostInputDto): Promise<PostViewDto> {
+    @UseInterceptors(FileInterceptor('image'))
+    async createPostController(
+        @Body() body: CreatePostInputDto,
+        // @ExtractUserFromRequest() user: UserContextDto,
+        @UploadedFile() image?: Multer.File | undefined,
+    ): Promise<PostViewDto> {
         // console.log('PostsController: createPostController - body 😡 ', body)
-        const postId = await this.postsService.createPostService(body);
+        const postId = await this.commandBus.execute<CreatePostCommand, string>(
+            new CreatePostCommand(body, undefined, image)
+        );
         // console.log('PostsController: createPostController - postId 😡 ', postId)
         return this.postsQueryRepository.getPostByIdOrNotFoundFailQueryRepository(postId);
     }
@@ -44,9 +58,16 @@ export class PostsController {
     @UseGuards(AuthAccessGuard)
     @Post('/:postId/comments')
     @HttpCode(HTTP_STATUSES.CREATED_201)
-    async createCommentForPostController(@Body() body: CreateCommentInputDto): Promise<CommentViewDto> {
+    @UseInterceptors(FileInterceptor('image'))
+    async createCommentForPostController(
+        @Body() body: CreateCommentInputDto,
+        @ExtractUserFromRequest() user: UserContextDto,
+        @UploadedFile() image?: Multer.File | undefined,
+    ): Promise<CommentViewDto> {
         // console.log('PostsController: createCommentForPostController - body 😡 ', body)
-        const commentId = await this.commentsService.createCommentService(body);
+        const commentId = await this.commandBus.execute<CreateCommentCommand, string>(
+            new CreateCommentCommand(user.id, body, image)
+        );
         return this.commentsQueryRepository.getCommentByIdOrNotFoundFailRepository(commentId);
     }
 
@@ -55,9 +76,16 @@ export class PostsController {
     @ApiResponse({ status: 204 })
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async updatePostController(@Param('id') id: string, @Body() body: UpdatePostInputDto): Promise<PostViewDto> {
+    @UseInterceptors(FileInterceptor('image'))
+    async updatePostController(
+        @Param('id') id: string,
+        @Body() body: UpdatePostInputDto,
+        @UploadedFile() image?: Multer.File | undefined,
+    ): Promise<PostViewDto> {
         // console.log('PostsController: updatePostController - id, body 😡 ', id, body)
-        const postId = await this.postsService.updatePostService(id, body);
+        const postId = await this.commandBus.execute<UpdatePostCommand, string>(
+            new UpdatePostCommand(id, body, image)
+        );
         // console.log('PostsController: updatePostController - postId 😡 ', postId)
         const isPost = await this.postsQueryRepository.getPostByIdOrNotFoundFailQueryRepository(postId)
         // console.log('PostsController: updatePostController - isPost 😡 ', isPost)
@@ -77,7 +105,9 @@ export class PostsController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deletePostController(@Param('id') id: string): Promise<void> {
         // console.log('PostsController: deletePostController - id 😡 ', id)
-        return this.postsService.deletePostService(id);
+        return await this.commandBus.execute<DeletePostCommand, void>(
+            new DeletePostCommand(id)
+        );
     }
 
     @ApiOperation({ summary: 'Получить все посты!' })

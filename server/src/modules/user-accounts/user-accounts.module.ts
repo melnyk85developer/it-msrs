@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users-api/users.controller';
-import { UsersService } from './users-application/users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersRepository } from './users-infrastructure/users.repository';
 import { AuthController } from '../auth/auth-api/auth.controller';
@@ -24,9 +23,34 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 import { FilesService } from '../files/files.service';
 import { AdminController } from './users-api/admin.controller';
 import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
-// import { DialogsModule } from '../user-messages/dialog/dialog.module';
-// import { MessagesModule } from '../user-messages/msg.module';
-// import { GalleryModule } from '../gallery/gallery.module';
+import { UserRegistrationUseCase } from '../auth/auth-application/auth-use-cases/registration-use-case';
+import { CqrsModule } from '@nestjs/cqrs';
+import { UserLoginUseCase } from '../auth/auth-application/auth-use-cases/login-use-case';
+import { RefreshTokenUseCase } from '../auth/auth-application/auth-use-cases/refresh-token.use-case.ts';
+import { UserLogoutUseCase } from '../auth/auth-application/auth-use-cases/logout-use-case';
+import { RegistrationEmailResendingUseCase } from '../auth/auth-application/auth-use-cases/registration-email-resending-use-case';
+import { SendPasswordRecoveryEmailUseCase } from './users-application/user-use-cases/sendPasswordRecoveryEmailUseCase';
+import { ConfirmationCodeRegistrationUseCase } from '../confirmationsCodes/confirmations-application/confirmation-use-cases/confirmation-code-registration-use-case';
+import { UpdatePasswordUseCase } from './users-application/user-use-cases/updatePasswordUseCase';
+import { CreateUserUseCase } from './users-application/user-use-cases/create-user.use-case';
+import { UpdateUserUseCase } from './users-application/user-use-cases/update-user.use-case';
+import { DeleteUserUseCase } from './users-application/user-use-cases/delete-user.use-case';
+import { UpdateLastSeenUserUseCase } from './users-application/user-use-cases/update-last-seen-user.use-case';
+
+const useCases = [
+    UserRegistrationUseCase,
+    UserLoginUseCase,
+    RefreshTokenUseCase,
+    UserLogoutUseCase,
+    RegistrationEmailResendingUseCase,
+    CreateUserUseCase,
+    UpdateUserUseCase,
+    DeleteUserUseCase,
+    UpdateLastSeenUserUseCase,
+    SendPasswordRecoveryEmailUseCase,
+    ConfirmationCodeRegistrationUseCase,
+    UpdatePasswordUseCase
+]
 
 @Module({
     imports: [
@@ -41,15 +65,12 @@ import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
         MongooseModule.forFeature([
             { name: User.name, schema: UserSchema }
         ]),
-
+        CqrsModule,
         NotificationsModule,
         PassportModule,
-        // MessagesModule,
-        // DialogsModule,
         TokenModule,   // НУЖЕН для AuthService, стратегий, blacklist
         SessionModule, // СЕССИИ ИСПОЛЬЗУЮТСЯ ПРИ АВТОРИЗАЦИИ
         ConfirmationModule,
-        // GalleryModule
     ],
     controllers: [
         AuthController,
@@ -57,7 +78,7 @@ import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
         UsersController
     ],
     providers: [
-        UsersService,
+        ...useCases,
         UsersRepository,
         UsersQueryRepository,
 
@@ -76,7 +97,6 @@ import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
         FilesService
     ],
     exports: [
-        UsersService,
         UsersRepository,
         UsersQueryRepository,
 

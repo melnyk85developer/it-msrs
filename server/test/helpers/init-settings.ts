@@ -16,7 +16,6 @@ import { PostsTestManager } from './posts-test-manager';
 import { UserSessionTestManager } from './user-session-test-manager';
 import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
 import { AuthService } from 'src/modules/auth/auth-application/auth.service';
-import { UsersService } from 'src/modules/user-accounts/users-application/users.service';
 import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { SessionsRepository } from 'src/modules/user-sessions/sessions-infrastructure/session.repository';
 import { ConfirmationRepository } from 'src/modules/confirmationsCodes/confirmations-infrastructure/confirmationRepository';
@@ -25,6 +24,9 @@ import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 import { UserPhotosTestManager } from './user-photos-test-manager';
 import { UserPhotoAlbumsTestManager } from './user-photo-albums-test-manager';
 import { UserMessagesTestManager } from './messages-test-manager';
+import { UserRegistrationCommand } from 'src/modules/auth/auth-application/auth-use-cases/registration-use-case';
+import { CommandBus } from '@nestjs/cqrs';
+import { PostsForProfileTestManager } from './posts-for-profile-test-manager';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -51,10 +53,13 @@ export const initSettings = async (
 
     contextTests.databaseConnection = contextTests.app.get<Connection>(getConnectionToken());
     contextTests.httpServer = contextTests.app.getHttpServer();
+    
+    contextTests.сommandBus = testingAppModule.get<CommandBus>(CommandBus);
+
     contextTests.mailService = contextTests.app.get<EmailService>(EmailService);
     contextTests.tokenService = contextTests.app.get<TokenService>(TokenService);
+    
     contextTests.authServices = contextTests.app.get<AuthService>(AuthService);
-    contextTests.userService = contextTests.app.get<UsersService>(UsersService);
     contextTests.usersRepository = contextTests.app.get<UsersRepository>(UsersRepository);
     contextTests.sessiosRepository = contextTests.app.get<SessionsRepository>(SessionsRepository);
     contextTests.confirmationService = contextTests.app.get<ConfirmationsCodesService>(ConfirmationsCodesService);
@@ -66,6 +71,8 @@ export const initSettings = async (
     contextTests.commentsTestManager = new CommentsTestManager(contextTests.app);
     contextTests.likesTestManager = new LikesTestManager(contextTests.app);
     contextTests.postsTestManager = new PostsTestManager(contextTests.app);
+    contextTests.postsForProfileTestManager = new PostsForProfileTestManager(contextTests.app);
+    
     contextTests.userSessionTestManager = new UserSessionTestManager(contextTests.app);
     contextTests.userMessagesTestManager = new UserMessagesTestManager(contextTests.app);
     contextTests.usersTestManager = new UsersTestManager(contextTests.app);

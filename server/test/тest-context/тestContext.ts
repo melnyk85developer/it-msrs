@@ -17,7 +17,6 @@ import { PostViewDto } from 'src/modules/bloggers-platform/posts/posts-api/posts
 import { CommentViewDto } from 'src/modules/bloggers-platform/comments/comments-api/comments-view-dto/comments.view-dto';
 import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
 import { AuthService } from 'src/modules/auth/auth-application/auth.service';
-import { UsersService } from 'src/modules/user-accounts/users-application/users.service';
 import { EmailService } from 'src/modules/notifications/email.service';
 import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { Session } from 'src/modules/user-sessions/sessions-domain/sessions.entity';
@@ -27,7 +26,6 @@ import { SessionContextClass } from './context-module/sessions-context';
 import { ConstantsContextClass } from './context-module/constants-context';
 import { UserContextClass } from './context-module/user-context';
 import { BlogsContextClass } from './context-module/blogs-context';
-import { PostsContextClass } from './context-module/posts-context';
 import { CommentsContextClass } from './context-module/comments-context';
 import { GetUsersQueryParams } from 'src/modules/user-accounts/users-dto/get-users-query-params.input-dto';
 import { SessionsRepository } from 'src/modules/user-sessions/sessions-infrastructure/session.repository';
@@ -38,14 +36,20 @@ import { CodeConfirmationContextClass } from './context-module/code-confirmation
 import { UserPhotosTestManager } from 'test/helpers/user-photos-test-manager';
 import { UserPhotoAlbumsTestManager } from 'test/helpers/user-photo-albums-test-manager';
 import { UserMessagesTestManager } from 'test/helpers/messages-test-manager';
+import { UserRegistrationCommand, UserRegistrationUseCase } from 'src/modules/auth/auth-application/auth-use-cases/registration-use-case';
+import { CommandBus } from '@nestjs/cqrs';
+import { PostsForProfileTestManager } from 'test/helpers/posts-for-profile-test-manager';
+import { PostsForProfileContextClass } from './context-module/posts-for-profile-context';
+import { PostsForBlogContextClass } from './context-module/posts-for-blogs-context';
 
 export class TestContext {
     public app: INestApplication;
     public databaseConnection: Connection;
     public httpServer: INestApplication;
 
+    public сommandBus: CommandBus;
+
     public authServices: AuthService;
-    public userService: UsersService | any;
     public usersRepository: UsersRepository;
     public sessiosRepository: SessionsRepository;
     public mailService: EmailService | any;
@@ -62,6 +66,8 @@ export class TestContext {
     public commentsTestManager: CommentsTestManager;
     public likesTestManager: LikesTestManager;
     public postsTestManager: PostsTestManager;
+    public postsForProfileTestManager: PostsForProfileTestManager;
+    
     public userSessionTestManager: UserSessionTestManager;
     public userMessagesTestManager: UserMessagesTestManager;
     public usersTestManager: UsersTestManager;
@@ -78,7 +84,8 @@ export class TestContext {
     public sessions: SessionContextClass;
     public users: UserContextClass;
     public blogs: BlogsContextClass;
-    public posts: PostsContextClass;
+    public posts_for_blog: PostsForBlogContextClass;
+    public posts_for_profile: PostsForProfileContextClass;
     public comments: CommentsContextClass;
     public codeConfirmation: CodeConfirmationContextClass;
 
@@ -87,7 +94,8 @@ export class TestContext {
         this.sessions = new SessionContextClass();
         this.users = new UserContextClass();
         this.blogs = new BlogsContextClass();
-        this.posts = new PostsContextClass();
+        this.posts_for_blog = new PostsForBlogContextClass();
+        this.posts_for_profile = new PostsForProfileContextClass();
         this.comments = new CommentsContextClass();
         this.codeConfirmation = new CodeConfirmationContextClass();
     }

@@ -19,7 +19,7 @@ export const isCreatedComment1 = async (
             numBlog,
             numPost,
             numComment,
-            contextTests.posts.createdBlog1Posts[0]!.id,
+            contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
             commentData,
             contextTests.sessions.accessTokenUser1Devices[0],
             statusCode

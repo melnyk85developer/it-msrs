@@ -1,5 +1,6 @@
 import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
 import { contextTests } from "test/helpers/init-settings";
+import { UserRegistrationCommand } from "../auth-application/auth-use-cases/registration-use-case";
 
 export const authIntegrationTest = () => {
     describe('AUTH-INTEGRATION', () => {
@@ -7,13 +8,15 @@ export const authIntegrationTest = () => {
             contextTests.mailService.sendConfirmationEmail = jest.fn((from, to, subject, text, html) => {
                 return Promise.resolve(true)
             })
-            const response = await contextTests.userService.registrationService(
-                {
-                    login: contextTests.users.correctUserNames[1],
-                    email: contextTests.users.correctUserEmails[1],
-                    password: contextTests.users.correctUserPasswords[1],
-                }
-            );
+            const response = await contextTests.сommandBus.execute(
+                new UserRegistrationCommand(
+                    {
+                        login: contextTests.users.correctUserNames[1],
+                        email: contextTests.users.correctUserEmails[1],
+                        password: contextTests.users.correctUserPasswords[1],
+                    },
+                    null
+                ));
             expect(response).toHaveProperty('_id')
             expect(contextTests.mailService.sendMail).toHaveBeenCalledWith(
                 expect.any(String),

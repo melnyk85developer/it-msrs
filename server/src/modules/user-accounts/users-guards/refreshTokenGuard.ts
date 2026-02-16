@@ -2,10 +2,14 @@ import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
 import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
 import { TokenService } from "src/modules/tokens/tokens-application/token-service";
+import { TokenRepository } from "src/modules/tokens/tokens-infrastructure/token.repository";
 
 @Injectable()
 export class AuthRefreshGuard implements CanActivate {
-    constructor(private tokenService: TokenService) { }
+    constructor(
+        private tokenService: TokenService,
+        private tokenRepository: TokenRepository,
+    ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest()
@@ -15,7 +19,7 @@ export class AuthRefreshGuard implements CanActivate {
         if (!refreshToken) {
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_NO_REFRESH_TOKEN)
         }
-        const isBkackList = await this.tokenService.getTokenBlackList(refreshToken)
+        const isBkackList = await this.tokenRepository.findTokenByToken(refreshToken)
         if (isBkackList) {
             // console.log('AuthRefreshGuard: - isBkackList', isBkackList)
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_REFRESH_TOKEN_BLACK_LIST)

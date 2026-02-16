@@ -2,6 +2,9 @@ import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "src/core/utils/utils";
 import { contextTests } from "test/helpers/init-settings";
 import { CreateUserInputDto } from "../users-dto/users.input-dto";
 import { deleteAllData } from "test/helpers/delete-all-data";
+import { ConfirmationCodeRegistrationCommand } from "src/modules/confirmationsCodes/confirmations-application/confirmation-use-cases/confirmation-code-registration-use-case";
+import { UserRegistrationCommand } from "../../auth/auth-application/auth-use-cases/registration-use-case";
+import { RegistrationEmailResendingCommand } from "../../auth/auth-application/auth-use-cases/registration-email-resending-use-case";
 
 export const registrEmailResendingAndConfirmIntegrationTest = () => {
     describe('REGISTRATION-EMAIL-RESSENDING-INTEGRATION', () => {
@@ -28,16 +31,24 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
         afterEach(() => {
             jest.useRealTimers();
         });
-        it('RECEIVE - Ожидается внутренний статус код 953, - Если пользователь не найден и сообщение ошибки: Такого пользователя не найденно!', async () => {
-            await expect(contextTests.authServices.registrationEmailResendingService('nonexistent@example.com'))
+        it('RECEIVE - Ожидается внутренний статус код 953...', async () => {
+            // Не используем await здесь! Передаем промис в expect
+            const command = new RegistrationEmailResendingCommand('nonexistent@example.com');
+            console.log('TEST: - email 😡😡😡', command)
+
+            await expect(contextTests.сommandBus.execute(command))
                 .rejects
                 .toMatchObject({
+                    // Убедись, что твой UseCase кидает именно DomainException 
+                    // с такими полями, а не просто возвращает объект
                     message: 'Не корректный email!',
                     code: INTERNAL_STATUS_CODE.BAD_REQUEST_INCORECT_E_MAIL
                 });
         });
         it('SUCCESS - Ожидается внутренний статус код 900, - Успешное повторное отправление на email сообщение подтвердить регистрацию!', async () => {
-            const result = await contextTests.authServices.registrationEmailResendingService(contextTests.users.correctUserEmails[0]);
+            const result = await contextTests.сommandBus.execute(
+                new RegistrationEmailResendingCommand(contextTests.users.correctUserEmails[0])
+            );
             expect(result.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
             expect(result.serviceMessage).toBe(`Сообщение успешно отправлено на E-Mail: ${contextTests.users.correctUserEmails[0]}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${result.data?.expirationISO}`);
             expect(result.data?.expirationISO).toMatch(isoDateRegex); // Проверяет формат строки
@@ -45,9 +56,13 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
         });
         it('ERROR   - Ожидается внутренний статус код 680, - Ошибка если 3 минуты не прошло с момента отправки сообщения!', async () => {
             // 1. Первая отправка (запускает таймер)
-            await contextTests.authServices.registrationEmailResendingService(contextTests.users.correctUserEmails[0]);
+            await contextTests.сommandBus.execute(
+                new RegistrationEmailResendingCommand(contextTests.users.correctUserEmails[0])
+            );
             // 2. Вторая отправка (ожидаем ошибку)
-            await expect(contextTests.authServices.registrationEmailResendingService(contextTests.users.correctUserEmails[0]))
+            await expect(contextTests.сommandBus.execute(
+                new RegistrationEmailResendingCommand(contextTests.users.correctUserEmails[0])
+            ))
                 .rejects
                 .toMatchObject({
                     code: INTERNAL_STATUS_CODE.BAD_REQUEST_TIME_HASNT_PASSED_YET,
@@ -71,7 +86,8 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
                 // dataCode.minutes = i < 5 ? 3 : 40
                 await contextTests.confirmationService.createConfirmationsCodesService(dataCode);
             }
-            await expect(contextTests.authServices.registrationEmailResendingService(contextTests.users.createdUsers[0]!.email)) // Шестая попытка
+            const command = new RegistrationEmailResendingCommand(contextTests.users.createdUsers[0]!.email)
+            await expect(contextTests.сommandBus.execute(command)) // Шестая попытка
                 .rejects
                 .toMatchObject({
                     code: INTERNAL_STATUS_CODE.BAD_REQUEST_A_LOT_OF_REQUESTS_TRY_AGAIN_LATER,
@@ -95,9 +111,11 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
             const now = Date.now();
             jest.setSystemTime(now + 38 * 60 * 1000);
             // 3. Проверяем блокировку на 38-й минуте
-            await expect(contextTests.authServices.registrationEmailResendingService(
-                contextTests.users.createdUsers[0]!.email
-            ))
+            await expect(
+                contextTests.сommandBus.execute(
+                    new RegistrationEmailResendingCommand(contextTests.users.createdUsers[0]!.email)
+                )
+            )
                 .rejects
                 .toMatchObject({
                     code: INTERNAL_STATUS_CODE.BAD_REQUEST_FUNCTION_BLOCKED,
@@ -107,14 +125,15 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
             // 4. Прыжок еще на 3 минуты (итого 41 минута, блокировка (40 мин) должна спасть)
             jest.setSystemTime(now + 41 * 60 * 1000);
             // 5. Проверяем успех
-            const success = await contextTests.authServices.registrationEmailResendingService(contextTests.users.createdUsers[0]!.email);
+            const success = await contextTests.сommandBus.execute(
+                new RegistrationEmailResendingCommand(contextTests.users.createdUsers[0]!.email)
+            );
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
             expect(success.serviceMessage).toBe(`Сообщение успешно отправлено на E-Mail: ${contextTests.users.correctUserEmails[0]}. Проверьте почту и следуйте дальнейшим инструкциям в письме. ${success.data?.expirationISO}`);
             expect(success.data?.expirationISO).toMatch(isoDateRegex); // Проверяет формат строки
             expect(success.done).toEqual(expect.any(Boolean));
         });
-
         it('SUCCESS - Ожидается внутренний статус код 900, - Успешное обновление статуса isEmailConfirmed в профиле пользователя!', async () => {
             const data: CreateUserInputDto = {
                 avatar: '',
@@ -122,7 +141,8 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
                 password: contextTests.users.correctUserPasswords[1],
                 email: contextTests.users.correctUserEmails[1]
             }
-            const createdUser = await contextTests.authServices.registrationService(data, null)
+            const command = new UserRegistrationCommand(data, null);
+            const createdUser = await contextTests.сommandBus.execute(command);
             const findUser = await contextTests.usersRepository.findUserByIdOrNotFoundFail(createdUser.data.id)
             const addUser = {
                 id: findUser.id,
@@ -131,7 +151,7 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
                 email: findUser.accountData.email,
                 createdAt: findUser.createdAt,
             }
-            if (createdUser && findUser) {
+            if (findUser && createdUser) {
                 contextTests.users.addUserStateTest({ numUser: 1, addUser: addUser });
                 contextTests.codeConfirmation.addCodeConfirmationStateTest({
                     numConfirmation: 1,
@@ -141,8 +161,8 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
                 // console.log('TEST: contextTests.createdUser1 😡 ', contextTests.users.createdUsers[1])
             }
             // console.log('TEST: contextTests.codeConfirmation 😡 ', contextTests.codeConfirmation.allCodesConfirmation[0].code)
-            const success = await contextTests.authServices.confirmationCodeRegistrationService(
-                contextTests.codeConfirmation.allCodesConfirmation[0].code
+            const success = await contextTests.сommandBus.execute(
+                new ConfirmationCodeRegistrationCommand(contextTests.codeConfirmation.allCodesConfirmation[0].code)
             );
             // console.log('TEST: success 😡 ', success)
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);

@@ -1,4 +1,4 @@
-import { isCreatedPost } from './testFunctionsPosts';
+import { isCreatedPostForBlog } from './testFunctionsPostsForBlogs';
 import { isCreatedBlog } from '../../blogs/blogs-testing/testFunctionsBlogs';
 import { HTTP_STATUSES } from 'src/core/utils/utils';
 import { CreatePostInputDto } from '../posts-api/posts-input-dto/posts.input-dto';
@@ -64,9 +64,9 @@ export const postsE2eTest = () => {
         })
         it(`POST   - Ожидается статус код 401, - Создание поста не авторизованным пользователем! Дополнительные запросы: -> GET`, async () => {
             const data: CreatePostInputDto = {
-                title: contextTests.posts.correctTitleBlog1Posts[0],
-                shortDescription: contextTests.posts.shortDescriptionBlog1Posts[0],
-                content: contextTests.posts.contentBlog1Posts[0],
+                title: contextTests.posts_for_blog.correctTitleBlog1Posts[0],
+                shortDescription: contextTests.posts_for_blog.shortDescriptionBlog1Posts[0],
+                content: contextTests.posts_for_blog.contentBlog1Posts[0],
                 blogId: String(new Types.ObjectId())
             }
             await contextTests.postsTestManager.createPosts(
@@ -127,12 +127,12 @@ export const postsE2eTest = () => {
                 HTTP_STATUSES.CREATED_201
             )
             // console.log('TEST: - isBlog2 😡 ', isBlog2)
-            const isPost = await isCreatedPost(
+            const isPost = await isCreatedPostForBlog(
                 0,
                 0,
-                contextTests.posts.correctTitleBlog1Posts[0],
-                contextTests.posts.shortDescriptionBlog1Posts[0],
-                contextTests.posts.contentBlog1Posts[0],
+                contextTests.posts_for_blog.correctTitleBlog1Posts[0],
+                contextTests.posts_for_blog.shortDescriptionBlog1Posts[0],
+                contextTests.posts_for_blog.contentBlog1Posts[0],
                 contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.CREATED_201
             )
@@ -149,7 +149,7 @@ export const postsE2eTest = () => {
                     page: 1,
                     pageSize: 10,
                     totalCount: 1,
-                    items: [contextTests.posts.createdBlog1Posts[0]]
+                    items: [contextTests.posts_for_blog.createdBlog1Posts[0]]
                 })
             )
         })
@@ -162,12 +162,12 @@ export const postsE2eTest = () => {
                 HTTP_STATUSES.CREATED_201
             )
             // console.log('TEST: - isBlog2 😡 ', isBlog2)
-            const isPost = await isCreatedPost(
+            const isPost = await isCreatedPostForBlog(
                 0,
                 1,
-                contextTests.posts.correctTitleBlog1Posts[1],
-                contextTests.posts.shortDescriptionBlog1Posts[1],
-                contextTests.posts.contentBlog1Posts[1],
+                contextTests.posts_for_blog.correctTitleBlog1Posts[1],
+                contextTests.posts_for_blog.shortDescriptionBlog1Posts[1],
+                contextTests.posts_for_blog.contentBlog1Posts[1],
                 contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.CREATED_201
             )
@@ -182,7 +182,7 @@ export const postsE2eTest = () => {
                     page: 1,
                     pageSize: 10,
                     totalCount: 2,
-                    items: [contextTests.posts.createdBlog1Posts[1], contextTests.posts.createdBlog1Posts[0]]
+                    items: [contextTests.posts_for_blog.createdBlog1Posts[1], contextTests.posts_for_blog.createdBlog1Posts[0]]
                 })
             )
         })
@@ -197,28 +197,28 @@ export const postsE2eTest = () => {
             await contextTests.postsTestManager.updatePosts(
                 0,
                 0,
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 data,
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.BAD_REQUEST_400
             );
             const { getPostsById } = await contextTests.postsTestManager.getPostsById(
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 null,
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             );
             expect(getPostsById).toEqual(
                 expect.objectContaining(
-                    contextTests.posts.createdBlog1Posts[0]
+                    contextTests.posts_for_blog.createdBlog1Posts[0]
                 )
             )
         })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего поста!`, async () => {
             const data: UpdatePostInputDto = {
-                title: contextTests.posts.correctTitleBlog1Posts[0],
-                shortDescription: contextTests.posts.shortDescriptionBlog1Posts[0],
-                content: contextTests.posts.contentBlog1Posts[0],
+                title: contextTests.posts_for_blog.correctTitleBlog1Posts[0],
+                shortDescription: contextTests.posts_for_blog.shortDescriptionBlog1Posts[0],
+                content: contextTests.posts_for_blog.contentBlog1Posts[0],
                 blogId: contextTests.constants.invalidId,
                 // blogName: contextTests.createdBlog1Post1.blogName
             }
@@ -233,23 +233,23 @@ export const postsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 204, - Обновление поста с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const updatedPost: UpdatePostInputDto = {
-                title: contextTests.posts.correctTitleBlog1Posts[2],
-                shortDescription: contextTests.posts.shortDescriptionBlog1Posts[2],
-                content: contextTests.posts.contentBlog1Posts[2],
-                blogId: contextTests.posts.createdBlog1Posts[0]!.blogId,
+                title: contextTests.posts_for_blog.correctTitleBlog1Posts[2],
+                shortDescription: contextTests.posts_for_blog.shortDescriptionBlog1Posts[2],
+                content: contextTests.posts_for_blog.contentBlog1Posts[2],
+                blogId: contextTests.posts_for_blog.createdBlog1Posts[0]!.blogId,
                 // blogName: contextTests.createdBlog1Post1.blogName
             }
             await contextTests.postsTestManager.updatePosts(
                 0,
                 0,
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 updatedPost,
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             );
 
             const { getPostsById } = await contextTests.postsTestManager.getPostsById(
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 null,
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
@@ -263,36 +263,36 @@ export const postsE2eTest = () => {
                 })
             )
             const { response } = await contextTests.postsTestManager.getPostsById(
-                contextTests.posts.createdBlog1Posts[1]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[1]!.id,
                 null,
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(response.body).toEqual(
                 expect.objectContaining(
-                    contextTests.posts.createdBlog1Posts[1]
+                    contextTests.posts_for_blog.createdBlog1Posts[1]
                 )
             )
         })
         it(`DELETE - Ожидается статус код 204, - Успешное удаление обоих постов! Дополнительные запросы: -> GET`, async () => {
             await contextTests.postsTestManager.deletePost(
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getPostsById: res1 } = await contextTests.postsTestManager.getPostsById(
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 null,
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
             await contextTests.postsTestManager.deletePost(
-                contextTests.posts.createdBlog1Posts[1]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[1]!.id,
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getPostsById: res2 } = await contextTests.postsTestManager.getPostsById(
-                contextTests.posts.createdBlog1Posts[1]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[1]!.id,
                 null,
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 HTTP_STATUSES.NOT_FOUND_404
@@ -311,7 +311,7 @@ export const postsE2eTest = () => {
                 }))
 
             if (res1 && res2) {
-                contextTests.posts.deleteAllPostsStateTest({numBlog: 0})
+                contextTests.posts_for_blog.deleteAllPostsForBlogStateTest({numBlog: 0})
             }
         })
         // console.log('TEST ⚙️ - getAllPosts', JSON.stringify(getAllPosts, null, 2))

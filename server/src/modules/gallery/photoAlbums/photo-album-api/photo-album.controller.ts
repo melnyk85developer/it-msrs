@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Multer } from 'multer';
+import { CommandBus } from '@nestjs/cqrs';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { PhotoAlbumService } from '../photo-album-application/photo-album-service';
 import { PhotoAlbumQueryRepository } from '../photo-album-infrastructure/photo-album.query-repository';
 import { CreatePhotoAlbumInputDto } from '../photo-album-dto/photo-album.input-dto';
 import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
@@ -15,12 +15,15 @@ import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { UpdatePhotoAlbumInputDto } from '../photo-album-dto/update-input-photo-album-dto';
 import { PhotoAlbumViewDto } from '../photo-album-dto/photo-album.view-dto';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
+import { CreatePhotoAlbumCommand } from '../photo-album-application/photo-album-use-cases/create-photo-album.use-case';
+import { UpdatePhotoAlbumCommand } from '../photo-album-application/photo-album-use-cases/update-photo-album.use-case';
+import { DeletePhotoAlbumCommand } from '../photo-album-application/photo-album-use-cases/delete-photo-album.use-case';
 
 @Controller('/photo-albums')
 export class PhotoAlbumController {
     constructor(
+        private commandBus: CommandBus,
         private photoAlbumQueryRepository: PhotoAlbumQueryRepository,
-        private photoAlbumService: PhotoAlbumService,
     ) { }
 
     @ApiOperation({ summary: 'Создание фотоальбома!' })
@@ -38,11 +41,13 @@ export class PhotoAlbumController {
     ): Promise<PhotoAlbumViewDto> {
         // console.log('createPhotoAlbumController: - dto', dto)
         const albumCoverFile = files?.albumCoverFile?.[0] || null;
-        const albumId = await this.photoAlbumService.createPhotoAlbumService(
-            user.id,
-            albumCoverFile,
-            dto
-        )
+        const albumId = await this.commandBus.execute<CreatePhotoAlbumCommand, string>(
+            new CreatePhotoAlbumCommand(
+                user.id,
+                albumCoverFile,
+                dto
+            ),
+        );
         // console.log('createPhotoAlbumController: - albumId', albumId)
         return await this.photoAlbumQueryRepository.findPhotoAlbumByIdOrNotFoundFailRepository(albumId);
     }
@@ -66,10 +71,12 @@ export class PhotoAlbumController {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_UPDATED_PHOTO)
         }
         const albumCoverFile = files?.albumCoverFile?.[0] || null;
-        return await this.photoAlbumService.updatePhotoAlbumService(
-            albumId,
-            dto,
-            albumCoverFile
+        return await this.commandBus.execute<UpdatePhotoAlbumCommand, string>(
+            new UpdatePhotoAlbumCommand(
+                albumId,
+                dto,
+                albumCoverFile,
+            ),
         );
     }
     @ApiOperation({ summary: 'Удаление фотоальбома!' })
@@ -79,7 +86,11 @@ export class PhotoAlbumController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deletePhotoAlbumController(@Param('albumId') albumId: string) {
         // console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
-        return await this.photoAlbumService.deletePhotoAlbumService(albumId)
+        return await this.commandBus.execute<DeletePhotoAlbumCommand, string>(
+            new DeletePhotoAlbumCommand(
+                albumId
+            ),
+        );
     }
     @ApiOperation({ summary: 'Создание всех фото!' })
     @ApiResponse({ status: 200, type: PhotoAlbum })

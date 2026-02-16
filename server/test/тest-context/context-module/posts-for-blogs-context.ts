@@ -1,7 +1,7 @@
 import { PostViewDto } from "src/modules/bloggers-platform/posts/posts-api/posts-view-dto/posts.view-dto";
 import { UserContextClass } from "./user-context";
 
-export class PostsContextClass {
+export class PostsForBlogContextClass {
     public correctTitleBlog1Posts: string[]
     public shortDescriptionBlog1Posts: string[]
     public contentBlog1Posts: string[]
@@ -35,7 +35,7 @@ export class PostsContextClass {
             `content 4 content 4 content 4 content 4 content`,
         ]
     }
-    public async addPostsStateTest({
+    public async addPostsForBlogStateTest({
         numBlog,
         numPost,
         addPost
@@ -69,7 +69,7 @@ export class PostsContextClass {
             addPost,
         ];
     }
-    public async deletePostsStateTest({
+    public async deletePostsForBlogStateTest({
         numBlog,
         numPost
     }: {
@@ -84,7 +84,7 @@ export class PostsContextClass {
             return;
         }
     }
-    public async deleteAllPostsStateTest({
+    public async deleteAllPostsForBlogStateTest({
         numBlog
     }: {
         numBlog: number | null;

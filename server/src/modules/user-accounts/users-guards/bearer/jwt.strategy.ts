@@ -3,21 +3,24 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../../users-infrastructure/users.repository';
-import { UsersService } from '../../users-application/users.service';
 import { UserContextDto } from '../dto/user-context.dto';
-import { SessionService } from 'src/modules/user-sessions/sessions-application/sessions.service';
-import { TokenService } from 'src/modules/tokens/tokens-application/token-service';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
+import { UpdateLastSeenUserCommand } from '../../users-application/user-use-cases/update-last-seen-user.use-case';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
+import { TokenRepository } from 'src/modules/tokens/tokens-infrastructure/token.repository';
+import { SessionsRepository } from 'src/modules/user-sessions/sessions-infrastructure/session.repository';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     constructor(
+        private commandBus: CommandBus,
+        private eventBus: EventBus,
+
         private usersRepository: UsersRepository,
         private configService: ConfigService,
-        private tokenService: TokenService,
-        private usersService: UsersService,
-        private sessionService: SessionService,
+        private tokenRepository: TokenRepository,
+        private sessionsRepository: SessionsRepository
     ) {
         const secret = configService.get('JWT_ACCESS_SECRET');
         super({
@@ -26,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             secretOrKey: secret,
         });
     }
-    
+
     async validate(payload: { id: string, iat: number, exp: number }): Promise<UserContextDto | null> {
         // console.log('🔥 JwtStrategy: - payload', payload)
 
@@ -36,13 +39,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED)
             // return null;
         }
-        const isToken = await this.tokenService.getTokenBlackList(payload.id)
+        const isToken = await this.tokenRepository.findTokenById(payload.id)
         if (isToken) {
             console.log('🔥 JwtStrategy: - isToken', isToken)
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_REFRESH_TOKEN_BLACK_LIST)
             // return null;
         }
-        const devices = await this.sessionService.findAllSessionsServices(payload.id)
+        const devices = await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(payload.id)
         if (!devices) {
             console.log('🔥 JwtStrategy: - devices', devices)
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_SESSION_ID)
@@ -55,7 +58,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_SESSION_ID)
             // return null;
         }
-        const isUpdateLastSeen = await this.usersService.updateLastSeenUserService(payload.id);
+        const isUpdateLastSeen = await this.commandBus.execute<UpdateLastSeenUserCommand, string>(
+            new UpdateLastSeenUserCommand(payload.id),
+        );
         // console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
         if (!isUpdateLastSeen) {
             console.log('🔥 JwtStrategy: - isUpdateLastSeen', isUpdateLastSeen)

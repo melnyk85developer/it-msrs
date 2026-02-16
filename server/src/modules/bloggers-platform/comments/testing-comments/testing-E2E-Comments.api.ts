@@ -1,6 +1,6 @@
 import { HTTP_STATUSES } from "src/core/utils/utils"
 import { isCreatedBlog } from "../../blogs/blogs-testing/testFunctionsBlogs"
-import { isCreatedPost } from "../../posts/testing-posts/testFunctionsPosts"
+import { isCreatedPostForBlog } from "../../posts/testing-posts/testFunctionsPostsForBlogs"
 import { CreateCommentInputDto } from "../comments-api/comments-input-dto/comments.input-dto"
 import { UpdateCommentInputDto } from "../comments-api/comments-input-dto/comments-update.input-dto"
 import { contextTests } from "test/helpers/init-settings"
@@ -34,12 +34,12 @@ export const commentsE2eTest = () => {
                 contextTests.blogs.correctWebsiteUrls[0],
                 HTTP_STATUSES.CREATED_201
             )
-            const isPost = await isCreatedPost(
+            const isPost = await isCreatedPostForBlog(
                 0,
                 0,
-                contextTests.posts.correctTitleBlog1Posts[0],
-                contextTests.posts.shortDescriptionBlog1Posts[0],
-                contextTests.posts.contentBlog1Posts[0],
+                contextTests.posts_for_blog.correctTitleBlog1Posts[0],
+                contextTests.posts_for_blog.shortDescriptionBlog1Posts[0],
+                contextTests.posts_for_blog.contentBlog1Posts[0],
                 contextTests.blogs.createdBlogs[0]!.id,
                 HTTP_STATUSES.CREATED_201
             )
@@ -48,7 +48,7 @@ export const commentsE2eTest = () => {
         it('GET    - Ожидается статус код 200, - Ожидается пустой массив комментариев!', async () => {
             const { getAllComments } = await contextTests.commentsTestManager.getAllComments(
                 contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllComments).toEqual(
@@ -71,20 +71,20 @@ export const commentsE2eTest = () => {
         it(`POST   - Ожидается статус код 401, - Создание комментария не авторизованным пользователем! Дополнительные запросы: -> GET`, async () => {
             const dataComment: CreateCommentInputDto = {
                 content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts.createdBlog1Posts[0]!.id
+                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             }
             const { createdComment } = await contextTests.commentsTestManager.createComment(
                 0,
                 0,
                 0,
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 dataComment,
                 contextTests.constants.invalidToken,
                 HTTP_STATUSES.UNAUTHORIZED_401
             );
             const { getAllComments } = await contextTests.commentsTestManager.getAllComments(
                 contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllComments).toEqual(
@@ -102,7 +102,7 @@ export const commentsE2eTest = () => {
                 0,
                 0,
                 0,
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 {
                     content: '',
                     postId: ''
@@ -112,7 +112,7 @@ export const commentsE2eTest = () => {
             )
             const { getAllComments } = await contextTests.commentsTestManager.getAllComments(
                 contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllComments).toEqual(
@@ -128,20 +128,20 @@ export const commentsE2eTest = () => {
         it(`POST   - Ожидается статус код 201, - Создание комментария с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data: CreateCommentInputDto = {
                 content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts.createdBlog1Posts[0]!.id
+                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             };
             const { createdComment, response } = await contextTests.commentsTestManager.createComment(
                 0,
                 0,
                 0,
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 data,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             const { getAllComments } = await contextTests.commentsTestManager.getAllComments(
                 contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllComments).toEqual(
@@ -157,20 +157,20 @@ export const commentsE2eTest = () => {
         it(`POST   - Ожидается статус код 201, - Создание ещё одного комментария с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data: CreateCommentInputDto = {
                 content: contextTests.comments.contentBlog1Post1Comments[1],
-                postId: contextTests.posts.createdBlog1Posts[0]!.id
+                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             }
             const { createdComment } = await contextTests.commentsTestManager.createComment(
                 0,
                 0,
                 1,
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 data,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             const { getAllComments } = await contextTests.commentsTestManager.getAllComments(
                 contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllComments).toEqual(
@@ -206,9 +206,9 @@ export const commentsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего комментария!`, async () => {
             const data: UpdateCommentInputDto = {
-                id: contextTests.comments.createdBlog1Post1Comments[0].id,
+                id: contextTests.constants.invalidId,
                 content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts.createdBlog1Posts[0]!.id
+                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             }
             await contextTests.commentsTestManager.updateComment(
                 contextTests.constants.invalidId,
@@ -219,9 +219,9 @@ export const commentsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 204, - Обновление комментария с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const updatedComment: UpdateCommentInputDto = {
-                id: contextTests.constants.invalidId,
+                id: contextTests.comments.createdBlog1Post1Comments[0].id,
                 content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts.createdBlog1Posts[0]!.id
+                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             }
             const { response: res1 } = await contextTests.commentsTestManager.updateComment(
                 contextTests.comments.createdBlog1Post1Comments[0].id,
@@ -281,7 +281,7 @@ export const commentsE2eTest = () => {
             )
             const { getAllComments } = await contextTests.commentsTestManager.getAllComments(
                 contextTests.sessions.accessTokenUser1Devices[0],
-                contextTests.posts.createdBlog1Posts[0]!.id,
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 HTTP_STATUSES.OK_200
             )
             expect(getAllComments).toEqual(

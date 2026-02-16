@@ -33,6 +33,6 @@ export class UpdateCommentDto {
     @IsNotEmpty({ message: 'Поле content не должно быть пустым!' })
     @Length(3, 3000, { message: 'Длина символов поля content должно быть не менеее 3 и не более 3000 символов!' })
     content: string;
-    @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
-    updatedAt: string;
+    // @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })
+    // updatedAt: string;
 }

@@ -2,7 +2,6 @@ import { Body, Controller, Post, UseGuards, Get, HttpCode, HttpStatus, UseInterc
 import { AuthAccessGuard } from '../../user-accounts/users-guards/bearer/jwt-auth.guard';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { PostForProfileService } from '../posts-application/post-for-profile-service';
 import { ExtractUserFromRequest } from '../../user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
 import { UserContextDto } from '../../user-accounts/users-guards/dto/user-context.dto';
 import { PostsForProfileQueryRepository } from '../posts-infrastructure/posts.query-repository';
@@ -12,13 +11,16 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Multer } from 'multer';
 import { GetPostForProfileQueryParams } from './posts-for-profile-input-dto/get-posts-query-params.input-dto';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
-import { DomainException } from 'src/core/exceptions/domain-exceptions';
-import { UpdatePostForProfileDto, UpdatePostForProfileInputDto } from './posts-for-profile-input-dto/posts-update.input-dto';
+import { UpdatePostForProfileInputDto } from './posts-for-profile-input-dto/posts-update.input-dto';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
+import { CreatePostForProfileCommand } from '../posts-application/post-for-profile.use-cases/create-post-for-profile.use-case';
+import { UpdatePostForProfileCommand } from '../posts-application/post-for-profile.use-cases/update-post-for-profile.use-case';
+import { DeletePostForProfileCommand } from '../posts-application/post-for-profile.use-cases/delete-post-for-profile.use-case';
 
 @Controller('/posts-for-profile')
 export class PostForProfileController {
     constructor(
-        private postForProfileService: PostForProfileService,
+        private commandBus: CommandBus,
         private postForProfileRepository: PostsForProfileQueryRepository,
     ) { }
     @ApiOperation({ summary: 'Создать пост!' })
@@ -34,10 +36,12 @@ export class PostForProfileController {
     ): Promise<PostForProfileViewDto> {
         // console.log('PostForProfileController: createPostController - image 😡 ', image)
         // console.log('PostForProfileController: createPostController - body 😡 ', body)
-        const postId = await this.postForProfileService.createPostForProfileService(
-            user.id,
-            image,
-            body
+        const postId = await this.commandBus.execute<CreatePostForProfileCommand, string>(
+            new CreatePostForProfileCommand(
+                user.id,
+                body,
+                image
+            ),
         );
         // console.log('PostForProfileController: createPostController - postId 😡 ', postId)
         return this.postForProfileRepository.getPostByIdOrNotFoundFailQueryRepository(postId);
@@ -72,11 +76,13 @@ export class PostForProfileController {
         // console.log('PostForProfileController: updatePostForProfileController - postId 😡 ', postId)
         // console.log('PostForProfileController: updatePostForProfileController - body 😡 ', body)
 
-        const isPostId = await this.postForProfileService.updatePostForProfileService(
-            postId,
-            user.id,
-            image,
-            body
+        const isPostId = await this.commandBus.execute<UpdatePostForProfileCommand, string>(
+            new UpdatePostForProfileCommand(
+                postId,
+                user.id,
+                image,
+                body
+            ),
         );
         // image ? image : body.image,
         // console.log('PostForProfileController: updatePostForProfileController - isPostId 😡 ', isPostId)
@@ -94,8 +100,13 @@ export class PostForProfileController {
         @Param('postId') postId: string,
         @ExtractUserFromRequest() user: UserContextDto,
     ): Promise<void> {
-        console.log('PostsController: deletePostController - postId 😡 ', postId)
-        return this.postForProfileService.deletePostForProfileService(postId, user.id);
+        // console.log('PostsController: deletePostController - postId 😡 ', postId)
+        return await this.commandBus.execute<DeletePostForProfileCommand, void>(
+            new DeletePostForProfileCommand(
+                postId,
+                user.id
+            )
+        );
     }
 
     @ApiOperation({ summary: 'Получить все посты!' })

@@ -3,11 +3,8 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Multer } from 'multer';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { PhotoService } from '../photos-application/photos-service';
 import { PhotoQueryRepository } from '../photos-infrastructure/photos.query-repository';
 import { Photo } from '../photos-domain/photos-entity';
-import { UsersQueryRepository } from 'src/modules/user-accounts/users-infrastructure/users.query-repository';
-import { CreatePhotoDto } from '../photos-dto/create-photo-dto';
 import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
 import { ExtractUserFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
 import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
@@ -18,13 +15,16 @@ import { UpdatePhotoDto } from '../photos-dto/update-photo-dto';
 import { UpdatePhotoInputDto } from '../photos-dto/update-input-photo-dto';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { PhotoViewDto } from '../photos-dto/photo-view-dto';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreatePhotoCommand } from '../photos-application/photos-use-cases/create-photo.use-case';
+import { UpdatePhotoCommand } from '../photos-application/photos-use-cases/update-photo.use-case';
+import { DeletePhotoCommand } from '../photos-application/photos-use-cases/delete-photo.use-case';
 
 @Controller('/photos')
 export class PhotoController {
     constructor(
-        private photoService: PhotoService,
-        private photoQueryRepository: PhotoQueryRepository,
-        private usersQueryRepository: UsersQueryRepository
+        private commandBus: CommandBus,
+        private photoQueryRepository: PhotoQueryRepository
     ) { }
 
     @ApiOperation({ summary: 'Создание фото!' })
@@ -42,20 +42,17 @@ export class PhotoController {
         @UploadedFiles() files: { image?: Multer.File[], miniature?: Multer.File[] }
     ): Promise<PhotoViewDto> {
         const { image, miniature } = files;
-
         const imageFile = files?.image?.[0] || null;
         const miniatureFile = files?.miniature?.[0] || null;
-
         // console.log('PhotoController: createPhotoController - dto', dto)
         // console.log('PhotoController: createPhotoController - imageFile', imageFile)
-        const photoId = await this.photoService.createPhotoService(
-            user.id,
-            dto,
-            imageFile,
-            miniatureFile
-        )
+        const photoId = await this.commandBus.execute<CreatePhotoCommand, string>(
+            new CreatePhotoCommand(user.id,
+                dto,
+                imageFile,
+                miniatureFile)
+        );
         // console.log('PhotoController: createPhotoController - photoId', photoId)
-
         return await this.photoQueryRepository.findPhotoByIdOrNotFoundFailRepository(photoId);
     }
     @ApiOperation({ summary: 'Обновление фото!' })
@@ -77,18 +74,16 @@ export class PhotoController {
         if (files === undefined) {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_UPDATED_PHOTO)
         }
-
         const imageFile = files?.image?.[0] || null;
         const miniatureFile = files?.miniature?.[0] || null;
 
-        const { image, miniature } = files;
-        const { albumName } = dto
-
-        return await this.photoService.updatePhotoService(
-            photoId,
-            dto,
-            imageFile,
-            miniatureFile
+        return await this.commandBus.execute<UpdatePhotoCommand, string>(
+            new UpdatePhotoCommand(
+                photoId,
+                dto,
+                imageFile,
+                miniatureFile
+            )
         );
     }
     @ApiOperation({ summary: 'Удаление фото!' })
@@ -98,7 +93,11 @@ export class PhotoController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deletePhotoController(@Param('photoId') photoId: string) {
         // console.log('PhotoController: - deletePhotoController photoId', photoId)
-        return await this.photoService.deletePhotoService(photoId)
+        return await this.commandBus.execute<DeletePhotoCommand, string>(
+            new DeletePhotoCommand(
+                photoId
+            )
+        );
     }
 
     @ApiOperation({ summary: 'Получение одного фото!' })

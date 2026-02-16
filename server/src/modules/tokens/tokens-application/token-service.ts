@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { Token, type TokenModelType } from '../tokens-domain/token-entity';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
 import { TokenRepository } from '../tokens-infrastructure/token.repository';
@@ -10,8 +8,6 @@ import { TokenRepository } from '../tokens-infrastructure/token.repository';
 @Injectable()
 export class TokenService {
     constructor(
-        @InjectModel(Token.name) private tokenModel: TokenModelType,
-        private tokenRepository: TokenRepository,
         private jwtService: JwtService,
     ) { }
     generateTokens(payload: any, remember: boolean): { accessToken: string; refreshToken: string } {
@@ -23,12 +19,7 @@ export class TokenService {
         // console.log('TokenService: accessToken, refreshToken', accessToken, refreshToken)
         return { accessToken, refreshToken }
     }
-    giveMeAccessToken(req: any) {
-        const authorizationHeader = req.headers.authorization
-        const bearer = authorizationHeader.split(' ')[0]
-        const accessToken = authorizationHeader.split(' ')[1]
-        return accessToken
-    }
+
     validateAccessToken(token: string): any {
         // Проверка формата JWT токена
         if (typeof token !== 'string' || !/^[\w-]+\.[\w-]+\.[\w-]+$/.test(token)) {
@@ -86,34 +77,5 @@ export class TokenService {
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_WRONG_REFRESH_TOKEN_FORMAT)
         }
         return this.jwtService.decode(refreshToken);
-    }
-    async saveTokenBlackList(userId: string, refreshToken: string): Promise<string> {
-        const token = this.tokenModel.createTokenInstance(
-            {
-                userId: userId,
-                refreshToken: refreshToken
-            }
-        )
-        // console.log('TokenService: saveTokenBlackList - token 😡 ', token)
-        await this.tokenRepository.save(token);
-        return token._id.toString();
-    }
-    async deleteTokenBlackList(refreshToken: string): Promise<string> {
-        const isToken = await this.tokenRepository.findTokenByTokenOrNotFoundFailRepository(refreshToken)
-        // console.log('TokenService: deleteTokenBlackList - isToken 😡 ', isToken)
-
-        const isDeletedToken = await this.tokenRepository.deleteTokenInBlackList(refreshToken)
-        // console.log('TokenService: deleteTokenBlackList - isDeletedToken 😡 ', isDeletedToken)
-
-        // const token = this.tokenModel.makeDeletedToken(refreshToken);
-
-        await this.tokenRepository.save(isToken);
-        return isToken._id.toString();
-    }
-    async getTokenBlackList(refreshToken: string): Promise<Token | null> {
-        return await this.tokenModel.findOne({
-            where: { refreshToken },
-            raw: true
-        });
     }
 }

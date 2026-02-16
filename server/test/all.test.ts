@@ -15,6 +15,7 @@ import { registrEmailResendingAndConfirmIntegrationTest } from "src/modules/user
 import { photoProfileE2ETest } from "src/modules/gallery/photos/testing-photos/testing-E2E-photoProfile";
 import { photoAlbumsE2ETest } from "src/modules/gallery/photoAlbums/testing-photo-albums/testing-E2E-photo-albums";
 import { userMessagesE2eTest } from "src/modules/user-messages/msg/testing-messages/testing-E2E-Messages";
+import { postForProfileE2ETest } from "src/modules/posts-for-profile/testing-posts-for-profile/testing-E2E-Posts-for-profile";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     beforeAll(async () => {
@@ -68,15 +69,16 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         photoProfileE2ETest()
         photoAlbumsE2ETest()
     })
-    describe('CONFIRMATION-BLOCK-TESTS', () => {
-        registrEmailResendingAndConfirmIntegrationTest()
-        resetPasswordInegrationTest()
-    })
     // describe('LIKES-BLOCK-TESTS', () => {
     //     likesE2eTest()
     // })
     describe('USERS-BLOCK-TESTS', () => {
+        postForProfileE2ETest()
         usersE2eTest()
+    })
+    describe('CONFIRMATION-BLOCK-TESTS', () => {
+        registrEmailResendingAndConfirmIntegrationTest()
+        resetPasswordInegrationTest()
     })
     afterAll(async () => {
         await mongoose.disconnect();
