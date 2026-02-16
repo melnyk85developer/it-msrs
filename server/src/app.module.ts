@@ -19,6 +19,7 @@ import { GalleryModule } from './modules/gallery/gallery.module';
 import { PhotoModule } from './modules/gallery/photos/photos.module';
 import { MessagesModule } from './modules/user-messages/msg.module';
 import { DialogsModule } from './modules/user-messages/dialog/dialog.module';
+import { LikeModule } from './modules/likes/likes.module';
 
 dotenv.config({ quiet: true });
 
@@ -56,7 +57,8 @@ dotenv.config({ quiet: true });
         CoreModule,
         TokenModule,
         SessionModule,
-        FilesModule
+        FilesModule,
+        LikeModule
     ],
     providers: [
         // ...useCases,

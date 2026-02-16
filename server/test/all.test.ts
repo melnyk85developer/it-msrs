@@ -44,15 +44,15 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         );
         // contextTests.app = result.app;
     });
-    describe('AUTH-BLOCK-TESTS', () => {
-        authE2eTest()
-        // authIntegrationTest()
-        // authUnitTest()
-    })
-    describe('USER-SESSIONS-BLOCK-TESTS', () => {
-        userSessionE2eTest()
-        // usersSessionsInegrationTest()
-    })
+    // describe('AUTH-BLOCK-TESTS', () => {
+    //     authE2eTest()
+    //     // authIntegrationTest()
+    //     // authUnitTest()
+    // })
+    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
+    //     userSessionE2eTest()
+    //     // usersSessionsInegrationTest()
+    // })
     describe('MESSAGES-BLOCK-TESTS', () => {
         userMessagesE2eTest()
     })

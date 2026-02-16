@@ -26,6 +26,8 @@ import { CreateCommentCommand } from '../../../comments/comments-application/com
 import { UpdateResult } from 'mongoose';
 import { CreateLikeInputDto } from 'src/modules/likes/likes-dto/create-likes.input-dto';
 import { CreateLikeCommand } from 'src/modules/likes/likes-application/likes.use-cases/create-like.use-case';
+import { UpdateLikeCommand } from 'src/modules/likes/likes-application/likes.use-cases/update-like.use-case';
+import { UpdateLikeInputDto } from 'src/modules/likes/likes-dto/like-update-input.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -82,12 +84,12 @@ export class PostsController {
     @UseInterceptors(FileInterceptor('image'))
     async likePostController(
         @Param('postId') postId: string,
-        @Body() body: CreateLikeInputDto,
+        @Body() body: UpdateLikeInputDto,
         @ExtractUserFromRequest() user: UserContextDto
     ): Promise<UpdateResult> {
         // console.log('PostsController: updatePostController - id, body 😡 ', id, body)
-        return await this.commandBus.execute<CreateLikeCommand, UpdateResult>(
-            new CreateLikeCommand(
+        return await this.commandBus.execute<UpdateLikeCommand, UpdateResult>(
+            new UpdateLikeCommand(
                 user.id,
                 postId,
                 body,

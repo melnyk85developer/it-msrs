@@ -1,4 +1,3 @@
-import { Multer } from 'multer';
 import { CommandBus, CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
 import { LikesRepository } from '../../likes-infrastructure/likesRepository';
