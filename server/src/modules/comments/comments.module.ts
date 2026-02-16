@@ -7,7 +7,7 @@ import { CommentsQueryRepository } from './comments-infrastructure/comments-exte
 import { CommentsExternalQueryRepository } from './comments-infrastructure/comments-external-query/comments.external-query-repository';
 import { CommentsExternalService } from './comments-application/comments.external-service';
 import { CommentsRepositoryModule } from './comments-repository.module';
-import { PostsRepositoryModule } from '../posts/posts-repository.module';
+import { PostsRepositoryModule } from '../bloggers-platform/posts/posts-repository.module';
 import { CreateCommentUseCase } from './comments-application/comments.use-cases/create-comment.use-case';
 import { UpdateCommentUseCase } from './comments-application/comments.use-cases/update-comment.use-case';
 import { DeleteCommentUseCase } from './comments-application/comments.use-cases/delete-comment.use-case';

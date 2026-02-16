@@ -1,5 +1,5 @@
 import { BLOGS_INTERNAL_STATUS } from "src/modules/bloggers-platform/blogs/internal-status-blogs-errors/blogs-etatus"
-import { COMMENT_INTERNAL_STATUS } from "src/modules/bloggers-platform/comments/internal-status-comments-errors/comment-status"
+import { COMMENT_INTERNAL_STATUS } from "src/modules/comments/internal-status-comments-errors/comment-status"
 import { POSTS_INTERNAL_STATUS } from "src/modules/bloggers-platform/posts/internal-status-posts-errors/posts-status"
 import { SESSIONS_INTERNAL_STATUS } from "src/modules/user-sessions/session-internal-status-errors/sessions-status"
 import { USERS_INTERNAL_STATUS } from "src/modules/user-accounts/internal-status-users-errors/users-status"
@@ -7,6 +7,7 @@ import { AUTH_INTERNAL_STATUS } from "src/modules/auth/auth-internal-status-erro
 import { CONFIRMATIONS_INTERNAL_STATUS } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsStatus"
 import { PHOTO_INTERNAL_STATUS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoStatus"
 import { MESSAGES_INTERNAL_STATUS } from "src/modules/user-messages/msg/internal-status-msg-errors/user-msg-status"
+import { LIKES_INTERNAL_STATUS } from "src/modules/likes/internalStatusLikesErrors/likesStatus"
 
 export const HTTP_STATUSES = {
     OK_200: 200,
@@ -32,7 +33,7 @@ export const INTERNAL_STATUS_CODE = {
     ...POSTS_INTERNAL_STATUS,
     ...COMMENT_INTERNAL_STATUS,
     ...CONFIRMATIONS_INTERNAL_STATUS,
-    // ...LIKES_INTERNAL_STATUS,
+    ...LIKES_INTERNAL_STATUS,
 
     SUCCESS: 900, // Успешное создание с оправкой ответа!
     CREATED: 960,

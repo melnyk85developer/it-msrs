@@ -3,8 +3,8 @@ import request from 'supertest';
 import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { CreatePostInputDto } from 'src/modules/bloggers-platform/posts/posts-api/posts-input-dto/posts.input-dto';
-import { CreateCommentInputDto } from 'src/modules/bloggers-platform/comments/comments-api/comments-input-dto/comments.input-dto';
-import { UpdateCommentInputDto } from 'src/modules/bloggers-platform/comments/comments-api/comments-input-dto/comments-update.input-dto';
+import { CreateCommentInputDto } from 'src/modules/comments/comments-api/comments-input-dto/comments.input-dto';
+import { UpdateCommentInputDto } from 'src/modules/comments/comments-api/comments-input-dto/comments-update.input-dto';
 import { contextTests } from './init-settings';
 
 export class CommentsTestManager {

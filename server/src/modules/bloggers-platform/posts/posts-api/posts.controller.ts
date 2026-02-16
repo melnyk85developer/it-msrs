@@ -8,10 +8,10 @@ import { CreatePostInputDto } from './posts-input-dto/posts.input-dto';
 import { UpdatePostInputDto } from './posts-input-dto/posts-update.input-dto';
 import { PostsQueryRepository } from '../posts-infrastructure/posts-external-query/posts-query/posts.query-repository';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { GetCommentsQueryParams } from '../../comments/comments-api/comments-input-dto/get-comments-query-params.input-dto';
-import { CommentsQueryRepository } from '../../comments/comments-infrastructure/comments-external-query/comments-query/comments.query-repository';
-import { CommentViewDto } from '../../comments/comments-api/comments-view-dto/comments.view-dto';
-import { CreateCommentInputDto } from '../../comments/comments-api/comments-input-dto/comments.input-dto';
+import { GetCommentsQueryParams } from '../../../comments/comments-api/comments-input-dto/get-comments-query-params.input-dto';
+import { CommentsQueryRepository } from '../../../comments/comments-infrastructure/comments-external-query/comments-query/comments.query-repository';
+import { CommentViewDto } from '../../../comments/comments-api/comments-view-dto/comments.view-dto';
+import { CreateCommentInputDto } from '../../../comments/comments-api/comments-input-dto/comments.input-dto';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { BasicAuthGuard } from 'src/modules/user-accounts/users-guards/basic/basic-auth.guard';
 import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
@@ -22,7 +22,10 @@ import { ExtractUserFromRequest } from 'src/modules/user-accounts/users-guards/d
 import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
 import { UpdatePostCommand } from '../posts-application/posts.use-cases/update-post.use-case';
 import { DeletePostCommand } from '../posts-application/posts.use-cases/delete-post.use-case';
-import { CreateCommentCommand } from '../../comments/comments-application/comments.use-cases/create-comment.use-case';
+import { CreateCommentCommand } from '../../../comments/comments-application/comments.use-cases/create-comment.use-case';
+import { UpdateResult } from 'mongoose';
+import { CreateLikeInputDto } from 'src/modules/likes/likes-dto/create-likes.input-dto';
+import { CreateLikeCommand } from 'src/modules/likes/likes-application/likes.use-cases/create-like.use-case';
 
 @Controller('posts')
 export class PostsController {
@@ -69,6 +72,28 @@ export class PostsController {
             new CreateCommentCommand(user.id, body, image)
         );
         return this.commentsQueryRepository.getCommentByIdOrNotFoundFailRepository(commentId);
+    }
+    @ApiOperation({ summary: 'Обновить пост по id.' })
+    @ApiParam({ name: 'id' })
+    @ApiResponse({ status: 204 })
+    @UseGuards(AuthAccessGuard)
+    @Put('/:postId/like-status')
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
+    @UseInterceptors(FileInterceptor('image'))
+    async likePostController(
+        @Param('postId') postId: string,
+        @Body() body: CreateLikeInputDto,
+        @ExtractUserFromRequest() user: UserContextDto
+    ): Promise<UpdateResult> {
+        // console.log('PostsController: updatePostController - id, body 😡 ', id, body)
+        return await this.commandBus.execute<CreateLikeCommand, UpdateResult>(
+            new CreateLikeCommand(
+                user.id,
+                postId,
+                body,
+                'post'
+            )
+        );
     }
 
     @ApiOperation({ summary: 'Обновить пост по id.' })

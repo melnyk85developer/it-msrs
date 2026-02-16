@@ -1,0 +1,14 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from "class-validator";
+import { MetaType } from "../likes-domain/meta-type-likes.schema";
+
+export class CreateLikeDomainDto {
+    @ApiProperty({ example: 'likeStatus', description: 'Значение None или Like или Dislike!' })
+    @IsString({ message: 'likeStatus должно быть строкой!' })
+    @IsNotEmpty({ message: 'Поле likeStatus не должно быть пустым!' })
+    readonly likeStatus: 'None' | 'Like' | 'Dislike'
+    @ApiProperty({ example: 'likeStatus', description: 'Значение None или Like или Dislike!' })
+    @IsString({ message: 'likeStatus должно быть строкой!' })
+    @IsNotEmpty({ message: 'Поле likeStatus не должно быть пустым!' })
+    readonly meta: MetaType;
+}

@@ -5,7 +5,7 @@ import { PostsQueryRepository } from './posts-infrastructure/posts-external-quer
 import { PostsExternalQueryRepository } from './posts-infrastructure/posts-external-query/posts.external-query-repository';
 import { PostsExternalService } from './posts-application/posts.external-service';
 import { Post, PostSchema } from './posts-domain/post.entity';
-import { CommentModule } from '../comments/comments.module';
+import { CommentModule } from '../../comments/comments.module';
 import { BlogsRepositoryModule } from '../blogs/blogs-repository.module';
 import { PostsRepositoryModule } from './posts-repository.module';
 import { PostMapper } from './posts-api/posts-view-dto/post.mapper';

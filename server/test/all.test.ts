@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { blogsE2eTest } from "src/modules/bloggers-platform/blogs/blogs-testing/testing-E2E-Blogs.api";
 import { postsE2eTest } from "src/modules/bloggers-platform/posts/testing-posts/testing-E2E-Posts.api";
-import { commentsE2eTest } from "src/modules/bloggers-platform/comments/testing-comments/testing-E2E-Comments.api";
+import { commentsE2eTest } from "src/modules/comments/testing-comments/testing-E2E-Comments.api";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { authE2eTest } from 'src/modules/auth/auth-testing/testing-E2E-Auth.api';
 import { contextTests, initSettings } from './helpers/init-settings';

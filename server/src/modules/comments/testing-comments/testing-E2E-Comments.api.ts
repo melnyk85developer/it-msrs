@@ -1,6 +1,6 @@
 import { HTTP_STATUSES } from "src/core/utils/utils"
-import { isCreatedBlog } from "../../blogs/blogs-testing/testFunctionsBlogs"
-import { isCreatedPostForBlog } from "../../posts/testing-posts/testFunctionsPostsForBlogs"
+import { isCreatedBlog } from "../../bloggers-platform/blogs/blogs-testing/testFunctionsBlogs"
+import { isCreatedPostForBlog } from "../../bloggers-platform/posts/testing-posts/testFunctionsPostsForBlogs"
 import { CreateCommentInputDto } from "../comments-api/comments-input-dto/comments.input-dto"
 import { UpdateCommentInputDto } from "../comments-api/comments-input-dto/comments-update.input-dto"
 import { contextTests } from "test/helpers/init-settings"

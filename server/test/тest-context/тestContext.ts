@@ -14,7 +14,7 @@ import { UsersTestManager } from '../helpers/users-test-manager';
 import { MeViewDto, UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
 import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto';
 import { PostViewDto } from 'src/modules/bloggers-platform/posts/posts-api/posts-view-dto/posts.view-dto';
-import { CommentViewDto } from 'src/modules/bloggers-platform/comments/comments-api/comments-view-dto/comments.view-dto';
+import { CommentViewDto } from 'src/modules/comments/comments-api/comments-view-dto/comments.view-dto';
 import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
 import { AuthService } from 'src/modules/auth/auth-application/auth.service';
 import { EmailService } from 'src/modules/notifications/email.service';

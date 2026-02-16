@@ -1,4 +1,4 @@
-import { CommentViewDto } from "src/modules/bloggers-platform/comments/comments-api/comments-view-dto/comments.view-dto";
+import { CommentViewDto } from "src/modules/comments/comments-api/comments-view-dto/comments.view-dto";
 
 export class CommentsContextClass {
     public contentBlog1Post1Comments: string[];
