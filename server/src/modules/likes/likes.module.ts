@@ -6,6 +6,9 @@ import { CreateLikeUseCase } from './likes-application/likes.use-cases/create-li
 import { LikesQueryRepository } from './likes-infrastructure/likesQueryRepository';
 import { LikesRepository } from './likes-infrastructure/likesRepository';
 import { UpdateLikeUseCase } from './likes-application/likes.use-cases/update-like.use-case';
+import { PostModule } from '../bloggers-platform/posts/posts.module';
+import { CommentModule } from '../comments/comments.module';
+import { PhotoModule } from '../gallery/photos/photos.module';
 
 const useCases = [
     CreateLikeUseCase,
@@ -15,7 +18,10 @@ const useCases = [
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: Like.name, schema: LikeSchema }]),
-        CqrsModule
+        CqrsModule,
+        PostModule,
+        CommentModule,
+        PhotoModule
     ],
     // controllers: [
     //     PostsController

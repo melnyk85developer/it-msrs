@@ -2,12 +2,14 @@ import { HTTP_STATUSES } from "src/core/utils/utils";
 import { CreateCommentInputDto } from "../comments-api/comments-input-dto/comments.input-dto";
 import { contextTests } from "test/helpers/init-settings";
 
-export const isCreatedComment1 = async (
+export const isCreatedComment = async (
     numBlog: number,
     numPost: number,
     numComment: number,
     content: string,
     postId: string,
+    accessToken: string,
+    refreshToken: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
     if (!contextTests.comments.createdBlog1Post1Comments.length) {
@@ -21,7 +23,7 @@ export const isCreatedComment1 = async (
             numComment,
             contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
             commentData,
-            contextTests.sessions.accessTokenUser1Devices[0],
+            accessToken,
             statusCode
         )
 

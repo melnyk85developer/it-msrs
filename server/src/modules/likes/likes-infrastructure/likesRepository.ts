@@ -13,25 +13,26 @@ export class LikesRepository {
     async save(like: LikeDocument) {
         await like.save();
     }
-    async findLikeByIdRepository(entity: string, entityId: string): Promise<LikeDocument | null> {
+    async findUserLikeForEntity(userId: string, entity: string, entityId: string): Promise<LikeDocument | null> {
         return this.LikeModel.findOne(
             {
                 'meta.entityType': entity,
                 'meta.entityId': entityId,
+                'meta.userId': userId,
                 deletedAt: null
             },
-        );
+        )
     }
 
-    async findlikeOrNotFoundFailRepository(entity: string, entityId: string): Promise<LikeDocument> {
-        console.log('CommentsController: updateCommentController - entityId, dto 😡 ', entityId)
+    async findUserLikeForEntityOrNotFoundFailRepository(userId: string, entity: string, entityId: string): Promise<LikeDocument> {
+        console.log('LikesRepository: findlikeOrNotFoundFailRepository - entityId, dto 😡 ', entityId)
         let like
         if (!entityId || entityId === undefined || entityId === 'undefined') {
             // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - IF id 😡😡😡 typeof', id, typeof id)
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST, 'id сука говняный 😡😡😡😡😡😡');
         } else {
             // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - ELSE id 😡😡😡 typeof', id, typeof id)
-            like = await this.findLikeByIdRepository(entity, entityId);
+            like = await this.findUserLikeForEntity(userId, entity, entityId);
         }
         if (!like) {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND)

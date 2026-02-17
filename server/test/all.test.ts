@@ -16,6 +16,7 @@ import { photoProfileE2ETest } from "src/modules/gallery/photos/testing-photos/t
 import { photoAlbumsE2ETest } from "src/modules/gallery/photoAlbums/testing-photo-albums/testing-E2E-photo-albums";
 import { userMessagesE2eTest } from "src/modules/user-messages/msg/testing-messages/testing-E2E-Messages";
 import { postForProfileE2ETest } from "src/modules/posts-for-profile/testing-posts-for-profile/testing-E2E-Posts-for-profile";
+import { likesE2eTest } from "src/modules/likes/testing-likes/testing-E2E-Likes.api";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     beforeAll(async () => {
@@ -53,33 +54,33 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     //     userSessionE2eTest()
     //     // usersSessionsInegrationTest()
     // })
-    describe('MESSAGES-BLOCK-TESTS', () => {
-        userMessagesE2eTest()
-    })
-    describe('BLOGS-BLOCK-TESTS', () => {
-        blogsE2eTest()
-    })
-    describe('POSTS-BLOCK-TESTS', () => {
-        postsE2eTest()
-    })
-    describe('COMMENTS-BLOCK-TESTS', () => {
-        commentsE2eTest()
-    })
-    describe('PHOTOS-BLOCK-TESTS', () => {
-        photoProfileE2ETest()
-        photoAlbumsE2ETest()
-    })
-    // describe('LIKES-BLOCK-TESTS', () => {
-    //     likesE2eTest()
+    // describe('MESSAGES-BLOCK-TESTS', () => {
+    //     userMessagesE2eTest()
     // })
-    describe('USERS-BLOCK-TESTS', () => {
-        postForProfileE2ETest()
-        usersE2eTest()
+    // describe('BLOGS-BLOCK-TESTS', () => {
+    //     blogsE2eTest()
+    // })
+    // describe('POSTS-BLOCK-TESTS', () => {
+    //     postsE2eTest()
+    // })
+    // describe('COMMENTS-BLOCK-TESTS', () => {
+    //     commentsE2eTest()
+    // })
+    // describe('PHOTOS-BLOCK-TESTS', () => {
+    //     photoProfileE2ETest()
+    //     photoAlbumsE2ETest()
+    // })
+    describe('LIKES-BLOCK-TESTS', () => {
+        likesE2eTest()
     })
-    describe('CONFIRMATION-BLOCK-TESTS', () => {
-        registrEmailResendingAndConfirmIntegrationTest()
-        resetPasswordInegrationTest()
-    })
+    // describe('USERS-BLOCK-TESTS', () => {
+    //     postForProfileE2ETest()
+    //     usersE2eTest()
+    // })
+    // describe('CONFIRMATION-BLOCK-TESTS', () => {
+    //     registrEmailResendingAndConfirmIntegrationTest()
+    //     resetPasswordInegrationTest()
+    // })
     afterAll(async () => {
         await mongoose.disconnect();
         await contextTests.app.close();

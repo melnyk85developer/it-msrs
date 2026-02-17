@@ -26,7 +26,7 @@ export class CreateLikeUseCase
         const { entityId, userId, dto, entityType } = command;
 
         const like = this.LikeModel.createLikeInstance({
-            ...dto,
+            likeStatus: dto.likeStatus,
             meta: {
                 entityType: entityType,
                 entityId, 

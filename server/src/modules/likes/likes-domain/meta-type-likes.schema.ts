@@ -6,7 +6,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class MetaType {
     @Prop({ type: String, required: true })
     entityType: string;
-    // entityType: 'post' | 'comment' | 'photo' | 'video';
 
     @Prop({ type: String, required: true })
     entityId: string;
@@ -16,3 +15,4 @@ export class MetaType {
 }
 
 export const MetaTypeSchema = SchemaFactory.createForClass(MetaType);
+// entityType: 'post' | 'comment' | 'photo' | 'video';

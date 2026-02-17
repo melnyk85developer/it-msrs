@@ -1,14 +1,16 @@
 import { CommandBus, CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { UpdateLikeDto } from '../../likes-dto/like-update.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Like, type LikeModelType } from '../../likes-domain/like.entity';
 import { LikesRepository } from '../../likes-infrastructure/likesRepository';
+import { PostsRepository } from 'src/modules/bloggers-platform/posts/posts-infrastructure/posts.repository';
+import { CommentsRepository } from 'src/modules/comments/comments-infrastructure/comments.repository';
+import { PhotoRepository } from 'src/modules/gallery/photos/photos-infrastructure/photos-repository';
 
 export class UpdateLikeCommand {
     constructor(
         public userId: string,
         public entityId: string,
-        public dto: Omit<UpdateLikeDto, 'meta'>,
+        public likeStatus: string,
         public entityType: string
     ) { }
 }
@@ -20,27 +22,63 @@ export class UpdateLikeUseCase
         @InjectModel(Like.name) private LikeModel: LikeModelType,
         private commandBus: CommandBus,
         private eventBus: EventBus,
-        private likesRepository: LikesRepository
+        private likesRepository: LikesRepository,
+        private postsRepository: PostsRepository,
+        private commentsRepository: CommentsRepository,
+        private photoRepository: PhotoRepository,
     ) { }
     async execute(command: UpdateLikeCommand): Promise<string> {
-        const { userId, entityId, entityType, dto } = command;
-        // console.log('LikesServices: - likeUpdateCommentServices 😡 entity, likeStatus, entityId, userId', entity, likeStatus, entityId, userId)
-        const date = new Date().toISOString()
-        const like = await this.likesRepository.findlikeOrNotFoundFailRepository(
+        const { userId, entityId, entityType, likeStatus } = command;
+        console.log('UpdateLikeUseCase: - likeStatus 😡 ', likeStatus)
+
+        if (entityType === 'post') {
+            await this.postsRepository.findPostOrNotFoundFail(entityId);
+        }
+        if (entityType === 'comment') {
+            await this.commentsRepository.findCommentOrNotFoundFailRepository(entityId);
+        }
+        if (entityType === 'photo') {
+            await this.photoRepository.findPhotoByIdOrNotFoundFailRepository(entityId);
+        }
+        // if (entityType === 'video') {
+        //     await this.postsRepository.findPostOrNotFoundFail(entityId);
+        // }
+
+        let like = await this.likesRepository.findUserLikeForEntity(
+            userId,
             entityType,
             entityId,
-        )
-
+        );
+        // 🔹 Если лайка нет — создаём
+        if (!like) {
+            console.log('UpdateLikeUseCase: - like1 IF 😡 ', like)
+            like = this.LikeModel.createLikeInstance({
+                likeStatus,
+                meta: {
+                    entityType,
+                    entityId,
+                    userId,
+                }
+            });
+            console.log('UpdateLikeUseCase: - like2 IF 😡 ', like)
+            await this.likesRepository.save(like);
+            console.log('UpdateLikeUseCase: - like3 IF 😡 ', like)
+            return like.id.toString();
+        }
+        console.log('UpdateLikeUseCase: findlikeOrNotFoundFailRepository - like1 😡 ', like)
+        // 🔹 Если есть — обновляем
         like.updateLike({
             id: like.id,
-            likeStatus: dto.likeStatus,
+            likeStatus,
             meta: {
-                entityType: entityType,
+                entityType,
                 entityId,
-                userId
+                userId,
             }
-        })
+        });
+        console.log('UpdateLikeUseCase: like.updateLike like2 😡 ', like)
         await this.likesRepository.save(like);
-        return like._id.toString();
+        console.log('UpdateLikeUseCase: like.updateLike like3 😡 ', like)
+        return like.id;
     }
 }

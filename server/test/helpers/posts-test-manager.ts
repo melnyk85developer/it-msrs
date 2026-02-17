@@ -3,7 +3,6 @@ import request from 'supertest';
 import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { CreatePostInputDto } from 'src/modules/bloggers-platform/posts/posts-api/posts-input-dto/posts.input-dto';
-import { contextTests } from './init-settings';
 
 export class PostsTestManager {
     constructor(private app: INestApplication) { }

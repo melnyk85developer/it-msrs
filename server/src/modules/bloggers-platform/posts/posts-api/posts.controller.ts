@@ -84,15 +84,15 @@ export class PostsController {
     @UseInterceptors(FileInterceptor('image'))
     async likePostController(
         @Param('postId') postId: string,
-        @Body() body: UpdateLikeInputDto,
+        @Body() dto: UpdateLikeInputDto,
         @ExtractUserFromRequest() user: UserContextDto
     ): Promise<UpdateResult> {
-        // console.log('PostsController: updatePostController - id, body 😡 ', id, body)
+        console.log('PostsController: likePostController - postId, dto.likeStatus 😡 ', postId, dto.likeStatus)
         return await this.commandBus.execute<UpdateLikeCommand, UpdateResult>(
             new UpdateLikeCommand(
                 user.id,
                 postId,
-                body,
+                String(dto.likeStatus),
                 'post'
             )
         );

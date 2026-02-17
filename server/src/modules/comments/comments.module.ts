@@ -11,6 +11,7 @@ import { PostsRepositoryModule } from '../bloggers-platform/posts/posts-reposito
 import { CreateCommentUseCase } from './comments-application/comments.use-cases/create-comment.use-case';
 import { UpdateCommentUseCase } from './comments-application/comments.use-cases/update-comment.use-case';
 import { DeleteCommentUseCase } from './comments-application/comments.use-cases/delete-comment.use-case';
+import { CommentsRepository } from './comments-infrastructure/comments.repository';
 
 const useCases = [
     CreateCommentUseCase,
@@ -30,12 +31,14 @@ const useCases = [
     ],
     providers: [
         ...useCases,
+        CommentsRepository,
         CommentsQueryRepository,
 
         CommentsExternalQueryRepository,
         CommentsExternalService,
     ],
     exports: [
+        CommentsRepository,
         CommentsQueryRepository,
 
         CommentsExternalQueryRepository,

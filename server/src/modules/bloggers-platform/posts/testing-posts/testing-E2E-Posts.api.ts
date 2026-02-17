@@ -2,7 +2,6 @@ import { isCreatedPostForBlog } from './testFunctionsPostsForBlogs';
 import { isCreatedBlog } from '../../blogs/blogs-testing/testFunctionsBlogs';
 import { HTTP_STATUSES } from 'src/core/utils/utils';
 import { CreatePostInputDto } from '../posts-api/posts-input-dto/posts.input-dto';
-import { CreateBlogInputDto } from '../../blogs/blogs-api/input-dto-blogs/blogs.input-dto';
 import { UpdatePostInputDto } from '../posts-api/posts-input-dto/posts-update.input-dto';
 import { contextTests } from 'test/helpers/init-settings';
 import { isLoginUser } from 'src/modules/auth/auth-testing/testFunctionsAuth';

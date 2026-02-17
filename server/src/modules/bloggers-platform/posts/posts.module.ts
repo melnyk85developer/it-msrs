@@ -15,6 +15,8 @@ import { DeletePostUseCase } from './posts-application/posts.use-cases/delete-po
 import { UpdatePostUseCase } from './posts-application/posts.use-cases/update-post.use-case';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreatePostOneBlogUseCase } from './posts-application/posts.use-cases/create-post-one-blog.use-case';
+import { LikeModule } from 'src/modules/likes/likes.module';
+import { PostsRepository } from './posts-infrastructure/posts.repository';
 
 const useCases = [
     CreatePostUseCase,
@@ -28,6 +30,7 @@ const useCases = [
         MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
         CqrsModule,
         CommentModule,
+        // LikeModule,
         UserAccountsModule,
         PostsRepositoryModule,
         BlogsRepositoryModule
@@ -37,6 +40,7 @@ const useCases = [
     ],
     providers: [
         ...useCases,
+        PostsRepository,
         PostsQueryRepository,
         PostMapper,
 
@@ -46,6 +50,7 @@ const useCases = [
     ],
     exports: [
         PostsQueryRepository,
+        PostsRepository,
         PostMapper,
 
         PostsExternalQueryRepository,
