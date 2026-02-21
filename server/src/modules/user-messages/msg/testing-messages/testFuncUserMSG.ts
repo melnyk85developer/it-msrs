@@ -1,7 +1,13 @@
 import { HTTP_STATUSES } from "src/core/utils/utils";
 import { contextTests } from "test/helpers/init-settings";
+import { CreateInputMessageDto } from "../msg-dto/msg-input-dto/create-input-msg.dto";
 
-export const isCreatedMsg1 = async (msg: any, access: string, refresh: string, statusCode: number = HTTP_STATUSES.CREATED_201) => {
+export const isCreatedMsg1 = async (
+    msg: CreateInputMessageDto, 
+    access: string, 
+    refresh: string, 
+    statusCode: number = HTTP_STATUSES.CREATED_201
+) => {
     if (!contextTests.createdMessage1) {
         const { createdMessage, response } = await contextTests.userMessagesTestManager.createMessage(
             access,

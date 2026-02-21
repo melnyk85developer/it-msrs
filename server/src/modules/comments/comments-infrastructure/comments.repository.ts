@@ -22,7 +22,7 @@ export class CommentsRepository {
     }
 
     async findCommentOrNotFoundFailRepository(commentId: string): Promise<CommentDocument> {
-        console.log('CommentsController: updateCommentController - commentId, dto 😡 ', commentId)
+        // console.log('CommentsController: updateCommentController - commentId, dto 😡 ', commentId)
         let comment
         if (!commentId || commentId === undefined || commentId === 'undefined') {
             // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - IF id 😡😡😡 typeof', id, typeof id)

@@ -5,7 +5,7 @@ export class InterlocutorViewDto {
     userId: string;
     name: string;
     surname: string;
-    avatar: string | null;
+    // avatar: string | null;
     chat: {
         dialogId: string;
         userAId: string;
@@ -39,7 +39,7 @@ export class InterlocutorViewDto {
         dto.userId = data.userId;
         dto.name = data.name;
         dto.surname = data.surname;
-        dto.avatar = data.avatar;
+        // dto.avatar = data.avatar;
         dto.chat = {
             dialogId: data.chat.id.toString(),
             userAId: data.chat.userBId,

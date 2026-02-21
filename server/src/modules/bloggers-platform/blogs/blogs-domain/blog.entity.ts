@@ -2,7 +2,6 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Model, Types } from 'mongoose';
 import { UpdateBlogDto } from '../blogs-dto/create-blog.dto';
 import { CreateBlogDomainDto } from './dto/create-blog.domain.dto';
-import { NotFoundException } from '@nestjs/common';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { ApiProperty } from '@nestjs/swagger';
@@ -92,27 +91,28 @@ export class Blog {
         // console.log('BlogsEntity: createInstance - blog 😡 ', blog)
         return blog as BlogDocument;
     }
-    updateBlogData(dto: UpdateBlogDto) {
-        if (dto.id !== this.id) {
+    updateBlogData(dto: Omit<UpdateBlogDto, 'updatedAt'>) {
+        if (this.id === dto.id) {
             this.name = dto.name === undefined ? this.name : dto.name;
             this.description = dto.description === undefined ? this.description : dto.description;
             this.websiteUrl = dto.websiteUrl === undefined ? this.websiteUrl : dto.websiteUrl;
+            this.userId = dto.userId === undefined ? this.userId : dto.userId;
             this.isMembership = dto.isMembership === undefined ? this.isMembership : dto.isMembership;
             this.updatedAt = new Date().toISOString();
-            this.deletedAt = dto.deletedAt === undefined ? this.deletedAt : dto.deletedAt;
+            this.deletedAt = this.deletedAt;
 
-            // this.homeDataPageBlog.titleHome = dto.titleHome === undefined ? this.homeDataPageBlog.titleHome : dto.titleHome
-            // this.homeDataPageBlog.subtitleHome = dto.subtitleHome === undefined ? this.homeDataPageBlog.subtitleHome : dto.subtitleHome
-            // this.homeDataPageBlog.contentHome = dto.contentHome === undefined ? this.homeDataPageBlog.contentHome : dto.contentHome
-            // this.homeDataPageBlog.ctaTextHome = dto.ctaTextHome === undefined ? this.homeDataPageBlog.ctaTextHome : dto.ctaTextHome
-            // this.homeDataPageBlog.ctaLinkHome = dto.ctaLinkHome === undefined ? this.homeDataPageBlog.ctaLinkHome : dto.ctaLinkHome
-            // this.homeDataPageBlog.seoDescriptionHome = dto.seoDescriptionHome === undefined ? this.homeDataPageBlog.seoDescriptionHome : dto.seoDescriptionHome
+            this.homeDataPageBlog.titleHome = dto.titleHome === undefined ? this.homeDataPageBlog.titleHome : dto.titleHome
+            this.homeDataPageBlog.subtitleHome = dto.subtitleHome === undefined ? this.homeDataPageBlog.subtitleHome : dto.subtitleHome
+            this.homeDataPageBlog.contentHome = dto.contentHome === undefined ? this.homeDataPageBlog.contentHome : dto.contentHome
+            this.homeDataPageBlog.ctaTextHome = dto.ctaTextHome === undefined ? this.homeDataPageBlog.ctaTextHome : dto.ctaTextHome
+            this.homeDataPageBlog.ctaLinkHome = dto.ctaLinkHome === undefined ? this.homeDataPageBlog.ctaLinkHome : dto.ctaLinkHome
+            this.homeDataPageBlog.seoDescriptionHome = dto.seoDescriptionHome === undefined ? this.homeDataPageBlog.seoDescriptionHome : dto.seoDescriptionHome
 
-            // this.about.titleAbout = dto.titleAbout === undefined ? this.about.titleAbout : dto.titleAbout
-            // this.about.subtitleAbout = dto.subtitleAbout === undefined ? this.about.subtitleAbout : dto.subtitleAbout
-            // this.about.contentAbout = dto.contentAbout === undefined ? this.about.contentAbout : dto.contentAbout
-            // this.about.missionAbout = dto.missionAbout === undefined ? this.about.missionAbout : dto.missionAbout
-            // this.about.seoDescriptionAbout = dto.seoDescriptionAbout === undefined ? this.about.seoDescriptionAbout : dto.seoDescriptionAbout
+            this.aboutDataPageBlog.titleAbout = dto.titleAbout === undefined ? this.aboutDataPageBlog.titleAbout : dto.titleAbout
+            this.aboutDataPageBlog.subtitleAbout = dto.subtitleAbout === undefined ? this.aboutDataPageBlog.subtitleAbout : dto.subtitleAbout
+            this.aboutDataPageBlog.contentAbout = dto.contentAbout === undefined ? this.aboutDataPageBlog.contentAbout : dto.contentAbout
+            this.aboutDataPageBlog.missionAbout = dto.missionAbout === undefined ? this.aboutDataPageBlog.missionAbout : dto.missionAbout
+            this.aboutDataPageBlog.seoDescriptionAbout = dto.seoDescriptionAbout === undefined ? this.aboutDataPageBlog.seoDescriptionAbout : dto.seoDescriptionAbout
         }
     }
     updateHomePageBlogData(dto: UpdateHomePageBlogDto) {

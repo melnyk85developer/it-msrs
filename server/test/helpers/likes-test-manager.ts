@@ -15,7 +15,7 @@ export class LikesTestManager {
     ) {
         // console.log('LikesTestManager: createLike - accessToken', accessToken)
         // console.log('LikesTestManager: createLike - refreshToken', refreshToken)
-        console.log('LikesTestManager: createLike - postId, likeStatus', postId, data)
+        // console.log('LikesTestManager: createLike - postId, likeStatus', postId, data)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.posts}/${postId}/like-status`)
             // .set('User-Agent', 'TestDevice/1.0')
@@ -25,7 +25,7 @@ export class LikesTestManager {
             .expect(expectedStatusCode)
 
         let createdLikeStatus;
-        console.log('LikesTestManager: createComment - response.status 😡', response.status)
+        // console.log('LikesTestManager: createComment - response.status 😡', response.status)
 
         if (expectedStatusCode === HTTP_STATUSES.UNAUTHORIZED_401) {
             expect(expectedStatusCode)

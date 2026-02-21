@@ -67,7 +67,7 @@ export class UserMessagesTestManager {
                 .set('User-Agent', `${userAgent}`)
                 .expect(expectedStatusCode);
         } else {
-            // console.log('TEST userMessagesTestManager - data req2', data)
+            console.log('TEST userMessagesTestManager - data req2', data)
             const req = request(this.app.getHttpServer())
                 .post(SETTINGS.RouterPath.messages)
                 .set('Authorization', `Bearer ${accessToken}`)

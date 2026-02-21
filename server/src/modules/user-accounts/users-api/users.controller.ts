@@ -27,7 +27,7 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Создать пользователя!' })
     @ApiResponse({ status: 201 })
-    // @UseGuards(BasicAuthGuard)
+    @UseGuards(BasicAuthGuard)
     @Post('/')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async createUserController(
@@ -67,7 +67,7 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
     @ApiResponse({ status: 404 })
-    // @UseGuards(BasicAuthGuard)
+    @UseGuards(BasicAuthGuard)
     @Delete('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteUserController(@Param('id') id: string): Promise<void> {
@@ -78,7 +78,7 @@ export class UsersController {
     }
     @ApiOperation({ summary: 'Получить всех пользователей!' })
     @ApiResponse({ status: 200 })
-    // @UseGuards(BasicAuthGuard)
+    @UseGuards(BasicAuthGuard)
     @Get('/')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllUsersController(@Query() query: GetUsersQueryParams): Promise<PaginatedViewDto<UserViewDto[]>> {

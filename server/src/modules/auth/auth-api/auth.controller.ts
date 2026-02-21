@@ -70,7 +70,8 @@ export class AuthController {
     async loginController(
         @Body() authDto: AuthUserDto,
         @ExtractUserFromRequest() user: UserContextDto,
-        @ExtractDeviceInfo() deviceInfo: DeviceInfo): Promise<{ accessToken: string, refreshToken: string }> {
+        @ExtractDeviceInfo() deviceInfo: DeviceInfo
+    ): Promise<{ accessToken: string, refreshToken: string }> {
         // console.log('AuthController: login - user 😡 REQ', user)
         // console.log('AuthController: login - deviceInfo 😡 REQ', deviceInfo)
         return await this.commandBus.execute<UserLoginCommand, UserLoginResult>(

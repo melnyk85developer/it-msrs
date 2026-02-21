@@ -6,7 +6,8 @@ import { BlogsRepository } from '../../blogs-infrastructure/blogs.repository';
 export class UpdateBlogCommand {
     constructor(
         public id: string,
-        public dto: UpdateBlogDto,
+        public dto: Omit<UpdateBlogDto, 'id' | 'userId' | 'isMembership'>,
+        public userId: string,
         public image?: Multer.File | null
     ) { }
 }
@@ -20,12 +21,19 @@ export class UpdateBlogUseCase
         private blogsRepository: BlogsRepository
     ) { }
     async execute(command: UpdateBlogCommand): Promise<string> {
-        const { id, dto, image } = command;
-
+        const { id, userId, dto, image } = command;
+        // console.log('UpdateBlogUseCase: - dto 😡 ', dto)
         const blog = await this.blogsRepository.findBlogOrNotFoundFailRepository(id);
-        blog.updateBlogData(dto);
-        // console.log('BlogsService: updateBlogService - blog 😡 ', blog)
+        // console.log('UpdateBlogUseCase: - blog 😡 1', blog)
+        blog.updateBlogData({
+            ...dto,
+            id,
+            userId,
+            isMembership: false
+        });
+        // console.log('UpdateBlogUseCase: - blog 😡 2', blog)
         await this.blogsRepository.save(blog);
+        // console.log('UpdateBlogUseCase: - blog 😡 3', blog)
         return blog._id.toString();
     }
 }

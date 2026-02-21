@@ -29,7 +29,7 @@ export const isCreatedPostForBlog = async (
             statusCode
         );
         if (response.status === statusCode) {
-            // console.log('TEST isCreatedPost1: - response.body 😡😡😡', response.body)
+            console.log('TEST isCreatedPost1: - response.body 😡😡😡', response.body)
             contextTests.posts_for_blog.addPostsForBlogStateTest({
                 numBlog,
                 numPost,
@@ -40,7 +40,32 @@ export const isCreatedPostForBlog = async (
             return response.body;
         }
     } else {
-        return contextTests.posts_for_blog[`createdBlog${numBlog +1}Posts`][numPost]
+        return contextTests.posts_for_blog[`createdBlog${numBlog + 1}Posts`][numPost]
         // return null
     }
+
+    // const postData: CreatePostInputDto = {
+    //     title,
+    //     shortDescription,
+    //     content,
+    //     blogId
+    // };
+    // const { response } = await contextTests.postsTestManager.createPosts(
+    //     postData,
+    //     contextTests.constants.codedAuth,
+    //     contextTests.sessions.accessTokenUser1Devices[0],
+    //     contextTests.sessions.refreshTokenUser1Devices[0],
+    //     statusCode
+    // );
+    // if (response.status === statusCode) {
+    //     // console.log('TEST isCreatedPost1: - response.body 😡😡😡', response.body)
+    //     contextTests.posts_for_blog.addPostsForBlogStateTest({
+    //         numBlog,
+    //         numPost,
+    //         addPost: response.body
+    //     })
+    //     return response.body;
+    // } else {
+    //     return response.body;
+    // }
 }

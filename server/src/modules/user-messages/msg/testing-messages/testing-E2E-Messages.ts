@@ -199,21 +199,17 @@ export const userMessagesE2eTest = () => {
             )
         })
         it(`POST   - Ожидается статус код 401, - Попытка без авторизации создать сообщение! Дополнительные запросы: -> GET, POST`, async () => {
-            const message = {
-                message: 'UNAUTHORIZED_401',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
-                read: false,
-                createdAt: new Date().toISOString(),
-                replyToMessageId: null,
-                attachments: contextTests.constants.image2Path,
-                localId: Date.now(),
-            };
-            await contextTests.userMessagesTestManager.createMessage(
-                '',
+            await isCreatedMsg1(
+                {
+                    localId: String(Date.now()),
+                    message: `UNAUTHORIZED_401 ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
+                    senderId: contextTests.users.createdUsers[0]!.id,
+                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    replyToMessageId: undefined,
+                    // attachments: contextTests.constants.image2Path,
+                },
                 contextTests.constants.expiredToken,
-                message,
-                contextTests.sessions.userAgent[5],
+                contextTests.constants.expiredToken,
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
         })
@@ -1351,7 +1347,7 @@ export const userMessagesE2eTest = () => {
                     userId: contextTests.users.createdUsers[1]!.id,
                     // login: contextTests.users.createdUsers[1]!.login,
                     // email: contextTests.users.createdUsers[1]!.email,
-                    avatar: contextTests.users.createdUsers[1]!.avatar,
+                    // avatar: contextTests.users.createdUsers[1]!.avatar,
                     chat: contextTests.createdDialog1,
                     lastMessage: {},
                     name: null,
@@ -1382,7 +1378,7 @@ export const userMessagesE2eTest = () => {
                     userId: contextTests.users.createdUsers[1]!.id,
                     // login: contextTests.users.createdUsers[1]!.login,
                     // email: contextTests.users.createdUsers[1]!.email,
-                    avatar: contextTests.users.createdUsers[1]!.avatar,
+                    // avatar: contextTests.users.createdUsers[1]!.avatar,
                     chat: contextTests.createdDialog1,
                     lastMessage: {},
                     name: null,

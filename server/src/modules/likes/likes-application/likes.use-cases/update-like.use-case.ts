@@ -5,12 +5,13 @@ import { LikesRepository } from '../../likes-infrastructure/likesRepository';
 import { PostsRepository } from 'src/modules/bloggers-platform/posts/posts-infrastructure/posts.repository';
 import { CommentsRepository } from 'src/modules/comments/comments-infrastructure/comments.repository';
 import { PhotoRepository } from 'src/modules/gallery/photos/photos-infrastructure/photos-repository';
+import { LikeStatus } from '../../likes-dto/like-update.dto';
 
 export class UpdateLikeCommand {
     constructor(
         public userId: string,
         public entityId: string,
-        public likeStatus: string,
+        public likeStatus: LikeStatus,
         public entityType: string
     ) { }
 }
@@ -29,7 +30,7 @@ export class UpdateLikeUseCase
     ) { }
     async execute(command: UpdateLikeCommand): Promise<string> {
         const { userId, entityId, entityType, likeStatus } = command;
-        console.log('UpdateLikeUseCase: - likeStatus 😡 ', likeStatus)
+        // console.log('UpdateLikeUseCase: - likeStatus 😡 ', likeStatus)
 
         if (entityType === 'post') {
             await this.postsRepository.findPostOrNotFoundFail(entityId);
@@ -51,7 +52,7 @@ export class UpdateLikeUseCase
         );
         // 🔹 Если лайка нет — создаём
         if (!like) {
-            console.log('UpdateLikeUseCase: - like1 IF 😡 ', like)
+            // console.log('UpdateLikeUseCase: - like1 IF 😡 ', like)
             like = this.LikeModel.createLikeInstance({
                 likeStatus,
                 meta: {
@@ -60,12 +61,12 @@ export class UpdateLikeUseCase
                     userId,
                 }
             });
-            console.log('UpdateLikeUseCase: - like2 IF 😡 ', like)
+            // console.log('UpdateLikeUseCase: - like2 IF 😡 ', like)
             await this.likesRepository.save(like);
-            console.log('UpdateLikeUseCase: - like3 IF 😡 ', like)
+            // console.log('UpdateLikeUseCase: - like3 IF 😡 ', like)
             return like.id.toString();
         }
-        console.log('UpdateLikeUseCase: findlikeOrNotFoundFailRepository - like1 😡 ', like)
+        // console.log('UpdateLikeUseCase: findlikeOrNotFoundFailRepository - like1 😡 ', like)
         // 🔹 Если есть — обновляем
         like.updateLike({
             id: like.id,
@@ -76,9 +77,9 @@ export class UpdateLikeUseCase
                 userId,
             }
         });
-        console.log('UpdateLikeUseCase: like.updateLike like2 😡 ', like)
+        // console.log('UpdateLikeUseCase: like.updateLike like2 😡 ', like)
         await this.likesRepository.save(like);
-        console.log('UpdateLikeUseCase: like.updateLike like3 😡 ', like)
-        return like.id;
+        // console.log('UpdateLikeUseCase: like.updateLike like3 😡 ', like)
+        return like.id.toString();
     }
 }

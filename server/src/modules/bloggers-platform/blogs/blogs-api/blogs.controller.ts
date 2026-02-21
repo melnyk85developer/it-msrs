@@ -9,7 +9,6 @@ import { CreateBlogInputDto } from './input-dto-blogs/blogs.input-dto';
 import { UpdateBlogInputDto } from './input-dto-blogs/update-blogs.input-dto';
 import { SuccessResponse } from 'src/core/utils/SuccessfulResponse';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { PostsQueryRepository } from '../../posts/posts-infrastructure/posts-external-query/posts-query/posts.query-repository';
 import { GetPostsQueryParams } from '../../posts/posts-api/posts-input-dto/get-posts-query-params.input-dto';
 import { PostViewDto } from '../../posts/posts-api/posts-view-dto/posts.view-dto';
 import { CreatePostForBlogInputDto } from './input-dto-blogs/posts-for-blog.input-dto';
@@ -28,34 +27,38 @@ import { UpdateBlogCommand } from '../blogs-application/blogs.use-cases/update-b
 import { UpdateBlogHomePageCommand } from '../blogs-application/blogs.use-cases/update-blog-home-page.use-case';
 import { DeleteBlogCommand } from '../blogs-application/blogs.use-cases/delete-blog.use-case';
 import { CreatePostOneBlogCommand } from '../../posts/posts-application/posts.use-cases/create-post-one-blog.use-case';
+import { PostQueryService } from '../../posts/posts-application/post-query-service';
+import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
+import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
 
 @Controller('/blogs')
 export class BlogsController {
     constructor(
         private commandBus: CommandBus,
         private blogsQueryRepository: BlogsQueryRepository,
-        private postsQueryRepository: PostsQueryRepository,
+        private postQueryService: PostQueryService,
     ) { }
 
     @ApiOperation({ summary: 'Создать блог!' })
     @ApiResponse({ status: 201 })
-    // @UseGuards(BasicAuthGuard)
-    @UseGuards(AuthAccessGuard)
+    @UseGuards(BasicAuthGuard)
+    // @UseGuards(AuthAccessGuard)
     @Post()
     @HttpCode(HTTP_STATUSES.CREATED_201)
     @UseInterceptors(FileInterceptor('image'))
     async createBlogController(
         @Body() body: CreateBlogInputDto,
-        @ExtractUserFromRequest() user: UserContextDto,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto,
         @UploadedFile() image?: Multer.File | undefined,
     ): Promise<BlogViewDto> {
         // console.log('BlogsController: createBlogController - REQ body 😡 ', body)
+        // console.log('BlogsController: createBlogController - REQ user 😡 ', user)
         const blogId = await this.commandBus.execute<CreateBlogCommand, string>(
-            new CreateBlogCommand(user.id, body, image)
+            new CreateBlogCommand(user?.id, body, image)
         );
         // console.log('BlogsController: createBlogController - RES blogId REQ 😡 ', blogId)
         const isCreatedBlog = await this.blogsQueryRepository.getBlogByIdOrNotFoundFailQueryRepository(blogId);
-        // console.log('BlogsController: createBlogController - RES isCreatedBlog.id 😡 ', isCreatedBlog.id)
+        // console.log('BlogsController: createBlogController - RES isCreatedBlog 😡 ', isCreatedBlog)
         return SuccessResponse(
             INTERNAL_STATUS_CODE.SUCCESS_CREATED_BLOG,
             isCreatedBlog
@@ -63,23 +66,23 @@ export class BlogsController {
     }
     @ApiOperation({ summary: 'Создать пост конкретному блогу!' })
     @ApiResponse({ status: 201 })
-    @UseGuards(AuthAccessGuard)
+    @UseGuards(BasicAuthGuard)
+    // @UseGuards(AuthAccessGuard)
     @Post(':blogId/posts')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     @UseInterceptors(FileInterceptor('image'))
     async createPostForBlogController(
         @Param('blogId') blogId: string,
         @Body() body: CreatePostForBlogInputDto,
-        @ExtractUserFromRequest() user: UserContextDto,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto,
         @UploadedFile() image?: Multer.File | undefined
     ): Promise<BlogViewDto> {
         // console.log('BlogsController: createPostForBlogController - body, blogId 😡 ', body, blogId)
-        // const postId = await this.postsService.createPostOneBlogService(body, blogId);
         const postId = await this.commandBus.execute<CreatePostOneBlogCommand, string>(
-            new CreatePostOneBlogCommand(user.id, body, blogId, image)
+            new CreatePostOneBlogCommand(user?.id, body, blogId, image)
         );
-        // console.log('BlogsController: createPostForBlogController - postId 😡 ', postId)
-        const isCreatedPost = await this.postsQueryRepository.getPostByIdOrNotFoundFailQueryRepository(postId);
+        // console.log('BlogsController: createPostForBlogController - postId 😡 RES', postId)
+        const isCreatedPost = await this.postQueryService.getPostQueryService(postId, user?.id);
         // console.log('BlogsController: createPostForBlogController - isCreatedPost 😡 ', isCreatedPost)
         return SuccessResponse(
             INTERNAL_STATUS_CODE.SUCCESS_CREATED_POST,
@@ -89,18 +92,25 @@ export class BlogsController {
     @ApiOperation({ summary: 'Обновить блог по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
-    @UseGuards(AuthAccessGuard)
-    @Put(':id')
+    @UseGuards(BasicAuthGuard)
+    // @UseGuards(AuthAccessGuard)
+    @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     @UseInterceptors(FileInterceptor('image'))
     async updateBlogController(
         @Param('id') id: string,
         @Body() body: UpdateBlogInputDto,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto,
         @UploadedFile() image?: Multer.File | undefined
     ): Promise<string> {
         // console.log('BlogsController: updateBlogController - id 😡 body ', id, body)
         const isUpdateBlog = await this.commandBus.execute<UpdateBlogCommand, string>(
-            new UpdateBlogCommand(id, body, image)
+            new UpdateBlogCommand(
+                id, 
+                body,
+                user?.id,
+                image
+            )
         );
         // console.log('BlogsController: updateBlogController - isUpdateBlog 😡 ', isUpdateBlog)
         return isUpdateBlog
@@ -108,6 +118,7 @@ export class BlogsController {
     @ApiOperation({ summary: 'Обновить блог по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
+    // @UseGuards(BasicAuthGuard)
     @UseGuards(AuthAccessGuard)
     @Put('/home-page/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
@@ -127,7 +138,8 @@ export class BlogsController {
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
     @ApiResponse({ status: 404 })
-    @UseGuards(AuthAccessGuard)
+    @UseGuards(BasicAuthGuard)
+    // @UseGuards(AuthAccessGuard)
     @Delete(':id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteBlogController(@Param('id') id: string): Promise<void> {
@@ -148,23 +160,26 @@ export class BlogsController {
     }
     @ApiOperation({ summary: 'Получить все блоги - текущего пользователя!' })
     @ApiResponse({ status: 200 })
-    @UseGuards(AuthAccessGuard)
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/my-blogs')
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getAllMyBlogsController(@Query() query: GetBlogsQueryParams, @ExtractUserFromRequest() user: UserContextDto): Promise<PaginatedViewDto<BlogViewDto[]>> {
+    async getAllMyBlogsController(
+        @Query() query: GetBlogsQueryParams,
+        @ExtractUserFromRequest() user: UserContextDto
+    ): Promise<PaginatedViewDto<BlogViewDto[]>> {
         // console.log('BlogsController: getAllMyBlogsController - query 😡 ', query)
         // console.log('BlogsController: getAllMyBlogsController - user 😡 ', user)
         const isBlogs = await this.blogsQueryRepository.getAllBlogRepository(query)
-        // console.log('BlogsController: getAllMyBlogsController - isBlogs 😡 ', isBlogs)
+        console.log('BlogsController: getAllMyBlogsController - isBlogs 😡 ', isBlogs)
         return isBlogs
     }
     @ApiOperation({ summary: 'Получить блог по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 200 })
-    @Get(':id')
+    @Get('/:id')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getBlogByIdController(@Param('id') id: string): Promise<BlogViewDto> {
-        // console.log('BlogsController: getBlogByIdController - id 😡 ', id)
+        console.log('BlogsController: getBlogByIdController - id 😡 ', id)
         return this.blogsQueryRepository.getBlogByIdOrNotFoundFailQueryRepository(id);
     }
     @ApiOperation({ summary: 'Получить блог по id.' })
@@ -191,12 +206,18 @@ export class BlogsController {
     }
     @ApiOperation({ summary: 'Получить все посты определенного блога!' })
     @ApiResponse({ status: 200 })
+    // @UseGuards(BasicAuthGuard)
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/:blogId/posts')
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getAllPostsController(@Param('blogId') blogId: string, @Query() query: GetPostsQueryParams): Promise<PaginatedViewDto<PostViewDto[]>> {
-        // console.log('PostsController: getAllPostsController - query 😡 blogId', query, blogId)
-        const isPosts = await this.postsQueryRepository.getAllPostRepository(query, blogId);
-        // console.log('PostsController: getAllPostsController - isPosts 😡 ', isPosts)
+    async getAllPostsByBlogIdController(
+        @Param('blogId') blogId: string,
+        @Query() query: GetPostsQueryParams,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
+    ): Promise<PaginatedViewDto<PostViewDto[]>> {
+        // console.log('BlogsController: getAllPostsByIdBlogController - query 😡 blogId', query, blogId)
+        const isPosts = await this.postQueryService.getAllPostsQueryService(user?.id, query, blogId);
+        // console.log('BlogsController: getAllPostsByIdBlogController - isPosts 😡 ', isPosts)
         return isPosts
     }
 }

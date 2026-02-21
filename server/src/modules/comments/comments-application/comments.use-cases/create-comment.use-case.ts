@@ -4,11 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Comment, type CommentModelType } from '../../comments-domain/comments.entity';
 import { CommentsRepository } from '../../comments-infrastructure/comments.repository';
 import { CreateCommentDto } from '../../comments-dto/create-comments.dto';
+import { PostsRepository } from 'src/modules/bloggers-platform/posts/posts-infrastructure/posts.repository';
+import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
 
 export class CreateCommentCommand {
     constructor(
         public userId: string,
-        public dto: Omit<CreateCommentDto, 'commentatorInfo'>, 
+        public postId: string,
+        public content: string,
         public image?: Multer.File | null
     ) { }
 }
@@ -20,15 +23,20 @@ export class CreateCommentUseCase
         @InjectModel(Comment.name) private CommentModel: CommentModelType,
         private commandBus: CommandBus,
         private eventBus: EventBus,
-        private commentsRepository: CommentsRepository
+        private commentsRepository: CommentsRepository,
+        private postsRepository: PostsRepository,
+        private usersRepository: UsersRepository,
     ) { }
     async execute(command: CreateCommentCommand): Promise<string> {
-        const { userId, dto, image } = command;
+        const { userId, postId, content, image } = command;
+        await this.postsRepository.findPostOrNotFoundFail(postId);
+        const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
         const commentData = {
-            ...dto,
+            postId,
+            content,
             commentatorInfo: {
-                userId: '123',
-                userLogin: 'MrRobot'
+                userId: userId,
+                userLogin: user.accountData.login
             }
         }
         const comment = this.CommentModel.createCommentInstance(commentData);

@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, Length } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString, Length } from "class-validator";
 import { MetaType } from "../likes-domain/meta-type-likes.schema";
 
 // 1. Создаем реальный ENUM
 export enum LikeStatus {
-  NONE = 'None',
-  LIKE = 'Like',
-  DISLIKE = 'Dislike'
+    NONE = 'None',
+    LIKE = 'Like',
+    DISLIKE = 'Dislike'
 }
 
 export class UpdateLikeDto {
@@ -15,10 +15,10 @@ export class UpdateLikeDto {
     @IsNotEmpty({ message: 'Поле postId не должно быть пустым!' })
     @Length(1, 60, { message: 'id должено быть не меньше 1 и не больше 60 символов!' })
     readonly id: string;
-    @ApiProperty({ example: 'likeStatus', description: 'Значение None или Like или Dislike!' })
-    @IsString({ message: 'likeStatus должно быть строкой!' })
+    @ApiProperty({ example: 'Like', description: 'None | Like | Dislike' })
+    @IsEnum(LikeStatus, { message: 'likeStatus должно быть одним из: None, Like, Dislike' })
     @IsNotEmpty({ message: 'Поле likeStatus не должно быть пустым!' })
-    readonly likeStatus: string
+    readonly likeStatus: LikeStatus;
     @ApiProperty({ example: 'likeStatus', description: 'Значение None или Like или Dislike!' })
     @IsString({ message: 'likeStatus должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле likeStatus не должно быть пустым!' })

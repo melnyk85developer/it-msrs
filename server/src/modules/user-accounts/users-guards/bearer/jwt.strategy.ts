@@ -35,26 +35,26 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
         const user = await this.usersRepository.findById(payload.id);
         if (!user || user.systemUserData.isBanned) {
-            console.log('🔥 JwtStrategy: - user', user)
+            // console.log('🔥 JwtStrategy: - user', user)
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED)
             // return null;
         }
         const isToken = await this.tokenRepository.findTokenById(payload.id)
         if (isToken) {
-            console.log('🔥 JwtStrategy: - isToken', isToken)
+            // console.log('🔥 JwtStrategy: - isToken', isToken)
             throw new DomainException(INTERNAL_STATUS_CODE.UNAUTHORIZED_REFRESH_TOKEN_BLACK_LIST)
             // return null;
         }
         const devices = await this.sessionsRepository.findAllSessionsByUserIdOrNotFoundFail(payload.id)
         if (!devices) {
-            console.log('🔥 JwtStrategy: - devices', devices)
+            // console.log('🔥 JwtStrategy: - devices', devices)
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_SESSION_ID)
             // return null;
         }
         const sessionExists = devices.some(d => d.userId === payload.id && Number(d.lastActiveDate) === Number(payload.iat))
         // console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
         if (!sessionExists) {
-            console.log('JwtAuthGuard: СУКА 😡 Сессия токена не найдена/обновлена');
+            // console.log('JwtAuthGuard: СУКА 😡 Сессия токена не найдена/обновлена');
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_SESSION_ID)
             // return null;
         }
@@ -63,7 +63,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         );
         // console.log('🔥 JwtStrategy: - sessionExists', sessionExists)
         if (!isUpdateLastSeen) {
-            console.log('🔥 JwtStrategy: - isUpdateLastSeen', isUpdateLastSeen)
+            // console.log('🔥 JwtStrategy: - isUpdateLastSeen', isUpdateLastSeen)
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
             // return null;
         }

@@ -4,65 +4,49 @@ import { ObjectId } from "mongodb";
 import { Like, type LikeModelType } from "../likes-domain/like.entity";
 import { sanitizedQueryType } from "../likes-dto/types";
 
-
 @Injectable()
 export class LikesQueryRepository {
     constructor(
         @InjectModel(Like.name) private LikeModel: LikeModelType,
     ) { }
     async getAllLikesCommentRepository(entityId: string, entity: string): Promise<Like[] | null> {
-        try {
-            const likes = await this.LikeModel.find(
-                {
-                    'meta.entityType': entity,
-                    'meta.entityId': entityId
-                }
-            )
-            // .toArray();
-            const isLikesComment = await this._arrLikesCommentMapForRender(likes)
-            // console.log('getAllLikesCommentRepository: - isLikesComment 😡😡😡', isLikesComment)
-            if (isLikesComment && isLikesComment !== undefined) {
-                // console.log('getAllLikesCommentRepository: - isLikesComment 😡😡😡', isLikesComment)
-                return isLikesComment
-            } else {
-                return null
+        const likes = await this.LikeModel.find(
+            {
+                'meta.entityType': entity,
+                'meta.entityId': entityId
             }
-        } catch (e) {
-            console.error(e);
-            return null;
+        )
+        // .toArray();
+        const isLikesComment = await this._arrLikesCommentMapForRender(likes)
+        // console.log('getAllLikesCommentRepository: - isLikesComment 😡😡😡', isLikesComment)
+        if (isLikesComment && isLikesComment !== undefined) {
+            // console.log('getAllLikesCommentRepository: - isLikesComment 😡😡😡', isLikesComment)
+            return isLikesComment
+        } else {
+            return null
         }
     }
-    async getAllLikeForCommentRepository(entityId: string, entity: string, likeStatus: string): Promise<number | null> {
-        try {
-            return await this.LikeModel.countDocuments(
-                {
-                    'meta.entityType': entity,
-                    'meta.entityId': entityId,
-                    likeStatus: likeStatus
-                }
-            )
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
+    async getAllLikeForCommentRepository(entityId: string, entity: string, likeStatus: string): Promise<number> {
+        return await this.LikeModel.countDocuments(
+            {
+                'meta.entityType': entity,
+                'meta.entityId': entityId,
+                likeStatus: likeStatus
+            }
+        )
     }
     async getLikeByIdRepository(id: string, entity: string): Promise<any | null> {
         // console.log('LikeQueryRepository: - id 😡', id)
-        try {
-            const getLike = await this.LikeModel.findOne(
-                {
-                    'meta.entityId': new ObjectId(id),
-                    'meta.entityType': entity
-                }
-            )
-            if (getLike && getLike.likeStatus) {
-                // console.log('LikeQueryRepository: - getLike 😡😡😡', getLike)
-                return await this._likeMapForRender(getLike.toObject())
-            } else {
-                return null
+        const getLike = await this.LikeModel.findOne(
+            {
+                'meta.entityId': new ObjectId(id),
+                'meta.entityType': entity
             }
-        } catch (error) {
-            console.error(error)
+        )
+        if (getLike && getLike.likeStatus) {
+            // console.log('LikeQueryRepository: - getLike 😡😡😡', getLike)
+            return await this._likeMapForRender(getLike.toObject())
+        } else {
             return null
         }
     }

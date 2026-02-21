@@ -66,7 +66,7 @@ export class UsersTestManager {
                         id: expect.any(String),
                         login: data.login,
                         email: data.email,
-                        avatar: null,
+                        // avatar: null,
                         // name: null,
                         // surname: null,
                         // isBot: expect.any(Boolean),
@@ -109,9 +109,9 @@ export class UsersTestManager {
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.users}/${id}`)
-            // .set('User-Agent', 'TestDevice/1.0')
-            // .set('Authorization', `Bearer ${accessToken}`)
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Basic ${codedAuth}`)
+            // .set('Authorization', `Bearer ${accessToken}`)
             .expect(expectedStatusCode)
         // console.log('usersTestManager - res', response.body)
         return { response: response, deleteUser: response.body }

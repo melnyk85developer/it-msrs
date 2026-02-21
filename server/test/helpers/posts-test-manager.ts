@@ -13,13 +13,29 @@ export class PostsTestManager {
     ) {
         const response = await request(this.app.getHttpServer())
             .get(SETTINGS.RouterPath.posts)
-            // .set('User-Agent', 'TestDevice/1.0')
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(expectedStatusCode)
 
         // console.log('TEST ⚙️ - postsTestManager: getAllPosts', response.body)
 
         return { response: response, getAllPosts: response.body }
+    }
+    async getAllPostsByIdBlog(
+        blogId: string,
+        codedAuth: string | undefined = undefined,
+        accessToken: string | undefined = undefined,
+        expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200
+    ) {
+
+        const response = await request(this.app.getHttpServer())
+            .get(`${SETTINGS.RouterPath.blogs}/${blogId}/posts`)
+            .set('User-Agent', 'TestDevice/1.0')
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
+            .expect(expectedStatusCode)
+
+        return { response: response, getAllPostsByIdBlog: response.body }
     }
     async getPostsById(
         id: string | null,
@@ -42,21 +58,6 @@ export class PostsTestManager {
         // console.log('postsTestManager: - getPostsById', response.body)
 
         return { response: response, getPostsById: response.body }
-    }
-    async getAllPostsByIdBlog(
-        codedAuth: string | undefined = undefined,
-        // accessToken: string | undefined = undefined,
-        expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200
-    ) {
-
-        const response = await request(this.app.getHttpServer())
-            .get(SETTINGS.RouterPath.posts)
-            // .set('User-Agent', 'TestDevice/1.0')
-            // .set('Authorization', `Bearer ${accessToken}`)
-            .set('Authorization', `Basic ${codedAuth}`)
-            .expect(expectedStatusCode)
-
-        return { response: response, getAllPostsByIdBlog: response.body }
     }
     async createPosts(
         data: CreatePostInputDto,
@@ -107,8 +108,8 @@ export class PostsTestManager {
         numPost: number,
         id: string,
         data: any,
+        accessToken: string | undefined = undefined,
         codedAuth: string | undefined = undefined,
-        // accessToken: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('postsTestManager: updatePosts: - id, data', id, data)

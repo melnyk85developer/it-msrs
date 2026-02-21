@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Blog, type BlogModelType } from '../../blogs-domain/blog.entity';
 import { BlogsRepository } from '../../blogs-infrastructure/blogs.repository';
 import { CreateBlogDto } from '../../blogs-dto/create-blog.dto';
+import { ObjectId } from "mongodb";
 
 export class CreateBlogCommand {
     constructor(
@@ -24,11 +25,14 @@ export class CreateBlogUseCase
     ) { }
     async execute(command: CreateBlogCommand): Promise<string> {
         const { userId, dto, image } = command;
+        // console.log('BlogsEntity: createInstance - userId, dto, image 😡 ', userId, dto, image)
         const blog = this.BlogModel.createBlogInstance({
             ...dto,
-            userId: userId
+            userId: String(new ObjectId()) // TODO - Сука заменить на req userId
         });
+        // console.log('BlogsEntity: createInstance - blog 😡 1', blog)
         await this.blogsRepository.save(blog);
+        // console.log('BlogsEntity: createInstance - blog 😡 2', blog)
         return blog._id.toString();
     }
 }

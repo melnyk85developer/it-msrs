@@ -26,13 +26,13 @@ export class UserLoginUseCase
     ) { }
     async execute(command: UserLoginCommand): Promise<UserLoginResult> {
         const { ip, userAgent, userId, remember, refreshToken } = command.dto
-        // console.log('AuthService → login: userId 👍', userId);
-        // console.log('loginService: - ', ip, userAgent, refreshToken)
+        // console.log('UserLoginUseCase → login: userId 👍', userId);
+        // console.log('UserLoginUseCase: - ', ip, userAgent, refreshToken)
         // const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
         const roleValues = user.systemUserData.roles.map(role => role.value);
-        // console.log('loginService: - user', user)
-        // console.log('loginService: - roleValues', roleValues)
+        // console.log('UserLoginUseCase: - user.accountData', user.accountData)
+        // console.log('UserLoginUseCase: - roleValues', roleValues)
         const isParse = await this._myParserService(ip, userAgent)
 
         const isLogin = await this.commandBus.execute<CreateSessionCommand, { accessToken: string, refreshToken: string }>(
@@ -56,11 +56,11 @@ export class UserLoginUseCase
             )
         )
         
-        // console.log('loginService: - isLogin RES', isLogin)
+        // console.log('UserLoginUseCase: - isLogin RES', isLogin)
         const isUpdateLastSeen = await this.commandBus.execute<UpdateLastSeenUserCommand, string>(
             new UpdateLastSeenUserCommand(userId)
         );
-        // console.log('loginService: - isUpdateLastSeen RES', isUpdateLastSeen)
+        // console.log('UserLoginUseCase: - isUpdateLastSeen RES', isUpdateLastSeen)
         return {
             accessToken: isLogin.accessToken,
             refreshToken: isLogin.refreshToken

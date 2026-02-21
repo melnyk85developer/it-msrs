@@ -60,7 +60,7 @@ export class CommentsTestManager {
         // console.log('TEST: - commetsTestManager - getCommentById - id', id)
         const response = await request(this.app.getHttpServer())
             .get(`${SETTINGS.RouterPath.comments}/${id}`)
-            // .set('User-Agent', 'TestDevice/1.0')
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             // .set('Cookie', `refreshToken=${refreshToken}`)
             .expect(expectedStatusCode)
@@ -75,11 +75,11 @@ export class CommentsTestManager {
                             userId: expect.any(String),
                             userLogin: expect.any(String),
                         },
-                        // likesInfo: {
-                        //     likesCount: expect.any(Number),
-                        //     dislikesCount: expect.any(Number),
-                        //     myStatus: expect.any(String)
-                        // },
+                        likesInfo: {
+                            likesCount: expect.any(Number),
+                            dislikesCount: expect.any(Number),
+                            myStatus: expect.any(String)
+                        },
                         createdAt: expect.any(String),
                     }
                 )
@@ -92,7 +92,6 @@ export class CommentsTestManager {
         accessToken: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.OK_200
     ) {
-
         const response = await request(this.app.getHttpServer())
             .get(SETTINGS.RouterPath.comments)
             // .set('User-Agent', 'TestDevice/1.0')
@@ -149,11 +148,11 @@ export class CommentsTestManager {
                     userId: expect.any(String),
                     userLogin: expect.any(String),
                 },
-                // likesInfo: {
-                //     dislikesCount: expect.any(Number),
-                //     likesCount: expect.any(Number),
-                //     myStatus: expect.any(String),
-                // },
+                likesInfo: {
+                    dislikesCount: expect.any(Number),
+                    likesCount: expect.any(Number),
+                    myStatus: expect.any(String),
+                },
                 content: dataComment.content,
                 createdAt: expect.any(String)
             });
@@ -172,13 +171,15 @@ export class CommentsTestManager {
         accessToken: string | null,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
-        // console.log('commetsTestManager: updatePosts: - commentId', commentId)
+        // console.log('commetsTestManager: updatePosts: - commentId REQ', commentId)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.comments}/${commentId}`)
             // .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode)
+
+        // console.log('commetsTestManager: updateComment: - RES response.body', response.body)
         return { response: response, updateComment: response.body }
     }
     async deleteComment(
@@ -186,12 +187,14 @@ export class CommentsTestManager {
         accessToken: string | null,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204
     ) {
-
+        // console.log('commetsTestManager: deleteComment: - commentId', commentId)
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.comments}/${commentId}`)
             // .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(expectedStatusCode)
+
+        // console.log('commetsTestManager: deleteComment: - response.body', response.body)
 
         let deletedComment;
 

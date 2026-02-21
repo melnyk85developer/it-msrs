@@ -105,7 +105,7 @@ export class RegistrationEmailResendingUseCase
 
         if (expirationDate) {
             // console.log('AuthService registrationEmailResendingService: - isSendEmail res', isSendEmail)
-            console.log('AuthService registrationEmailResendingService: - expirationDate res', expirationDate.expirationDate)
+            // console.log('RegistrationEmailResendingUseCase: - expirationDate res', expirationDate.expirationDate)
             const expirationISO = new Date(expirationDate.expirationDate).toISOString();
             return {
                 done: true,

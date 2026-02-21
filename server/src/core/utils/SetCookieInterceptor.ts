@@ -13,7 +13,11 @@ export class SetCookieInterceptor implements NestInterceptor {
                 // Устанавливаем куку после успешного выполнения метода
                 if (data && data.refreshToken) {
                     // console.log('SetCookieInterceptor: data.refreshToken - 👽👽👽', data.refreshToken)
-                    response.cookie('refreshToken', data.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+                    response.cookie('refreshToken', data.refreshToken, {
+                        maxAge: 30 * 24 * 60 * 60 * 1000,
+                        httpOnly: true,
+                        secure: true,
+                    });
                 }
             }),
         );

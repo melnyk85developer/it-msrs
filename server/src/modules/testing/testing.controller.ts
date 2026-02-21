@@ -1,6 +1,7 @@
 import { Controller, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { HTTP_STATUSES } from 'src/core/utils/utils';
 
 @Controller('/testing')
 export class TestingController {
@@ -9,7 +10,7 @@ export class TestingController {
     ) { }
 
     @Delete('/all-data')
-    @HttpCode(HttpStatus.NO_CONTENT)
+    @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteAll() {
         console.log('⏳ TestingController обнуляет DB...');
         const collections = await this.databaseConnection.listCollections();

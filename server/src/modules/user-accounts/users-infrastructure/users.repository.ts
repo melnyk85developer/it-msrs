@@ -20,8 +20,18 @@ export class UsersRepository {
             deletedAt: null,
         });
     }
+    async findByAdminRepository(params: string): Promise<UserDocument | null> {
+        // console.log('UsersRepository → findByAdminRepository 👍 params', params);
+        const isAdmin = await this.UserModel.findOne(
+            {
+                'systemUserData.roles.value': params
+            }
+        );
+        // console.log('UsersRepository → findByAdminRepository RES 👍 isAdmin', isAdmin);
+        return isAdmin
+    }
     async findByLoginOrEmail(loginOrEmail: string): Promise<UserDocument | null> {
-        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail);
+        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail); systemUserData
         return this.UserModel.findOne(
             {
                 $or: [
@@ -37,15 +47,13 @@ export class UsersRepository {
         if (!user) {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
         }
-
         return user;
     }
-    async findUserByLoginOrEmailOrNotFoundFail(id: string): Promise<UserDocument> {
-        const user = await this.findById(id);
+    async findUserByLoginOrEmailOrNotFoundFail(email: string): Promise<UserDocument> {
+        const user = await this.findByLoginOrEmail(email);
         if (!user) {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_USER)
         }
-
         return user;
     }
 

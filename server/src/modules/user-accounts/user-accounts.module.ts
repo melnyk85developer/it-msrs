@@ -36,6 +36,8 @@ import { CreateUserUseCase } from './users-application/user-use-cases/create-use
 import { UpdateUserUseCase } from './users-application/user-use-cases/update-user.use-case';
 import { DeleteUserUseCase } from './users-application/user-use-cases/delete-user.use-case';
 import { UpdateLastSeenUserUseCase } from './users-application/user-use-cases/update-last-seen-user.use-case';
+import { PostQueryService } from '../bloggers-platform/posts/posts-application/post-query-service';
+import { LikeModule } from '../likes/likes.module';
 
 const useCases = [
     UserRegistrationUseCase,
@@ -71,6 +73,7 @@ const useCases = [
         TokenModule,   // НУЖЕН для AuthService, стратегий, blacklist
         SessionModule, // СЕССИИ ИСПОЛЬЗУЮТСЯ ПРИ АВТОРИЗАЦИИ
         ConfirmationModule,
+        // LikeModule
     ],
     controllers: [
         AuthController,

@@ -21,7 +21,7 @@ export class UserContextClass {
             'Maksym',
             'Viktor',
             'Nataly',
-            'Aleksandra'
+            'Sashka'
         ]
         this.correctUserSurNames = [
             'Melnyk'

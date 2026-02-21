@@ -1,8 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { GLOBAL_PREFIX } from './global-prefix.setup';
-import * as fs from 'fs';
-import * as path from 'path';
 
 export function swaggerSetup(app: INestApplication) {
     const config = new DocumentBuilder()

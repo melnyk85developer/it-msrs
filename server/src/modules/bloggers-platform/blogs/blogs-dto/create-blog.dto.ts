@@ -1,27 +1,31 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsNotEmpty, IsOptional, IsString, IsUrl, Length } from "class-validator";
+import { IsStringWithTrim } from "src/core/decorators/validation/is-string-with-trim";
 
 export class CreateBlogDto {
     @ApiProperty({ example: 'name', description: 'SamurayBlog!' })
     @IsString({ message: 'name должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле login не должно быть пустым!' })
-    @Length(1, 50, { message: 'Длина name должена быть не меньше 1 и не больше 15 символов!' })
+    // @Length(1, 15, { message: 'Длина name должена быть не меньше 1 и не больше 15 символов!' })
+    @IsStringWithTrim(1, 15)
     readonly name: string;
     @ApiProperty({ example: 'description', description: 'Описание Блога!' })
     @IsString({ message: 'description должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле description не должно быть пустым!' })
-    @Length(1, 500, { message: 'Длина description должена быть не меньше 1 и не больше 500 символов!' })
+    // @Length(1, 500, { message: 'Длина description должена быть не меньше 1 и не больше 500 символов!' })
+    @IsStringWithTrim(1, 500)
     readonly description: string;
     @ApiProperty({ example: 'websiteUrl', description: 'Адрес сайта URL!' })
     @IsString({ message: 'websiteUrl должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле websiteUrl не должно быть пустым!' })
-    @Length(1, 150, { message: 'Длина websiteUrl должена быть не меньше 1 и не больше 150 символов!' })
+    // @Length(1, 100, { message: 'Длина websiteUrl должена быть не меньше 1 и не больше 150 символов!' })
+    @IsStringWithTrim(1, 100)
     @IsUrl()
     readonly websiteUrl: string;
-    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя (владелец блога)!' })
-    @IsString({ message: 'userId должно быть строкой!' })
-    @IsOptional()
-    userId: string;
+    // @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя (владелец блога)!' })
+    // @IsString({ message: 'userId должно быть строкой!' })
+    // @IsOptional()
+    // userId: string;
 }
 
 export class UpdateBlogDto {
@@ -33,32 +37,35 @@ export class UpdateBlogDto {
     @IsString({ message: 'name должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле login не должно быть пустым!' })
     // @Length(1, 15, { message: 'Длина name должена быть не меньше 1 и не больше 15 символов!' })
+    @IsStringWithTrim(1, 15)
     name: string;
     @ApiProperty({ example: 'description', description: 'Описание Блога!' })
     @IsString({ message: 'description должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле description не должно быть пустым!' })
-    @Length(1, 500, { message: 'Длина description должена быть не меньше 1 и не больше 500 символов!' })
+    // @Length(1, 500, { message: 'Длина description должена быть не меньше 1 и не больше 500 символов!' })
+    @IsStringWithTrim(1, 500)
     description: string;
     @ApiProperty({ example: 'websiteUrl', description: 'Адрес сайта URL!' })
     @IsString({ message: 'websiteUrl должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле websiteUrl не должно быть пустым!' })
-    @Length(1, 150, { message: 'Длина websiteUrl должена быть не меньше 1 и не больше 100 символов!' })
+    // @Length(1, 150, { message: 'Длина websiteUrl должена быть не меньше 1 и не больше 100 символов!' })
+    @IsStringWithTrim(1, 100)
     @IsUrl()
     websiteUrl: string;
     @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор создателя блога!' })
     @IsString({ message: 'userId должно быть строкой!' })
     @IsOptional()
     userId: string;
-    @ApiProperty({ example: 'createdAt', description: 'Дата создания!' })
-    @IsString({ message: 'createdAt должно быть строкой!' })
-    @IsOptional()
-    createdAt: string | null;
-    @ApiProperty({ example: 'updatedAt', description: 'Дата обновления!' })
-    @IsString({ message: 'updatedAt должно быть строкой!' })
-    @IsOptional()
-    updatedAt: string | null;
-    @IsOptional()
-    deletedAt: string | null;
+    // @ApiProperty({ example: 'createdAt', description: 'Дата создания!' })
+    // @IsString({ message: 'createdAt должно быть строкой!' })
+    // @IsOptional()
+    // createdAt: string | null;
+    // @ApiProperty({ example: 'updatedAt', description: 'Дата обновления!' })
+    // @IsString({ message: 'updatedAt должно быть строкой!' })
+    // @IsOptional()
+    // updatedAt: string | null;
+    // @IsOptional()
+    // deletedAt: string | null;
     @IsOptional()
     isMembership: boolean;
 

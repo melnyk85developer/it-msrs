@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import * as dotenv from 'dotenv'
+import path from 'path';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TestingModule } from './modules/testing/testing.module';
 import { BloggersPlatformModule } from './modules/bloggers-platform/bloggers-platform.module';
@@ -8,14 +11,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { TokenModule } from './modules/tokens/token.module';
 import { SessionModule } from './modules/user-sessions/sessions.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SuccessMessageInterceptor } from './core/interceptors/successMessageInterceptor';
 import { FilesModule } from './modules/files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import path from 'path';
-import * as dotenv from 'dotenv'
 import { PostForProfileModule } from './modules/posts-for-profile/posts-for-profile.module';
-import { GalleryModule } from './modules/gallery/gallery.module';
 import { PhotoModule } from './modules/gallery/photos/photos.module';
 import { MessagesModule } from './modules/user-messages/msg.module';
 import { DialogsModule } from './modules/user-messages/dialog/dialog.module';
@@ -61,8 +60,6 @@ dotenv.config({ quiet: true });
         LikeModule
     ],
     providers: [
-        // ...useCases,
-
         {
             provide: APP_INTERCEPTOR,
             useClass: SuccessMessageInterceptor,

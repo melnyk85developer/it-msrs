@@ -70,8 +70,7 @@ export const commentsE2eTest = () => {
         })
         it(`POST   - Ожидается статус код 401, - Создание комментария не авторизованным пользователем! Дополнительные запросы: -> GET`, async () => {
             const dataComment: CreateCommentInputDto = {
-                content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
+                content: contextTests.comments.contentForComments[0]
             }
             const { createdComment } = await contextTests.commentsTestManager.createComment(
                 0,
@@ -104,8 +103,7 @@ export const commentsE2eTest = () => {
                 0,
                 contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 {
-                    content: '',
-                    postId: ''
+                    content: ''
                 },
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.BAD_REQUEST_400
@@ -127,8 +125,7 @@ export const commentsE2eTest = () => {
         })
         it(`POST   - Ожидается статус код 201, - Создание комментария с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data: CreateCommentInputDto = {
-                content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
+                content: contextTests.comments.contentForComments[0]
             };
             const { createdComment, response } = await contextTests.commentsTestManager.createComment(
                 0,
@@ -156,8 +153,7 @@ export const commentsE2eTest = () => {
         })
         it(`POST   - Ожидается статус код 201, - Создание ещё одного комментария с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data: CreateCommentInputDto = {
-                content: contextTests.comments.contentBlog1Post1Comments[1],
-                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
+                content: contextTests.comments.contentForComments[1]
             }
             const { createdComment } = await contextTests.commentsTestManager.createComment(
                 0,
@@ -185,9 +181,9 @@ export const commentsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 400, - Обновление комметнатрия не валидными данными! Дополнительные запросы: -> GET`, async () => {
             const data: UpdateCommentInputDto = {
-                id: contextTests.comments.createdBlog1Post1Comments[0].id,
+                // id: contextTests.comments.createdBlog1Post1Comments[0].id,
                 content: '',
-                postId: ''
+                // postId: ''
             }
             await contextTests.commentsTestManager.updateComment(
                 contextTests.comments.createdBlog1Post1Comments[0].id,
@@ -206,9 +202,9 @@ export const commentsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего комментария!`, async () => {
             const data: UpdateCommentInputDto = {
-                id: contextTests.constants.invalidId,
-                content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
+                // id: contextTests.constants.invalidId,
+                content: contextTests.comments.contentForComments[0],
+                // postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             }
             await contextTests.commentsTestManager.updateComment(
                 contextTests.constants.invalidId,
@@ -219,9 +215,9 @@ export const commentsE2eTest = () => {
         })
         it(`PUT    - Ожидается статус код 204, - Обновление комментария с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const updatedComment: UpdateCommentInputDto = {
-                id: contextTests.comments.createdBlog1Post1Comments[0].id,
-                content: contextTests.comments.contentBlog1Post1Comments[0],
-                postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
+                // id: contextTests.comments.createdBlog1Post1Comments[0].id,
+                content: contextTests.comments.contentForComments[0],
+                // postId: contextTests.posts_for_blog.createdBlog1Posts[0]!.id
             }
             const { response: res1 } = await contextTests.commentsTestManager.updateComment(
                 contextTests.comments.createdBlog1Post1Comments[0].id,
@@ -260,22 +256,22 @@ export const commentsE2eTest = () => {
         })
         it(`DELETE - Ожидается статус код 204, - Успешное удаление обоих комметариев! Дополнительные запросы: -> GET`, async () => {
             await contextTests.commentsTestManager.deleteComment(
-                contextTests.comments.createdBlog1Post1Comments[0].id,
+                contextTests.comments.createdBlog1Post1Comments[0]!.id,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getCommentById: res1 } = await contextTests.commentsTestManager.getCommentById(
-                contextTests.comments.createdBlog1Post1Comments[0].id,
+                contextTests.comments.createdBlog1Post1Comments[0]!.id,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
             await contextTests.commentsTestManager.deleteComment(
-                contextTests.comments.createdBlog1Post1Comments[1].id,
+                contextTests.comments.createdBlog1Post1Comments[1]!.id,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getCommentById: res2 } = await contextTests.commentsTestManager.getCommentById(
-                contextTests.comments.createdBlog1Post1Comments[1].id,
+                contextTests.comments.createdBlog1Post1Comments[1]!.id,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
@@ -294,7 +290,18 @@ export const commentsE2eTest = () => {
                 })
             )
             if (res1 && res2) {
-                // Обновляем в сторе комментарий после 
+                // Зачистка контекста и подготовки сущьностей !!!
+                await contextTests.postsTestManager.deletePost(
+                    contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
+                    contextTests.constants.codedAuth,
+                    HTTP_STATUSES.NO_CONTENT_204
+                )
+                await contextTests.posts_for_blog.deletePostsForBlogStateTest(
+                    {
+                        numBlog: 0,
+                        numPost: 0,
+                    }
+                )
                 await contextTests.comments.deleteAllCommentsStateTest({
                     numBlog: 0,
                     numPost: 0,

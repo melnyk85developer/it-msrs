@@ -9,7 +9,7 @@ import { CreatePostDto } from '../../posts-dto/create-post.dto';
 export class CreatePostOneBlogCommand {
     constructor(
         public userId: string,
-        public dto: Omit<CreatePostDto, 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, 
+        public dto: Omit<CreatePostDto, 'blogId' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'blogName'>, 
         public blogId: string,
         public image?: Multer.File | null
     ) { }
@@ -27,7 +27,7 @@ export class CreatePostOneBlogUseCase
     ) { }
     async execute(command: CreatePostOneBlogCommand): Promise<string> {
         const { userId, dto, blogId, image } = command;
-        // console.log('PostsService: createPostOneBlogService: dto.blogId 😡 ELSE', blogId)
+        // console.log('CreatePostOneBlogUseCase: command.blogId 😡 ', blogId)
         const isBlog = await this.blogsRepository.findBlogOrNotFoundFailRepository(blogId);
         // console.log('PostsService: createPostOneBlogService: isBlog 😡 ELSE', isBlog)
         const post = this.PostModel.createPostInstance({

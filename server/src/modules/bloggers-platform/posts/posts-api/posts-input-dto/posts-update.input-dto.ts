@@ -1,5 +1,6 @@
 import { ApiProperty, OmitType } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
+import { IsStringWithTrim } from "src/core/decorators/validation/is-string-with-trim";
 
 export class UpdatePostInputDto {
     // @ApiProperty({ example: 'id', description: 'Идентификатор обновляемого поста!' })
@@ -7,14 +8,17 @@ export class UpdatePostInputDto {
     @ApiProperty({ example: 'title', description: 'Заголовок поста!' })
     @IsString({ message: 'title должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле title не должно быть пустым!' })
+    @IsStringWithTrim(3, 30)
     title: string;
     @ApiProperty({ example: 'shortDescription', description: 'Краткое описание!' })
     @IsString({ message: 'shortDescription должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле shortDescription не должно быть пустым!' })
+    @IsStringWithTrim(3, 100)
     shortDescription: string;
     @ApiProperty({ example: 'content', description: 'Поле content для текста поста!' })
     @IsString({ message: 'content должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле content не должно быть пустым!' })
+    @IsStringWithTrim(3, 1000)
     content: string;
     @ApiProperty({ example: 'blogId', description: 'blogId блога в котором пост создается!' })
     @IsString({ message: 'blogId должно быть строкой!' })

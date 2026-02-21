@@ -12,29 +12,52 @@ export const isCreatedComment = async (
     refreshToken: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
-    if (!contextTests.comments.createdBlog1Post1Comments.length) {
-        const commentData: CreateCommentInputDto = {
-            content,
-            postId
-        };
-        const { createdComment, response } = await contextTests.commentsTestManager.createComment(
-            numBlog,
-            numPost,
-            numComment,
-            contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
-            commentData,
-            accessToken,
-            statusCode
-        )
+    const postKey = contextTests.comments[`createdBlog${numBlog + 1}Post${numPost + 1}Comments`]
+    const isCommentTestStore = postKey[numComment + 1]
 
-        if (response.status === statusCode) {
-            // contextTests.comments.total_number_of_comments_in_tests++
-            // return contextTests.comments.createdBlog1Post1Comments.push(createdComment)
-            return createdComment;
-        } else {
-            return response.body;
-        }
+    const commentData: CreateCommentInputDto = {
+        content
+    };
+    const { createdComment, response } = await contextTests.commentsTestManager.createComment(
+        numBlog,
+        numPost,
+        numComment,
+        postId,
+        commentData,
+        accessToken,
+        statusCode
+    )
+
+    if (response.status === statusCode) {
+        // return contextTests.comments.createdBlog1Post1Comments.push(createdComment)
+        return createdComment;
     } else {
-        return null
+        return response.body;
     }
+
+    // if (isCommentTestStore === undefined || isCommentTestStore === null) {
+    //     const commentData: CreateCommentInputDto = {
+    //         content,
+    //         postId
+    //     };
+    //     const { createdComment, response } = await contextTests.commentsTestManager.createComment(
+    //         numBlog,
+    //         numPost,
+    //         numComment,
+    //         contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
+    //         commentData,
+    //         accessToken,
+    //         statusCode
+    //     )
+
+    //     if (response.status === statusCode) {
+    //         // return contextTests.comments.createdBlog1Post1Comments.push(createdComment)
+    //         return createdComment;
+    //     } else {
+    //         return response.body;
+    //     }
+    // } else {
+    //     return contextTests.comments[`createdBlog${numBlog + 1}Post${numPost + 1}Comments`][numComment]
+    //     // return null
+    // }
 }
