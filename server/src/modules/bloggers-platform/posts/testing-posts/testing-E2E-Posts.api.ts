@@ -279,7 +279,8 @@ export const postsE2eTest = () => {
         it(`DELETE - Ожидается статус код 204, - Успешное удаление обоих постов! Дополнительные запросы: -> GET`, async () => {
             await contextTests.postsTestManager.deletePost(
                 contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
-                contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                // contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getPostsById: res1 } = await contextTests.postsTestManager.getPostsById(
@@ -290,7 +291,8 @@ export const postsE2eTest = () => {
             )
             await contextTests.postsTestManager.deletePost(
                 contextTests.posts_for_blog.createdBlog1Posts[1]!.id,
-                contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                // contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getPostsById: res2 } = await contextTests.postsTestManager.getPostsById(

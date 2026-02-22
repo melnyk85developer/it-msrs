@@ -94,7 +94,7 @@ export class CommentsTestManager {
     ) {
         const response = await request(this.app.getHttpServer())
             .get(SETTINGS.RouterPath.comments)
-            // .set('User-Agent', 'TestDevice/1.0')
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode)
@@ -129,7 +129,7 @@ export class CommentsTestManager {
 
         const response = await request(this.app.getHttpServer())
             .post(`${SETTINGS.RouterPath.posts}/${postId}/comments`)
-            // .set('User-Agent', 'TestDevice/1.0')
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .send(dataComment)
             .expect(expectedStatusCode)
@@ -174,7 +174,7 @@ export class CommentsTestManager {
         // console.log('commetsTestManager: updatePosts: - commentId REQ', commentId)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.comments}/${commentId}`)
-            // .set('User-Agent', 'TestDevice/1.0')
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode)
@@ -190,7 +190,7 @@ export class CommentsTestManager {
         // console.log('commetsTestManager: deleteComment: - commentId', commentId)
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.comments}/${commentId}`)
-            // .set('User-Agent', 'TestDevice/1.0')
+            .set('User-Agent', 'TestDevice/1.0')
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(expectedStatusCode)
 

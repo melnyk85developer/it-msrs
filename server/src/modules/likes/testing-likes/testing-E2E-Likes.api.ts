@@ -489,7 +489,7 @@ export const likesE2eTest = () => {
             const { getAllPostsByIdBlog } = await contextTests.postsTestManager.getAllPostsByIdBlog(
                 contextTests.blogs.createdBlogs[0]!.id,
                 contextTests.constants.codedAuth,
-                contextTests.sessions.accessTokenUser2Devices[0],
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             // console.log('TEST: - getAllPostsByIdBlog.items 😡 ', getAllPostsByIdBlog.items)
@@ -524,7 +524,7 @@ export const likesE2eTest = () => {
             await isCreatedPostLike(
                 contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 'Like',
-                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.accessTokenUser4Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             await isCreatedPostLike(
@@ -542,13 +542,13 @@ export const likesE2eTest = () => {
             await isCreatedPostLike(
                 contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 'Like',
-                contextTests.sessions.accessTokenUser4Devices[0],
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getAllPostsByIdBlog: res2 } = await contextTests.postsTestManager.getAllPostsByIdBlog(
                 contextTests.blogs.createdBlogs[0]!.id,
                 contextTests.constants.codedAuth,
-                contextTests.sessions.accessTokenUser3Devices[0],
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(res2.items[0].extendedLikesInfo.newestLikes.length).toBe(3)
@@ -599,7 +599,7 @@ export const likesE2eTest = () => {
             await isCreatedPostLike(
                 contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 'Dislike',
-                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.accessTokenUser2Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             await isCreatedPostLike(
@@ -611,7 +611,7 @@ export const likesE2eTest = () => {
             const { getAllPostsByIdBlog: res4 } = await contextTests.postsTestManager.getAllPostsByIdBlog(
                 contextTests.blogs.createdBlogs[0]!.id,
                 contextTests.constants.codedAuth,
-                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.accessTokenUser2Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(res4.items.length)
@@ -636,7 +636,7 @@ export const likesE2eTest = () => {
                     extendedLikesInfo: {
                         likesCount: 3,
                         dislikesCount: 1,
-                        myStatus: 'Dislike',
+                        myStatus: 'None',
                         newestLikes: [
                             {
                                 addedAt: expect.any(String),
@@ -645,13 +645,13 @@ export const likesE2eTest = () => {
                             },
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[3]!.id,
-                                login: contextTests.users.createdUsers[3]!.login
+                                userId: contextTests.users.createdUsers[0]!.id,
+                                login: contextTests.users.createdUsers[0]!.login
                             },
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[1]!.id,
-                                login: contextTests.users.createdUsers[1]!.login
+                                userId: contextTests.users.createdUsers[3]!.id,
+                                login: contextTests.users.createdUsers[3]!.login
                             },
                         ]
                     },
@@ -662,6 +662,12 @@ export const likesE2eTest = () => {
                 contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
                 'Like',
                 contextTests.sessions.accessTokenUser2Devices[0],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            await isCreatedPostLike(
+                contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
+                'Dislike',
+                contextTests.sessions.accessTokenUser3Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             const { getAllPostsByIdBlog: res5 } = await contextTests.postsTestManager.getAllPostsByIdBlog(
@@ -694,7 +700,7 @@ export const likesE2eTest = () => {
                     extendedLikesInfo: {
                         likesCount: 3,
                         dislikesCount: 1,
-                        myStatus: 'Dislike',
+                        myStatus: 'None',
                         newestLikes: [
                             {
                                 addedAt: expect.any(String),
@@ -703,8 +709,8 @@ export const likesE2eTest = () => {
                             },
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[2]!.id,
-                                login: contextTests.users.createdUsers[2]!.login
+                                userId: contextTests.users.createdUsers[0]!.id,
+                                login: contextTests.users.createdUsers[0]!.login
                             },
 
                             {

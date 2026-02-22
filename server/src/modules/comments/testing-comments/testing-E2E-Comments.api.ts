@@ -293,7 +293,8 @@ export const commentsE2eTest = () => {
                 // Зачистка контекста и подготовки сущьностей !!!
                 await contextTests.postsTestManager.deletePost(
                     contextTests.posts_for_blog.createdBlog1Posts[0]!.id,
-                    contextTests.constants.codedAuth,
+                    contextTests.sessions.accessTokenUser1Devices[0],
+                    // contextTests.constants.codedAuth,
                     HTTP_STATUSES.NO_CONTENT_204
                 )
                 await contextTests.posts_for_blog.deletePostsForBlogStateTest(

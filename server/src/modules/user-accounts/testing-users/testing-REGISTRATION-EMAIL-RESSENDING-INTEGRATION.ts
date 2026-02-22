@@ -20,6 +20,7 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
             const { createdEntity, response } = await contextTests.usersTestManager.createUser(
                 data,
                 contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {

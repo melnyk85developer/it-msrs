@@ -70,8 +70,8 @@ export class PostsTestManager {
         const response = await request(this.app.getHttpServer())
             .post(SETTINGS.RouterPath.posts)
             .set('User-Agent', 'TestDevice/1.0')
-            .set('Authorization', `Basic ${codedAuth}`)
-            // .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             // .set('Cookie', `refreshToken=${refreshToken}`)
             .send(data)
             .expect(expectedStatusCode)
@@ -116,8 +116,8 @@ export class PostsTestManager {
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.posts}/${id}`)
             // .set('User-Agent', 'TestDevice/1.0')
-            // .set('Authorization', `Bearer ${accessToken}`)
-            .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .send(data)
             .expect(expectedStatusCode)
         // if (response.status === expectedStatusCode) {
@@ -131,15 +131,15 @@ export class PostsTestManager {
     }
     async deletePost(
         postId: string,
-        codedAuth: string | undefined = undefined,
-        // accessToken: string | undefined = undefined,
+        accessToken: string | undefined = undefined,
+        // codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204
     ) {
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.posts}/${postId}`)
             // .set('User-Agent', 'TestDevice/1.0')
-            // .set('Authorization', `Bearer ${accessToken}`)
-            .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .expect(expectedStatusCode)
 
         let deletedPost;

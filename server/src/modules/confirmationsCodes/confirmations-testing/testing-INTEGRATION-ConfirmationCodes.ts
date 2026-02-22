@@ -18,6 +18,7 @@ describe('CONFIRMATION-CODE-INTEGRATION', () => {
         const { response, createdEntity } = await contextTests.usersTestManager.createUser(
             userData1,
             contextTests.constants.codedAuth,
+            contextTests.sessions.accessTokenUser1Devices[0],
             HTTP_STATUSES.CREATED_201
         )
         if (response.status === HTTP_STATUSES.CREATED_201) {

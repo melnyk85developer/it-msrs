@@ -12,13 +12,16 @@ export class UsersTestManager {
 
     async getAllUsers(
         params: GetUsersQueryParams | null,
+        access: string | null,
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         const response = await request(this.app.getHttpServer())
             .get(`${SETTINGS.RouterPath.users}`)
             // .get(params !== null ? `${SETTINGS.RouterPath.users}${params}` : `${SETTINGS.RouterPath.users}`)
             .set('User-Agent', 'TestDevice/1.0')
-            .set('Authorization', `Basic ${codedAuth}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${access}`)
+            // .set('Cookie', `refreshToken=${refresh}`)
             .expect(expectedStatusCode)
         // console.log('usersTestManager - res 😡', response.body)
         return { response: response, getAllUsers: response.body }
@@ -40,14 +43,15 @@ export class UsersTestManager {
     }
     async createUser(
         data: CreateUserInputDto,
-        // accessToken: string | undefined = undefined,
-        codedAuth: string | undefined = undefined,
+        accessToken: string,
+        codedAuth: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
+        console.log('UsersTestManager - accessToken 😡👽😡👽😡 req', accessToken)
         // console.log('UsersTestManager - data 😡👽😡👽😡 req', data)
         const response = await request(this.app.getHttpServer())
             .post(`${SETTINGS.RouterPath.users}`)
-            .set('User-Agent', 'TestDevice/1.0')
-            .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .send(data)
             .expect(expectedStatusCode)
 
@@ -79,13 +83,15 @@ export class UsersTestManager {
     async updateUser(
         id: string,
         data: Omit<UpdateUserInputDto, 'id' | 'isEmailConfirmed' | 'lastSeen' | 'avatar'>,
+        accessToken: string,
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204) {
         // console.log('usersTestManager - updateUser data, codedAuth', data, codedAuth)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.users}/${id}`)
             // .set('User-Agent', 'TestDevice/1.0')
-            .set('Authorization', `Basic ${codedAuth}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .send(data)
             .expect(expectedStatusCode)
         let updateUser
@@ -104,14 +110,14 @@ export class UsersTestManager {
     }
     async deleteUser(
         id: string,
-        // accessToken: string | undefined = undefined,
+        accessToken: string | undefined = undefined,
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.users}/${id}`)
             .set('User-Agent', 'TestDevice/1.0')
-            .set('Authorization', `Basic ${codedAuth}`)
-            // .set('Authorization', `Bearer ${accessToken}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            // .set('Authorization', `Basic ${codedAuth}`)
             .expect(expectedStatusCode)
         // console.log('usersTestManager - res', response.body)
         return { response: response, deleteUser: response.body }
@@ -127,7 +133,11 @@ export class UsersTestManager {
                 password: `password${i}`,
                 email: `webmars${i}@mars.com`,
                 isBot: true
-            }, accessToken, HTTP_STATUSES.CREATED_201)
+            },
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                HTTP_STATUSES.CREATED_201
+            )
             users.push(createdEntity)
 
         }

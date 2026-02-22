@@ -11,6 +11,7 @@ export const usersE2eTest = () => {
 
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )
@@ -38,12 +39,14 @@ export const usersE2eTest = () => {
             }
             await contextTests.usersTestManager.createUser(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
                 contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -65,6 +68,7 @@ export const usersE2eTest = () => {
             const { createdEntity, response } = await contextTests.usersTestManager.createUser(
                 data,
                 contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {
@@ -94,6 +98,7 @@ export const usersE2eTest = () => {
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
                 contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -115,6 +120,7 @@ export const usersE2eTest = () => {
             const { createdEntity, response } = await contextTests.usersTestManager.createUser(
                 data,
                 contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {
@@ -144,6 +150,7 @@ export const usersE2eTest = () => {
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
                 contextTests.constants.codedAuth,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(getAllUsers).toEqual(
@@ -165,6 +172,7 @@ export const usersE2eTest = () => {
             await contextTests.usersTestManager.updateUser(
                 contextTests.users.createdUsers[0]!.id,
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.BAD_REQUEST_400
             )
@@ -187,6 +195,7 @@ export const usersE2eTest = () => {
             await contextTests.usersTestManager.updateUser(
                 contextTests.constants.invalidId,
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NOT_FOUND_404
             )
@@ -201,6 +210,7 @@ export const usersE2eTest = () => {
             const { response: res } = await contextTests.usersTestManager.updateUser(
                 contextTests.users.createdUsers[0]!.id,
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
@@ -238,6 +248,7 @@ export const usersE2eTest = () => {
         it(`DELETE - Ожидается статус код 204, - Успешное удаление обоих пользователей! Дополнительные запросы: -> GET`, async () => {
             await contextTests.usersTestManager.deleteUser(
                 contextTests.users.createdUsers[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
@@ -247,6 +258,7 @@ export const usersE2eTest = () => {
             )
             await contextTests.usersTestManager.deleteUser(
                 contextTests.users.createdUsers[1]!.id,
+                contextTests.sessions.accessTokenUser2Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
@@ -256,6 +268,7 @@ export const usersE2eTest = () => {
             )
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.OK_200
             )

@@ -17,6 +17,8 @@ import { CreateUserCommand } from '../users-application/user-use-cases/create-us
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateUserCommand } from '../users-application/user-use-cases/update-user.use-case';
 import { DeleteUserCommand } from '../users-application/user-use-cases/delete-user.use-case';
+import { JwtOptionalAuthGuard } from '../users-guards/bearer/jwt-optional-auth.guard';
+import { ExtractUserIfExistsFromRequest } from '../users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
 @Controller('/users')
 export class UsersController {
@@ -27,7 +29,8 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Создать пользователя!' })
     @ApiResponse({ status: 201 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(AuthAccessGuard)
+    // @UseGuards(BasicAuthGuard)
     @Post('/')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async createUserController(
@@ -40,12 +43,13 @@ export class UsersController {
         const userId = await this.commandBus.execute<CreateUserCommand, string>(
             new CreateUserCommand(body, avatar),
         );
-        // console.log('UsersController: createUserController - RES userId 😡 ', userId)
+        console.log('UsersController: createUserController - RES userId 😡 ', userId)
         return this.usersQueryRepository.getUserByIdOrNotFoundFail(userId);
     }
     @ApiOperation({ summary: 'Обновить пользователя по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
+    @UseGuards(AuthAccessGuard)
     // @UseGuards(BasicAuthGuard)
     @Put('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
@@ -67,7 +71,8 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 204 })
     @ApiResponse({ status: 404 })
-    @UseGuards(BasicAuthGuard)
+    @UseGuards(AuthAccessGuard)
+    // @UseGuards(BasicAuthGuard)
     @Delete('/:id')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteUserController(@Param('id') id: string): Promise<void> {
@@ -78,7 +83,7 @@ export class UsersController {
     }
     @ApiOperation({ summary: 'Получить всех пользователей!' })
     @ApiResponse({ status: 200 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
     @Get('/')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllUsersController(@Query() query: GetUsersQueryParams): Promise<PaginatedViewDto<UserViewDto[]>> {
@@ -90,7 +95,10 @@ export class UsersController {
     @UseGuards(AuthAccessGuard)
     @Get('/profile/:userId')
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getProfileController(@Param('userId') userId: string, @ExtractUserFromRequest() user: UserContextDto): Promise<UserProfileViewDto> {
+    async getProfileController(
+        @Param('userId') userId: string,
+        @ExtractUserFromRequest() user: UserContextDto
+    ): Promise<UserProfileViewDto> {
         // console.log('UsersController: getProfileController - user 😡😡😡😡😡 ', user)
         // console.log('UsersController: getProfileController - userId 😡😡😡😡😡 ', userId)
         return await this.usersQueryRepository.getProfileQueryRepository(userId)
@@ -98,9 +106,13 @@ export class UsersController {
     @ApiOperation({ summary: 'Получить пользователя по id.' })
     @ApiParam({ name: 'id' })
     @ApiResponse({ status: 200 })
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/:id')
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getUserByIdController(@Param('id') id: string): Promise<UserViewDto> {
+    async getUserByIdController(
+        @Param('id') id: string,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
+    ): Promise<UserViewDto> {
         // console.log('UsersController: getUserByIdController - id 😡 ', id)
         return this.usersQueryRepository.getUserByIdOrNotFoundFail(String(id));
     }
