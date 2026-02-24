@@ -50,8 +50,8 @@ export class UsersTestManager {
         // console.log('UsersTestManager - data 😡👽😡👽😡 req', data)
         const response = await request(this.app.getHttpServer())
             .post(`${SETTINGS.RouterPath.users}`)
-            .set('Authorization', `Bearer ${accessToken}`)
-            // .set('Authorization', `Basic ${codedAuth}`)
+            // .set('Authorization', `Bearer ${accessToken}`)
+            .set('Authorization', `Basic ${codedAuth}`)
             .send(data)
             .expect(expectedStatusCode)
 
@@ -70,7 +70,7 @@ export class UsersTestManager {
                         id: expect.any(String),
                         login: data.login,
                         email: data.email,
-                        // avatar: null,
+                        avatar: null,
                         // name: null,
                         // surname: null,
                         // isBot: expect.any(Boolean),

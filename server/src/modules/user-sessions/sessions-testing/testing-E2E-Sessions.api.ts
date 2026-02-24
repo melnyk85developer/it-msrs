@@ -192,12 +192,7 @@ export const userSessionE2eTest = () => {
             if (response.status === HTTP_STATUSES.NO_CONTENT_204) {
                 // console.log('contextTests.total_count_sessions_user1', contextTests.sessions.total_count_sessions_user1)
                 // Удаляем в тест-сторе все сессии кроме текущей, а так же токены после удачного посещения deleteUserSessions!
-                await contextTests.sessions.deleteAllSessionStateTest({
-                    numUser: 0,
-                    numDevice: 0,
-                    accessToken: contextTests.sessions.accessTokenUser1Devices[0],
-                    refreshToken: contextTests.sessions.refreshTokenUser1Devices[0]
-                })
+                await contextTests.sessions.clearAllSessionsStateTest()
                 // console.log('contextTests.total_count_sessions_user1', contextTests.sessions.total_count_sessions_user1)
             }
         })

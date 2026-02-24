@@ -10,6 +10,8 @@ export const resetPasswordInegrationTest = () => {
         const isoDateRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/i;
         beforeEach(async () => {
             await deleteAllData(contextTests.app);
+            await contextTests.users.deleteAllUsersStateTest();
+            await contextTests.sessions.clearAllSessionsStateTest();
             // Добавить отчистку контекста!
             const data: CreateUserInputDto = {
                 login: contextTests.users.correctUserNames[0],
@@ -18,8 +20,8 @@ export const resetPasswordInegrationTest = () => {
             }
             const { createdEntity, response } = await contextTests.usersTestManager.createUser(
                 data,
-                contextTests.constants.codedAuth,
                 contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.CREATED_201
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {

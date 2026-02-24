@@ -8,7 +8,7 @@ export class CreateUserInputDto {
     @ApiProperty({ example: 'login', description: 'Samuray - Логин пользователя!' })
     @IsString({ message: 'login должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле login не должно быть пустым!' })
-    @Length(3, 10, { message: 'Длина логина должена быть не меньше 3 и не больше 20 символов!' })
+    @Length(3, 20, { message: 'Длина логина должена быть не меньше 3 и не больше 20 символов!' })
     readonly login: string;
     @ApiProperty({ example: 'user@gmail.com', description: 'Почтовый адрес' })
     @IsString({ message: 'Email должен быть строкой!' })

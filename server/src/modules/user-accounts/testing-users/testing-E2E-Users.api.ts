@@ -5,10 +5,13 @@ import { CreateUserInputDto } from '../users-dto/users.input-dto';
 
 export const usersE2eTest = () => {
     describe('E2E-USERS', () => {
-        it('GET    - Ожидается статус код 200, - Ожидается пустой массив пользователей!', async () => {
+        beforeAll(async () => {
             await deleteAllData(contextTests.app);
-            contextTests.users.deleteAllUsersStateTest();
-
+            await contextTests.users.deleteAllUsersStateTest();
+            await contextTests.sessions.clearAllSessionsStateTest();
+            // console.log('TEST: -  😡')
+        })
+        it('GET    - Ожидается статус код 200, - Ожидается пустой массив пользователей!', async () => {
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(
                 contextTests.userParams,
                 contextTests.sessions.accessTokenUser1Devices[0],
@@ -67,8 +70,8 @@ export const usersE2eTest = () => {
             }
             const { createdEntity, response } = await contextTests.usersTestManager.createUser(
                 data,
-                contextTests.constants.codedAuth,
                 contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.CREATED_201
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {
@@ -119,8 +122,8 @@ export const usersE2eTest = () => {
             }
             const { createdEntity, response } = await contextTests.usersTestManager.createUser(
                 data,
-                contextTests.constants.codedAuth,
                 contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.constants.codedAuth,
                 HTTP_STATUSES.CREATED_201
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {

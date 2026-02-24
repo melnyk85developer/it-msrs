@@ -7,7 +7,7 @@ export class CreateUserDto {
     @ApiProperty({ example: 'login', description: 'Samuray - Логин пользователя!' })
     @IsString({ message: 'login должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле login не должно быть пустым!' })
-    @Length(3, 10, { message: 'Длина логина должена быть не меньше 2 и не больше 10 символов!' })
+    @Length(3, 20, { message: 'Длина логина должена быть не меньше 2 и не больше 10 символов!' })
     readonly login: string;
     @ApiProperty({ example: 'user@gmail.com', description: 'Почтовый адрес' })
     @IsString({ message: 'Email должен быть строкой!' })

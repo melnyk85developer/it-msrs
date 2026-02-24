@@ -75,7 +75,7 @@ export class SessionContextClass {
         refreshToken: string;
     }) {
         // console.log('SessionContextClass: saveSessionStateTest - 👽😡👽 numUser, numDevice, accessToken, refreshToken', numUser, numDevice, accessToken, refreshToken)
-        
+
         const accessTokenKey = `accessTokenUser${numUser + 1}Devices`;
         const refreshTokenKey = `refreshTokenUser${numUser + 1}Devices`;
         const sessionsKey = `sessionsUser${numUser + 1}`;
@@ -171,21 +171,28 @@ export class SessionContextClass {
         this[accessKey] = updatedAccessTokens
         this[refreshKey] = updatedRefreshTokens
         this[sessionKey] = updatedSessions
-        this.total_count_sessions_user1 --
+        this.total_count_sessions_user1--
     }
-    public async deleteAllSessionStateTest({ numUser, numDevice, accessToken, refreshToken, userId }: {
-        numUser: number;
-        numDevice: number;
-        accessToken: string;
-        refreshToken: string;
-        userId?: string;
-    }) {
+    public async clearAllSessionsStateTest() {
 
-        this[`accessTokenUser${numUser + 1}Devices`] = [this[`accessTokenUser${numUser + 1}Devices`][numDevice]]
-        this[`refreshTokenUser${numUser + 1}Devices`] = [this[`refreshTokenUser${numUser + 1}Devices`][numDevice]]
+        this[`accessTokenUser${1}Devices`] = []
+        this[`refreshTokenUser${1}Devices`] = []
+        this[`sessionsUser${1}`] = []
+        this.total_count_sessions_user1 = 0
 
-        this[`sessionsUser${numUser + 1}`] = [this[`sessionsUser${numUser + 1}`][numDevice]]
+        this[`accessTokenUser${2}Devices`] = []
+        this[`refreshTokenUser${2}Devices`] = []
+        this[`sessionsUser${2}`] = []
+        this.total_count_sessions_user2 = 0
 
-        this.total_count_sessions_user1 = this[`sessionsUser${numUser + 1}`].length
+        this[`accessTokenUser${3}Devices`] = []
+        this[`refreshTokenUser${3}Devices`] = []
+        this[`sessionsUser${3}`] = []
+        this.total_count_sessions_user3 = 0
+
+        this[`accessTokenUser${4}Devices`] = []
+        this[`refreshTokenUser${4}Devices`] = []
+        this[`sessionsUser${4}`] = []
+        this.total_count_sessions_user4 = 0
     }
 }

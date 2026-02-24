@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import * as dotenv from 'dotenv'
 import path from 'path';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -19,26 +18,21 @@ import { PhotoModule } from './modules/gallery/photos/photos.module';
 import { MessagesModule } from './modules/user-messages/msg.module';
 import { DialogsModule } from './modules/user-messages/dialog/dialog.module';
 import { LikeModule } from './modules/likes/likes.module';
-
-dotenv.config({ quiet: true });
+import { configModule } from './config-dynamic-module';
 
 @Module({
     imports: [
         // 1. Настраиваем ConfigModule ПЕРВЫМ
-        ConfigModule.forRoot({
-            isGlobal: true,
-            // Логика выбора файла правильная, оставляем, но она будет работать в связке
-            envFilePath: process.env.NODE_ENV === 'development' ? '.dev.env' : '.test.env'
-        }),
+        configModule,
         // 2. Mongoose подключаем АСИНХРОННО. 
         // Он будет ждать, пока ConfigModule прочитает нужный файл.
         MongooseModule.forRootAsync({
             imports: [ConfigModule],
-            inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
                 // Читаем URL базы из переменных, а не хардкодим здесь
                 uri: configService.get<string>('DB_URL'),
             }),
+            inject: [ConfigService],
         }),
 
         ServeStaticModule.forRoot({
