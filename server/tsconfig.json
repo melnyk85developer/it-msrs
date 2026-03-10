@@ -17,14 +17,16 @@
     "paths": {
       "src/*": [
         "./src/*"
-      ]
+      ],
+      "@modules/*": ["./src/modules/*"],
+      "@core/*": ["./src/core/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   }
 }

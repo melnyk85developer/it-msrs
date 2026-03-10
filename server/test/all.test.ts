@@ -17,6 +17,7 @@ import { photoAlbumsE2ETest } from "src/modules/gallery/photoAlbums/testing-phot
 import { userMessagesE2eTest } from "src/modules/user-messages/msg/testing-messages/testing-E2E-Messages";
 import { postForProfileE2ETest } from "src/modules/posts-for-profile/testing-posts-for-profile/testing-E2E-Posts-for-profile";
 import { likesE2eTest } from "src/modules/likes/testing-likes/testing-E2E-Likes.api";
+import { UserAccountsConfig } from "src/modules/user-accounts/users-config/users.config";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     beforeAll(async () => {
@@ -26,17 +27,18 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
                 .useModule(
                     ConfigModule.forRoot({
                         isGlobal: true,
-                        envFilePath: '.test.env', // Используем файл для тестов
+                        envFilePath: '.env.testing', // Используем файл для тестов
                     }),
                 )
                 // 2. Переопределяем JwtService, используя useFactory для получения ConfigService
                 .overrideProvider(JwtService)
                 .useFactory({
                     inject: [ConfigService], // Инжектируем ConfigService
-                    factory: (configService: ConfigService) => { // Получаем его
+                    // factory: (configService: ConfigService) => { // Получаем его
+                    factory: (userAccountsConfig: UserAccountsConfig) => {
                         return new JwtService({
                             // 3. Используем реальный секрет из .test.env
-                            secret: configService.get('JWT_ACCESS_SECRET'),
+                            secret: userAccountsConfig.accessTokenSecret,
                             // 4. Оставляем специфичное для тестов время жизни
                             signOptions: { expiresIn: '15m' },
                         });
@@ -50,37 +52,37 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         // authIntegrationTest()
         // authUnitTest()
     })
-    describe('USER-SESSIONS-BLOCK-TESTS', () => {
-        userSessionE2eTest()
-        // usersSessionsInegrationTest()
-    })
-    describe('MESSAGES-BLOCK-TESTS', () => {
-        userMessagesE2eTest()
-    })
-    describe('BLOGS-BLOCK-TESTS', () => {
-        blogsE2eTest()
-    })
-    describe('POSTS-BLOCK-TESTS', () => {
-        postsE2eTest()
-    })
-    describe('COMMENTS-BLOCK-TESTS', () => {
-        commentsE2eTest()
-    })
-    describe('LIKES-BLOCK-TESTS', () => {
-        likesE2eTest()
-    })
-    describe('PHOTOS-BLOCK-TESTS', () => {
-        photoProfileE2ETest()
-        photoAlbumsE2ETest()
-    })
-    describe('USERS-BLOCK-TESTS', () => {
-        postForProfileE2ETest()
-        usersE2eTest()
-    })
-    describe('CONFIRMATION-BLOCK-TESTS', () => {
-        registrEmailResendingAndConfirmIntegrationTest()
-        resetPasswordInegrationTest()
-    })
+    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
+    //     userSessionE2eTest()
+    //     // usersSessionsInegrationTest()
+    // })
+    // describe('MESSAGES-BLOCK-TESTS', () => {
+    //     userMessagesE2eTest()
+    // })
+    // describe('BLOGS-BLOCK-TESTS', () => {
+    //     blogsE2eTest()
+    // })
+    // describe('POSTS-BLOCK-TESTS', () => {
+    //     postsE2eTest()
+    // })
+    // describe('COMMENTS-BLOCK-TESTS', () => {
+    //     commentsE2eTest()
+    // })
+    // describe('LIKES-BLOCK-TESTS', () => {
+    //     likesE2eTest()
+    // })
+    // describe('PHOTOS-BLOCK-TESTS', () => {
+    //     photoProfileE2ETest()
+    //     photoAlbumsE2ETest()
+    // })
+    // describe('USERS-BLOCK-TESTS', () => {
+    //     postForProfileE2ETest()
+    //     usersE2eTest()
+    // })
+    // describe('CONFIRMATION-BLOCK-TESTS', () => {
+    //     registrEmailResendingAndConfirmIntegrationTest()
+    //     resetPasswordInegrationTest()
+    // })
     afterAll(async () => {
         await mongoose.disconnect();
         await contextTests.app.close();

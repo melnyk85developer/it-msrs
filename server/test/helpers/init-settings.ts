@@ -27,6 +27,7 @@ import { UserMessagesTestManager } from './messages-test-manager';
 import { UserRegistrationCommand } from 'src/modules/auth/auth-application/auth-use-cases/registration-use-case';
 import { CommandBus } from '@nestjs/cqrs';
 import { PostsForProfileTestManager } from './posts-for-profile-test-manager';
+import { CoreConfig } from 'src/core/core.config';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -48,17 +49,18 @@ export const initSettings = async (
     const testingAppModule = await testingModuleBuilder.compile();
 
     contextTests.app = testingAppModule.createNestApplication();
-    appSetup(contextTests.app);
+    const coreConfig = contextTests.app.get<CoreConfig>(CoreConfig);
+    appSetup(contextTests.app, coreConfig.isSwaggerEnabled);
     await contextTests.app.init();
 
     contextTests.databaseConnection = contextTests.app.get<Connection>(getConnectionToken());
     contextTests.httpServer = contextTests.app.getHttpServer();
-    
+
     contextTests.сommandBus = testingAppModule.get<CommandBus>(CommandBus);
 
     contextTests.mailService = contextTests.app.get<EmailService>(EmailService);
     contextTests.tokenService = contextTests.app.get<TokenService>(TokenService);
-    
+
     contextTests.authServices = contextTests.app.get<AuthService>(AuthService);
     contextTests.usersRepository = contextTests.app.get<UsersRepository>(UsersRepository);
     contextTests.sessiosRepository = contextTests.app.get<SessionsRepository>(SessionsRepository);
@@ -72,7 +74,7 @@ export const initSettings = async (
     contextTests.likesTestManager = new LikesTestManager(contextTests.app);
     contextTests.postsTestManager = new PostsTestManager(contextTests.app);
     contextTests.postsForProfileTestManager = new PostsForProfileTestManager(contextTests.app);
-    
+
     contextTests.userSessionTestManager = new UserSessionTestManager(contextTests.app);
     contextTests.userMessagesTestManager = new UserMessagesTestManager(contextTests.app);
     contextTests.usersTestManager = new UsersTestManager(contextTests.app);
