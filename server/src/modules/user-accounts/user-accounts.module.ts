@@ -21,8 +21,7 @@ import { SessionModule } from '../user-sessions/sessions.module';
 import { ConfirmationModule } from '../confirmationsCodes/confirmation-module';
 import { IsBlockedEmailResendingService } from 'src/core/utils/blocked-utilite';
 import { FilesService } from '../files/files.service';
-import { AdminController } from './users-api/admin.controller';
-import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
+// import { AdminService } from '../notifications/service/adminSrvice/adminSrvice';
 import { UserRegistrationUseCase } from '../auth/auth-application/auth-use-cases/registration-use-case';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UserLoginUseCase } from '../auth/auth-application/auth-use-cases/login-use-case';
@@ -77,7 +76,7 @@ const useCases = [
     ],
     controllers: [
         AuthController,
-        AdminController,
+        // AdminController,
         UsersController
     ],
     providers: [
@@ -86,7 +85,7 @@ const useCases = [
         UsersQueryRepository,
 
         AuthService,
-        AdminService,
+        // AdminService,
         AuthQueryRepository,
 
         LocalStrategy,
@@ -109,7 +108,7 @@ const useCases = [
         JwtStrategy,
         AuthQueryRepository,
         FilesService,
-        AdminService
+        // AdminService
     ],
 })
 export class UserAccountsModule { }

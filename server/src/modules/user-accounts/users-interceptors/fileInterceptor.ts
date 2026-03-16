@@ -2,7 +2,7 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler, NotFoundExc
 import { Observable } from 'rxjs';
 import * as path from 'path';
 import { Request } from 'express';
-import { AdminService } from 'src/modules/notifications/service/adminSrvice/adminSrvice';
+import { AdminService } from 'src/modules/admin/admin-application/admin-query-service';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 

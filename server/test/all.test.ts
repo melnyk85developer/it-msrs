@@ -18,8 +18,11 @@ import { userMessagesE2eTest } from "src/modules/user-messages/msg/testing-messa
 import { postForProfileE2ETest } from "src/modules/posts-for-profile/testing-posts-for-profile/testing-E2E-Posts-for-profile";
 import { likesE2eTest } from "src/modules/likes/testing-likes/testing-E2E-Likes.api";
 import { UserAccountsConfig } from "src/modules/user-accounts/users-config/users.config";
+import { join } from "path";
+import { CoreConfig } from "src/core/core.config";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
+
     beforeAll(async () => {
         const result = await initSettings((moduleBuilder) =>
             moduleBuilder
@@ -47,15 +50,16 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         );
         // contextTests.app = result.app;
     });
+
     describe('AUTH-BLOCK-TESTS', () => {
         authE2eTest()
         // authIntegrationTest()
         // authUnitTest()
     })
-    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
-    //     userSessionE2eTest()
-    //     // usersSessionsInegrationTest()
-    // })
+    describe('USER-SESSIONS-BLOCK-TESTS', () => {
+        userSessionE2eTest()
+        // usersSessionsInegrationTest()
+    })
     // describe('MESSAGES-BLOCK-TESTS', () => {
     //     userMessagesE2eTest()
     // })
@@ -83,9 +87,9 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     //     registrEmailResendingAndConfirmIntegrationTest()
     //     resetPasswordInegrationTest()
     // })
-    afterAll(async () => {
-        await mongoose.disconnect();
-        await contextTests.app.close();
-    });
+    // afterAll(async () => {
+    //     await mongoose.disconnect();
+    //     await contextTests.app.close();
+    // });
 })
 

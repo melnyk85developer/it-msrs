@@ -20,6 +20,7 @@ import { DialogsModule } from './modules/user-messages/dialog/dialog.module';
 import { LikeModule } from './modules/likes/likes.module';
 import { configModule } from './config-dynamic-module';
 import { CoreConfig } from './core/core.config';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
     imports: [
@@ -50,6 +51,7 @@ import { CoreConfig } from './core/core.config';
             rootPath: path.join(process.cwd(), 'static'),
             serveRoot: '/',
         }),
+        AdminModule,
         NotificationsModule,
         UserAccountsModule,
         BloggersPlatformModule,
