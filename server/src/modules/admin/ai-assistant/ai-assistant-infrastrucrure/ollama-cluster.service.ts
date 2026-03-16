@@ -1,55 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class OllamaClusterService {
+    private readonly logger = new Logger(OllamaClusterService.name);
     private readonly nodes: string[];
 
     constructor(
         private readonly httpService: HttpService,
         private readonly configService: ConfigService
-
     ) {
-        // Добавляем fallback на пустой массив, если переменная не задана
-        this.nodes = this.configService.get<string[]>('AI_NODES') || [];
+        // Убедись, что в .env переменная AI_NODES — это JSON-строка массива или через запятую
+        const nodesConfig = this.configService.get<any>('AI_NODES');
+        this.nodes = Array.isArray(nodesConfig) ? nodesConfig : (nodesConfig?.split(',') || []);
+        this.logger.log(`Initialized AI Cluster with nodes: ${this.nodes.join(', ')}`);
     }
-    async sendToNode(nodeIndex: string, prompt: string) {
-        const nodeUrl = this.nodes[nodeIndex];
-        const { data } = await firstValueFrom(
-            this.httpService.post(`${nodeUrl}/api/generate`, {
-                model: 'gpt-oss',
-                prompt,
-                stream: false
-            })
-        );
-        return data.response;
-    }
-    async healthCheck(nodeIndex: number): Promise<boolean> {
-        const nodeUrl = this.nodes[nodeIndex];
+
+    async sendToNode(nodeUrl: string, prompt: string) {
         try {
-            // Простой GET-запрос к корню Ollama
-            await firstValueFrom(this.httpService.get(nodeUrl));
-            return true;
+            this.logger.log(`Sending prompt to node: ${nodeUrl}`);
+            const { data } = await firstValueFrom(
+                this.httpService.post(`${nodeUrl}/api/generate`, {
+                    model: 'gpt-oss', // Убедись, что эта модель скачана на ПК2/ПК3
+                    prompt,
+                    stream: false
+                }, { timeout: 60000 }) // Таймаут 60 сек
+            );
+            return data.response;
         } catch (e) {
-            return false;
+            this.logger.error(`Failed to reach node ${nodeUrl}: ${e.message}`);
+            throw e;
         }
     }
-    // Добавляем публичный метод для получения списка
+
     public getNodes(): string[] {
         return this.nodes;
-    }
-    async checkAllNodesStatus() {
-        return await Promise.all(
-            this.getNodes().map(async (url) => {
-                try {
-                    const { data } = await firstValueFrom(this.httpService.get(`${url}/api/tags`));
-                    return { url, status: 'online', modelsCount: data.models.length };
-                } catch {
-                    return { url, status: 'offline' };
-                }
-            })
-        );
     }
 }

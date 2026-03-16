@@ -10,12 +10,12 @@ export class OrchestrateAiRequestUseCase implements ICommandHandler<OrchestrateA
     constructor(private readonly clusterService: OllamaClusterService) { }
 
     async execute(command: OrchestrateAiRequestCommand) {
-        // Берем только ПЕРВУЮ доступную ноду для теста, чтобы исключить ошибки парралельности
         const nodes = this.clusterService.getNodes();
         if (nodes.length === 0) throw new Error('No AI nodes configured');
         
-        // Отправляем запрос на 0-й узел для проверки связи
-        const response = await this.clusterService.sendToNode(nodes[0], command.prompt);
+        // Берем первый доступный URL из массива
+        const targetNode = nodes[0];
+        const response = await this.clusterService.sendToNode(targetNode, command.prompt);
         return { content: response }; 
     }
 }
