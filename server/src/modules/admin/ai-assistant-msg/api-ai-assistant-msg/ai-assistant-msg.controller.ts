@@ -16,6 +16,7 @@ import { DialogAiAssistantQueryService, DialogAiAssistantType } from '../../ai-a
 import { AiAssistantMessageOneViewDto } from './viev-dto-msg/msg-one.view-dto';
 import { GetAiModelsQuery } from '../ai-assistant-application/get-ai-models.query-service';
 import { GetGoogleModelsQuery } from '../ai-assistant-application/get-google-models.query.service';
+import { AiStreamInterceptor } from '../../interceptors/ai-stream.interceptor';
 
 // @Roles('ADMIN')
 @Controller('admin')
@@ -26,62 +27,7 @@ export class AiAssistantController {
         private adminQueryService: AdminQueryService,
         private dialogAiAssistantQueryService: DialogAiAssistantQueryService,
     ) { }
-    @Post('v1/chat/completions')
-    async continueProxyController(@Body() body: any, @Res() res: any) {
-        try {
-            const userMessages = body.messages.filter((m: any) => m.role !== 'system');
-            const lastMessage = userMessages[userMessages.length - 1]?.content || '';
 
-            const result = await this.commandBus.execute(
-                new CreatePromptForTerminatorCommand({
-                    prompt: lastMessage,
-                    model: 'gemini-3.1-flash-lite-preview',
-                    provider: 'google',
-                    localId: `cont-${Date.now()}`,
-                    senderId: 'continue-extension',
-                    receiverId: 'terminator-ai'
-                } as any)
-            );
-
-            const content = result.assistantResponse.message;
-
-            // Если Continue просит стрим (а он просит, судя по твоему логу)
-            if (body.stream) {
-                res.setHeader('Content-Type', 'text/event-stream');
-                res.setHeader('Cache-Control', 'no-cache');
-                res.setHeader('Connection', 'keep-alive');
-
-                // Формируем чанк в формате OpenAI SSE
-                const chunk = {
-                    id: `chatcmpl-${Date.now()}`,
-                    object: 'chat.completion.chunk',
-                    created: Math.floor(Date.now() / 1000),
-                    model: body.model,
-                    choices: [{
-                        index: 0,
-                        delta: { content: content },
-                        finish_reason: null
-                    }]
-                };
-
-                res.write(`data: ${JSON.stringify(chunk)}\n\n`);
-
-                // Сигнал завершения стрима
-                res.write(`data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: 'stop' }] })}\n\n`);
-                res.write('data: [DONE]\n\n');
-                return res.end();
-            }
-
-            // Обычный ответ (на всякий случай)
-            return res.status(200).json({
-                choices: [{ message: { role: 'assistant', content: content }, finish_reason: 'stop' }]
-            });
-
-        } catch (error) {
-            console.error('😡 PROXY ERROR:', error.message);
-            return res.status(500).json({ error: { message: error.message } });
-        }
-    }
     @Get('/ai-plenum/models/google')
     async getGoogleModels() {
         return this.queryBus.execute(new GetGoogleModelsQuery());
@@ -124,6 +70,7 @@ export class AiAssistantController {
     @Post('/ai-assistant/orchestrate')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     // @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(AiStreamInterceptor)
     async createPromptForTerminatorController(
         @Body() dto: CreatePromptAiInputDto,
         // @UploadedFile() image: Multer.File
@@ -140,7 +87,23 @@ export class AiAssistantController {
         console.log('testConnectionController: - 😡')
         return await this.commandBus.execute(new CheckAiClusterConnectionCommand());
     }
+    @Post('v1/chat/completions')
+    @UseInterceptors(AiStreamInterceptor)
+    async continueProxy(@Body() body: any) {
+        const userMessages = body.messages?.filter((m: any) => m.role !== 'system') || [];
+        const lastMessage = userMessages[userMessages.length - 1]?.content || '';
 
+        return this.commandBus.execute(
+            new CreatePromptForTerminatorCommand({
+                prompt: lastMessage,
+                model: body.model || 'gemini-1.5-flash',
+                provider: 'google',
+                localId: `cont-${Date.now()}`,
+                senderId: 'continue-extension',
+                receiverId: 'terminator-ai'
+            } as any)
+        );
+    }
     // @Roles('ADMIN')
     // @UseGuards(AuthAccessGuard)
     @Get('/static/ftp/img/:folder')
