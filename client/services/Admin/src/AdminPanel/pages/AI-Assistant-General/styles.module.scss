@@ -1,0 +1,261 @@
+@import '../../../../../host/src/mixins.scss';
+@import '../../../../../host/src/variables.scss';
+
+.adminTopNav {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+
+    .left_1_BlockAdminTopNav {
+        margin-left: auto;
+        // outline: 1px solid rgb(255, 230, 0);
+    }
+
+    .wrapLeft_2_BlockAdminTopNav {
+        margin-top: 2px;
+        padding: 0 15px;
+    }
+
+    .left_2_BlockAdminTopNav {
+        display: block;
+        border-radius: 8px;
+        height: 100%;
+        padding-top: 3px;
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--dark-theme-text-color);
+        text-align: center;
+        // outline: 1px solid rgb(0, 255, 13);
+        border: 1px solid rgb(68, 68, 68);
+        background-color: #282828;
+        cursor: pointer;
+    }
+
+    .left_2_BlockAdminTopNav:hover {
+        background-color: #454545;
+        border: 1px solid rgb(24, 24, 24);
+        color: #FEA930;
+    }
+
+    .center_BlockAdminTopNav {
+        margin-left: auto;
+        // outline: 1px solid rgb(0, 60, 255);
+    }
+
+    .right_1_BlockAdminTopNav {
+        margin-left: auto;
+        // outline: 1px solid rgb(153, 0, 255);
+    }
+
+    .right_2_BlockAdminTopNav {
+        margin-left: auto;
+        // outline: 1px solid rgb(255, 0, 98);
+    }
+}
+
+.wrapLeftAdminNav {
+    min-width: 150px;
+    padding: 1px;
+    border: 1px solid #101010;
+    border-radius: 8px;
+    width: 100%;
+    height: auto;
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+
+    /* Standard syntax */
+    .title_nav {
+        h3 {
+            display: block;
+            padding: 6px;
+            border: 1px solid #101010;
+            border-radius: 8px;
+            color: #FFAC00;
+            font-size: 15px;
+            font-weight: 900;
+            text-align: center;
+        }
+    }
+
+    .ul {
+        display: block;
+        margin-top: 1px;
+        padding: 6px;
+        border: 1px solid black;
+        border-radius: 8px;
+        min-height: 200px;
+
+        li {
+            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: 900;
+        }
+    }
+}
+
+.wrapAdminContent.light {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--light-AppContent-background);
+    border: 1px solid black;
+
+    .adminContent {
+        border: 1px solid black;
+        min-height: 85vh;
+    }
+
+    .title {
+        margin-top: 10px;
+        color: var(--light-theme-text-color);
+        font-weight: 900;
+        text-align: center;
+    }
+}
+
+.wrapAdminContent.dark {
+    width: 100%;
+    padding: 10px;
+    background-color: #282828;
+    border: 1px solid black;
+
+    // outline: 1px solid red;
+
+    .adminContent {
+        border: 1px solid black;
+        min-height: 85vh;
+    }
+
+    .title {
+        display: block;
+        margin-top: 10px;
+        // color: var(--dark-theme-text-color);
+        color: wheat;
+        font-size: 1.7em;
+        font-weight: 900;
+        text-align: center;
+        // outline: 1px solid rgb(180, 154, 2);
+    }
+
+    .messagesClass {
+        display: flex;
+        flex-direction: column;
+        margin: 0px 0 0px 5px;
+        min-height: 72vh;
+        max-height: 73vh;
+
+        .wrapMessages {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            @include custom-scrollbar();
+            // outline: 1px solid rgb(255, 3, 3);
+        }
+
+        // z-index: 9999;
+        .wrapStartMessages {
+            margin: 10px;
+
+            // outline: 1px solid red;
+            .wrapBlockOfNoPosts {
+                // outline: 1px solid red;
+                min-height: 58vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .blockOfNoPosts {
+                    text-align: center;
+                    border: 2px dashed #8a8a8a;
+                    padding: 15px;
+                    opacity: 0.5;
+
+                    h1 {
+                        color: #D55612;
+                    }
+
+                    h2 {
+                        color: #5B5B5B;
+                    }
+
+                    .strongInterlocutor {
+                        color: #8a8a8a;
+                    }
+                }
+            }
+        }
+    }
+
+    .wrapInputAddMessage {
+        position: sticky;
+        bottom: 0px;
+        left: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0px 10px 0 10px;
+        border-top: 1px solid #3f3f3f;
+        border-left: 1px solid #3f3f3f;
+        border-right: 1px solid #3f3f3f;
+        border-bottom: 3px solid black;
+        box-shadow:
+            0 0 0 1px rgb(0, 0, 0, 0.1),
+            0 0 0 1px rgb(0, 0, 0, 0.1),
+            0 0 0 3px rgb(0, 0, 0, 0.1);
+        background-color: #282828;
+
+        .wrapLeftBlockInputAddMessage {
+            width: 5%;
+            margin-top: auto;
+            margin-bottom: 17px;
+            padding: 0px 5px;
+            font-size: 22px;
+            color: wheat;
+            cursor: pointer;
+        }
+
+        .wrapCentrBlockInputAddMessage {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            font-size: 21px;
+
+            // min-height: 30px;
+            // border: 1px solid red;
+            .SendOutlined {
+                margin-top: auto;
+                margin-bottom: 17px;
+                color: wheat;
+                cursor: pointer;
+            }
+        }
+
+        .wrapRightBlockInputAddMessage {
+            display: flex;
+            justify-content: space-between;
+            width: 15%;
+            margin-top: auto;
+            margin-bottom: 17px;
+            padding: 0px 5px;
+            font-size: 21px;
+            color: wheat;
+
+            // border: 1px solid red;
+            .FaRegSmile {
+                margin: auto;
+                font-weight: normal;
+                cursor: pointer;
+            }
+
+            .AudioOutlined {
+                font-weight: normal;
+                cursor: pointer;
+            }
+        }
+    }
+}

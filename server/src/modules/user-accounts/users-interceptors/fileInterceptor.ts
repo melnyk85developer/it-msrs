@@ -2,13 +2,13 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler, NotFoundExc
 import { Observable } from 'rxjs';
 import * as path from 'path';
 import { Request } from 'express';
-import { AdminService } from 'src/modules/admin/admin-application/admin-query-service';
+import { AdminQueryService } from 'src/modules/admin/admin-application/admin-query-service';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 
 @Injectable()
 export class ValidateFtpFileInterceptor implements NestInterceptor {
-    constructor(private readonly adminService: AdminService) { }
+    constructor(private readonly adminQueryService: AdminQueryService) { }
 
     async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
         const req = context.switchToHttp().getRequest<Request>();
@@ -23,7 +23,7 @@ export class ValidateFtpFileInterceptor implements NestInterceptor {
         }
 
         // Проверка разрешённых папок через сервис
-        if (!this.adminService['allowedFolders']?.includes(folder)) {
+        if (!this.adminQueryService['allowedFolders']?.includes(folder)) {
             console.log('ValidateFtpFileInterceptor: - fileName, folder 😡', fileName, folder)
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
         }
@@ -42,7 +42,7 @@ export class ValidateFtpFileInterceptor implements NestInterceptor {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST)
         }
 
-        const filePath = await this.adminService.getFtpFileByFolderAndName(folder, fileName);
+        const filePath = await this.adminQueryService.getFtpFileByFolderAndName(folder, fileName);
         if (!filePath) {
             console.log('ValidateFtpFileInterceptor: - fileName, folder 😡 File not found ', fileName, folder)
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND)

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { addPhotoMyProfileAC, addPostMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
+import { addPhotoMyProfileAC, addPostMyProfileAC } from "../../../../../../packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import { createUsersMyAdmin, deleteUserMyAdmin, fetchAvatarFile, getFtpFilesAdminAC, getUserMyAdminAC } from "@packages/shared/src/store/MyAdminReducers/myAdminSlice";
 import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import imageCompression from 'browser-image-compression';
+import { IUser } from "../../../../../../packages/shared/src/types/IUser";
 import classes from '../../styles.module.scss';
 import routeMain from "./routes";
-import { IUser } from "@packages/shared/src/types/IUser";
 
 const BotsContainer = () => {
     const dispatch = useAppDispatch();
@@ -32,10 +32,10 @@ const BotsContainer = () => {
     const [resFile, setResFile] = useState(null);
 
     const filterBots: IUser[] = users?.filter((b: { isBot: boolean; }) => b?.isBot === true);
-    // console.log('BotsContainer: - fileName: 😳 ', avatars)
+    console.log('BotsContainer: - fileName: 😳 ', avatars)
 
     useEffect(() => {
-        // console.log('[BotsContainer] mount — загружаю 😡 ftpAvatars');
+        console.log('[BotsContainer] mount — загружаю 😡 ftpAvatars');
         dispatch(getFtpFilesAdminAC('avatars'));
     }, [dispatch]);
 
@@ -48,12 +48,12 @@ const BotsContainer = () => {
         dispatch(getUserMyAdminAC());
     };
 
-    useEffect(() => {
-        if (bot && bot.user) {
-            sendPhotos(bot.user.id);
-            sendPosts(bot.user.id);
-        }
-    }, [bot]);
+    // useEffect(() => {
+    //     if (bot && bot.user) {
+    //         sendPhotos(bot.user.id);
+    //         sendPosts(bot.user.id);
+    //     }
+    // }, [bot]);
 
     useEffect(() => { }, [progressUsersCount, progressPhotosCount, progressPostsCount]);
 
@@ -85,7 +85,7 @@ const BotsContainer = () => {
         const avatarServerFileName = avatars.files[randomIndexFtpAvatars];
         try {
             const file = await dispatch(fetchAvatarFile(avatarServerFileName, 'avatars')) as unknown as File;
-            // console.log('getRandomAvatarFile: - avatarServerFileName', avatarServerFileName)
+            console.log('getRandomAvatarFile: - avatarServerFileName', avatarServerFileName)
             if (!file) throw new Error('File not loaded');
             setResFile(file);
             return { file, fileName: avatarServerFileName };
@@ -152,20 +152,20 @@ const BotsContainer = () => {
             setIsCompletedUsers(true);
             setProgressUsersCount(i + 1);
             const { file, fileName } = await getRandomAvatarFile();
-            // console.log('BotsContainer: file, fileName', file, fileName)
+            console.log('BotsContainer: file, fileName', file, fileName)
 
             const croppedFile = await autoCropImage(file, fileName);
-            // console.log('BotsContainer: croppedFile', croppedFile)
+            console.log('BotsContainer: croppedFile', croppedFile)
 
             const compressedFile = await imageCompression(croppedFile, {
                 maxSizeMB: 20,
                 maxWidthOrHeight: 500,
                 useWebWorker: true,
             });
-            // console.log('BotsContainer: compressedFile', compressedFile)
+            console.log('BotsContainer: compressedFile', compressedFile)
             // Восстанавливаем имя
             const finalFile = new File([compressedFile], fileName, { type: compressedFile.type });
-            // console.log('BotsContainer: finalFile', finalFile)
+            console.log('BotsContainer: finalFile', finalFile)
 
             const userData = {
                 login: `Login${i}`,
@@ -184,42 +184,42 @@ const BotsContainer = () => {
         setMessageUsers('Создано пользователей: ');
     };
 
-    const sendPhotos = async (userId: string) => {
-        setMessagePhotos('Создаются фотографии: ');
-        for (let d = 0; d < Number(photoCount); d++) {
-            setIsCompletedPhotos(true);
-            setProgressPhotosCount(d + 1);
-            if (userId) {
-                const { file: photoFile, fileName } = await getRandomAvatarFile();
-                const croppedFile = await autoCropImage(photoFile, fileName);
-                const albumName = '';
+    // const sendPhotos = async (userId: string) => {
+    //     setMessagePhotos('Создаются фотографии: ');
+    //     for (let d = 0; d < Number(photoCount); d++) {
+    //         setIsCompletedPhotos(true);
+    //         setProgressPhotosCount(d + 1);
+    //         if (userId) {
+    //             const { file: photoFile, fileName } = await getRandomAvatarFile();
+    //             const croppedFile = await autoCropImage(photoFile, fileName);
+    //             const albumName = '';
 
-                setCandincatPhotos((prev) => prev + 1);
-                await dispatch(addPhotoMyProfileAC(userId, croppedFile, croppedFile, albumName));
-            }
-        }
-    };
+    //             setCandincatPhotos((prev) => prev + 1);
+    //             await dispatch(addPhotoMyProfileAC(userId, croppedFile, croppedFile, albumName));
+    //         }
+    //     }
+    // };
 
-    const sendPosts = async (userId: string) => {
-        setMessagePosts('Создаются посты: ');
-        for (let b = 0; b < Number(postCount); b++) {
-            setIsCompletedPosts(true);
-            setProgressPostsCount(b + 1);
-            if (userId) {
-                const { file: postFile, fileName } = await getRandomAvatarFile();
-                const croppedFile = await autoCropImage(postFile, fileName);
-                const postData = {
-                    image: croppedFile,
-                    title: `Ячейка хакеров "Нахрен Общество" ${b} взломали мировой банк!`,
-                    content: `Почему Мистер Робот — лучший сериал про IT-индустрию... ${b}`,
-                    profileId: userId,
-                    postedByUserId: userId,
-                };
-                setCandincatPost((prev) => prev + 1);
-                await dispatch(addPostMyProfileAC(postData));
-            }
-        }
-    };
+    // const sendPosts = async (userId: string) => {
+    //     setMessagePosts('Создаются посты: ');
+    //     for (let b = 0; b < Number(postCount); b++) {
+    //         setIsCompletedPosts(true);
+    //         setProgressPostsCount(b + 1);
+    //         if (userId) {
+    //             const { file: postFile, fileName } = await getRandomAvatarFile();
+    //             const croppedFile = await autoCropImage(postFile, fileName);
+    //             const postData = {
+    //                 image: croppedFile,
+    //                 title: `Ячейка хакеров "Нахрен Общество" ${b} взломали мировой банк!`,
+    //                 content: `Почему Мистер Робот — лучший сериал про IT-индустрию... ${b}`,
+    //                 profileId: userId,
+    //                 postedByUserId: userId,
+    //             };
+    //             setCandincatPost((prev) => prev + 1);
+    //             await dispatch(addPostMyProfileAC(postData));
+    //         }
+    //     }
+    // };
 
     return (
         <div className={`${classes.wrapAdminContent} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>

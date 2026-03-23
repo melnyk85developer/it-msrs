@@ -19,6 +19,7 @@ import { UpdateUserCommand } from '../users-application/user-use-cases/update-us
 import { DeleteUserCommand } from '../users-application/user-use-cases/delete-user.use-case';
 import { JwtOptionalAuthGuard } from '../users-guards/bearer/jwt-optional-auth.guard';
 import { ExtractUserIfExistsFromRequest } from '../users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('/users')
 export class UsersController {
@@ -29,15 +30,16 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Создать пользователя!' })
     @ApiResponse({ status: 201 })
-    // @UseGuards(AuthAccessGuard)
-    @UseGuards(BasicAuthGuard)
+    @UseGuards(AuthAccessGuard)
+    // @UseGuards(BasicAuthGuard)
     @Post('/')
+    @UseInterceptors(FileInterceptor('image'))
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async createUserController(
         @Body() body: CreateUserInputDto,
         @UploadedFile() image?: Multer.File | undefined
     ): Promise<UserViewDto> {
-        // console.log('UsersController: createUserController - body 😡 ', body)
+        console.log('UsersController: createUserController - body 😡 ', body)
         // const userId = await this.usersService.createUserService(body, null);
         const avatar = image ? image : null
         const userId = await this.commandBus.execute<CreateUserCommand, string>(

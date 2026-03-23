@@ -4,7 +4,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 @Injectable()
-export class AdminService {
+export class AdminQueryService {
     private readonly allowedFolders = ['avatars', 'post-images', 'gallery'];
 
     private resolveFolderPath(folder: string): string | null {
@@ -40,7 +40,7 @@ export class AdminService {
                 return filePath;
             }
             return null
-        } catch(error) {
+        } catch (error) {
             // console.error('AdminService: getFtpFileByFolderAndName: catch(error)', error)
             return null;
         }
@@ -49,4 +49,6 @@ export class AdminService {
     getMimeType(fileName: string): string {
         return mime.lookup(fileName) || 'application/octet-stream';
     }
+
+
 }

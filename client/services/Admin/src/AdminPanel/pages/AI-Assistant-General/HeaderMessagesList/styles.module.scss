@@ -1,0 +1,146 @@
+.headerMessagesList {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    margin: 5px 0 0 0;
+    padding: 10px 1px 10px 10px;
+    border-bottom: 1px solid black;
+    background-color: #282828;
+
+    // outline: 1px solid rgb(255, 3, 3);
+    .wrapLeftBlock {
+        width: 50%;
+
+        .userNameHeaderMsgList {
+            display: block;
+            font-size: 16px;
+            margin: 0 0 5px 0;
+
+            .name {
+                margin-right: 5px;
+            }
+        }
+
+        .dataHeaderMessagesList {
+            display: block;
+            padding-top: 3px;
+            color: gray;
+        }
+    }
+
+    .wrapIcon {
+        display: flex;
+        justify-content: space-between;
+        margin-left: auto;
+
+        // outline: 1px solid rgb(3, 255, 16);
+        .navMsgActive {
+            position: relative;
+
+            .wrapPopUpMenu {
+                position: absolute;
+                top: 50px;
+                right: -1px;
+                background-color: #282828;
+                border-left: 1px solid black;
+                border-right: 1px solid black;
+                border-radius: 8px 0 8px 8px;
+                padding: 5px 0;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                z-index: 9999;
+                min-width: max-content;
+
+                .li {
+                    display: flex;
+                    padding: 8px;
+                    border-radius: 8px;
+                    border-bottom: 1px solid black;
+                    color: #e2e2e2;
+                    cursor: pointer;
+
+                    .iconWrapper {
+                        display: inline-block;
+
+                        .icon {
+                            cursor: pointer;
+                            margin: 0px;
+                            font-size: 22px;
+                            transition: opacity 0.2s ease;
+                        }
+                    }
+
+                    strong {
+                        margin: 5px 10px;
+                        font-size: 13px;
+                    }
+
+                    .liItemBlock {
+                        color: red;
+                    }
+                }
+
+                .li:hover {
+                    border-radius: 8px;
+                    background-color: #454545;
+                    color: #FEA930;
+                    font-weight: 500;
+
+                    .iconNormal {
+                        display: none;
+                    }
+
+                    .iconHover {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .navMsgDisactive {
+            display: none;
+        }
+    }
+}
+
+.iconWrapper {
+    display: inline-block;
+
+    .icon {
+        cursor: pointer;
+        margin: 7px;
+        font-size: 22px;
+        transition: opacity 0.2s ease;
+    }
+
+    .iconSearch,
+    .iconVideoCam {
+        font-size: 27px;
+    }
+
+    .iconTelephone,
+    .iconNav {
+        margin-top: 9px;
+    }
+
+    .iconNormal {
+        display: inline-block;
+    }
+
+    .iconHover {
+        display: none;
+    }
+
+    &:hover {
+        .iconNormal {
+            display: none;
+        }
+
+        .iconHover {
+            color: #FEA930;
+            display: inline-block;
+        }
+    }
+}

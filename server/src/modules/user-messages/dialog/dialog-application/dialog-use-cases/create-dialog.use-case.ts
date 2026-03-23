@@ -28,7 +28,9 @@ export class CreateDialogUseCase
             userAId,
             userBId
         })
+        // console.log('CreateMessageAiAssistantUseCase: - 😡😡😡, dialog1', dialog)
         await this.dialogRepository.save(dialog);
+        // console.log('CreateMessageAiAssistantUseCase: - 😡😡😡, dialog2', dialog)
         return dialog._id.toString();
     }
 }

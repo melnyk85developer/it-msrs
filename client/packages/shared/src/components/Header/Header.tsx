@@ -73,13 +73,14 @@ const Header: React.FC<PropsType> = React.memo(({ authorizedUser, dispatch, isAu
                                     </div>
                                     <div className={classes.logo}>
                                         <span className={classes.span1}>
-                                            {/* Euro */}
-                                            My
+                                            Euro
+                                            {/* My */}
                                         </span>
                                         <span className={classes.span2}>
-                                            Corner
+                                            {/* Corner */}
                                             {/* Life */}
                                             {/* Mars */}
+                                            World
                                         </span>
                                     </div>
                                 </NavLink>

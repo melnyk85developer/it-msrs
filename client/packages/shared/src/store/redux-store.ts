@@ -12,10 +12,12 @@ import myAdminSlice from "./MyAdminReducers/myAdminSlice";
 import messagesSlice from "./MessagesReducers/messagesSlice";
 import settingMyProfileSlice  from "./SettingsMyProfileReducers/settingsMyProfileSlice";
 import blogsSlice from "./BlogsReducers/blogsSlice";
+import myAIAssistantAdminSlice from "./MyAdminReducers/myAiAssistantAdminSlice";
 
 // Корневой редюсер
 const rootReducer = combineReducers({
     adminPage: myAdminSlice,
+    adminAdminAiAssistantPage: myAIAssistantAdminSlice,
     usersPage: usersSlice,
     authPage: authSlice,
     myProfilePage: myProfileSlice,

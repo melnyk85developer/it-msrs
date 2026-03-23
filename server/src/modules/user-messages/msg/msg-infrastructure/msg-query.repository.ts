@@ -4,11 +4,9 @@ import { FilterQuery, Types } from 'mongoose';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { Message, MessageDocument, type MessageModelType } from '../msg-domain/msg-entity';
-import { DomainExceptionCode } from 'src/core/exceptions/domain-exception-codes';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { GetMessageQueryParams } from '../msg-dto/msg-input-dto/get-msg-query-params.input-dto';
 import { MessagesAllViewDto } from '../msg-api/viev-dto-msg/msg-all.view-dto';
-import { queryMaperArrUserMessages, queryMaperUserMessage } from '../maper/queryMaper';
 
 @Injectable()
 export class MessageQueryRepository {

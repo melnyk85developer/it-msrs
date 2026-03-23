@@ -1,26 +1,115 @@
-# IT-MARS PROJECT CONTEXT
+# IT-MARS PROJECT CONTEXT (STATIC)
 
 ## 1. Project Overview
-Backend социальной сети уровня production. Цель: сильный проект для портфолио/трудоустройства на базе DDD.
+Backend социальной сети уровня production.
+Цель: сильный проект для портфолио и трудоустройства.
+
+---
 
 ## 2. Technology Stack
-- Node.js, NestJS, TypeScript, MongoDB, Mongoose.
-- Архитектура: DDD + UseCase-ориентированный подход.
+- Node.js
+- NestJS
+- TypeScript
+- MongoDB + Mongoose
 
-## 3. Realized Modules & Functionality
-- **User/Profile:** профили, аватары, галереи, карусели изображений.
-- **Posts:** создание постов, галерея, карусели изображений.
-- **Blogs:** миграция старой платформы (блоги, посты).
-- **Messages:** система сообщений (хранение, удаление у себя/всех через `deletedFor: string[]`).
-- **FileService:** хранение файлов в `static/` (аватары, посты) с сохранением оригинальных имен.
-- **Bots Generator:** система генерации ботов, постов, фото (интеграция со случайными файлами `static/ftp/avatars`).
+Архитектура:
+- DDD (Domain-Driven Design)
+- UseCase-ориентированный подход
 
-## 4. Architectural Constraints
-- **UseCase Pattern:** Сервисы как «сервисы-боги» запрещены. Бизнес-логика живет только в UseCase.
-- **Repositories:** Доступ к БД строго через репозитории.
-- **Error Handling:** Только `DomainException`. Никаких `throw new Error()` в бизнес-слое.
-- **State Management (Frontend):** Файлы (Blob) запрещено хранить в Redux (из-за serializable error), только в `useState`.
-- **Infrastructure:** Изоляция маппинга Mongoose-документов от доменных сущностей.
+---
 
-## 5. Evolution Context
-Проект — результат объединения нескольких систем (блогер-платформа на Express -> социальная сеть на NestJS). Текущая фаза: объединение всех модулей в единую DDD-систему, подготовка к Production-стадии.
+## 3. Architectural Principles
+
+### 3.1 Layers
+- Domain
+- Application (UseCases)
+- Infrastructure
+- Interface (Controllers)
+
+---
+
+### 3.2 Core Rules
+
+- Бизнес-логика только в UseCase
+- Контроллеры не содержат бизнес-логики
+- Доступ к БД только через Repository
+- Доменные сущности не зависят от Mongoose
+- Маппинг из Mongoose → Domain изолирован
+
+---
+
+### 3.3 Error Handling
+Используется только:
+- DomainException
+
+Запрещено:
+- throw new Error() в бизнес-логике
+
+---
+
+### 3.4 Frontend State Rules
+- File / Blob запрещено хранить в Redux
+- Использовать useState для файлов
+
+---
+
+## 4. Implemented Modules (STABLE)
+
+### 4.1 User / Profile
+- профили пользователей
+- аватары
+- галереи
+- карусель изображений
+
+---
+
+### 4.2 Posts (Profile)
+- создание постов
+- изображения постов
+- галерея
+- карусель
+
+---
+
+### 4.3 Blogs (migration)
+- блоги
+- посты
+
+---
+
+### 4.4 Messages
+- отправка сообщений
+- хранение
+- удаление:
+  - у себя
+  - у всех
+- модель:
+  deletedFor: string[]
+
+---
+
+### 4.5 FileService
+- хранение файлов в static/
+  - avatars/
+  - post-images/
+- сохранение оригинальных имен файлов
+- доступ через:
+  ${API_URL}/{path}
+
+---
+
+### 4.6 Bots Generator
+- генерация пользователей
+- генерация постов
+- генерация фото
+- случайные файлы из static/ftp/avatars
+
+---
+
+## 5. Project Evolution
+Проект — объединение:
+- старый Express проект (блоги)
+- новая соцсеть на NestJS
+
+Текущая цель:
+→ единая DDD система уровня production
