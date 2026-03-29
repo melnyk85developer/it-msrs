@@ -2,13 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { message as antdMessage } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Tooltip } from "antd";
 import rehypeHighlight from 'rehype-highlight';
 import defaultUserAvatar from "../../../../../../../packages/shared/src/assets/fonAvatars.png"
-import { Tooltip } from "antd";
-import { formatTimeOfPublication } from "@packages/shared/src/components/utils/timeOfPublication";
 import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
-import { IoCheckmarkDoneSharp } from "react-icons/io5";
-import { MessagesType } from "@packages/shared/src/types/types";
+import { formatTimeOfPublication } from "@packages/shared/src/components/utils/timeOfPublication";
 import { RiDeleteBin6Fill, RiDeleteBin6Line, RiFileCopyFill, RiFileCopyLine, RiShareForwardFill, RiShareForwardLine } from "react-icons/ri";
 import { BsEmojiSmile, BsEmojiSmileFill, BsPencil, BsPencilFill, BsPin, BsPinFill } from "react-icons/bs";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
@@ -17,6 +15,7 @@ import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import MessageFormModal from "../ModalContentMsg/messageFormModal";
 import DeleteMessageModal from "../ModalContentMsg/deleteMessageModal/deleteMessageModal";
 import { API_URL } from "@packages/shared/src/http";
+import { MsgAiAssistantType } from "@packages/shared/src/types/AiAssistantType";
 import 'highlight.js/styles/github-dark.css'; // Тема для кода
 import classes from './styles.module.scss'
 
@@ -29,7 +28,7 @@ type PropsType = {
     message: string;
     createdAt: string;
     updatedAt: string;
-    messages: MessagesType[];
+    messages: MsgAiAssistantType[];
     attachments: any[];
     avatar: string;
     isSending: boolean;
@@ -40,9 +39,11 @@ type PropsType = {
     index: number;
 }
 const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
-    const { dispatch, localId, msgId, userId, senderId, interlocutorId,
-        message, createdAt, updatedAt, avatar, index,
-        messages, sendingMessages, updatingMessages } = props
+    const {
+        dispatch, localId, msgId, userId, senderId, interlocutorId,
+        messages, message, avatar, index, createdAt,
+        updatedAt, sendingMessages, updatingMessages
+    } = props
 
     // console.log('AdminAiAssistantItemDialog: - message', message)
 
@@ -56,24 +57,6 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
     const [deleteOption, setDeleteOption] = useState<"me" | "all">("me");
 
     const itemRef = useRef<HTMLDivElement>(null);
-    const [wasRead, setWasRead] = useState(false);
-
-    // useEffect(() => {
-    //     if (senderId === userId || wasRead) return;
-    //     const observer = new IntersectionObserver(([entry]) => {
-    //         if (entry.isIntersecting && !wasRead) {
-    //             dispatch(updateReadAC(msgId, true));
-    //             setWasRead(true);
-    //             observer.unobserve(entry.target);
-    //         }
-    //     }, {
-    //         threshold: 1.0,
-    //     });
-    //     if (itemRef.current) {
-    //         observer.observe(itemRef.current);
-    //     }
-    //     return () => observer.disconnect();
-    // }, [senderId, userId, msgId, wasRead]);
 
     useEffect(() => {
         if (showDeletedMessageLeft) {
@@ -140,19 +123,11 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                 antdMessage.error("Не удалось скопировать :(");
             });
     };
-    const repostMsg = () => {
-        console.log("Переслать сообщение");
-    };
-    const pinMsg = () => {
-        console.log("Закрепить сообщение");
-    };
-    const reaction = () => {
-        console.log("Добавить реакцию");
-    };
 
     return (
         <>
             <div ref={itemRef}
+                data-ai-message-id={msgId || localId}
                 className={`
                     ${classes.messageItem}
                     ${showDeletedMessageRight && userId === senderId ? classes.messageItemDeleteRight : ''}
@@ -165,31 +140,63 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                         ${isLastFromSender && userId !== senderId ? classes.withTail : ''}
                     `}>
                         <div className={classes.textBlock}>
-                            <p>
-                                <ReactMarkdown
-                                    remarkPlugins={[remarkGfm]}
-                                    rehypePlugins={[rehypeHighlight]}
-                                >{message}
-                                    </ReactMarkdown></p>
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeHighlight]}
+                                components={{
+                                    code(props: any) {
+                                        const { inline, children, ...rest } = props;
+
+                                        const codeText = String(children).replace(/\n$/, '');
+
+                                        if (inline) {
+                                            return <code {...rest}>{children}</code>;
+                                        }
+
+                                        const copy = () => {
+                                            navigator.clipboard.writeText(codeText);
+                                        };
+
+                                        return (
+                                            <div className={classes.codeBlockWrapper}>
+                                                <button
+                                                    type="button"
+                                                    className={classes.copyBtn}
+                                                    onClick={copy}
+                                                >
+                                                    Copy
+                                                </button>
+
+                                                <pre>
+                                                    <code {...rest}>{children}</code>
+                                                </pre>
+                                            </div>
+                                        );
+                                    }
+                                }}
+                            >
+                                {message}
+                            </ReactMarkdown>
                         </div>
-                        {userId === senderId
-                            ?
-                            <div className={classes.footer}>
-                                {/* <span className={classes.edited}>Изменено в </span> */}
-                                {/* {sendingMessages.includes(localId) || updatingMessages.includes(msgId)
-                                    ?
-                                    <LoadingOutlined className={classes.svg} /> //<IoCheckmarkSharp className={classes.svg} /> //<IoCheckmark className={classes.svg}/> //<BsCheck className={classes.svg} />
-                                    :
-                                    <>
-                                        <span className={classes.timestamp}>{formatTimeOfPublication(createdAt)}</span>
-                                        <IoCheckmarkDoneSharp className={`${read ? classes.statusIcon : classes.delivered}`} />
-                                    </>
-                                } */}
-                            </div>
-                            :
-                            <div className={classes.footer}>
-                                <span className={classes.timestamp}>{formatTimeOfPublication(createdAt)}</span>
-                            </div>
+                        {
+                            userId === senderId
+                                ?
+                                <div className={classes.footer}>
+                                    {/* <span className={classes.edited}>Изменено в </span> */}
+                                    {sendingMessages.includes(localId) || updatingMessages.includes(msgId)
+                                        ?
+                                        <LoadingOutlined className={classes.svg} /> //<IoCheckmarkSharp className={classes.svg} /> //<IoCheckmark className={classes.svg}/> //<BsCheck className={classes.svg} />
+                                        :
+                                        <>
+                                            <span className={classes.timestamp}>{formatTimeOfPublication(createdAt)}</span>
+                                            {/* <IoCheckmarkDoneSharp className={`${read ? classes.statusIcon : classes.delivered}`} /> */}
+                                        </>
+                                    }
+                                </div>
+                                :
+                                <div className={classes.footer}>
+                                    <span className={classes.timestamp}>{formatTimeOfPublication(createdAt)}</span>
+                                </div>
                         }
 
                         {isLastFromSender && userId !== senderId
@@ -206,7 +213,7 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                                     <g transform="scale(-1,1) translate(-20,0)">
                                         <path
                                             d="M0,20 C0,10 10,10 10,0 L0,0 Z"
-                                            fill="#252525"
+                                            fill="#282828"
                                             stroke="#606060"
                                             strokeWidth="1"
                                         />
@@ -230,7 +237,7 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                                     <g transform="scale(-1,-1) translate(-20,-20)">
                                         <path
                                             d="M0,20 C0,10 10,10 10,0 L0,0 Z"
-                                            fill="#383838"
+                                            fill="#202020"
                                             stroke="#606060"
                                             strokeWidth="1"
                                         />
@@ -265,24 +272,6 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                                 <span className={classes.iconWrapper} onClick={() => copyText(message)}>
                                     <RiFileCopyLine className={`${classes.icon} ${classes.iconNormal}`} />
                                     <RiFileCopyFill className={`${classes.icon} ${classes.iconHover}`} />
-                                </span>
-                            </Tooltip>
-                            <Tooltip destroyTooltipOnHide title="Переслать сообщение">
-                                <span className={classes.iconWrapper} onClick={repostMsg}>
-                                    <RiShareForwardLine className={`${classes.icon} ${classes.iconNormal}`} />
-                                    <RiShareForwardFill className={`${classes.icon} ${classes.iconHover}`} />
-                                </span>
-                            </Tooltip>
-                            <Tooltip destroyTooltipOnHide title="Закрепить">
-                                <span className={classes.iconWrapper} onClick={pinMsg}>
-                                    <BsPin className={`${classes.icon} ${classes.iconNormal}`} />
-                                    <BsPinFill className={`${classes.icon} ${classes.iconHover}`} />
-                                </span>
-                            </Tooltip>
-                            <Tooltip destroyTooltipOnHide title="Оставить эмоцию">
-                                <span className={classes.iconWrapper} onClick={reaction}>
-                                    <BsEmojiSmile className={`${classes.icon} ${classes.iconNormal}`} />
-                                    <BsEmojiSmileFill className={`${classes.icon} ${classes.iconHover}`} />
                                 </span>
                             </Tooltip>
                         </div>

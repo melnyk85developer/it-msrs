@@ -7,11 +7,14 @@ export default class AiAssistantAdminAPI {
     static async getAiAssistantInterlocutorAPI(): Promise<AxiosResponse<any>> {
         return $api.get<any[]>('/admin/ai-interlocutors')
     }
-    static async getDialogAPI(receiverId: string) {
-        return $api.get(`/admin/ai-messages/dialog/${receiverId}`)
+    static async getDialogByReceiverIdAPI(receiverId: string, params: { pageSize: number; pageNumber: number }) {
+        // console.log('AiAssistantAdminAPI: getDialogByReceiverIdAPI: - receiverId, params', receiverId, params)
+        return $api.get(`/admin/ai-messages/dialog/${receiverId}`, { params })
     }
-
-    static async addNewPromptAPI(message: MsgAiAssistantType): Promise<AxiosResponse<{userPrompt: MsgAiAssistantType, assistantResponse: MsgAiAssistantType}>> {
+    static async getDialogByDialogIdAPI(dialogId: string) {
+        return $api.get(`/admin/ai-messages/dialog/${dialogId}`)
+    }
+    static async addNewPromptAPI(message: MsgAiAssistantType): Promise<AxiosResponse<{ userPrompt: MsgAiAssistantType, assistantResponse: MsgAiAssistantType }>> {
         console.log('addNewPromptAPI: - message1', message)
         const formData = new FormData();
         formData.append('localId', `${message.localId}`);
@@ -29,7 +32,7 @@ export default class AiAssistantAdminAPI {
         // });
         console.log('addNewPromptAPI: - message2', message)
 
-        return await $api.post<{userPrompt: MsgAiAssistantType, assistantResponse: MsgAiAssistantType}>('/admin/ai-assistant/orchestrate', message);
+        return await $api.post<{ userPrompt: MsgAiAssistantType, assistantResponse: MsgAiAssistantType }>('/admin/ai-assistant/orchestrate', message);
         // return await $api.post<MsgAiAssistantType>('/admin/ai-assistant/orchestrate', formData);
     }
     static async updateMessageAPI(message: MsgAiAssistantType): Promise<AxiosResponse<MsgAiAssistantType>> {

@@ -118,73 +118,79 @@
     }
 }
 
-.wrapAdminContent.dark {
+.wrapContentAiAssistantAdmin.dark {
     width: 100%;
-    padding: 10px;
+    height: 100%;
+    padding-top: 5px;
+    // padding: 10px 10px 0 10px;
     background-color: #282828;
-    border: 1px solid black;
+    // border: 1px solid black;
+    -webkit-box-shadow: 0px 6px 8px 3px rgba(0, 0, 0, 0.79);
+    -moz-box-shadow: 0px 6px 8px 3px rgba(0, 0, 0, 0.79);
+    box-shadow: 0px 6px 8px 3px rgba(0, 0, 0, 0.79);
 
-    // outline: 1px solid red;
+    .aiAssistantContent {
+        margin-bottom: 1px;
+        // border: 1px solid black;
+        min-height: 0vh;
+        // max-height: 84vh;
+        // outline: 1px solid red;
 
-    .adminContent {
-        border: 1px solid black;
-        min-height: 85vh;
-    }
-
-    .title {
-        display: block;
-        margin-top: 10px;
-        // color: var(--dark-theme-text-color);
-        color: wheat;
-        font-size: 1.7em;
-        font-weight: 900;
-        text-align: center;
-        // outline: 1px solid rgb(180, 154, 2);
-    }
-
-    .messagesClass {
-        display: flex;
-        flex-direction: column;
-        margin: 0px 0 0px 5px;
-        min-height: 72vh;
-        max-height: 73vh;
-
-        .wrapMessages {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            @include custom-scrollbar();
-            // outline: 1px solid rgb(255, 3, 3);
+        .title {
+            display: block;
+            margin-top: 10px;
+            // color: var(--dark-theme-text-color);
+            color: wheat;
+            font-size: 1.7em;
+            font-weight: 900;
+            text-align: center;
+            // outline: 1px solid rgb(180, 154, 2);
         }
 
-        // z-index: 9999;
-        .wrapStartMessages {
-            margin: 10px;
+        .messagesClass {
+            display: flex;
+            flex-direction: column;
+            margin: 0px 0 0px 5px;
+            min-height: 0vh;
+            max-height: 74.6vh;
 
-            // outline: 1px solid red;
-            .wrapBlockOfNoPosts {
+            .wrapMessages {
+                flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                @include custom-scrollbar();
+                // outline: 1px solid rgb(255, 3, 3);
+            }
+
+            // z-index: 9999;
+            .wrapStartMessages {
+                margin: 10px;
+
                 // outline: 1px solid red;
-                min-height: 58vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                .wrapBlockOfNoPosts {
+                    // outline: 1px solid red;
+                    min-height: 58vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
 
-                .blockOfNoPosts {
-                    text-align: center;
-                    border: 2px dashed #8a8a8a;
-                    padding: 15px;
-                    opacity: 0.5;
+                    .blockOfNoPosts {
+                        text-align: center;
+                        border: 2px dashed #8a8a8a;
+                        padding: 15px;
+                        opacity: 0.5;
 
-                    h1 {
-                        color: #D55612;
-                    }
+                        h1 {
+                            color: #D55612;
+                        }
 
-                    h2 {
-                        color: #5B5B5B;
-                    }
+                        h2 {
+                            color: #5B5B5B;
+                        }
 
-                    .strongInterlocutor {
-                        color: #8a8a8a;
+                        .strongInterlocutor {
+                            color: #8a8a8a;
+                        }
                     }
                 }
             }
@@ -192,69 +198,71 @@
     }
 
     .wrapInputAddMessage {
-        position: sticky;
-        bottom: 0px;
-        left: 0;
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        padding: 0px 10px 0 10px;
-        border-top: 1px solid #3f3f3f;
-        border-left: 1px solid #3f3f3f;
-        border-right: 1px solid #3f3f3f;
-        border-bottom: 3px solid black;
-        box-shadow:
-            0 0 0 1px rgb(0, 0, 0, 0.1),
-            0 0 0 1px rgb(0, 0, 0, 0.1),
-            0 0 0 3px rgb(0, 0, 0, 0.1);
-        background-color: #282828;
-
-        .wrapLeftBlockInputAddMessage {
-            width: 5%;
-            margin-top: auto;
-            margin-bottom: 17px;
-            padding: 0px 5px;
-            font-size: 22px;
-            color: wheat;
-            cursor: pointer;
-        }
-
-        .wrapCentrBlockInputAddMessage {
+        .inputAddMessage {
+            position: sticky;
+            bottom: 0px;
+            left: 0;
             display: flex;
             justify-content: space-between;
-            width: 80%;
-            font-size: 21px;
+            width: 100%;
+            padding: 0px 10px 0 10px;
+            border-top: 1px solid #3f3f3f;
+            border-left: 1px solid #3f3f3f;
+            border-right: 1px solid #3f3f3f;
+            border-bottom: 3px solid black;
+            box-shadow:
+                0 0 0 1px rgb(0, 0, 0, 0.1),
+                0 0 0 1px rgb(0, 0, 0, 0.1),
+                0 0 0 3px rgb(0, 0, 0, 0.1);
+            background-color: #282828;
 
-            // min-height: 30px;
-            // border: 1px solid red;
-            .SendOutlined {
+            .wrapLeftBlockInputAddMessage {
+                width: 5%;
                 margin-top: auto;
                 margin-bottom: 17px;
+                padding: 0px 5px;
+                font-size: 22px;
                 color: wheat;
                 cursor: pointer;
             }
-        }
 
-        .wrapRightBlockInputAddMessage {
-            display: flex;
-            justify-content: space-between;
-            width: 15%;
-            margin-top: auto;
-            margin-bottom: 17px;
-            padding: 0px 5px;
-            font-size: 21px;
-            color: wheat;
+            .wrapCentrBlockInputAddMessage {
+                display: flex;
+                justify-content: space-between;
+                width: 80%;
+                font-size: 21px;
 
-            // border: 1px solid red;
-            .FaRegSmile {
-                margin: auto;
-                font-weight: normal;
-                cursor: pointer;
+                // min-height: 30px;
+                // border: 1px solid red;
+                .SendOutlined {
+                    margin-top: auto;
+                    margin-bottom: 17px;
+                    color: wheat;
+                    cursor: pointer;
+                }
             }
 
-            .AudioOutlined {
-                font-weight: normal;
-                cursor: pointer;
+            .wrapRightBlockInputAddMessage {
+                display: flex;
+                justify-content: space-between;
+                width: 15%;
+                margin-top: auto;
+                margin-bottom: 17px;
+                padding: 0px 5px;
+                font-size: 21px;
+                color: wheat;
+
+                // border: 1px solid red;
+                .FaRegSmile {
+                    margin: auto;
+                    font-weight: normal;
+                    cursor: pointer;
+                }
+
+                .AudioOutlined {
+                    font-weight: normal;
+                    cursor: pointer;
+                }
             }
         }
     }

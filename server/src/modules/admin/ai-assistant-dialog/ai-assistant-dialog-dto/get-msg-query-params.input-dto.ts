@@ -11,7 +11,7 @@ export class GetAiAssistantMessageQueryParams extends BaseQueryParams {
     @IsOptional()
     @IsString({ message: 'searchTextMessage ключевые слова для поиска сообщений!' })
     searchTextMessage: string | null = null;
-    @IsString({ message: 'receiverId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле receiverId не должно быть пустым!' })
-    receiverId: string;
+    // @IsString({ message: 'receiverId должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле receiverId не должно быть пустым!' })
+    // receiverId: string;
 }

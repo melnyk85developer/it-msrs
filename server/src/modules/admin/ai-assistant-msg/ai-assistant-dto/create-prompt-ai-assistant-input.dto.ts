@@ -19,6 +19,11 @@ export class CreatePromptAiInputDto {
     @IsNotEmpty()
     readonly receiverId: string;
 
+    @ApiProperty({ example: 'receiverId', description: 'Уникальный идентификатор модели получателя промпта.' })
+    // @IsString()
+    // @IsNotEmpty()
+    readonly dialogId?: string;
+
     @ApiProperty({ example: 'createdAt', description: 'Локальное время создания промпта.' })
     @IsString()
     @IsNotEmpty()

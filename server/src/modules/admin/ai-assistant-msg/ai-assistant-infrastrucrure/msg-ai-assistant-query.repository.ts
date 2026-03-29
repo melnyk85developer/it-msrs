@@ -7,6 +7,7 @@ import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { AiAssistantMessage, AiAssistantMessageDocument, type AiAssistantMessageModelType } from '../ai-assistant-domain/ai-assistant.entity';
 import { GetAiAssistantMessageQueryParams } from '../../ai-assistant-dialog/ai-assistant-dialog-dto/get-msg-query-params.input-dto';
 import { AiAssistantMessagesAllViewDto } from '../api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
+import { queryMaperArrUserMessages } from '../ai-assistant-maper/queryMaper';
 
 @Injectable()
 export class MessageAiAssistantQueryRepository {
@@ -14,22 +15,28 @@ export class MessageAiAssistantQueryRepository {
         @InjectModel(AiAssistantMessage.name) private AiAssistantMessageModel: AiAssistantMessageModelType
     ) { }
 
-    async getAllMessagesByUserIdQueryRepository(query: GetAiAssistantMessageQueryParams, dialogId: string, userId: string): Promise<PaginatedViewDto<AiAssistantMessagesAllViewDto[]>> {
-        // console.log('BlogsQueryRepository: getAllBlogRepository: query 😡 ', query)
+    async getAllMessagesByAiAssistantIdQueryRepository(userId: string, query: GetAiAssistantMessageQueryParams, dialogId: string): Promise<PaginatedViewDto<AiAssistantMessagesAllViewDto[]>> {
+        // console.log('MessageAiAssistantQueryRepository: getAllMessagesByAiAssistantIdQueryRepository: query 😡 ', query)
         const normalizedQuery = GetAiAssistantMessageQueryParams.normalize(query);
-        // console.log('BlogsQueryRepository: getAllBlogRepository: normalizedQuery 😡 ', normalizedQuery)
+        // console.log('MessageAiAssistantQueryRepository: getAllMessagesByAiAssistantIdQueryRepository: normalizedQuery 😡 ', normalizedQuery)
         const filter: FilterQuery<AiAssistantMessage> = {
             deletedAt: null,
+            dialogId: dialogId,
+            // senderId: userId,
         };
-        // console.log('BlogsQueryRepository: getAllBlogRepository: filter 😡 ', filter)
+        // console.log('MessageAiAssistantQueryRepository: getAllMessagesByAiAssistantIdQueryRepository: filter 😡 ', filter)
 
         if (normalizedQuery.searchTextMessage) {
-            filter.$or = filter.$or || [];
-            filter.$or.push({
-                message: { $regex: normalizedQuery.searchTextMessage, $options: 'i' },
-            });
+            filter.$or = [
+                {
+                    message: {
+                        $regex: normalizedQuery.searchTextMessage,
+                        $options: 'i'
+                    }
+                }
+            ];
         }
-        // console.log('BlogsQueryRepository: getAllBlogRepository: normalizedQuery 😡 PREV REQ', normalizedQuery)
+        // console.log('MessageAiAssistantQueryRepository: getAllMessagesByAiAssistantIdQueryRepository: normalizedQuery 😡 PREV REQ', normalizedQuery)
 
         const messages = await this.AiAssistantMessageModel.find(filter)
             .sort({ [normalizedQuery.sortBy]: normalizedQuery.sortDirection, _id: 1 })
@@ -39,7 +46,7 @@ export class MessageAiAssistantQueryRepository {
         const totalCount = await this.AiAssistantMessageModel.countDocuments(filter);
 
         // const items = blogs.map(BlogViewDto.mapToBlogsView).reverse();
-        const items = messages.map(AiAssistantMessagesAllViewDto.mapToMessagesAiAssistantAllView);
+        const items = queryMaperArrUserMessages(messages, userId).map(AiAssistantMessagesAllViewDto.mapToMessagesAiAssistantAllView).reverse()
 
         // items.reverse()
 

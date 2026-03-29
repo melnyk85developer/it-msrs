@@ -17,6 +17,7 @@ import { AiAssistantMessageOneViewDto } from './viev-dto-msg/msg-one.view-dto';
 import { GetAiModelsQuery } from '../ai-assistant-application/get-ai-models.query-service';
 import { GetGoogleModelsQuery } from '../ai-assistant-application/get-google-models.query.service';
 import { AiStreamInterceptor } from '../../interceptors/ai-stream.interceptor';
+import { GetAiAssistantMessageQueryParams } from '../../ai-assistant-dialog/ai-assistant-dialog-dto/get-msg-query-params.input-dto';
 
 // @Roles('ADMIN')
 @Controller('admin')
@@ -57,14 +58,16 @@ export class AiAssistantController {
     @Get('/ai-messages/dialog/:receiverId')
     async getDialogAIAssistantController(
         @Param('receiverId') receiverId: string,
+        @Query() query: GetAiAssistantMessageQueryParams,
         @ExtractUserFromRequest() user: UserContextDto
-    ): Promise<DialogAiAssistantType | []> {
-        // console.log('getDialogAIAssistantController: receiverId', receiverId)
+    ): Promise<PaginatedViewDto<DialogAiAssistantType> | null> {
+        console.log('getDialogAIAssistantController: receiverId', receiverId)
         const dialog = await this.dialogAiAssistantQueryService.getOneDialogBySenderIdOrReceiverIdQueryService(
             user.id,
+            query,
             receiverId
         );
-        // console.log('getDialogAIAssistantController: RES dialog', dialog)
+        console.log('getDialogAIAssistantController: RES dialog', dialog)
         return dialog
     }
     @Post('/ai-assistant/orchestrate')

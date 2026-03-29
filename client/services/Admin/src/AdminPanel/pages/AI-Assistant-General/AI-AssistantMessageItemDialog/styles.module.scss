@@ -4,24 +4,101 @@
     width: 100%;
 
     .wrapMessage {
-        display: flex;
-        justify-content: space-between;
+        margin-top: 20px;
+        // display: flex;
+        // justify-content: space-between;
 
         // outline: 1px solid red;
         .messagLeft {
             position: relative;
             min-width: 133px;
             max-width: 100%;
-            padding: 10px;
+            padding: 20px;
             border: 1px solid #525050;
-            background-color: #252525;
+            // background-color: #252525;
             margin: 3px 20px 7px 40px;
             border-radius: 8px;
             word-break: break-all;
 
             .textBlock {
                 width: 100%;
+                overflow-wrap: break-word;
+                word-break: normal;
+                font-size: 17px;
+
+                p {
+                    margin: 10px 0;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                }
+
+                /* 👇 ВАЖНО: wrapper теперь ВНУТРИ textBlock */
+                .codeBlockWrapper {
+                    position: relative;
+                    margin: 12px 0;
+                }
+
+                .copyBtn {
+                    position: absolute;
+                    top: 6px;
+                    right: 6px;
+
+                    background: #2a2a2a;
+                    color: #fff;
+                    border: none;
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    z-index: 2;
+                }
+
+                .copyBtn:hover {
+                    background: #3a3a3a;
+                }
+
+                .codeBlockWrapper pre {
+                    margin: 0;
+                    padding: 12px;
+                    background-color: #1e1e1e;
+                    border-radius: 8px;
+                    overflow-x: auto;
+                    // min-width: 0vh;
+                    // max-width: 100%;
+                    @include custom-horizontal-scrollbar();
+                }
+
+                .codeBlockWrapper pre code {
+                    background: none;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 14px;
+                    @include custom-horizontal-scrollbar();
+                }
             }
+
+            .textBlock pre {
+                background-color: #1e1e1e;
+                margin-bottom: 12px;
+                padding: 12px;
+                border-radius: 8px;
+                overflow-x: auto;
+            }
+
+            .textBlock pre+* {
+                margin-top: 12px;
+            }
+
+            .textBlock pre code {
+                background: none;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 14px;
+            }
+
+            // .textBlock p code {
+            //     // background-color: #2a2a2a;
+            //     // padding: 2px 6px;
+            //     border-radius: 4px;
+            //     font-size: 15px;
+            // }
 
             .footer {
                 display: flex;
@@ -117,7 +194,7 @@
                     border-right: 1px solid #505050;
                     width: 11px;
                     height: 3px;
-                    background-color: #252525;
+                    background-color: #282828;
                 }
             }
         }
@@ -126,16 +203,92 @@
             position: relative;
             min-width: 133px;
             max-width: 90%;
-            padding: 10px 10px 0px 10px;
+            padding: 20px 20px 0px 20px;
             border: 1px solid #525050;
-            background-color: #383838;
+            // background-color: #383838;
+            background-color: #202020;
             margin: 0 20px 10px auto;
             border-radius: 8px;
             word-break: break-all;
 
             .textBlock {
                 width: 100%;
+                overflow-wrap: break-word;
+                word-break: normal;
+                font-size: 17px;
+                p {
+                    margin: 10px 0;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                }
+
+                /* 👇 ВАЖНО: wrapper теперь ВНУТРИ textBlock */
+                .codeBlockWrapper {
+                    position: relative;
+                    margin: 12px 0;
+                }
+
+                .copyBtn {
+                    position: absolute;
+                    top: 6px;
+                    right: 6px;
+
+                    background: #2a2a2a;
+                    color: #fff;
+                    border: none;
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    z-index: 2;
+                }
+
+                .copyBtn:hover {
+                    background: #3a3a3a;
+                }
+
+                .codeBlockWrapper pre {
+                    margin: 0;
+                    padding: 12px;
+                    background-color: #1e1e1e;
+                    border-radius: 8px;
+                    overflow-x: auto;
+                    // min-width: 0vh;
+                    // max-width: 100%;
+                    @include custom-horizontal-scrollbar();
+                }
+
+                .codeBlockWrapper pre code {
+                    background: none;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 14px;
+                    @include custom-horizontal-scrollbar();
+                }
             }
+
+            .textBlock pre {
+                background-color: #1e1e1e;
+                margin-bottom: 12px;
+                padding: 12px;
+                border-radius: 8px;
+                overflow-x: auto;
+            }
+
+            .textBlock pre+* {
+                margin-top: 12px;
+            }
+
+            .textBlock pre code {
+                background: none;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 14px;
+            }
+
+            // .textBlock p code {
+            //     // background-color: #2a2a2a;
+            //     // padding: 2px 6px;
+            //     border-radius: 4px;
+            //     font-size: 15px;
+            // }
 
             .footer {
                 display: flex;
@@ -243,7 +396,8 @@
                     border-right: 1px solid #505050;
                     width: 12px;
                     height: 6px;
-                    background-color: #383838;
+                    // background-color: #383838;
+                    background-color: #202020;
                 }
             }
         }

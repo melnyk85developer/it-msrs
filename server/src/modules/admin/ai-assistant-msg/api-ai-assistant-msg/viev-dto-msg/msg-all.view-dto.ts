@@ -2,7 +2,7 @@ import { AiAssistantMessageDocument } from "../../ai-assistant-domain/ai-assista
 
 export class AiAssistantMessagesAllViewDto {
     msgId: string;
-    message: string;
+    prompt: string;
     senderId: string;
     receiverId: string;
     dialogId: string;
@@ -12,7 +12,7 @@ export class AiAssistantMessagesAllViewDto {
     static mapToMessagesAiAssistantAllView(msg: AiAssistantMessageDocument): AiAssistantMessagesAllViewDto {
         const dto = new AiAssistantMessagesAllViewDto();
         dto.msgId = msg._id.toString();
-        dto.message = msg.content;
+        dto.prompt = msg.content;
         dto.senderId = msg.senderId;
         dto.receiverId = msg.receiverId;
         dto.dialogId = msg.dialogId;

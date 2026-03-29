@@ -8,13 +8,13 @@ export type AiAssistantInterlocutor = {
 export type CreateMsgAiAssistantType = {
     localId: string;
     msgId: string;
-    message: string;
+    prompt: string;
     senderId: string;
     receiverId: string;
-    dialogId: string;
+    dialogId: undefined;
     createdAt: string;
     updatedAt: string;
-    // attachments: any[];
+    attachments?: any[];
 }
 export type MsgAiAssistantType = {
     localId: string;
@@ -22,10 +22,10 @@ export type MsgAiAssistantType = {
     prompt: string;
     senderId: string;
     receiverId: string;
-    dialogId?: string;
+    dialogId?: string | undefined;
     createdAt?: string;
     updatedAt?: string;
-    // attachments: any[];
+    attachments?: any[];
 }
 export type ChatType = {
     dialogId: string;

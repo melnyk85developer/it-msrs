@@ -1,152 +1,237 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../../../packages/shared/src/components/hooks/redux";
-import { AudioOutlined, PaperClipOutlined, SendOutlined } from "@ant-design/icons";
 import { FaRegSmile } from "react-icons/fa";
-import { Navigate, useParams, useOutletContext } from "react-router-dom";
-import { getDialogMessagesAC, sendMessageAC } from "../../../../../../packages/shared/src/store/MessagesReducers/messagesSlice";
-import { formatDayLabel, formatYearLabel } from "../../../../../../packages/shared/src/components/utils/timeOfPublication";
+import { useAppSelector } from "../../../../../../packages/shared/src/components/hooks/redux";
+import { AudioOutlined, PaperClipOutlined, SendOutlined } from "@ant-design/icons";
+import { AiAssistantInterlocutor, ChatType, MsgAiAssistantType } from '../../../../../../packages/shared/src/types/AiAssistantType'
+import { AppDispatch } from "@packages/shared/src/store/redux-store";
+import { IUser } from "@packages/shared/src/types/IUser";
 import HeaderMessagesList from "./HeaderMessagesList/headerMessagesList";
 import SendMessageForm from "./SendMessageForm/sendMessageForm";
-import AdminAiAssistantItemDialog from "./AI-AssistantMessageItemDialog/aiAssistantMessageItemDialog";
-import { getDialogAiAssistantMessagesAC, sendNewPromptAC } from "../../../../../../packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
-import classes from './styles.module.scss';
+import { getDialogAiAssistantMessagesAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
 import routeMain from "./routes";
+import classes from './styles.module.scss';
+import MessagesList from "./MessagesList/MessagesList";
+import { useNavigate } from "react-router-dom";
 
-const AdminAiAssistant: React.FC = React.memo(() => {
-    const dispatch = useAppDispatch();
-    const { typePage, setTypePage } = useOutletContext<any>();
-    const { authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage);
+type PropsType = {
+    dispatch: AppDispatch;
+    addNewPrompt: (messageText: string) => void
+    setAddMessageText: React.Dispatch<React.SetStateAction<string>>
+    addMessageText: string;
+    authorizedUser: IUser
+    assistantId: string;
+    prompts: MsgAiAssistantType[];
+    currentChat: ChatType;
+    lastMessage: MsgAiAssistantType;
+    currentInterlocutor: AiAssistantInterlocutor;
+    isSending: boolean;
+    sendingMessages: string[];
+    totalAiAssistantMessageCount: number
+    updatingMessages: string[];
+    deletingMessages: string[];
+}
+
+type ScrollAnchorType = {
+    messageId: string;
+    offsetTop: number;
+}
+
+const PAGE_SIZE = 20;
+const WINDOW_SIZE = 40;
+
+const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
     const {
-        prompts,
-        currentChat,
-        lastMessage,
-        currentInterlocutor,
-        isSending,
-        deletingMessages,
-        sendingMessages,
-        updatingMessages
-    } = useAppSelector(state => state.adminAdminAiAssistantPage);
+        dispatch, addNewPrompt, setAddMessageText, sendingMessages, authorizedUser,
+        assistantId, prompts, currentInterlocutor, currentChat, lastMessage, isSending,
+        totalAiAssistantMessageCount, updatingMessages, deletingMessages, addMessageText
+    } = props;
 
-    // console.log('AdminAiAssistant - typePage', typePage)
-    console.log('AdminAiAssistant - prompts', prompts)
+    const navigate = useNavigate();
+    const { isDarkTheme } = useAppSelector(state => state.authPage);
+    const messagesAnchorRef = useRef<HTMLDivElement>(null);
+    const fetchingRef = useRef(false);
+    const windowStartRef = useRef(0);
+    const isWindowInitializedRef = useRef(false);
+    const [isAutoScroll, setIsAutoScroll] = useState(false);
 
-    const messagesAnchorRef = useRef<HTMLDivElement>(null)
-    const newMessageAnchorRef = useRef<HTMLDivElement | null>(null)
-    const [isAutoScroll, setIsAutoScroll] = useState(false)
-    const [addMessageText, setAddMessageText] = useState('');
-    const { userId } = useParams();
-    const renderItems: JSX.Element[] = [];
+    console.log('AdminAiAssistant - assistantId', assistantId)
+    console.log('AdminAiAssistant - dialogId', currentChat?.dialogId)
+    console.log('AdminAiAssistant - prompts.length', prompts.length)
 
-    console.log('AdminAiAssistant - userId', userId)
-    // console.log('AdminAiAssistant - dialogId', currentChat?.dialogId)
-    // console.log('AdminAiAssistant - currentInterlocutor', currentInterlocutor)
+    const getInitialWindowStart = () => Math.max(totalAiAssistantMessageCount - Math.min(PAGE_SIZE, totalAiAssistantMessageCount), 0);
+
+    const getMaxWindowStart = () => Math.max(totalAiAssistantMessageCount - Math.min(WINDOW_SIZE, totalAiAssistantMessageCount), 0);
+
+    const getPageNumberForMessageIndex = (messageIndex: number) => {
+        if (totalAiAssistantMessageCount <= 0) {
+            return 1;
+        }
+
+        const boundedIndex = Math.min(Math.max(messageIndex, 0), totalAiAssistantMessageCount - 1);
+        const reverseIndex = totalAiAssistantMessageCount - 1 - boundedIndex;
+
+        return Math.floor(reverseIndex / PAGE_SIZE) + 1;
+    };
+
+    const getScrollAnchor = (container: HTMLDivElement): ScrollAnchorType | null => {
+        const messageElements = Array.from(container.querySelectorAll<HTMLElement>('[data-ai-message-id]'));
+        const currentScrollTop = container.scrollTop;
+
+        for (const element of messageElements) {
+            const elementTop = element.offsetTop;
+            const elementBottom = elementTop + element.offsetHeight;
+            const messageId = element.dataset.aiMessageId;
+
+            if (elementBottom > currentScrollTop && messageId) {
+                return {
+                    messageId,
+                    offsetTop: elementTop - currentScrollTop,
+                };
+            }
+        }
+
+        return null;
+    };
+
+    const restoreScrollAnchor = (container: HTMLDivElement, anchor: ScrollAnchorType | null, fallbackBottomGap: number) => {
+        if (!anchor) {
+            container.scrollTop = Math.max(0, container.scrollHeight - container.clientHeight - fallbackBottomGap);
+            return;
+        }
+
+        const messageElements = Array.from(container.querySelectorAll<HTMLElement>('[data-ai-message-id]'));
+        const anchorElement = messageElements.find(element => element.dataset.aiMessageId === anchor.messageId);
+
+        if (!anchorElement) {
+            container.scrollTop = Math.max(0, container.scrollHeight - container.clientHeight - fallbackBottomGap);
+            return;
+        }
+
+        container.scrollTop = Math.max(0, anchorElement.offsetTop - anchor.offsetTop);
+    };
 
     useEffect(() => {
-        if (typePage === 'BIG') {
-            setTypePage('SMALL')
+        if (!assistantId) return;
+
+        fetchingRef.current = false;
+        windowStartRef.current = 0;
+        isWindowInitializedRef.current = false;
+
+        dispatch(getDialogAiAssistantMessagesAC(assistantId, {
+            pageSize: PAGE_SIZE,
+            pageNumber: 1
+        }, 'init'));
+
+        messagesAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
+    }, [assistantId, dispatch]);
+
+    useEffect(() => {
+        if (!assistantId || isWindowInitializedRef.current) return;
+        if (prompts.length === 0 && totalAiAssistantMessageCount === 0) return;
+
+        windowStartRef.current = getInitialWindowStart();
+        isWindowInitializedRef.current = true;
+
+        requestAnimationFrame(() => {
+            messagesAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
+        });
+    }, [assistantId, prompts.length, totalAiAssistantMessageCount]);
+
+    useEffect(() => {
+        if (!assistantId || !currentChat?.dialogId) return;
+
+        navigate(`/admin/ai-assistant/${assistantId}/dialog/${currentChat.dialogId}`, {
+            replace: true
+        });
+    }, [assistantId, currentChat?.dialogId, navigate]);
+
+    useEffect(() => {
+        if (!isAutoScroll) return;
+        messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [lastMessage, isAutoScroll]);
+
+    const scrollHandler = (e: React.UIEvent<HTMLDivElement>) => {
+        const el = e.currentTarget;
+
+        const AUTO_SCROLL_THRESHOLD = 100;
+        const LOAD_THRESHOLD = 20;
+
+        const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < AUTO_SCROLL_THRESHOLD;
+        const isNearBottomForLoad = el.scrollHeight - el.scrollTop - el.clientHeight < LOAD_THRESHOLD;
+
+        const currentWindowStart = windowStartRef.current;
+        const currentWindowEnd = currentWindowStart + prompts.length;
+
+        if (isAutoScroll !== isAtBottom) {
+            setIsAutoScroll(isAtBottom);
         }
-        dispatch(getDialogAiAssistantMessagesAC(userId))
-    }, [userId, lastMessage]);
 
-    // const msgs = prompts.find(i => i.chat.dialogId === currentChat.dialogId);
-    // const recipient = interlocutors.find(i => i.chat.dialogId === dialogId);
-    // console.log('Dialog - recipient', recipient)
+        if (fetchingRef.current) return;
 
-    const addNewPrompt = (messageText: string) => {
+        // 🔼 ВВЕРХ
+        if (el.scrollTop < 50 && currentWindowStart > 0) {
+            const nextWindowStart = Math.max(currentWindowStart - PAGE_SIZE, 0);
+            const nextOlderPage = getPageNumberForMessageIndex(nextWindowStart);
 
-        if (currentChat && currentChat.dialogId) {
-            const prompt = {
-                localId: String(Date.now()),
-                prompt: messageText,
-                senderId: authorizedUser.id,
-                receiverId: userId,
-                dialogId: currentChat?.dialogId,
-                createdAt: new Date().toISOString(),
-                // attachments: null as [],
-            };
-            dispatch(sendNewPromptAC(prompt));
-        } else {
-            const prompt = {
-                localId: String(Date.now()),
-                prompt: messageText,
-                senderId: authorizedUser.id,
-                receiverId: userId,
-                createdAt: new Date().toISOString(),
-                // attachments: null as [],
-            };
-            dispatch(sendNewPromptAC(prompt));
+            const scrollAnchor = getScrollAnchor(el);
+
+            fetchingRef.current = true;
+
+            dispatch(getDialogAiAssistantMessagesAC(assistantId, {
+                pageSize: PAGE_SIZE,
+                pageNumber: nextOlderPage
+            }, 'older'))
+                .then(() => {
+                    windowStartRef.current = nextWindowStart;
+
+                    requestAnimationFrame(() => {
+                        restoreScrollAnchor(el, scrollAnchor, 0);
+                        fetchingRef.current = false;
+                    });
+                })
+                .catch(() => {
+                    fetchingRef.current = false;
+                });
+
+            return;
         }
-        setAddMessageText('')
-    };
 
-    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-        const element = e.currentTarget;
-        if (Math.abs((element.scrollHeight - element.scrollTop) - element.clientHeight) < 300) {
-            !isAutoScroll && setIsAutoScroll(true)
-        } else {
-            isAutoScroll && setIsAutoScroll(false)
-        }
-    };
-
-    if (prompts) {
-        for (let i = 0; i < prompts.length; i++) {
-            const currentMessage = prompts[i];
-            // console.log('AdminAiAssistant - prompts[i]', prompts[i])
-
-            const currentDayLabel = formatDayLabel(currentMessage.createdAt);
-            const currentYearLabel = formatYearLabel(currentMessage.createdAt);
-
-            // Проверка на смену года
-            if (i !== 0 && formatYearLabel(prompts[i - 1].createdAt) !== currentYearLabel) {
-                renderItems.push(
-                    <div key={`year-${i}`} className={classes.yearLabel}>
-                        <span className={classes.systemMsg}>
-                            {`${currentYearLabel} год`}
-                        </span>
-                    </div>
-                );
-            }
-
-            // Проверка на смену дня
-            if (i !== 0 && formatDayLabel(prompts[i - 1].createdAt) !== currentDayLabel) {
-                renderItems.push(
-                    <div key={`day-${i}`} className={classes.dateLabel}>
-                        <span className={classes.systemMsg}>
-                            {currentDayLabel}
-                        </span>
-                    </div>
-                );
-            }
-
-            userId && renderItems.push(
-                <AdminAiAssistantItemDialog
-                    key={currentMessage.localId || currentMessage.smsId || i}
-                    dispatch={dispatch}
-                    localId={currentMessage.localId}
-                    msgId={currentMessage.msgId}
-                    userId={authorizedUser.id}
-                    interlocutorId={userId}
-                    senderId={currentMessage.senderId}
-                    message={currentMessage.message}
-                    createdAt={currentMessage.createdAt}
-                    updatedAt={currentMessage.updatedAt}
-                    attachments={currentMessage.attachments}
-                    avatar={currentInterlocutor.avatar}
-                    messages={prompts}
-                    isSending={isSending}
-                    sendingMessages={sendingMessages}
-                    updatingMessages={updatingMessages}
-                    deletingMessages={deletingMessages}
-                    index={i}
-                />
+        // 🔽 ВНИЗ
+        if (isNearBottomForLoad && currentWindowEnd < totalAiAssistantMessageCount) {
+            const nextWindowStart = Math.min(currentWindowStart + PAGE_SIZE, getMaxWindowStart());
+            const nextWindowEnd = Math.min(
+                nextWindowStart + Math.min(WINDOW_SIZE, totalAiAssistantMessageCount),
+                totalAiAssistantMessageCount
             );
-        };
-    }
+
+            const nextNewerPage = getPageNumberForMessageIndex(nextWindowEnd - 1);
+
+            const prevBottomGap = el.scrollHeight - el.scrollTop - el.clientHeight;
+            const scrollAnchor = getScrollAnchor(el);
+
+            fetchingRef.current = true;
+
+            dispatch(getDialogAiAssistantMessagesAC(assistantId, {
+                pageSize: PAGE_SIZE,
+                pageNumber: nextNewerPage
+            }, 'newer'))
+                .then(() => {
+                    windowStartRef.current = nextWindowStart;
+
+                    requestAnimationFrame(() => {
+                        restoreScrollAnchor(el, scrollAnchor, prevBottomGap);
+                        fetchingRef.current = false;
+                    });
+                })
+                .catch(() => {
+                    fetchingRef.current = false;
+                });
+        }
+    };
 
     return (
-        <div className={`${classes.wrapAdminContent} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
-            <div className={classes.adminContent}>
-                {/* <span className={classes.title}>GPTermikAI General Admin Bot</span> */}
+        <div className={`${classes.wrapContentAiAssistantAdmin} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
+            <div className={classes.aiAssistantContent}>
                 <HeaderMessagesList title={currentInterlocutor?.name} />
                 <div className={classes.messagesClass}>
                     <div className={classes.wrapMessages} onScroll={scrollHandler}>
@@ -163,35 +248,30 @@ const AdminAiAssistant: React.FC = React.memo(() => {
                                                     {currentInterlocutor?.name}
                                                 </strong>
                                             </h2>
-                                            {/* <Navigate to={"/admin/ai-assistant/orchestrate"} /> */}
                                         </div>
                                     </div>
                                 </div>
                                 :
-                                renderItems.length > 0
-                                    ? renderItems
-                                    :
-                                    <div className={classes.wrapStartMessages}>
-                                        <div className={classes.wrapBlockOfNoPosts}>
-                                            <div className={classes.blockOfNoPosts}>
-                                                <h1><strong>Чат переписки очищен, контекстное окно свободно!</strong></h1>
-                                                <h2>Весь контекст пленума моделей операется только на базу данных - пока нет переписки с добавлением контекста.
-                                                    <strong className={classes.strongInterlocutor}>
-                                                        {' '}
-                                                        {currentInterlocutor.name}
-                                                    </strong>
-                                                </h2>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                <MessagesList
+                                    dispatch={dispatch}
+                                    authorizedUser={authorizedUser}
+                                    assistantId={assistantId}
+                                    lastMessage={lastMessage}
+                                    prompts={prompts}
+                                    currentInterlocutor={currentInterlocutor}
+                                    isSending={isSending}
+                                    sendingMessages={sendingMessages}
+                                    updatingMessages={updatingMessages}
+                                    deletingMessages={deletingMessages}
+                                />
                         }
                         <div ref={messagesAnchorRef}></div>
                     </div>
                 </div>
-                <div className={classes.wrapInputAddMessage}>
+            </div>
+            <div className={classes.wrapInputAddMessage}>
+                <div className={classes.inputAddMessage}>
                     <div className={classes.wrapLeftBlockInputAddMessage}>
-                        {/* <BsPaperclip className={classes.PaperClipOutlined}/> */}
                         <PaperClipOutlined className={classes.PaperClipOutlined} />
                     </div>
                     <div className={classes.wrapCentrBlockInputAddMessage}>

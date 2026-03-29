@@ -12,9 +12,9 @@ import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { clearMessageStateAC, deleteMessageAC, updateMessageAC, updateReadAC } from "@packages/shared/src/store/MessagesReducers/messagesSlice";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import MessageFormModal from "../ModalContentMsg/messageFormModal";
-import classes from './styles.module.scss'
 import DeleteMessageModal from "../ModalContentMsg/deleteMessageModal/deleteMessageModal";
 import { API_URL } from "@packages/shared/src/http";
+import classes from './styles.module.scss'
 
 type PropsType = {
     dispatch: AppDispatch;

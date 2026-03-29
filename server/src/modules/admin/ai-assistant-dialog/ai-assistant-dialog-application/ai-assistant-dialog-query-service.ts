@@ -19,6 +19,7 @@ import { DialogAiAssistantRepository } from '../ai-assistant-dialog-infrastructu
 import { AiAssistantViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/ai-assistant.view.dto';
 import { UserProfileViewDto } from 'src/modules/user-accounts/users-dto/user-profile.view-dto';
 import { AiAssistantMessagesAllViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
+import { GetAiAssistantMessageQueryParams } from '../ai-assistant-dialog-dto/get-msg-query-params.input-dto';
 
 export type DialogAiAssistantType = {
     allMsg: AiAssistantMessagesAllViewDto[] | [],
@@ -29,7 +30,6 @@ export type DialogAiAssistantType = {
 @Injectable()
 export class DialogAiAssistantQueryService {
     constructor(
-        @InjectModel(DialogAiAssistant.name) private DialogAiAssistantModel: DialogAiAssistantModelType,
         private dialogRepository: DialogAiAssistantRepository,
         private dialogQueryRepository: DialogAiAssistantQueryRepository,
         private usersRepository: UsersRepository,
@@ -72,35 +72,40 @@ export class DialogAiAssistantQueryService {
             size: normalizedQuery.pageSize,
         });
     }
-    async getDialogAndMSGQueryService(userId: string, dialogId: string, receiverId: string): Promise<DialogAiAssistantType | []> {
+    async getDialogAndMSGQueryService(userId: string, dialogId: string, query: GetAiAssistantMessageQueryParams, receiverId: string): Promise<PaginatedViewDto<DialogAiAssistantType>  | null> {
         if (dialogId && receiverId) {
-            const user = await this.usersQueryRepository.getProfileQueryRepository(receiverId)
+            const assistant = await this.usersQueryRepository.getProfileQueryRepository(receiverId)
             const isChat = await this.getDialogsByIdService(dialogId)
-            const allMsgForDialogAndMiniUser = await this.messageAiAssistantQueryService.getAllAiAssistantMessagesByDialogIdService(
+            const allMsgAiAssistantForDialog = await this.messageAiAssistantQueryService.getAllAiAssistantMessagesByDialogIdService(
                 userId,
-                dialogId
+                dialogId,
+                query
             );
-            // console.log('DialogQueryService: - user', user)
-            // console.log('DialogQueryService: - isChat', isChat)
-            // console.log('DialogQueryService: - allMsgForDialogAndMiniUser', allMsgForDialogAndMiniUser)
+            // console.log('getDialogAndMSGQueryService: - assistant', assistant)
+            // console.log('getDialogAndMSGQueryService: - isChat', isChat)
+            // console.log('getDialogAndMSGQueryService: - allMsgAiAssistantForDialog', allMsgAiAssistantForDialog)
+
             return {
-                allMsg: allMsgForDialogAndMiniUser.length ? allMsgForDialogAndMiniUser : [],
-                interlocutor: user,
-                currentChat: isChat ? isChat : {}
+                ...allMsgAiAssistantForDialog,
+                items: {
+                    allMsg: allMsgAiAssistantForDialog.items.length ? allMsgAiAssistantForDialog.items : [],
+                    interlocutor: assistant,
+                    currentChat: isChat ? isChat : {}
+                }
             }
         } else {
             throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_TO_GET_A_DIALOG)
         }
     }
-    async getOneDialogBySenderIdOrReceiverIdQueryService(senderId: string, receiverId: string): Promise<DialogAiAssistantType | []> {
+    async getOneDialogBySenderIdOrReceiverIdQueryService(senderId: string, query: GetAiAssistantMessageQueryParams, receiverId: string): Promise<PaginatedViewDto<DialogAiAssistantType>  | null> {
         const isDialog = await this.dialogQueryRepository.findOneDialogBySenderIdOrReceiverIdRepository(senderId, receiverId);
         // console.log('getOneDialogBySenderIdOrReceiverIdQueryService: - isDialog', isDialog)
         if (isDialog === null) {
-            return []
+            return null
         }
         const dialog = AiAssistantDialogViewDto.mapToView(isDialog)
         // console.log('getOneDialogBySenderIdOrReceiverIdQueryService: - dialog', dialog)
-        return await this.getDialogAndMSGQueryService(senderId, dialog.dialogId, receiverId)
+        return await this.getDialogAndMSGQueryService(senderId, dialog.dialogId, query, receiverId)
     }
     async getDialogsByIdService(dialogId: string): Promise<AiAssistantDialogViewDto> {
         const isDialog = await this.dialogQueryRepository.findDialogByIdOrNotFoundFailRepository(dialogId)

@@ -1,6 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
@@ -8,6 +6,8 @@ import { MessageAiAssistantQueryRepository } from '../ai-assistant-infrastrucrur
 import { AiAssistantMessage } from '../ai-assistant-domain/ai-assistant.entity';
 import { AiAssistantMessagesAllViewDto } from '../api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
 import { queryMaperArrUserMessages, queryMaperUserMessage } from '../ai-assistant-maper/queryMaper';
+import { GetAiAssistantMessageQueryParams } from '../../ai-assistant-dialog/ai-assistant-dialog-dto/get-msg-query-params.input-dto';
+import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 
 @Injectable()
 export class MessageAiAssistantQueryService {
@@ -24,13 +24,16 @@ export class MessageAiAssistantQueryService {
         this.nodes = Array.isArray(nodesConfig) ? nodesConfig : (nodesConfig?.split(',') || []);
         this.logger.log(`Initialized AI Cluster with nodes: ${this.nodes.join(', ')}`);
     }
-    async getAllAiAssistantMessagesByDialogIdService(userId: string, dialogId: string): Promise<AiAssistantMessagesAllViewDto[]> {
-        const messages = await this.messageAiAssistantQueryRepository.findMessagesByDialogIdOrNotFoundFailRepository(dialogId);
-        // console.log('DialogQueryService - RES getAllMessagesByDialogIdService messages', messages);
-        if (messages.length) {
-            return queryMaperArrUserMessages(messages, userId).map(AiAssistantMessagesAllViewDto.mapToMessagesAiAssistantAllView)
+    async getAllAiAssistantMessagesByDialogIdService(userId: string, dialogId: string, query: GetAiAssistantMessageQueryParams): Promise<PaginatedViewDto<AiAssistantMessagesAllViewDto[]>> {
+        const messages = await this.messageAiAssistantQueryRepository.getAllMessagesByAiAssistantIdQueryRepository(userId, query, dialogId);
+        // console.log('MessageAiAssistantQueryService: getAllAiAssistantMessagesByDialogIdService - RES messages', messages.items);
+        if (messages && messages.items.length) {
+            return messages
         } else {
-            return []
+            return {
+                ...messages,
+                items: []
+            }
         }
     }
     async getMessageByIdOrNotFoundFailQueryService(msgId: string, userId: string): Promise<AiAssistantMessagesAllViewDto> {
