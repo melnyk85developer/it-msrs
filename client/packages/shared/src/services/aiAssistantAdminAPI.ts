@@ -62,7 +62,7 @@ export default class AiAssistantAdminAPI {
         return await $api.delete<any>('/admin/ai-assistant/prompts/all', { params: { senderId, receiverId, deleteOption } })
     }
     static async deleteAiAssistantDialogAPI(dialogId: string, senderId: string, receiverId: string): Promise<AxiosResponse<any>> {
-        console.log('deleteDialogAPI: dialogId, senderId, receiverId - ', dialogId, senderId, receiverId)
+        // console.log('deleteDialogAPI: dialogId, senderId, receiverId - ', dialogId, senderId, receiverId)
         return await $api.delete<any>(`/admin/ai-assistant/dialog/${dialogId}`, {
             params: {
                 senderId,

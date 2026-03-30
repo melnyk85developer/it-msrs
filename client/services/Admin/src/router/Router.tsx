@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import MyAdminContainer from "../AdminPanel";
 import AdminShopsContainer, { routeMain as routeAdminShopsContainer } from "../AdminPanel/pages/AdminShops/adminShopsContainer";
-import BotsContainer, { routeMain as routeAdminBotsContainer } from "../AdminPanel/pages/Bots/botsContainer";
+import AiAssistantGeneratorContainer, { routeMain as routeAdminBotsContainer } from "../AdminPanel/pages/AI-Assistant-General/AiAssistantGenerator/AiAssistantGeneratorContainer";
 import AdminHome from "../AdminPanel/pages";
 import AdminAiAssistantContainer from "../AdminPanel/pages/AI-Assistant-General/ai-assistant-general-container";
 
@@ -14,6 +14,11 @@ const AppMyAdminRout = () => {
                 <Route index element={
                     <Suspense fallback={'Loading...'}>
                         <AdminHome />
+                    </Suspense>
+                } />
+                <Route path="ai-assistant/generator" element={
+                    <Suspense fallback={'Loading...'}>
+                        <AiAssistantGeneratorContainer />
                     </Suspense>
                 } />
                 <Route path="ai-assistant/:userId" element={
@@ -29,11 +34,6 @@ const AppMyAdminRout = () => {
                 <Route path="adminshops" element={
                     <Suspense fallback={'Loading...'}>
                         <AdminShopsContainer />
-                    </Suspense>
-                } />
-                <Route path="bots" element={
-                    <Suspense fallback={'Loading...'}>
-                        <BotsContainer />
                     </Suspense>
                 } />
             </Route>

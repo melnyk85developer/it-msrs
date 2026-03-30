@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { addPhotoMyProfileAC, addPostMyProfileAC } from "../../../../../../packages/shared/src/store/MyProfileReducers/myProfileSlice";
+import { addPhotoMyProfileAC, addPostMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
 import { createUsersMyAdmin, deleteUserMyAdmin, fetchAvatarFile, getFtpFilesAdminAC, getUserMyAdminAC } from "@packages/shared/src/store/MyAdminReducers/myAdminSlice";
 import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import imageCompression from 'browser-image-compression';
-import { IUser } from "../../../../../../packages/shared/src/types/IUser";
-import classes from '../../styles.module.scss';
+import { IUser } from "@packages/shared/src/types/IUser";
 import routeMain from "./routes";
+import classes from '../../../styles.module.scss';
 
-const BotsContainer = () => {
+const AiAssistantGeneratorContainer = () => {
     const dispatch = useAppDispatch();
     const { isDarkTheme } = useAppSelector(state => state.authPage);
     const { users } = useAppSelector(state => state.usersPage);
@@ -329,4 +329,4 @@ const BotsContainer = () => {
 };
 
 export { routeMain };
-export default BotsContainer;
+export default AiAssistantGeneratorContainer;

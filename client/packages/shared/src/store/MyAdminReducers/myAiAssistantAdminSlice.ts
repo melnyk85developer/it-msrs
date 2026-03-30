@@ -340,11 +340,11 @@ export const deleteAiAssistantAllMessagesAC = (senderId: string, receiverId: str
     }
 }
 export const deleteAiAssistantDialogAC = (dialogId: string, senderId: string, receiverId: string) => async (dispatch: AppDispatch) => {
-    console.log('deleteDialogAC: senderId, receiverId - ', senderId, receiverId)
+    // console.log('deleteDialogAC: senderId, receiverId - ', senderId, receiverId)
     try {
         const response = await AiAssistantAdminAPI.deleteAiAssistantDialogAPI(dialogId, senderId, receiverId);
         if (response.status === 204) {
-            console.log('deleteDialogAC: response.status - ', response.status)
+            // console.log('deleteDialogAC: response.status - ', response.status)
             dispatch(myAIAssistantAdminSlice.actions.removeChat())
         }
         return response.status
