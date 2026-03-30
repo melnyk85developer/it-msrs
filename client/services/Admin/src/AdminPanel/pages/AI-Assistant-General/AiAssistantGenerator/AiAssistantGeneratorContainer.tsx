@@ -7,6 +7,8 @@ import imageCompression from 'browser-image-compression';
 import { IUser } from "@packages/shared/src/types/IUser";
 import routeMain from "./routes";
 import classes from '../../../styles.module.scss';
+import { getRandomAvatarFile } from "./utilsAiGenerator/getRandomAvatarFile";
+import { autoCropImage } from "./utilsAiGenerator/autoCropImage";
 
 const AiAssistantGeneratorContainer = () => {
     const dispatch = useAppDispatch();
@@ -73,77 +75,77 @@ const AiAssistantGeneratorContainer = () => {
         }
     }, [candincatPost, candincatPhotos, isCompletedPhotos, isCompletedPosts, isCompletedUsers]);
 
-    // Получение случайного файла аватара с оригинальным именем
-    const getRandomAvatarFile = async (): Promise<{ file: File; fileName: string }> => {
-        if (!avatars || avatars.length === 0) {
-            const defFile = new File([""], "defaultAvatar.png");
-            setResFile(defFile);
-            return { file: defFile, fileName: "defaultAvatar.png" };
-        }
+    // // Получение случайного файла аватара с оригинальным именем
+    // const getRandomAvatarFile = async (): Promise<{ file: File; fileName: string }> => {
+    //     if (!avatars || avatars.length === 0) {
+    //         const defFile = new File([""], "defaultAvatar.png");
+    //         setResFile(defFile);
+    //         return { file: defFile, fileName: "defaultAvatar.png" };
+    //     }
 
-        const randomIndexFtpAvatars = Math.floor(Math.random() * avatars.files.length);
-        const avatarServerFileName = avatars.files[randomIndexFtpAvatars];
-        try {
-            const file = await dispatch(fetchAvatarFile(avatarServerFileName, 'avatars')) as unknown as File;
-            console.log('getRandomAvatarFile: - avatarServerFileName', avatarServerFileName)
-            if (!file) throw new Error('File not loaded');
-            setResFile(file);
-            return { file, fileName: avatarServerFileName };
-        } catch (e) {
-            const defFile = new File([""], "defaultAvatar.png");
-            setResFile(defFile);
-            return { file: defFile, fileName: "defaultAvatar.png" };
-        }
-    };
+    //     const randomIndexFtpAvatars = Math.floor(Math.random() * avatars.files.length);
+    //     const avatarServerFileName = avatars.files[randomIndexFtpAvatars];
+    //     try {
+    //         const file = await dispatch(fetchAvatarFile(avatarServerFileName, 'avatars')) as unknown as File;
+    //         console.log('getRandomAvatarFile: - avatarServerFileName', avatarServerFileName)
+    //         if (!file) throw new Error('File not loaded');
+    //         setResFile(file);
+    //         return { file, fileName: avatarServerFileName };
+    //     } catch (e) {
+    //         const defFile = new File([""], "defaultAvatar.png");
+    //         setResFile(defFile);
+    //         return { file: defFile, fileName: "defaultAvatar.png" };
+    //     }
+    // };
 
-    const autoCropImage = async (imageSrc: File, originalFileName: string): Promise<File> => {
-        // console.log('autoCropImage: imageSrc, originalFileName', imageSrc, originalFileName)
-        const image = new Image();
-        image.src = URL.createObjectURL(imageSrc);
-        // console.log('autoCropImage: image.src', image.src)
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+    // const autoCropImage = async (imageSrc: File, originalFileName: string): Promise<File> => {
+    //     // console.log('autoCropImage: imageSrc, originalFileName', imageSrc, originalFileName)
+    //     const image = new Image();
+    //     image.src = URL.createObjectURL(imageSrc);
+    //     // console.log('autoCropImage: image.src', image.src)
+    //     const canvas = document.createElement('canvas');
+    //     const ctx = canvas.getContext('2d');
 
-        const cropWidth = 500;
-        const cropHeight = 500;
+    //     const cropWidth = 500;
+    //     const cropHeight = 500;
 
-        await new Promise<void>((resolve) => {
-            image.onload = () => {
-                let imgWidth = image.width;
-                let imgHeight = image.height;
+    //     await new Promise<void>((resolve) => {
+    //         image.onload = () => {
+    //             let imgWidth = image.width;
+    //             let imgHeight = image.height;
 
-                canvas.width = cropWidth;
-                canvas.height = cropHeight;
+    //             canvas.width = cropWidth;
+    //             canvas.height = cropHeight;
 
-                const scaleX = cropWidth / imgWidth;
-                const scaleY = cropHeight / imgHeight;
-                const scale = Math.max(scaleX, scaleY);
+    //             const scaleX = cropWidth / imgWidth;
+    //             const scaleY = cropHeight / imgHeight;
+    //             const scale = Math.max(scaleX, scaleY);
 
-                imgWidth *= scale;
-                imgHeight *= scale;
+    //             imgWidth *= scale;
+    //             imgHeight *= scale;
 
-                const x = (cropWidth - imgWidth) / 2;
-                const y = (cropHeight - imgHeight) / 2;
+    //             const x = (cropWidth - imgWidth) / 2;
+    //             const y = (cropHeight - imgHeight) / 2;
 
-                ctx!.clearRect(0, 0, canvas.width, canvas.height);
-                ctx!.drawImage(image, x, y, imgWidth, imgHeight);
+    //             ctx!.clearRect(0, 0, canvas.width, canvas.height);
+    //             ctx!.drawImage(image, x, y, imgWidth, imgHeight);
 
-                resolve();
-            };
-        });
+    //             resolve();
+    //         };
+    //     });
 
-        return new Promise<File>((resolve) => {
-            canvas.toBlob((blob) => {
-                if (blob) {
-                    // Создаем новый File с оригинальным именем
-                    const file = new File([blob], originalFileName, { type: blob.type });
-                    resolve(file);
-                } else {
-                    resolve(new File([""], "defaultCroppedAvatar.png"));
-                }
-            }, 'image/png');
-        });
-    };
+    //     return new Promise<File>((resolve) => {
+    //         canvas.toBlob((blob) => {
+    //             if (blob) {
+    //                 // Создаем новый File с оригинальным именем
+    //                 const file = new File([blob], originalFileName, { type: blob.type });
+    //                 resolve(file);
+    //             } else {
+    //                 resolve(new File([""], "defaultCroppedAvatar.png"));
+    //             }
+    //         }, 'image/png');
+    //     });
+    // };
 
     const sendUsers = async () => {
         setIsStart('start');
@@ -151,7 +153,7 @@ const AiAssistantGeneratorContainer = () => {
         for (let i = 0; i < Number(userCount); i++) {
             setIsCompletedUsers(true);
             setProgressUsersCount(i + 1);
-            const { file, fileName } = await getRandomAvatarFile();
+            const { file, fileName } = await getRandomAvatarFile(dispatch, avatars, setResFile);
             console.log('BotsContainer: file, fileName', file, fileName)
 
             const croppedFile = await autoCropImage(file, fileName);
