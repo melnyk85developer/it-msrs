@@ -14,10 +14,16 @@ import { MessageAiAssistantRepository } from './ai-assistant-infrastrucrure/msg-
 import { AiAssistantController } from './api-ai-assistant-msg/ai-assistant-msg.controller';
 import { AdminQueryService } from '../admin-application/admin-query-service';
 import { GetAiModelsQueryService } from './ai-assistant-application/get-ai-models.query-service';
+import { UpdateAiAssistantMessageUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/update-msg-ai-assistant.use-case';
+import { DeleteAiAssistantOneMessagegUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/delete-one-msgs-ai-assistant.use-case';
+import { DeleteAiAssistantAllMessagesUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/delete-all-msgs-ai-assistant.use-case';
 
 const useCases = [
     CreatePromptForTerminatorUseCase,
     CreateMessageAiAssistantUseCase,
+    UpdateAiAssistantMessageUseCase,
+    DeleteAiAssistantOneMessagegUseCase,
+    DeleteAiAssistantAllMessagesUseCase,
     CheckAiClusterConnectionUseCase,
     MessageAiAssistantQueryService,
 

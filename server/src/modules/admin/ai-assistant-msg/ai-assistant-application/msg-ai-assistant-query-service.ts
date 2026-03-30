@@ -6,7 +6,7 @@ import { MessageAiAssistantQueryRepository } from '../ai-assistant-infrastrucrur
 import { AiAssistantMessage } from '../ai-assistant-domain/ai-assistant.entity';
 import { AiAssistantMessagesAllViewDto } from '../api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
 import { queryMaperArrUserMessages, queryMaperUserMessage } from '../ai-assistant-maper/queryMaper';
-import { GetAiAssistantMessageQueryParams } from '../../ai-assistant-dialog/ai-assistant-dialog-dto/get-msg-query-params.input-dto';
+import { GetAiAssistantMessageQueryParams } from '../ai-assistant-dto/get-msg-query-params.input-dto';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 
 @Injectable()

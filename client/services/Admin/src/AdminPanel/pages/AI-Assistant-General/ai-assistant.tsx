@@ -54,12 +54,12 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
     const isWindowInitializedRef = useRef(false);
     const [isAutoScroll, setIsAutoScroll] = useState(false);
 
-    console.log('AdminAiAssistant - assistantId', assistantId)
-    console.log('AdminAiAssistant - dialogId', currentChat?.dialogId)
-    console.log('AdminAiAssistant - prompts.length', prompts.length)
+    // console.log('AdminAiAssistant - currentInterlocutor', currentInterlocutor)
+    // console.log('AdminAiAssistant - assistantId', assistantId)
+    // console.log('AdminAiAssistant - dialogId', currentChat?.dialogId)
+    // console.log('AdminAiAssistant - prompts.length', prompts.length)
 
     const getInitialWindowStart = () => Math.max(totalAiAssistantMessageCount - Math.min(PAGE_SIZE, totalAiAssistantMessageCount), 0);
-
     const getMaxWindowStart = () => Math.max(totalAiAssistantMessageCount - Math.min(WINDOW_SIZE, totalAiAssistantMessageCount), 0);
 
     const getPageNumberForMessageIndex = (messageIndex: number) => {
@@ -72,7 +72,6 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
 
         return Math.floor(reverseIndex / PAGE_SIZE) + 1;
     };
-
     const getScrollAnchor = (container: HTMLDivElement): ScrollAnchorType | null => {
         const messageElements = Array.from(container.querySelectorAll<HTMLElement>('[data-ai-message-id]'));
         const currentScrollTop = container.scrollTop;
@@ -92,7 +91,6 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
 
         return null;
     };
-
     const restoreScrollAnchor = (container: HTMLDivElement, anchor: ScrollAnchorType | null, fallbackBottomGap: number) => {
         if (!anchor) {
             container.scrollTop = Math.max(0, container.scrollHeight - container.clientHeight - fallbackBottomGap);
@@ -111,19 +109,28 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
     };
 
     useEffect(() => {
-        if (!assistantId) return;
+        messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [lastMessage]);
 
+    useEffect(() => {
         fetchingRef.current = false;
         windowStartRef.current = 0;
         isWindowInitializedRef.current = false;
-
-        dispatch(getDialogAiAssistantMessagesAC(assistantId, {
-            pageSize: PAGE_SIZE,
-            pageNumber: 1
-        }, 'init'));
-
         messagesAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
-    }, [assistantId, dispatch]);
+
+        if (assistantId) {
+            dispatch(getDialogAiAssistantMessagesAC(assistantId, {
+                pageSize: PAGE_SIZE,
+                pageNumber: 1
+            }, 'init'));
+            if (currentChat && currentChat.dialogId) {
+                navigate(`/admin/ai-assistant/${assistantId}/dialog/${currentChat.dialogId}`, {
+                    replace: true
+                });
+            }
+        }
+
+    }, [assistantId, currentChat?.dialogId]);
 
     useEffect(() => {
         if (!assistantId || isWindowInitializedRef.current) return;
@@ -136,19 +143,6 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
             messagesAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
         });
     }, [assistantId, prompts.length, totalAiAssistantMessageCount]);
-
-    useEffect(() => {
-        if (!assistantId || !currentChat?.dialogId) return;
-
-        navigate(`/admin/ai-assistant/${assistantId}/dialog/${currentChat.dialogId}`, {
-            replace: true
-        });
-    }, [assistantId, currentChat?.dialogId, navigate]);
-
-    useEffect(() => {
-        if (!isAutoScroll) return;
-        messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [lastMessage, isAutoScroll]);
 
     const scrollHandler = (e: React.UIEvent<HTMLDivElement>) => {
         const el = e.currentTarget;
@@ -256,6 +250,7 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
                                     dispatch={dispatch}
                                     authorizedUser={authorizedUser}
                                     assistantId={assistantId}
+                                    currentChat={currentChat}
                                     lastMessage={lastMessage}
                                     prompts={prompts}
                                     currentInterlocutor={currentInterlocutor}

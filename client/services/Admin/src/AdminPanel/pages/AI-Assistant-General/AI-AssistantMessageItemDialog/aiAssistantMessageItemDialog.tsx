@@ -10,20 +10,21 @@ import { formatTimeOfPublication } from "@packages/shared/src/components/utils/t
 import { RiDeleteBin6Fill, RiDeleteBin6Line, RiFileCopyFill, RiFileCopyLine, RiShareForwardFill, RiShareForwardLine } from "react-icons/ri";
 import { BsEmojiSmile, BsEmojiSmileFill, BsPencil, BsPencilFill, BsPin, BsPinFill } from "react-icons/bs";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
-import { clearMessageStateAC, deleteMessageAC, updateMessageAC, updateReadAC } from "@packages/shared/src/store/MessagesReducers/messagesSlice";
 import ModalWindow from "@packages/shared/src/components/ModalWindows";
 import MessageFormModal from "../ModalContentMsg/messageFormModal";
 import DeleteMessageModal from "../ModalContentMsg/deleteMessageModal/deleteMessageModal";
 import { API_URL } from "@packages/shared/src/http";
-import { MsgAiAssistantType } from "@packages/shared/src/types/AiAssistantType";
+import { ChatType, MsgAiAssistantType } from "@packages/shared/src/types/AiAssistantType";
 import 'highlight.js/styles/github-dark.css'; // Тема для кода
 import classes from './styles.module.scss'
+import { clearAiAssistantMessageStateAC, deleteAiAssistantMessageAC, updateAiAssistantMessageAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
 
 type PropsType = {
     dispatch: AppDispatch;
     msgId: string;
     userId: string;
     interlocutorId: string;
+    currentChat: ChatType;
     senderId: string;
     message: string;
     createdAt: string;
@@ -41,7 +42,7 @@ type PropsType = {
 const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
     const {
         dispatch, localId, msgId, userId, senderId, interlocutorId,
-        messages, message, avatar, index, createdAt,
+        currentChat, messages, message, avatar, index, createdAt,
         updatedAt, sendingMessages, updatingMessages
     } = props
 
@@ -62,7 +63,7 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
         if (showDeletedMessageLeft) {
             setOpenDeleteModalMessage(false)
             const timer = setTimeout(() => {
-                dispatch(clearMessageStateAC(msgId));
+                dispatch(clearAiAssistantMessageStateAC(msgId));
                 setShowDeletedMessageLeft(false);
             }, 2000);
             return () => clearTimeout(timer);
@@ -70,7 +71,7 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
         if (showDeletedMessageRight) {
             setOpenDeleteModalMessage(false)
             const timer = setTimeout(() => {
-                dispatch(clearMessageStateAC(msgId));
+                dispatch(clearAiAssistantMessageStateAC(msgId));
                 setShowDeletedMessageRight(false);
             }, 2000);
             return () => clearTimeout(timer);
@@ -84,22 +85,21 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
     const addEdit = (messageText: string) => {
         const newMsg = {
             msgId,
-            message: messageText,
+            prompt: messageText,
             senderId: userId,
             receiverId: interlocutorId,
-            read: false,
-            // createdAt: new Date().toISOString(),
-            replyToMessageId: null as string,
-            attachments: null as [],
+            dialogId: currentChat?.dialogId,
+            createdAt: createdAt,
+            attachments: [] as any[],
         };
         const oldMsg = messages.filter(m => m.msgId === msgId)
-        dispatch(updateMessageAC(newMsg, oldMsg))
+        dispatch(updateAiAssistantMessageAC(newMsg, oldMsg))
         setTextMessage('')
         setOpenModalMessage(false)
     };
 
     const deleteMsg = async () => {
-        const status = await dispatch(deleteMessageAC(msgId, deleteOption))
+        const status = await dispatch(deleteAiAssistantMessageAC(msgId, deleteOption))
         if (status === 204) {
             if (userId === senderId) {
                 setShowDeletedMessageRight(true)

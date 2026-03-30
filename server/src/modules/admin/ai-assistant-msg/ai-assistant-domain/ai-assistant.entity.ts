@@ -84,9 +84,9 @@ export class AiAssistantMessage {
         // console.log('TokenEntity: createInstance - token 😡 ', token)
         return message as AiAssistantMessageDocument;
     }
-    updateMessage(dto: UpdateMessageAiAssistantDomainDto) {
+    updateAiAssistantMessage(dto: UpdateMessageAiAssistantDomainDto) {
         if (this.id === dto.msgId) {
-            this.content = dto.message;
+            this.content = dto.prompt;
             this.senderId = dto.senderId;
             this.receiverId = dto.receiverId;
             this.dialogId = this.dialogId;

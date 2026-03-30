@@ -19,7 +19,7 @@ import { DialogAiAssistantRepository } from '../ai-assistant-dialog-infrastructu
 import { AiAssistantViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/ai-assistant.view.dto';
 import { UserProfileViewDto } from 'src/modules/user-accounts/users-dto/user-profile.view-dto';
 import { AiAssistantMessagesAllViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
-import { GetAiAssistantMessageQueryParams } from '../ai-assistant-dialog-dto/get-msg-query-params.input-dto';
+import { GetAiAssistantMessageQueryParams } from '../../ai-assistant-msg/ai-assistant-dto/get-msg-query-params.input-dto';
 
 export type DialogAiAssistantType = {
     allMsg: AiAssistantMessagesAllViewDto[] | [],

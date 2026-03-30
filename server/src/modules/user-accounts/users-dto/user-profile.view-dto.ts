@@ -2,7 +2,7 @@ import { OmitType } from "@nestjs/swagger";
 import { UserDocument } from "../users-domain/user.entity";
 
 export class UserProfileViewDto {
-    id: string;
+    profileId: string;
     avatar: string | null;
     login: string;
     email: string;
@@ -12,7 +12,7 @@ export class UserProfileViewDto {
     static mapToView(user: UserDocument): UserProfileViewDto {
         // console.log('UsersController: mapToView - user 😡 ', user)
         const dto = new UserProfileViewDto();
-        dto.id = user._id.toString();
+        dto.profileId = user._id.toString();
         dto.avatar = user.profileData.avatar;
         dto.email = user.accountData.email;
         dto.login = user.accountData.login;

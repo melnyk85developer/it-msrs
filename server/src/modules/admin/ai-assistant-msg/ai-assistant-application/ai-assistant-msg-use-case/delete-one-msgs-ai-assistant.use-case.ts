@@ -3,7 +3,7 @@ import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { MessageAiAssistantRepository } from '../../ai-assistant-infrastrucrure/msg-ai-assistant.repository';
 
-export class DeleteOneMessageCommand {
+export class DeleteAiAssistantOneMessageCommand {
     constructor(
         public userId: string,
         public msgId: string,
@@ -11,21 +11,21 @@ export class DeleteOneMessageCommand {
     ) { }
 }
 
-@CommandHandler(DeleteOneMessageCommand)
-export class DeleteOneMessagegUseCase
-    implements ICommandHandler<DeleteOneMessageCommand, string> {
+@CommandHandler(DeleteAiAssistantOneMessageCommand)
+export class DeleteAiAssistantOneMessagegUseCase
+    implements ICommandHandler<DeleteAiAssistantOneMessageCommand, string> {
     constructor(
         private commandBus: CommandBus,
         private eventBus: EventBus,
         private messageRepository: MessageAiAssistantRepository
     ) { }
-    async execute(command: DeleteOneMessageCommand): Promise<string> {
+    async execute(command: DeleteAiAssistantOneMessageCommand): Promise<string> {
         const { msgId, userId, deleteOption } = command;
         const message = await this.messageRepository.findMessageByIdOrNotFoundFailRepository(msgId)
         const newMeta: any[] = [...message.meta]
 
         if (userId !== message.senderId && userId !== message.receiverId) {
-            // console.log('deleteMessageByMsgIdServices: message', message)
+            console.log('deleteMessageByMsgIdServices: message', message)
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE)
         }
 

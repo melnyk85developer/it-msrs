@@ -1,6 +1,6 @@
 //dto для запроса списка юзеров с пагинацией, сортировкой, фильтрами
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { DialogAiAssistantSortBy } from './dialog-ai-assistant-sort-by';
+import { DialogAiAssistantSortBy } from '../../ai-assistant-dialog/ai-assistant-dialog-dto/dialog-ai-assistant-sort-by';
 import { BaseQueryParams } from 'src/core/dto/base.query-params.input-dto';
 
 //наследуемся от класса BaseQueryParams, где уже есть pageNumber, pageSize и т.п., чтобы не дублировать эти свойства

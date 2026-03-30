@@ -4,23 +4,23 @@ import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DialogAiAssistantRepository } from '../../ai-assistant-dialog-infrastructure/ai-assistant-dialog.repository';
 import { MessageAiAssistantRepository } from 'src/modules/admin/ai-assistant-msg/ai-assistant-infrastrucrure/msg-ai-assistant.repository';
 
-export class DeleteDialogCommand {
+export class DeleteAiAssistantDialogCommand {
     constructor(
         public dialogId: string,
         public userId: string
     ) { }
 }
 
-@CommandHandler(DeleteDialogCommand)
+@CommandHandler(DeleteAiAssistantDialogCommand)
 export class DeleteDialogAiAssistantUseCase
-    implements ICommandHandler<DeleteDialogCommand, void> {
+    implements ICommandHandler<DeleteAiAssistantDialogCommand, void> {
     constructor(
         private commandBus: CommandBus,
         private eventBus: EventBus,
         private messageAiAssistantRepository: MessageAiAssistantRepository,
         private dialogRepository: DialogAiAssistantRepository
     ) { }
-    async execute(command: DeleteDialogCommand): Promise<void> {
+    async execute(command: DeleteAiAssistantDialogCommand): Promise<void> {
         const { dialogId, userId } = command;
         let msgs = [] as any
         // console.log('MessageService: dialogId', dialogId);
@@ -32,10 +32,7 @@ export class DeleteDialogAiAssistantUseCase
         if (!isDialog || isDialog && isDialog.userAId !== userId && isDialog.userBId !== userId) {
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE)
         }
-        // const isAdmin = user.roles.some(entry => entry.value === 'ADMIN')
-        // if (isAdmin && messages) {
-        //     return await this.usersMessagesRepository.deleteAllMessagesRepository(senderId, receiverId)
-        // }
+        
         for (let i = 0; messages.length > i; i++) {
             const newMeta: any[] = [...messages[i].meta];
             // console.log('deleteAllMessagesServices: - newMeta 😡 ', newMeta)
@@ -80,33 +77,23 @@ export class DeleteDialogAiAssistantUseCase
                 msg.markMsgDeletedForUser({ msgId: msgs[i].id, meta: newMeta });
                 await this.messageAiAssistantRepository.save(msg);
             }
-            // console.log('deleteDialogService: dialogId, userId', dialogId, userId);
+            // console.log('DeleteDialogAiAssistantUseCase: dialogId, userId', dialogId, userId);
             const isDialog = await this.dialogRepository.findDialogByIdOrNotFoundFailRepository(dialogId)
-            // console.log('deleteDialogService: isDialog 1', isDialog);
+            // console.log('DeleteDialogAiAssistantUseCase: isDialog 1', isDialog);
             isDialog.markDialogDeletedForUser(dialogId, userId)
-            // console.log('deleteDialogService: isDialog 2', isDialog);
+            // console.log('DeleteDialogAiAssistantUseCase: isDialog 2', isDialog);
             await this.dialogRepository.save(isDialog);
-            // console.log('deleteDialogService: isDialog 3', isDialog);
-            if (isDialog && isDialog.meta[0]?.userId === isDialog.userAId && isDialog && isDialog.meta[1]?.userId === isDialog.userBId || isDialog && isDialog.meta[0]?.userId === isDialog.userBId && isDialog && isDialog.meta[1]?.userId === isDialog.userAId) {
-                // console.log('deleteDialogService: isDialog 4', isDialog);
-                return await this.dialogRepository.deleteDialog(dialogId)
-            }
-            // console.log('deleteDialogService: isDialog 5', isDialog);
-            return isDialog.id.toString();
+            // console.log('DeleteDialogAiAssistantUseCase: isDialog 3', isDialog);
+            return await this.dialogRepository.deleteDialog(dialogId)
         } else {
-            // console.log('deleteDialogService: dialogId, userId', dialogId, userId);
+            // console.log('DeleteDialogAiAssistantUseCase: dialogId, userId', dialogId, userId);
             const isDialog = await this.dialogRepository.findDialogByIdOrNotFoundFailRepository(dialogId)
-            // console.log('deleteDialogService: isDialog 1', isDialog);
+            // console.log('DeleteDialogAiAssistantUseCase: isDialog 1', isDialog);
             isDialog.markDialogDeletedForUser(dialogId, userId)
-            // console.log('deleteDialogService: isDialog 2', isDialog);
+            // console.log('DeleteDialogAiAssistantUseCase: isDialog 2', isDialog);
             await this.dialogRepository.save(isDialog);
-            // console.log('deleteDialogService: isDialog 3', isDialog);
-            if (isDialog && isDialog.meta[0]?.userId === isDialog.userAId && isDialog && isDialog.meta[1]?.userId === isDialog.userBId || isDialog && isDialog.meta[0]?.userId === isDialog.userBId && isDialog && isDialog.meta[1]?.userId === isDialog.userAId) {
-                // console.log('deleteDialogService: isDialog 4', isDialog);
-                return await this.dialogRepository.deleteDialog(dialogId)
-            }
-            // console.log('deleteDialogService: isDialog 5', isDialog);
-            return isDialog.id.toString();
+            // console.log('DeleteDialogAiAssistantUseCase: isDialog 3', isDialog);
+            return await this.dialogRepository.deleteDialog(dialogId)
         }
     }
 }

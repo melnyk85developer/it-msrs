@@ -7,29 +7,35 @@ export class UpdateMessageAiAssistantDto {
     @IsString({ message: 'msgId должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле msgId не должно быть пустым!' })
     readonly msgId: string;
-    @ApiProperty({ example: 'Привет, как дела?', description: 'Текст сообщения.' })
-    @IsString({ message: 'message должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле message не должно быть пустым!' })
-    @Length(1, 8000, { message: 'Длина сообщения должена быть не меньше 1 и не больше 8000 символов!' })
-    readonly message: string;
-    @ApiProperty({ example: 'senderId', description: 'Уникальный идентификатор отправителя!' })
-    @IsString({ message: 'senderId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле senderId не должно быть пустым!' })
+    @ApiProperty({ example: 'prompt', description: 'Prompt для консилиума моделей' })
+    @IsString()
+    @IsNotEmpty()
+    prompt: string;
+    @ApiProperty({ example: 'senderId', description: 'Уникальный идентификатор отправителя сообщения.' })
+    @IsString()
+    @IsNotEmpty()
     readonly senderId: string;
-    @ApiProperty({ example: 'receiverId', description: 'Уникальный идентификатор получателя!' })
-    @IsString({ message: 'receiverId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле receiverId не должно быть пустым!' })
+    @ApiProperty({ example: 'receiverId', description: 'Уникальный идентификатор модели получателя промпта.' })
+    @IsString()
+    @IsNotEmpty()
     readonly receiverId: string;
-    // @ApiProperty({ example: 'true', description: 'Является ли сообщение прочитанным или нет?' })
-    // @IsBoolean({ message: 'read должно быть boolean!' })
-    // @IsNotEmpty({ message: 'Поле read не должно быть пустым!' })
-    // readonly read: boolean;
-    // @ApiProperty({ example: 'true', description: 'Уникальный идентификатор диалога!' })
-    // @IsString({ message: 'dialogId должно быть строкой!' })
-    // @IsNotEmpty({ message: 'Поле dialogId не должно быть пустым!' })
-    // readonly dialogId: string;
-    @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
-    @IsString({ message: 'replyToMessageId должно быть строкой!' })
+    @ApiProperty({ example: 'dialogId', description: 'Уникальный идентификатор диалога.' })
+    @IsString()
+    @IsNotEmpty()
+    readonly dialogId: string;
+    @ApiProperty({ example: 'createdAt', description: 'Локальное время создания промпта.' })
+    @IsString()
+    @IsNotEmpty()
+    readonly createdAt: string;
+    @ApiProperty({ example: 'model', description: 'Имя модели AiAssistant.' })
     @IsOptional()
-    readonly replyToMessageId?: string;
+    @IsString()
+    readonly model?: string;
+    @ApiProperty({ example: 'model', description: 'Имя провайдера AiAssistant моделей.' })
+    @IsOptional()
+    @IsString()
+    readonly provider?: 'ollama' | 'external' | 'google'
+    @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
+    @IsOptional()
+    readonly attachments: Attachment[];
 }

@@ -1,14 +1,14 @@
-import { BiSearch, BiSearchAlt } from "react-icons/bi";
-import { BsTelephone, BsTelephoneFill } from "react-icons/bs";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
 import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Fill, RiDeleteBin6Line, RiMore2Fill, RiMore2Line, RiVideoOnFill, RiVideoOnLine } from "react-icons/ri";
 import { PiBroom, PiBroomBold } from "react-icons/pi";
 import { MdBlock, MdOutlineBlock } from "react-icons/md";
-import { deleteAllMessagesAC, deleteDialogAC } from "@packages/shared/src/store/MessagesReducers/messagesSlice";
+import { BiSearch, BiSearchAlt } from "react-icons/bi";
+import { BsTelephone, BsTelephoneFill } from "react-icons/bs";
 import LastSeenLabel from './getLastSeenLabel';
+import { deleteAiAssistantAllMessagesAC, deleteAiAssistantDialogAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
 import classes from './styles.module.scss'
-import React from "react";
 
 type PropsType = {
     title: string;
@@ -17,7 +17,7 @@ type PropsType = {
 const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
     const dispatch = useAppDispatch();
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage);
-    const { currentInterlocutor, currentChat } = useAppSelector(state => state.messagesPage);
+    const { currentInterlocutor, currentChat } = useAppSelector(state => state.adminAdminAiAssistantPage);
     const [isOpen, setIsOpen] = useState(false);
     const [deleteOption, setDeleteOption] = useState<"me" | "all">("me");
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -28,17 +28,17 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
 
     const clearChat = () => {
         setDeleteOption('all')
-        dispatch(deleteAllMessagesAC(
-            authorizedUser.id,
-            currentInterlocutor.id,
+        dispatch(deleteAiAssistantAllMessagesAC(
+            authorizedUser?.id,
+            currentInterlocutor?.profileId,
             deleteOption
         ))
     }
     const deleteChat = () => {
-        dispatch(deleteDialogAC(
-            currentChat.dialogId,
-            authorizedUser.id,
-            currentInterlocutor.id
+        dispatch(deleteAiAssistantDialogAC(
+            currentChat?.dialogId,
+            authorizedUser?.id,
+            currentInterlocutor?.profileId
         ))
     }
 

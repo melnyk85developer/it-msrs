@@ -1,8 +1,10 @@
 export type AiAssistantInterlocutor = {
-    userId: string;
+    profileId: string;
     avatar: string;
+    lastSeen: string;
+    login: string;
     name: string;
-    titleChat: string;
+    surname: string;
     chat: ChatType;
 }
 export type CreateMsgAiAssistantType = {

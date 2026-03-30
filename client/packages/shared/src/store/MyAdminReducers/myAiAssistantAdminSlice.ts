@@ -76,33 +76,33 @@ export const myAIAssistantAdminSlice = createSlice({
         meagsesIsSending(state) {
             state.isSending = true
         },
-        // meagseUpdating(state, action: PayloadAction<any>) {
-        //     state.error = ''
-        //     state.isSpiner = true
-        //     state.updatingMessages.push(action.payload);
-        // },
-        // stopMeagseUpdating(state, action: PayloadAction<any>) {
-        //     state.error = ''
-        //     state.updatingMessages = state.updatingMessages.filter(
-        //         msgId => msgId !== action.payload.msgId
-        //     );
-        //     state.isSpiner = false
-        // },
-        // meagsesIsSpiner(state, action: PayloadAction<boolean>) {
-        //     state.error = ''
-        //     state.isSpiner = action.payload
-        // },
+        meagseUpdating(state, action: PayloadAction<any>) {
+            state.error = ''
+            state.isSpiner = true
+            state.updatingMessages.push(action.payload);
+        },
+        stopMeagseUpdating(state, action: PayloadAction<any>) {
+            state.error = ''
+            state.updatingMessages = state.updatingMessages.filter(
+                msgId => msgId !== action.payload.msgId
+            );
+            state.isSpiner = false
+        },
+        meagsesIsSpiner(state, action: PayloadAction<boolean>) {
+            state.error = ''
+            state.isSpiner = action.payload
+        },
         setCurrentInterlocutor(state, action: PayloadAction<AiAssistantInterlocutor>) {
+            // console.log('setCurrentInterlocutor: - action.payload', action.payload)
             state.error = ''
             state.currentInterlocutor = action.payload
             state.isLoading = false
         },
-
-        // removeChat(state) {
-        //     state.error = ''
-        //     state.currentChat = {}
-        //     state.isLoading = false
-        // },
+        removeChat(state) {
+            state.error = ''
+            state.currentChat = {} as ChatType
+            state.isLoading = false
+        },
         setAllAiAssistantInterlocutors(state, action: PayloadAction<AiAssistantInterlocutor[]>) {
             state.error = ''
             state.interlocutors = action.payload
@@ -182,7 +182,7 @@ export const myAIAssistantAdminSlice = createSlice({
             state.isDeleting = true
         },
         removeMessage(state, action: PayloadAction<string>) {
-            console.log('removeMessage: - action.payload', action.payload)
+            // console.log('removeMessage: - action.payload', action.payload)
             state.prompts = state.prompts.filter(m => m.msgId !== action.payload);
             state.deletingMessages = state.deletingMessages.filter(msgId => msgId !== action.payload);
             state.isDeleting = false;
@@ -248,6 +248,7 @@ export const getDialogAiAssistantMessagesAC = (receiverId: string, params: { pag
 
         if (response.data && response.data.items) {
             const { allMsg, currentChat, interlocutor } = response.data.items;
+            console.log('getDialogAiAssistantMessagesAC: - response.data.items', response.data.items)
             console.log('getDialogAiAssistantMessagesAC: - totalCount', response.data.totalCount)
 
             // 🔥 Сохраняем общее кол-во сообщений в твой существующий стейт
@@ -256,7 +257,7 @@ export const getDialogAiAssistantMessagesAC = (receiverId: string, params: { pag
             }
 
             // Логика сообщений
-            if (allMsg) {
+            if (allMsg.length) {
                 if (type === 'older') {
                     dispatch(myAIAssistantAdminSlice.actions.addOlderMessages(allMsg));
                 } else if (type === 'newer') {
@@ -264,11 +265,20 @@ export const getDialogAiAssistantMessagesAC = (receiverId: string, params: { pag
                 } else {
                     dispatch(myAIAssistantAdminSlice.actions.setMessagesCurrentChat(allMsg));
                 }
+            } else {
+                dispatch(myAIAssistantAdminSlice.actions.setMessagesCurrentChat([]));
             }
 
-            // Логика для Chat и Interlocutor (твоя неизменная)
-            dispatch(myAIAssistantAdminSlice.actions.setCurrentChat(currentChat || {} as ChatType));
-            dispatch(myAIAssistantAdminSlice.actions.setCurrentInterlocutor(interlocutor || {} as AiAssistantInterlocutor));
+            if (currentChat) {
+                dispatch(myAIAssistantAdminSlice.actions.setCurrentChat(currentChat));
+            } else {
+                dispatch(myAIAssistantAdminSlice.actions.setCurrentChat({} as ChatType));
+            }
+            if (interlocutor) {
+                dispatch(myAIAssistantAdminSlice.actions.setCurrentInterlocutor(interlocutor));
+            } else {
+                dispatch(myAIAssistantAdminSlice.actions.setCurrentInterlocutor({} as AiAssistantInterlocutor));
+            }
         }
     } catch (error: any) {
         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message));
@@ -287,62 +297,63 @@ export const sendNewPromptAC = (message: MsgAiAssistantType) => async (dispatch:
         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
     }
 }
-// export const updateMessageAC = (newMsg: MsgAiAssistantType, oldMsg: MsgAiAssistantType) => async (dispatch: AppDispatch) => {
-//     // console.log('updateMessageAC newMsg: - req', newMsg)
-//     try {
-//         dispatch(myAIAssistantAdminSlice.actions.updateMessage(newMsg));
-//         const response = await AiAssistantAdminAPI.updateMessageAPI(newMsg);
-//         if (response.status === 200) {
-//             // console.log('updateMessageAC message: - IF status', response.status);
-//             // console.log('updateMessageAC message: - IF ', response.data);
-//             dispatch(myAIAssistantAdminSlice.actions.stopMeagseUpdating(response.data));
-//         } else {
-//             // console.log('updateMessageAC message: - ELSE ', response.data);
-//             dispatch(myAIAssistantAdminSlice.actions.updateMessage(oldMsg));
-//             dispatch(myAIAssistantAdminSlice.actions.stopMeagseUpdating(oldMsg));
-//         }
-//         return response.status
-//     } catch (error: any) {
-//         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message));
-//     }
-// }
-// export const deleteMessageAC = (msgId: string, deleteOption: string) => async (dispatch: AppDispatch) => {
-//     try {
-//         dispatch(myAIAssistantAdminSlice.actions.meagseIsDeleting(msgId));
-//         const response = await AiAssistantAdminAPI.deleteMessageAPI(msgId, deleteOption);
-//         return response.status
-//     } catch (error: any) {
-//         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
-//     }
-// }
-// export const deleteAllMessagesAC = (senderId: string, receiverId: string, deleteOption: string) => async (dispatch: AppDispatch) => {
-//     try {
-//         // dispatch(messagesSlice.actions.meagsesIsDeleting(msgId));
-//         const response = await AiAssistantAdminAPI.deleteAllMessagesAPI(senderId, receiverId, deleteOption);
-//         if (response.status === 204) {
-//             console.log('deleteAllMessagesAC: response.status - ', response.status)
-//             dispatch(myAIAssistantAdminSlice.actions.clearChat())
-//         }
-//         return response.status
-//     } catch (error: any) {
-//         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
-//     }
-// }
-// export const deleteDialogAC = (dialogId: string, senderId: string, receiverId: string) => async (dispatch: AppDispatch) => {
-//     // console.log('deleteDialogAC: senderId, receiverId - ', senderId, receiverId)
-//     try {
-//         // dispatch(messagesSlice.actions.meagsesIsDeleting(msgId));
-//         const response = await AiAssistantAdminAPI.deleteDialogAPI(dialogId, senderId, receiverId);
-//         if (response.status === 204) {
-//             dispatch(myAIAssistantAdminSlice.actions.removeChat())
-//         }
-//         return response.status
-//     } catch (error: any) {
-//         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
-//     }
-// }
-// export const clearMessageStateAC = (msgId: string) => async (dispatch: AppDispatch) => {
-//     // console.log('clearMessageStateAC smsId', msgId)
-//     dispatch(myAIAssistantAdminSlice.actions.removeMessage(msgId));
-// }
+
+export const updateAiAssistantMessageAC = (newMsg: MsgAiAssistantType, oldMsg: MsgAiAssistantType) => async (dispatch: AppDispatch) => {
+    // console.log('updateMessageAC newMsg: - req', newMsg)
+    try {
+        dispatch(myAIAssistantAdminSlice.actions.updateMessage(newMsg));
+        const response = await AiAssistantAdminAPI.updateAiAssistantMessageAPI(newMsg);
+        if (response.status === 200) {
+            // console.log('updateMessageAC message: - IF status', response.status);
+            // console.log('updateMessageAC message: - IF ', response.data);
+            dispatch(myAIAssistantAdminSlice.actions.stopMeagseUpdating(response.data));
+        } else {
+            // console.log('updateMessageAC message: - ELSE ', response.data);
+            dispatch(myAIAssistantAdminSlice.actions.updateMessage(oldMsg));
+            dispatch(myAIAssistantAdminSlice.actions.stopMeagseUpdating(oldMsg));
+        }
+        return response.status
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message));
+    }
+}
+export const deleteAiAssistantMessageAC = (msgId: string, deleteOption: string) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(myAIAssistantAdminSlice.actions.meagseIsDeleting(msgId));
+        const response = await AiAssistantAdminAPI.deleteAiAssistantMessageAPI(msgId, deleteOption);
+        return response.status
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
+export const deleteAiAssistantAllMessagesAC = (senderId: string, receiverId: string, deleteOption: string) => async (dispatch: AppDispatch) => {
+    try {
+        // console.log('deleteAiAssistantAllMessagesAC: senderId, receiverId, deleteOption - ', senderId, receiverId, deleteOption)
+        const response = await AiAssistantAdminAPI.deleteAiAssistantAllMessagesAPI(senderId, receiverId, deleteOption);
+        if (response.status === 204) {
+            // console.log('deleteAiAssistantAllMessagesAC: response.status - ', response.status)
+            dispatch(myAIAssistantAdminSlice.actions.clearChat())
+        }
+        return response.status
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
+export const deleteAiAssistantDialogAC = (dialogId: string, senderId: string, receiverId: string) => async (dispatch: AppDispatch) => {
+    console.log('deleteDialogAC: senderId, receiverId - ', senderId, receiverId)
+    try {
+        const response = await AiAssistantAdminAPI.deleteAiAssistantDialogAPI(dialogId, senderId, receiverId);
+        if (response.status === 204) {
+            console.log('deleteDialogAC: response.status - ', response.status)
+            dispatch(myAIAssistantAdminSlice.actions.removeChat())
+        }
+        return response.status
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
+export const clearAiAssistantMessageStateAC = (msgId: string) => async (dispatch: AppDispatch) => {
+    // console.log('clearMessageStateAC smsId', msgId)
+    dispatch(myAIAssistantAdminSlice.actions.removeMessage(msgId));
+}
 export default myAIAssistantAdminSlice.reducer

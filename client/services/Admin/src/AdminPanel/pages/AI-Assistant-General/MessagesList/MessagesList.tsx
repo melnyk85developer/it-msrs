@@ -2,7 +2,7 @@ import React from "react";
 import classes from './styles.module.scss';
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { IUser } from "@packages/shared/src/types/IUser";
-import { AiAssistantInterlocutor, MsgAiAssistantType } from "@packages/shared/src/types/AiAssistantType";
+import { AiAssistantInterlocutor, ChatType, MsgAiAssistantType } from "@packages/shared/src/types/AiAssistantType";
 import { formatDayLabel, formatYearLabel } from "@packages/shared/src/components/utils/timeOfPublication";
 import AdminAiAssistantItemDialog from "../AI-AssistantMessageItemDialog/aiAssistantMessageItemDialog";
 
@@ -10,6 +10,7 @@ type PropsType = {
     dispatch: AppDispatch;
     authorizedUser: IUser
     assistantId: string;
+    currentChat: ChatType;
     prompts: MsgAiAssistantType[];
     lastMessage: MsgAiAssistantType;
     currentInterlocutor: AiAssistantInterlocutor;
@@ -22,7 +23,7 @@ type PropsType = {
 const MessagesList: React.FC<PropsType> = React.memo((props) => {
     const {
         dispatch, sendingMessages, authorizedUser, assistantId,
-        prompts, currentInterlocutor, lastMessage, isSending,
+        currentChat, prompts, currentInterlocutor, lastMessage, isSending,
         updatingMessages, deletingMessages
     } = props;
 
@@ -68,6 +69,7 @@ const MessagesList: React.FC<PropsType> = React.memo((props) => {
                     msgId={currentMessage.msgId}
                     userId={authorizedUser.id}
                     interlocutorId={assistantId}
+                    currentChat={currentChat}
                     senderId={currentMessage.senderId}
                     message={currentMessage.prompt}
                     createdAt={currentMessage.createdAt}

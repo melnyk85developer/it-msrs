@@ -3,9 +3,10 @@ import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DialogRepository } from 'src/modules/user-messages/dialog/dialog-infrastructure/dialog.repository';
 import { MessageAiAssistantRepository } from '../../ai-assistant-infrastrucrure/msg-ai-assistant.repository';
+import { DialogAiAssistantRepository } from 'src/modules/admin/ai-assistant-dialog/ai-assistant-dialog-infrastructure/ai-assistant-dialog.repository';
 
 
-export class DeleteAllMessageCommand {
+export class DeleteAiAssistantAllMessagesCommand {
     constructor(
         public receiverId: string,
         public userId: string,
@@ -13,26 +14,26 @@ export class DeleteAllMessageCommand {
     ) { }
 }
 
-@CommandHandler(DeleteAllMessageCommand)
-export class DeleteAllMessageUseCase
-    implements ICommandHandler<DeleteAllMessageCommand, boolean> {
+@CommandHandler(DeleteAiAssistantAllMessagesCommand)
+export class DeleteAiAssistantAllMessagesUseCase
+    implements ICommandHandler<DeleteAiAssistantAllMessagesCommand, boolean> {
     constructor(
         private commandBus: CommandBus,
         private eventBus: EventBus,
-        private messageRepository: MessageAiAssistantRepository,
-        private dialogRepository: DialogRepository
+        private aiAssistantMessagesRepository: MessageAiAssistantRepository,
+        private aiAssistantDialogRepository: DialogAiAssistantRepository
     ) { }
-    async execute(command: DeleteAllMessageCommand): Promise<boolean> {
+    async execute(command: DeleteAiAssistantAllMessagesCommand): Promise<boolean> {
         const { userId, receiverId, deleteOption } = command;
 
         let msgs = [] as any
         // console.log('deleteAllMessagesServices - 🤪🤪🤪 - senderId, receiverId, userId, deleteOption', senderId, receiverId, userId, deleteOption)
-        const isDialog = await this.dialogRepository.findOneDialogBySenderIdOrReceiverIdRepository(userId, receiverId)
+        const isDialog = await this.aiAssistantDialogRepository.findOneDialogBySenderIdOrReceiverIdRepository(userId, receiverId)
         // console.log('MessageService: deleteDialogService - 🤪🤪🤪 - isDialog', isDialog)
         if (!isDialog || isDialog && isDialog.userAId !== userId && isDialog.userBId !== userId) {
             throw new DomainException(INTERNAL_STATUS_CODE.FORBIDEN_DELETION_IS_PROHIBITED_FOR_ALL_OF_YOU_WHO_ARE_NOT_THE_AUTHORS_OF_THIS_MESSAGE)
         }
-        const messages = await this.messageRepository.findMessagesBySenderIdOrReceiverIdOrNotFoundFailRepository(userId, receiverId);
+        const messages = await this.aiAssistantMessagesRepository.findMessagesBySenderIdOrReceiverIdOrNotFoundFailRepository(userId, receiverId);
         // console.log('deleteAllMessagesServices - 🤪🤪🤪 - messages.length', messages.length)
         // const isAdmin = user.roles.some(entry => entry.value === 'ADMIN')
         // if (isAdmin && messages) {
@@ -78,11 +79,11 @@ export class DeleteAllMessageUseCase
                         newMeta.push({ userId: userId, deletedAt: new Date().toISOString() });
                     }
                 }
-                const msg = await this.messageRepository.findMessageByIdOrNotFoundFailRepository(msgs[i].id)
+                const msg = await this.aiAssistantMessagesRepository.findMessageByIdOrNotFoundFailRepository(msgs[i].id)
                 msg.markMsgDeletedForUser(
                     { msgId: msgs[i].id, meta: newMeta }
                 );
-                await this.messageRepository.save(msg);
+                await this.aiAssistantMessagesRepository.save(msg);
             }
             return true
         } else {
