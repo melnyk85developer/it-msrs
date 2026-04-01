@@ -8,15 +8,19 @@ import routeMain from './routes'
 import classes from './styles.module.scss';
 import { AiAssistantWidgetListAdmin } from "./pages/AI-Assistant-General/AI-AssistantLSidebar/AiAssistantListWidgetAdmin/AiAssistantListAdminWidget";
 import { AdminTopRightNav } from "./AdminTopNav/adminTopRightNav/adminTopRightNav";
+import { AdminLSidebar, AdminPagesTypeContent } from "./AdminLSidebar/AdminLSidebar";
+import { getAiProvidersAndModelsAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
+
 
 const AppMyAdminContainer: React.FC = React.memo(() => {
     const dispatch = useAppDispatch()
     const { content, setContent, setPageType } = useAppContext();
     const { isAuth, isDarkTheme } = useAppSelector(state => state.authPage)
     const [typePage, setTypePage] = useState<'SMALL' | 'BIG'>('BIG');
-    const [contentLSidebar, setContentLSidebar] = useState();
+    const [typeContent, setTypeContent] = useState<AdminPagesTypeContent>('HALLO_ADMIN');
 
     // console.log('AppMyAdminContainer: - users', users)
+    console.log('AppMyAdminContainer: - typeContent', typeContent)
 
 
     const newContent = {
@@ -29,12 +33,20 @@ const AppMyAdminContainer: React.FC = React.memo(() => {
                 </Col>
                 <Col span={4}></Col>
                 <Col span={2}>
-                    <AdminTopRightNav/>
+                    <AdminTopRightNav
+                        typeContent={typeContent}
+                        setTypeContent={setTypeContent}
+                    />
                 </Col>
             </Row>
         ] as React.ReactNode[],
-        contentLsidebar: [<AiAssistantWidgetListAdmin />],
-        contentRsidebar: [<></>],
+        contentLsidebar: [
+            <AdminLSidebar
+                typeContent={typeContent}
+                setTypeContent={setTypeContent}
+            />
+        ] as React.ReactNode[],
+        contentRsidebar: [<></>] as React.ReactNode[],
         contentFooter: [
             <div className={`
                 ${classes.wrapFooterSectionsForProfile}
@@ -56,10 +68,11 @@ const AppMyAdminContainer: React.FC = React.memo(() => {
                     <p>Блок 4</p>
                 </Col>
             </div>
-        ]
+        ] as React.ReactNode[]
     };
 
     useEffect(() => {
+        dispatch(getAiProvidersAndModelsAC())
         dispatch(setLSidebarAC(SIDEBAR_ON));
         dispatch(setLSidebarSpanAC(4));
         dispatch(setContentSpanAC(16));
@@ -71,6 +84,7 @@ const AppMyAdminContainer: React.FC = React.memo(() => {
     }, []);
 
     useEffect(() => {
+        dispatch(getAiProvidersAndModelsAC())
         dispatch(setLSidebarAC(SIDEBAR_ON));
         dispatch(setLSidebarSpanAC(4));
         dispatch(setContentSpanAC(16));
@@ -79,7 +93,8 @@ const AppMyAdminContainer: React.FC = React.memo(() => {
         dispatch(setFooterAC(typePage === 'BIG' ? FOOTER_ON : FOOTER_OFF));
         setPageType('stretch');
         setContent(newContent);
-    }, [typePage]);
+    }, [typeContent, typePage]);
+
     return <Outlet
         context={{
             typePage,

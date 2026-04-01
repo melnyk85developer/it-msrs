@@ -294,7 +294,7 @@ const FinishRegistration: React.FC = React.memo(() => {
                                     </label>
                                     <NavLink
                                         className={`${classes.navLink} ${!isCheckboxChecked ? classes.disabledLink : ""}`}
-                                        to={isCheckboxChecked ? routeMyProfile(authorizedUser?.userId) : "#"}
+                                        to={isCheckboxChecked ? routeMyProfile(authorizedUser?.id) : "#"}
                                         onClick={(e) => {
                                             if (!isCheckboxChecked) e.preventDefault()
                                         }}

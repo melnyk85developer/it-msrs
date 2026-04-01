@@ -15,8 +15,6 @@ import { GetDialogsAiAssistantQueryParams } from '../../ai-assistant-dialog/ai-a
 import { AiAssistantDialogViewDto } from './viev-dto-msg/ai-assistant-dialog-view.dto';
 import { DialogAiAssistantQueryService, DialogAiAssistantType } from '../../ai-assistant-dialog/ai-assistant-dialog-application/ai-assistant-dialog-query-service';
 import { AiAssistantMessageOneViewDto } from './viev-dto-msg/msg-one.view-dto';
-import { GetAiModelsQuery } from '../ai-assistant-application/get-ai-models.query-service';
-import { GetGoogleModelsQuery } from '../ai-assistant-application/get-google-models.query.service';
 import { AiStreamInterceptor } from '../../interceptors/ai-stream.interceptor';
 import { GetAiAssistantMessageQueryParams } from '../ai-assistant-dto/get-msg-query-params.input-dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -31,6 +29,7 @@ import { DeleteAiAssistantMsgQueryDto } from '../ai-assistant-dto/delete-msg-ai-
 import { DeleteAiAssistantOneMessageCommand } from '../ai-assistant-application/ai-assistant-msg-use-case/delete-one-msgs-ai-assistant.use-case';
 import { DeleteAiAssistantDialogCommand } from '../../ai-assistant-dialog/ai-assistant-dialog-application/ai-assistant-dialog-use-cases/delete-ai-assistant-dialog.use-case';
 import { MessageAiAssistantQueryService } from '../ai-assistant-application/msg-ai-assistant-query-service';
+import { GetAllProvidersModelsQuery } from '../ai-assistant-application/ai-assistant-msg-use-case/get-all-providers-models.query.use-case';
 
 // @Roles('ADMIN')
 @Controller('admin')
@@ -48,8 +47,8 @@ export class AiAssistantController {
         console.log('testConnectionController: - 😡')
         return await this.commandBus.execute(new CheckAiClusterConnectionCommand());
     }
-    @Post('v1/chat/completions')
-    @UseInterceptors(AiStreamInterceptor)
+    @Post('/v1/chat/completions')
+    // @UseInterceptors(AiStreamInterceptor)
     async continueProxy(@Body() body: any) {
         const userMessages = body.messages?.filter((m: any) => m.role !== 'system') || [];
         const lastMessage = userMessages[userMessages.length - 1]?.content || '';
@@ -146,7 +145,7 @@ export class AiAssistantController {
         @Param('dialogId') dialogId: string,
         @ExtractUserFromRequest() user: UserContextDto
     ) {
-        console.log('😳😳 deleteAiAssistantDialogByIdController: dialogId - ', dialogId)
+        // console.log('😳😳 deleteAiAssistantDialogByIdController: dialogId - ', dialogId)
         return await this.commandBus.execute<DeleteAiAssistantDialogCommand, string>(
             new DeleteAiAssistantDialogCommand(
                 dialogId,
@@ -154,6 +153,14 @@ export class AiAssistantController {
             )
         );
         // return await this.messagesService.deleteDialogService(dialogId, user.id);
+    }
+    // @Roles('ADMIN')
+    @UseGuards(AuthAccessGuard)
+    @Get('/ai-plenum/all-terminators')
+    @HttpCode(HTTP_STATUSES.OK_200)
+    async getAllAiProvidersController() {
+        console.log('getAllAiProvidersController: all-terminators')
+        return this.queryBus.execute(new GetAllProvidersModelsQuery());
     }
     // @Roles('ADMIN')
     @UseGuards(AuthAccessGuard)
@@ -187,15 +194,6 @@ export class AiAssistantController {
         );
         // console.log('getDialogAIAssistantController: RES dialog', dialog)
         return dialog
-    }
-    @Get('/ai-plenum/models/google')
-    async getGoogleModels() {
-        return this.queryBus.execute(new GetGoogleModelsQuery());
-    }
-    // @UseGuards(AuthAccessGuard)
-    @Get('/ai-plenum/models')
-    async getAiModelsController() {
-        return await this.queryBus.execute(new GetAiModelsQuery());
     }
     // @Roles('ADMIN')
     // @UseGuards(AuthAccessGuard)

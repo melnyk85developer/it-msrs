@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { Attachment } from 'nodemailer/lib/mailer';
 
 export class CreatePromptAiDto {
     @ApiProperty({ example: 'localId', description: 'Локальный идентификатор сообщения - для обновлении его при ответе сервера.' })
@@ -19,6 +20,15 @@ export class CreatePromptAiDto {
     @IsNotEmpty()
     readonly receiverId: string;
 
-    model?: string;
-    provider?: 'ollama' | 'external' | 'google'
+    @ApiProperty({ example: 'model', description: 'Имя модели AiAssistant.' })
+    @IsOptional()
+    @IsString()
+    readonly model?: string;
+    @ApiProperty({ example: 'model', description: 'Имя провайдера AiAssistant моделей.' })
+    @IsOptional()
+    @IsString()
+    readonly provider?: 'ollama' | 'openai' | 'google'
+    @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
+    @IsOptional()
+    readonly attachments?: Attachment[];
 }

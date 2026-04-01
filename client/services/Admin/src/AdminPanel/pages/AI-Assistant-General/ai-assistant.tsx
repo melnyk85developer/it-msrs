@@ -15,8 +15,15 @@ import { useNavigate } from "react-router-dom";
 
 type PropsType = {
     dispatch: AppDispatch;
+
+    selectedAIProvider: string
+    setSelectedAIProvider: React.Dispatch<React.SetStateAction<string>>
+    selectedAIModel: string
+    setSelectedAIModel: React.Dispatch<React.SetStateAction<string>>
+
     addNewPrompt: (messageText: string) => void
     setAddMessageText: React.Dispatch<React.SetStateAction<string>>
+
     addMessageText: string;
     authorizedUser: IUser
     assistantId: string;
@@ -42,7 +49,7 @@ const WINDOW_SIZE = 40;
 const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
     const {
         dispatch, addNewPrompt, setAddMessageText, sendingMessages, authorizedUser,
-        assistantId, prompts, currentInterlocutor, currentChat, lastMessage, isSending,
+        assistantId, selectedAIProvider, setSelectedAIProvider, selectedAIModel, setSelectedAIModel, prompts, currentInterlocutor, currentChat, lastMessage, isSending,
         totalAiAssistantMessageCount, updatingMessages, deletingMessages, addMessageText
     } = props;
 
@@ -226,7 +233,13 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
     return (
         <div className={`${classes.wrapContentAiAssistantAdmin} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.aiAssistantContent}>
-                <HeaderMessagesList title={currentInterlocutor?.name} />
+                <HeaderMessagesList
+                    title={'GPTermikAI Admin'}
+                    selectedAIProvider={selectedAIProvider}
+                    setSelectedAIProvider={setSelectedAIProvider}
+                    selectedAIModel={selectedAIModel}
+                    setSelectedAIModel={setSelectedAIModel}
+                />
                 <div className={classes.messagesClass}>
                     <div className={classes.wrapMessages} onScroll={scrollHandler}>
                         {

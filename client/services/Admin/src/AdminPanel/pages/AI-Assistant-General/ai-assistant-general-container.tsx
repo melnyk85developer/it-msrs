@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import AdminAiAssistant from "./ai-assistant";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { getDialogAiAssistantMessagesAC, sendNewPromptAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
+import { getAiProvidersAndModelsAC, getDialogAiAssistantMessagesAC, sendNewPromptAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
 import routeMain from './routes'
 
 const AdminAiAssistantContainer: React.FC = React.memo(() => {
@@ -21,10 +21,14 @@ const AdminAiAssistantContainer: React.FC = React.memo(() => {
         updatingMessages
     } = useAppSelector(state => state.adminAdminAiAssistantPage);
     const { userId } = useParams<string>();
+    const [selectedAIProvider, setSelectedAIProvider] = useState('');
+    const [selectedAIModel, setSelectedAIModel] = useState('');
     const [addMessageText, setAddMessageText] = useState('');
 
     const assistantId = userId
 
+    console.log('AdminAiAssistant - selectedAIProvider', selectedAIProvider)
+    console.log('AdminAiAssistant - selectedAIModel', selectedAIModel)
     // console.log('AdminAiAssistant - assistantId', assistantId)
     // console.log('AdminAiAssistant - prompts', prompts)
     // console.log('AdminAiAssistant - currentInterlocutor', currentInterlocutor)
@@ -42,8 +46,10 @@ const AdminAiAssistantContainer: React.FC = React.memo(() => {
             senderId: authorizedUser.id,
             receiverId: assistantId,
             dialogId: currentChat?.dialogId,
+            provider: selectedAIProvider,
+            model: selectedAIModel,
             createdAt: new Date().toISOString(),
-            // attachments: null as [],
+            attachments: [] as any[],
         };
         dispatch(sendNewPromptAC(prompt));
         setAddMessageText('')
@@ -52,6 +58,10 @@ const AdminAiAssistantContainer: React.FC = React.memo(() => {
     return (
         <AdminAiAssistant
             dispatch={dispatch}
+            selectedAIProvider={selectedAIProvider}
+            setSelectedAIProvider={setSelectedAIProvider}
+            selectedAIModel={selectedAIModel}
+            setSelectedAIModel={setSelectedAIModel}
             addNewPrompt={addNewPrompt}
             setAddMessageText={setAddMessageText}
             addMessageText={addMessageText}

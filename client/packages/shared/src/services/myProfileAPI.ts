@@ -40,7 +40,7 @@ export default class MyProfileAPI {
         // console.log('updateMyProfileAPI - formData avatar', formData)
         return $api.put<Object>(`/users/profile/update/avatar/${userId}`, formData)
     }
-    static async updateStatusMyProfileAPI(userId: number, authorizedUserId: number, status: string): Promise<AxiosResponse<any>> {
+    static async updateStatusMyProfileAPI(userId: string, authorizedUserId: string, status: string): Promise<AxiosResponse<any>> {
         return $api.put<Object>(`/users/profile/update/status/${userId}`, { authorizedUserId, status })
     }
     static async deleteMyProfileAPI(userId: number): Promise<AxiosResponse<void>> {

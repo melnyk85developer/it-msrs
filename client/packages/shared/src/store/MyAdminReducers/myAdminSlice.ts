@@ -101,7 +101,7 @@ export const createUsersMyAdmin = (user: any) => async (dispatch: AppDispatch) =
     try {
         dispatch(myAdminSlice.actions.usersFetching())
         const data = await MyAdminAPI.createUsersAdminAPI(user)
-        console.log('createUsersMyAdmin: res - data.data', data.data)
+        // console.log('createUsersMyAdmin: res - data.data', data.data)
         dispatch(myAdminSlice.actions.createUserBotAdmin(data.data))
         dispatch(myAdminSlice.actions.createUsersBotsAdmin(data.data))
         return data.data
@@ -123,7 +123,7 @@ export const getFtpFilesAdminAC = (folder: string) => async (dispatch: AppDispat
     try {
         dispatch(myAdminSlice.actions.usersFetching());
         const res = await MyAdminAPI.getFtpFilesAPI(folder);
-        console.log('getFtpFilesAdminAC: - res', res.data)
+        // console.log('getFtpFilesAdminAC: - res', res.data)
         dispatch(myAdminSlice.actions.setFtpFilesAdmin({ folder, files: res.data}));
     } catch (error: any) {
         dispatch(myAdminSlice.actions.myAdminFetchingError(error.message ?? 'Ошибка при загрузке списка файлов'));

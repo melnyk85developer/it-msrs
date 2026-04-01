@@ -14,7 +14,7 @@ const ProfileStatus: React.FC<PropsType> = React.memo(({
     const [editMode, setEditMode] = useState(false);
     const [status, setStatus] = useState(profile.status || '');
 
-    const userId = profile ? profile.userId : undefined
+    const userId = profile ? profile.id : undefined
     const authorizedUserId = authorizedUser ? authorizedUser.id : undefined
 
     const activateEditMode = () => {
@@ -23,7 +23,7 @@ const ProfileStatus: React.FC<PropsType> = React.memo(({
         }
     }
     const deactivateEditMode = () => {
-        dispatch(updateStatusMyProfileAC(userId, Number(authorizedUserId), status))
+        dispatch(updateStatusMyProfileAC(userId, authorizedUserId, status))
         setEditMode(false);
     }
     const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,3 +1,29 @@
+export type ModelProviderType = {
+    id: string;
+    name: string;
+    version: string;
+}
+export type GoogleProviderType = {
+    free: ModelProviderType[];
+    paid: ModelProviderType[];
+}
+export type OpenAIProviderType = {
+    free: ModelProviderType[];
+    paid: ModelProviderType[];
+}
+export type OllamaLocalProviderType = {
+    free: ModelProviderType[];
+    paid: ModelProviderType[];
+    localPC: {
+        name: string[];
+        node: string;
+    };
+}
+export type AIProvidersType = {
+    google: GoogleProviderType
+    openai: OpenAIProviderType
+    ollama: OllamaLocalProviderType
+}
 export type AiAssistantInterlocutor = {
     profileId: string;
     avatar: string;
@@ -24,7 +50,9 @@ export type MsgAiAssistantType = {
     prompt: string;
     senderId: string;
     receiverId: string;
-    dialogId?: string | undefined;
+    dialogId?: string;
+    provider?: string;
+    model?: string;
     createdAt?: string;
     updatedAt?: string;
     attachments?: any[];

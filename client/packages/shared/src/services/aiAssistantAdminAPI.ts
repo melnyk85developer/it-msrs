@@ -3,6 +3,9 @@ import $api from "../http";
 import { MsgAiAssistantType } from "@/types/AiAssistantType";
 
 export default class AiAssistantAdminAPI {
+    static async getAiProvidersAndModelsAPI(): Promise<AxiosResponse<any>> {
+        return $api.get<any[]>('/admin/ai-plenum/all-terminators')
+    }
     static async getAiAssistantInterlocutorAPI(): Promise<AxiosResponse<any>> {
         return $api.get<any[]>('/admin/ai-interlocutors')
     }

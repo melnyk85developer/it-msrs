@@ -32,8 +32,8 @@ const ProfileDataForm: React.FC<PropsType> = ({
 
     const sendAPicture = () => {
         const profileQuestionnaire = {
-            userId: profile.userId, 
-            authorizedUserId: Number(authorizedUser.id),
+            userId: profile.id, 
+            authorizedUserId: authorizedUser.id,
             name,
             surname,
             gender,

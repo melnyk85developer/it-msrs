@@ -38,5 +38,5 @@ export class UpdateMessageAiAssistantDomainDto {
     @ApiProperty({ example: 'model', description: 'Имя провайдера AiAssistant моделей.' })
     @IsOptional()
     @IsString()
-    readonly provider?: 'ollama' | 'external' | 'google'
+    readonly provider?: 'ollama' | 'openai' | 'google'
 }

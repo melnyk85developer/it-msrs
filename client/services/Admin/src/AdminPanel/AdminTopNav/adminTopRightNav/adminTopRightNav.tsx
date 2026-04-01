@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined, UnorderedListOutlined, ShoppingCartOutlined, EditOutlined, MenuOutlined } from "@ant-design/icons";
 import { useAppSelector } from '@packages/shared/src/components/hooks/redux';
 import { Col } from 'antd';
 import { NavLink } from 'react-router-dom';
 import classes from './styles.module.scss'
 
-export const AdminTopRightNav: React.FC = () => {
+type PropsType = {
+    typeContent: string;
+    setTypeContent: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const AdminTopRightNav: React.FC<PropsType> = React.memo(({ typeContent, setTypeContent }) => {
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage)
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -30,17 +35,17 @@ export const AdminTopRightNav: React.FC = () => {
             </Col>
             <Col className={`${isOpen ? classes.topNavMyBlogsActive : classes.topNavMyBlogsDisactive}`}>
                 <ul className={classes.wrap_menu_options}>
-                    <li className={classes.li}>
+                    <li className={classes.li} onClick={() => setTypeContent('ASSISTANTS')}>
                         <NavLink to="/admin/ai-assistant/generator" className={({ isActive }) => `${isActive ? classes.active : classes.button}`}>
                             AiAssistants
                         </NavLink>
                     </li>
-                    <li className={classes.li}>
+                    <li className={classes.li} onClick={() => setTypeContent('HALLO_ADMIN')}>
                         <NavLink to="/admin" className={({ isActive }) => `${isActive ? classes.active : classes.button}`}>
                             Главная
                         </NavLink>
                     </li>
-                    <li className={classes.li}>
+                    <li className={classes.li} onClick={() => setTypeContent('SHOPS')}>
                         <NavLink to="/admin/adminshops" className={({ isActive }) => `${isActive ? classes.active : classes.button}`}>
                             Магазины
                         </NavLink>
@@ -49,4 +54,4 @@ export const AdminTopRightNav: React.FC = () => {
             </Col>
         </Col>
     )
-}
+})

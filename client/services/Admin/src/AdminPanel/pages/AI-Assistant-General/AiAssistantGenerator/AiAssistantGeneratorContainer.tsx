@@ -34,10 +34,10 @@ const AiAssistantGeneratorContainer = () => {
     const [resFile, setResFile] = useState(null);
 
     const filterBots: IUser[] = users?.filter((b: { isBot: boolean; }) => b?.isBot === true);
-    console.log('BotsContainer: - fileName: 😳 ', avatars)
+    // console.log('AiAssistantGeneratorContainer: - fileName: 😳 ', avatars)
 
     useEffect(() => {
-        console.log('[BotsContainer] mount — загружаю 😡 ftpAvatars');
+        // console.log('[AiAssistantGeneratorContainer] mount — загружаю 😡 ftpAvatars');
         dispatch(getFtpFilesAdminAC('avatars'));
     }, [dispatch]);
 
@@ -226,6 +226,7 @@ const AiAssistantGeneratorContainer = () => {
     return (
         <div className={`${classes.wrapAdminContent} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.adminContent}>
+
                 <h1 className={classes.title}>Генегатор ботов</h1>
                 <div className={classes.content}>
                     <div className={classes.wrapCreateUsersBlock}>
@@ -325,6 +326,7 @@ const AiAssistantGeneratorContainer = () => {
                         <button onClick={deleteUsers}>Deleted All Bots</button>
                     </div>
                 </div>
+                
             </div>
         </div>
     );

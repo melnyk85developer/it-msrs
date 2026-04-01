@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@packages/shared/src/components/hooks/redux'
 import AiAssistantAdminItemWidget from '../AiAssistantItemWidgetAdmin/AiAssistantItemWidgetAdmin'
 import { getAiAssistantInterlocutorAC } from '@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice'
 import classes from '../../styles.module.scss'
 
-export const AiAssistantWidgetListAdmin = () => {
+export const AiAssistantWidgetListAdmin: React.FC = React.memo(() => {
     const dispatch = useAppDispatch()
     const { isAuth, authorizedUser, isDarkTheme } = useAppSelector(state => state.authPage)
     const { users } = useAppSelector(state => state.usersPage)
@@ -17,13 +17,12 @@ export const AiAssistantWidgetListAdmin = () => {
     }, [users])
 
     return (
-        <div className={
-            `${classes.wrapInterlocutors}
-                    ${isDarkTheme !== "light"
-                ? classes.dark
-                : classes.light
-            }`
-        }>
+        <>
+            <div className={classes.titleLTopWitgetAiAssistantInterlocutors}>
+                <h3>
+                    Ассистенты
+                </h3>
+            </div>
             <ul>
                 {!interlocutors.length
                     ? <span>Вы еще не переписывались ни с кем из Термиков! </span>
@@ -36,6 +35,6 @@ export const AiAssistantWidgetListAdmin = () => {
                         />)
                 }
             </ul>
-        </div>
+        </>
     )
-}
+})

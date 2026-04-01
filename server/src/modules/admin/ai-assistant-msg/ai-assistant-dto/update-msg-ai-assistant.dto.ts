@@ -34,8 +34,8 @@ export class UpdateMessageAiAssistantDto {
     @ApiProperty({ example: 'model', description: 'Имя провайдера AiAssistant моделей.' })
     @IsOptional()
     @IsString()
-    readonly provider?: 'ollama' | 'external' | 'google'
+    readonly provider?: 'ollama' | 'openai' | 'google'
     @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
     @IsOptional()
-    readonly attachments: Attachment[];
+    readonly attachments?: Attachment[];
 }

@@ -13,10 +13,13 @@ import { CreateMessageAiAssistantUseCase } from './ai-assistant-application/ai-a
 import { MessageAiAssistantRepository } from './ai-assistant-infrastrucrure/msg-ai-assistant.repository';
 import { AiAssistantController } from './api-ai-assistant-msg/ai-assistant-msg.controller';
 import { AdminQueryService } from '../admin-application/admin-query-service';
-import { GetAiModelsQueryService } from './ai-assistant-application/get-ai-models.query-service';
+import { GetOllamaLocalAiModelsQueryUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/get-ollama-local-models.query.use-case';
 import { UpdateAiAssistantMessageUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/update-msg-ai-assistant.use-case';
 import { DeleteAiAssistantOneMessagegUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/delete-one-msgs-ai-assistant.use-case';
 import { DeleteAiAssistantAllMessagesUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/delete-all-msgs-ai-assistant.use-case';
+import { GetGoogleModelsQueryUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/get-google-models.query.use-case';
+import { GetAllProvidersModelsQueryUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/get-all-providers-models.query.use-case';
+import { GetOpenAiModelsQueryUseCase } from './ai-assistant-application/ai-assistant-msg-use-case/get-open-ai-models-query.use-case';
 
 const useCases = [
     CreatePromptForTerminatorUseCase,
@@ -27,10 +30,14 @@ const useCases = [
     CheckAiClusterConnectionUseCase,
     MessageAiAssistantQueryService,
 
+    GetAllProvidersModelsQueryUseCase,
+    GetGoogleModelsQueryUseCase,
+    GetOpenAiModelsQueryUseCase,
+    GetOllamaLocalAiModelsQueryUseCase,
+
     AdminQueryService,
     MessageAiAssistantRepository,
     MessageAiAssistantQueryRepository,
-    GetAiModelsQueryService,
 ]
 
 @Module({

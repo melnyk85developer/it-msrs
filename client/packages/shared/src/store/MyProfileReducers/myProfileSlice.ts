@@ -206,7 +206,7 @@ export const updateAvatarMyProfileAC = (userId: number, authorizedUserId: number
         dispatch(myProfileSlice.actions.myProfileFetchingError(error.response?.data?.message))
     }
 }
-export const updateStatusMyProfileAC = (userId: number, authorizedUserId: number, status: string) => async (dispatch: AppDispatch) => {
+export const updateStatusMyProfileAC = (userId: string, authorizedUserId: string, status: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyProfileAPI.updateStatusMyProfileAPI(userId, authorizedUserId, status);
         dispatch(myProfileSlice.actions.setUpdateStatusMyProfile(data.data.newStatus))

@@ -9,7 +9,7 @@ export default class MyAdminAPI {
     }
     static createUsersAdminAPI(user: any): Promise<AxiosResponse<any>> {
         const { name, surname, email, password, isBot, avatar } = user
-        console.log('createUsersAPI: - isBot', isBot)
+        // console.log('createUsersAPI: - isBot', isBot)
 
         const formData = new FormData()
         formData.append('login', name)
@@ -31,7 +31,7 @@ export default class MyAdminAPI {
     }
 
     static getFtpAvatarFileAPI(fileName: string, folder: string): Promise<AxiosResponse<Blob>> {
-        console.log('getFtpAvatarFileAPI: - fileName 😡', fileName)
+        // console.log('getFtpAvatarFileAPI: - fileName 😡', fileName)
         return $api.get<Blob>(`/admin/static/ftp/${folder}`, { params: { fileName }, responseType: 'blob' });
     }
 }

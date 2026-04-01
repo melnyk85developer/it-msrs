@@ -1,10 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "../redux-store";
 import { ChatType, Interlocutor, MessagesType, PostsType } from "@/types/types";
-import { AiAssistantInterlocutor, CreateMsgAiAssistantType, MsgAiAssistantType } from "@/types/AiAssistantType";
+import { AiAssistantInterlocutor, AIProvidersType, CreateMsgAiAssistantType, GoogleProviderType, ModelProviderType, MsgAiAssistantType, OllamaLocalProviderType, OpenAIProviderType } from "@/types/AiAssistantType";
 import AiAssistantAdminAPI from "../../services/aiAssistantAdminAPI";
 
 interface AIAssistantAdminState {
+    providers: AIProvidersType;
+    goole_provider_ai: GoogleProviderType;
+    openai_provider_ai: OpenAIProviderType;
+    ollama_local_provider_ai: OllamaLocalProviderType;
+
     currentInterlocutor: AiAssistantInterlocutor;
     currentChat: ChatType;
     lastMessage: CreateMsgAiAssistantType | MsgAiAssistantType;
@@ -26,6 +31,11 @@ interface AIAssistantAdminState {
     error: string;
 }
 const initialState: AIAssistantAdminState = {
+    providers: {} as AIProvidersType,
+    goole_provider_ai: {} as GoogleProviderType,
+    openai_provider_ai: {} as OpenAIProviderType,
+    ollama_local_provider_ai: {} as OllamaLocalProviderType,
+
     currentInterlocutor: {} as AiAssistantInterlocutor,
     currentChat: {} as ChatType,
     lastMessage: {} as CreateMsgAiAssistantType,
@@ -91,6 +101,16 @@ export const myAIAssistantAdminSlice = createSlice({
         meagsesIsSpiner(state, action: PayloadAction<boolean>) {
             state.error = ''
             state.isSpiner = action.payload
+        },
+        setAIProviders(state, action: PayloadAction<AIProvidersType>) {
+            // console.log('setAIProviders: - action.payload', action.payload)
+            state.error = ''
+            // state.providers = action.payload
+            state.goole_provider_ai = action.payload.google
+            state.openai_provider_ai = action.payload.openai
+            state.ollama_local_provider_ai = action.payload.ollama
+            state.providers = action.payload
+            state.isLoading = false
         },
         setCurrentInterlocutor(state, action: PayloadAction<AiAssistantInterlocutor>) {
             // console.log('setCurrentInterlocutor: - action.payload', action.payload)
@@ -212,6 +232,16 @@ export const myAIAssistantAdminSlice = createSlice({
         },
     }
 })
+export const getAiProvidersAndModelsAC = () => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(myAIAssistantAdminSlice.actions.meagsesIsSending())
+        const response = await AiAssistantAdminAPI.getAiProvidersAndModelsAPI()
+        // console.log('getAiProvidersAndModelsAC: - RES', response.data)
+        dispatch(myAIAssistantAdminSlice.actions.setAIProviders(response.data))
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
 export const getAiAssistantInterlocutorAC = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(myAIAssistantAdminSlice.actions.meagsesIsSending())

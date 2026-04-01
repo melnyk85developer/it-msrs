@@ -10,7 +10,7 @@
 
     // outline: 1px solid rgb(255, 3, 3);
     .wrapLeftBlock {
-        width: 50%;
+        width: 100%;
 
         .userNameHeaderMsgList {
             display: block;
@@ -20,12 +20,31 @@
             .name {
                 margin-right: 5px;
             }
+
+            .surname {
+                margin-right: 5px;
+            }
         }
 
         .dataHeaderMessagesList {
             display: block;
             padding-top: 3px;
             color: gray;
+
+            .poroviderNameProviderLabel {
+                color: gray;
+            }
+            .poroviderNameModelLabel {
+                color: gray;
+                margin-left: 20px;
+            }
+
+            .select {
+                // color: wheat;
+                color: gray;
+                border: none;
+                background-color: #282828;
+            }
         }
     }
 
