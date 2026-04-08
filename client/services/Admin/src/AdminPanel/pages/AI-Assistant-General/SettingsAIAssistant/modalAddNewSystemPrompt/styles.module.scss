@@ -1,0 +1,27 @@
+@import '../../../../../../../host/src/mixins.scss';
+@import '../../../../../../../host/src/variables.scss';
+
+.wrapAddNewSystemPromptForTerminator {
+    width: 100%;
+    color: var(--dark-theme-text-color);
+
+    .addNewSystemPromptAI {
+        display: flex;
+        width: 100%;
+
+        .labelAddNewSystemPropt {
+            margin: 7px 0 auto auto;
+            height: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            // outline: 1px solid green;
+        }
+
+        .ioMdSettings {
+            font-size: 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    }
+
+}

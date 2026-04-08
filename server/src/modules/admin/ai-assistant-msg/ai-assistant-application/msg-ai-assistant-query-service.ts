@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { MessageAiAssistantQueryRepository } from '../ai-assistant-infrastrucrure/msg-ai-assistant-query.repository';
-import { AiAssistantMessage } from '../ai-assistant-domain/ai-assistant.entity';
+import { AiAssistantMessage } from '../ai-assistant-domain/ai-assistant-msg.entity';
 import { AiAssistantMessagesAllViewDto } from '../api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
 import { queryMaperArrUserMessages, queryMaperUserMessage } from '../ai-assistant-maper/queryMaper';
 import { GetAiAssistantMessageQueryParams } from '../ai-assistant-dto/get-msg-query-params.input-dto';

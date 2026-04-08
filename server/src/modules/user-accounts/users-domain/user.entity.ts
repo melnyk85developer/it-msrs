@@ -9,6 +9,7 @@ import { UpdateUserDto } from '../users-dto/create-user.dto';
 import { CreateUserDomainDto } from '../users-dto/create-user.domain.dto';
 import { ProfileData, ProfileDataSchema } from './profile.data';
 import { SystemUserData, SystemUserSchema } from './system-user.data';
+import { UpdateProviderForAiAssistantDomainDto } from 'src/modules/admin/ai-assistant-msg/ai-assistant-dto/update-provider-for-ai-assistants-domain.dto';
 
 @Schema({
     // _id: false,
@@ -53,7 +54,7 @@ export class User {
         return this._id.toString();
     }
 
-    static async createUserInstance(dto: Omit<CreateUserDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<UserDocument> {
+    static async createUserInstance(dto: Omit<CreateUserDomainDto, 'provider' | 'model' | 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<UserDocument> {
         const user = new this();
         const date = new Date();
         const createdAt = date.toISOString();
@@ -82,8 +83,14 @@ export class User {
             isBanned: false,
             bannReason: null,
             isBot: dto.isBot,
+            provider1: null,
+            model1: null,
+            provider2: null,
+            model2: null,
+            assistantRole: null,
+            systemPrompts: null,
             banneds: [],
-            roles: [dto.role]
+            adminRoles: [dto.role]
         };
         user.passwordHash = dto.passwordHash
         user.createdAt = createdAt
@@ -116,8 +123,14 @@ export class User {
             this.profileData.website = dto.website === undefined ? this.profileData.website : dto.website;
 
             this.systemUserData.isBot = dto.isBot === undefined ? this.systemUserData.isBot : dto.isBot;
+            this.systemUserData.provider1 = dto.provider === undefined ? this.systemUserData.provider1 : dto.provider;
+            this.systemUserData.model1 = dto.model === undefined ? this.systemUserData.model1 : dto.model;
+            this.systemUserData.provider2 = dto.provider === undefined ? this.systemUserData.provider2 : dto.provider;
+            this.systemUserData.model2 = dto.model === undefined ? this.systemUserData.model2 : dto.model;
+            this.systemUserData.systemPrompts = dto.systemPrompts === undefined ? this.systemUserData.systemPrompts : dto.systemPrompts;
+
             this.systemUserData.isEmailConfirmed = dto.isEmailConfirmed === undefined ? this.systemUserData.isEmailConfirmed : dto.isEmailConfirmed;
-            this.systemUserData.roles = dto.roles === undefined ? this.systemUserData.roles : dto.roles;
+            this.systemUserData.adminRoles = dto.roles === undefined ? this.systemUserData.adminRoles : dto.roles;
             this.systemUserData.isBanned = dto.isBanned === undefined ? this.systemUserData.isBanned : dto.isBanned;
             this.systemUserData.bannReason = dto.bannReason === undefined ? this.systemUserData.bannReason : dto.bannReason;
             this.systemUserData.banneds = dto.banneds === undefined ? this.systemUserData.banneds : dto.banneds;
@@ -139,7 +152,7 @@ export class User {
             this.accountData.login = this.accountData.login;
             this.profileData = this.profileData;
             this.systemUserData.isBot = this.systemUserData.isBot;
-            this.systemUserData.roles = this.systemUserData.roles;
+            this.systemUserData.adminRoles = this.systemUserData.adminRoles;
             this.systemUserData.isBanned = this.systemUserData.isBanned;
             this.systemUserData.bannReason = this.systemUserData.bannReason;
             this.systemUserData.banneds = this.systemUserData.banneds;
@@ -152,7 +165,7 @@ export class User {
     }
     static async addRole(role: Role) {
         const user = new this();
-        user.systemUserData.roles.push(role)
+        user.systemUserData.adminRoles.push(role)
         return user as UserDocument;
     }
     updateLastSeen(userId: string) {
@@ -160,6 +173,28 @@ export class User {
 
         if (this.id === userId) {
             this.lastSeen = date.toISOString();
+        }
+    }
+    updateDesignatedProviderAndModelForAssistantData(id: string, dto: Omit<UpdateProviderForAiAssistantDomainDto, 'deletedAt' | 'updatedAt'>) {
+        const date = new Date();
+        const updatedAt = date.toISOString();
+        if (this.id === id) {
+            this.systemUserData.provider1 = dto.provider1;
+            this.systemUserData.model1 = dto.model1;
+            this.systemUserData.provider2 = dto.provider2;
+            this.systemUserData.model2 = dto.model2;
+            this.systemUserData.systemPrompts = dto.systemPrompts;
+            this.updatedAt = updatedAt;
+            this.deletedAt = null;
+        }
+    }
+    updateSystemPromptsForAssistantData(id: string, systemPrompts: Omit<[], 'deletedAt' | 'updatedAt'>) {
+        const date = new Date();
+        const updatedAt = date.toISOString();
+        if (this.id === id) {
+            this.systemUserData.systemPrompts = systemPrompts;
+            this.updatedAt = updatedAt;
+            this.deletedAt = null;
         }
     }
     makeDeletedAccount() {

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
-import { AiAssistantMessage, AiAssistantMessageDocument, type AiAssistantMessageModelType } from '../ai-assistant-domain/ai-assistant.entity';
+import { AiAssistantMessage, AiAssistantMessageDocument, type AiAssistantMessageModelType } from '../ai-assistant-domain/ai-assistant-msg.entity';
 
 @Injectable()
 export class MessageAiAssistantRepository {

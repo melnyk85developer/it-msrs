@@ -53,7 +53,7 @@ export class RefreshTokenUseCase
 
         if (noExpSession && Number(device.lastActiveDate) === Number(refreshTokenPayload.iat)) {
             const isParse = await this._myParserService(ip, userAgent)
-            const roleValues = user.systemUserData.roles.map(role => role.value);
+            const roleValues = user.systemUserData.adminRoles.map(role => role.value);
 
             const isUpdatedSession = await this.commandBus.execute<UpdateSessionCommand, { accessToken: string, refreshToken: string }>(
                 new UpdateSessionCommand(

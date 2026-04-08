@@ -1,4 +1,4 @@
-import { AiAssistantMessageDocument } from "../../ai-assistant-msg/ai-assistant-domain/ai-assistant.entity";
+import { AiAssistantMessageDocument } from "../../ai-assistant-msg/ai-assistant-domain/ai-assistant-msg.entity";
 
 export class AiAssistantMessageOneViewDto {
     localId: string;

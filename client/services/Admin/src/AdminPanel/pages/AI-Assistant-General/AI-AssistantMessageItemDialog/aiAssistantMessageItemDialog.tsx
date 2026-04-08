@@ -144,9 +144,11 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeHighlight]}
                                 components={{
+                                    // Добавь этот блок:
+                                    p: ({ node, ...props }) => <div {...props} />,
+
                                     code(props: any) {
                                         const { inline, children, ...rest } = props;
-
                                         const codeText = String(children).replace(/\n$/, '');
 
                                         if (inline) {
@@ -166,7 +168,6 @@ const AdminAiAssistantItemDialog: React.FC<PropsType> = (props) => {
                                                 >
                                                     Copy
                                                 </button>
-
                                                 <pre>
                                                     <code {...rest}>{children}</code>
                                                 </pre>

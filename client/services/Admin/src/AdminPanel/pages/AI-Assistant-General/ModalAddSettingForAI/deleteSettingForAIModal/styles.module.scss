@@ -1,0 +1,91 @@
+.row {
+    display: flex;
+    flex-direction: column;
+    min-width: 25vh;
+    max-width: 30vh;
+    min-height: 0vh;
+    max-height: 20vh;
+    border-radius: 8px;
+    color: wheat;
+
+    .headerBlockDeleteMsgModal {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 30px;
+        border-radius: 8px;
+        text-align: center;
+
+        .title {
+            width: 90%;
+            margin: 0 10px;
+            color: #FEA930;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .topIconWrapper {
+            width: 10%;
+            display: block;
+            margin-left: auto;
+            width: 30px;
+            font-size: 22px;
+            cursor: pointer;
+
+            .topIcon {
+                margin: 0 3px;
+                transition: opacity 0.2s ease;
+            }
+
+            .topIconNormal {
+                display: inline-block;
+            }
+
+            .topIconHover {
+                display: none;
+            }
+
+            &:hover {
+                .topIconNormal {
+                    display: none;
+                }
+
+                .topIconHover {
+                    color: #FEA930;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .wrapCentrBlockDeleteMessage {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 0 10px 5px 10px;
+        border-radius: 8px;
+        border: 1px solid rgb(68, 68, 68);
+
+        .checkbox {
+            margin-top: 5px;
+
+            span {
+                color: wheat;
+            }
+        }
+    }
+
+    .footerBlock {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        width: 100%;
+        min-height: 30px;
+        border-radius: 8px;
+        text-align: center;
+
+        .button {
+            width: 100%;
+        }
+    }
+}

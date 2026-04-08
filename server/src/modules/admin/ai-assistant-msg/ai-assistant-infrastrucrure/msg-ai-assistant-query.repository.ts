@@ -4,7 +4,7 @@ import { FilterQuery, Types } from 'mongoose';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
-import { AiAssistantMessage, AiAssistantMessageDocument, type AiAssistantMessageModelType } from '../ai-assistant-domain/ai-assistant.entity';
+import { AiAssistantMessage, AiAssistantMessageDocument, type AiAssistantMessageModelType } from '../ai-assistant-domain/ai-assistant-msg.entity';
 import { GetAiAssistantMessageQueryParams } from '../ai-assistant-dto/get-msg-query-params.input-dto';
 import { AiAssistantMessagesAllViewDto } from '../api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
 import { queryMaperArrUserMessages } from '../ai-assistant-maper/queryMaper';

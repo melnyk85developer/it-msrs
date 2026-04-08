@@ -1,17 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "../redux-store";
-import { ChatType, Interlocutor, MessagesType, PostsType } from "@/types/types";
-import { AiAssistantInterlocutor, AIProvidersType, CreateMsgAiAssistantType, GoogleProviderType, ModelProviderType, MsgAiAssistantType, OllamaLocalProviderType, OpenAIProviderType } from "@/types/AiAssistantType";
+import { ChatType } from "@/types/types";
+import { AiAssistantInterlocutor, AIProvidersType, CreateMsgAiAssistantType, DesignatedProviderForAIAssistantsType, GoogleProviderType, ModelProviderType, MsgAiAssistantType, OllamaLocalProviderType, OpenAIProviderType, RulesForAIAssistantsType } from "@/types/AiAssistantType";
 import AiAssistantAdminAPI from "../../services/aiAssistantAdminAPI";
 
 interface AIAssistantAdminState {
+    systemPromptsForTerminators: RulesForAIAssistantsType[];
     providers: AIProvidersType;
     goole_provider_ai: GoogleProviderType;
     openai_provider_ai: OpenAIProviderType;
     ollama_local_provider_ai: OllamaLocalProviderType;
 
     currentInterlocutor: AiAssistantInterlocutor;
-    currentChat: ChatType;
+    currentChat: ChatType | null;
     lastMessage: CreateMsgAiAssistantType | MsgAiAssistantType;
     interlocutors: AiAssistantInterlocutor[];
     prompts: MsgAiAssistantType[];
@@ -31,6 +32,7 @@ interface AIAssistantAdminState {
     error: string;
 }
 const initialState: AIAssistantAdminState = {
+    systemPromptsForTerminators: [] as RulesForAIAssistantsType[],
     providers: {} as AIProvidersType,
     goole_provider_ai: {} as GoogleProviderType,
     openai_provider_ai: {} as OpenAIProviderType,
@@ -102,6 +104,12 @@ export const myAIAssistantAdminSlice = createSlice({
             state.error = ''
             state.isSpiner = action.payload
         },
+        setRulesForAIAssistants(state, action: PayloadAction<RulesForAIAssistantsType[]>) {
+            // console.log('setRulesForAIAssistants: - action.payload', action.payload)
+            state.error = ''
+            state.systemPromptsForTerminators = action.payload
+            state.isLoading = false
+        },
         setAIProviders(state, action: PayloadAction<AIProvidersType>) {
             // console.log('setAIProviders: - action.payload', action.payload)
             state.error = ''
@@ -160,24 +168,25 @@ export const myAIAssistantAdminSlice = createSlice({
             state.isSending = true
 
         },
-        addResponseMsgFromTheAI(state, action: PayloadAction<MsgAiAssistantType>) {
-            state.error = ''
-            // Если сообщение уже было добавлено временно (с localId), обновим его
-            const index = state.prompts.findIndex(m => m.localId === action.payload.localId);
-            if (index !== -1) {
-                // console.log('addResponceMessage: - IF action.payload', action.payload)
-                state.prompts[index] = {
-                    ...state.prompts[index],
-                    ...action.payload
-                };
-                state.sendingMessages = state.sendingMessages.filter(localId => localId !== action.payload.localId);
-            } else {
-                // console.log('addResponceMessage: - ELSE action.payload', action.payload)
-                state.prompts.push(action.payload)
+        // Обновляем только сообщение юзера (меняем localId на данные с бэка)
+        updateUserPrompt(state, action: PayloadAction<MsgAiAssistantType>) {
+            if (action.payload.localId) {
+                const index = state.prompts.findIndex(m => m.localId === action.payload.localId);
+                if (index !== -1) {
+                    state.prompts[index] = {
+                        ...state.prompts[index],
+                        ...action.payload
+                    };
+                    // Убираем из лоадинга
+                    state.sendingMessages = state.sendingMessages.filter(localId => localId !== action.payload.localId);
+                }
             }
-            state.isSending = false
-            // console.log('addResponseMsgFromTheAI: - messages', state.messages)
-
+        },
+        // Тупо пушим ответ ассистента в самый конец
+        addAssistantResponse(state, action: PayloadAction<MsgAiAssistantType>) {
+            state.error = '';
+            state.prompts.push(action.payload);
+            state.isSending = false;
         },
         updateMessage(state, action: PayloadAction<MsgAiAssistantType>) {
             // console.log('updateMessage: - action.payload', action.payload)
@@ -232,6 +241,42 @@ export const myAIAssistantAdminSlice = createSlice({
         },
     }
 })
+export const getAllSystemPromptsAiAssistantsAC = () => async (dispatch: AppDispatch) => {
+    try {
+        const response = await AiAssistantAdminAPI.getSystemPromptsAiAssistantsAPI()
+        // console.log('getRulesAiAssistantsAC: - RES', response)
+        dispatch(myAIAssistantAdminSlice.actions.setRulesForAIAssistants(response.data))
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
+export const createSystemPromptAiAssistantsAC = (addRules: RulesForAIAssistantsType) => async (dispatch: AppDispatch) => {
+    try {
+        const response = await AiAssistantAdminAPI.addRulesAiAssistantsAPI(addRules)
+        console.log('createRulesAiAssistantsAC: - RES', response)
+        dispatch(myAIAssistantAdminSlice.actions.setRulesForAIAssistants(response.data))
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
+export const updateSystemPromptForAiAssistantsAC = (addRules: RulesForAIAssistantsType) => async (dispatch: AppDispatch) => {
+    try {
+        const response = await AiAssistantAdminAPI.addRulesAiAssistantsAPI(addRules)
+        // console.log('createRulesAiAssistantsAC: - RES', response)
+        dispatch(myAIAssistantAdminSlice.actions.setRulesForAIAssistants(response.data))
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
+export const saveDesignatedProviderAndModelAC = (aiProvider: DesignatedProviderForAIAssistantsType) => async (dispatch: AppDispatch) => {
+    try {
+        const response = await AiAssistantAdminAPI.saveDesignatedProviderAndModelAPI(aiProvider)
+        console.log('createRulesAiAssistantsAC: - RES', response)
+        dispatch(myAIAssistantAdminSlice.actions.setRulesForAIAssistants(response.data))
+    } catch (error: any) {
+        dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
+    }
+}
 export const getAiProvidersAndModelsAC = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(myAIAssistantAdminSlice.actions.meagsesIsSending())
@@ -253,33 +298,17 @@ export const getAiAssistantInterlocutorAC = () => async (dispatch: AppDispatch) 
         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
     }
 }
-// export const getDialogByDialogIdMessagesAiAssistantAC = (dialogId: string) => async (dispatch: AppDispatch) => {
-//     // console.log('getDialogMessagesAC: - REQ senderId, receiverId', senderId, receiverId)
-//     try {
-//         // const response = await AiAssistantAdminAPI.getDialogByDialogIdAPI(dialogId)
-//         // // console.log('getDialogMessagesAC: - RES data', response.data)
-//         // const allMsg = response.data.allMsg
-//         // // console.log('getDialogMessagesAC: - RES allMsg', allMsg)
-//         // const chat = response.data.currentChat
-//         // // console.log('getDialogMessagesAC: - RES chat', chat)
-//         // const currentInterlocutor = response.data.interlocutor
-//         // // console.log('getDialogMessagesAC: - RES currentInterlocutor', currentInterlocutor)
-
-//         // dispatch(myAIAssistantAdminSlice.actions.setMessagesCurrentChat(allMsg))
-//         // dispatch(myAIAssistantAdminSlice.actions.setCurrentChat(chat))
-//         // dispatch(myAIAssistantAdminSlice.actions.setCurrentInterlocutor(currentInterlocutor))
-//     } catch (error: any) {
-//         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))
-//     }
-// }
 export const getDialogAiAssistantMessagesAC = (receiverId: string, params: { pageSize: number; pageNumber: number }, type: 'init' | 'older' | 'newer' = 'init') => async (dispatch: AppDispatch) => {
+    // console.log('getDialogAiAssistantMessagesAC: - receiverId, params', receiverId, params)
+
     try {
         const response = await AiAssistantAdminAPI.getDialogByReceiverIdAPI(receiverId, params);
+        // console.log('getDialogAiAssistantMessagesAC: - response.data.items', response.data.items)
 
         if (response.data && response.data.items) {
             const { allMsg, currentChat, interlocutor } = response.data.items;
-            console.log('getDialogAiAssistantMessagesAC: - response.data.items', response.data.items)
-            console.log('getDialogAiAssistantMessagesAC: - totalCount', response.data.totalCount)
+            // console.log('getDialogAiAssistantMessagesAC: - response.data.items', response.data.items)
+            // console.log('getDialogAiAssistantMessagesAC: - totalCount', response.data.totalCount)
 
             // 🔥 Сохраняем общее кол-во сообщений в твой существующий стейт
             if (response.data.totalCount !== undefined) {
@@ -315,13 +344,13 @@ export const getDialogAiAssistantMessagesAC = (receiverId: string, params: { pag
     }
 };
 export const sendNewPromptAC = (message: MsgAiAssistantType) => async (dispatch: AppDispatch) => {
-    console.log('sendNewPromptAC message: - req', message)
+    // console.log('sendNewPromptAC message: - req', message)
     try {
         dispatch(myAIAssistantAdminSlice.actions.addNewPrompt(message))
         const response = await AiAssistantAdminAPI.addNewPromptAPI(message)
-        console.log('sendNewPromptAC response.data: - ', response.data)
-        dispatch(myAIAssistantAdminSlice.actions.addResponseMsgFromTheAI(response.data.userPrompt))
-        dispatch(myAIAssistantAdminSlice.actions.addResponseMsgFromTheAI(response.data.assistantResponse))
+        // console.log('sendNewPromptAC response.data: - ', response.data)
+        dispatch(myAIAssistantAdminSlice.actions.updateUserPrompt(response.data.userPrompt))
+        dispatch(myAIAssistantAdminSlice.actions.addAssistantResponse(response.data.assistantResponse))
         return response.data
     } catch (error: any) {
         dispatch(myAIAssistantAdminSlice.actions.usersFetchingError(error.message))

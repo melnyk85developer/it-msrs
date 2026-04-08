@@ -6,6 +6,7 @@ import AdminShopsContainer, { routeMain as routeAdminShopsContainer } from "../A
 import AiAssistantGeneratorContainer, { routeMain as routeAdminBotsContainer } from "../AdminPanel/pages/AI-Assistant-General/AiAssistantGenerator/AiAssistantGeneratorContainer";
 import AdminHome from "../AdminPanel/pages";
 import AdminAiAssistantContainer from "../AdminPanel/pages/AI-Assistant-General/ai-assistant-general-container";
+import SettingSystemProptsForAssistants from "../AdminPanel/pages/AI-Assistant-General/SettingsAIAssistant/settingSystemPrompts";
 
 const AppMyAdminRout = () => {
     return (
@@ -19,6 +20,11 @@ const AppMyAdminRout = () => {
                 <Route path="ai-assistant/generator" element={
                     <Suspense fallback={'Loading...'}>
                         <AiAssistantGeneratorContainer />
+                    </Suspense>
+                } />
+                <Route path="ai-assistant/setting" element={
+                    <Suspense fallback={'Loading...'}>
+                        <SettingSystemProptsForAssistants />
                     </Suspense>
                 } />
                 <Route path="ai-assistant/:userId" element={

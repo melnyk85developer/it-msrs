@@ -24,14 +24,14 @@ export class UsersRepository {
         // console.log('UsersRepository → findByAdminRepository 👍 params', params);
         const isAdmin = await this.UserModel.findOne(
             {
-                'systemUserData.roles.value': params
+                'systemUserData.adminRoles.value': params
             }
         );
         // console.log('UsersRepository → findByAdminRepository RES 👍 isAdmin', isAdmin);
         return isAdmin
     }
     async findByLoginOrEmail(loginOrEmail: string): Promise<UserDocument | null> {
-        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail); systemUserData
+        console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail)
         return this.UserModel.findOne(
             {
                 $or: [

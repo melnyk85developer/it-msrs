@@ -2,12 +2,12 @@ import { CommandBus, CommandHandler, EventBus, ICommandHandler } from '@nestjs/c
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateDialogCommand } from 'src/modules/user-messages/dialog/dialog-application/dialog-use-cases/update-dialog.use-case';
 import { AiAssistantMessageOneViewDto } from '../../api-ai-assistant-msg/viev-dto-msg/msg-one.view-dto';
-import { AiAssistantMessage, type AiAssistantMessageModelType } from '../../ai-assistant-domain/ai-assistant.entity';
 import { MessageAiAssistantRepository } from '../../ai-assistant-infrastrucrure/msg-ai-assistant.repository';
 import { isDialogAiAssistantDeletedForUser } from '../../ai-assistant-maper/queryMaper';
 import { CreatePromptAiDto } from '../../ai-assistant-dto/create-prompt-ai-assistant.dto';
 import { DialogAiAssistantRepository } from 'src/modules/admin/ai-assistant-dialog/ai-assistant-dialog-infrastructure/ai-assistant-dialog.repository';
 import { CreateDialogAiAssistantCommand } from 'src/modules/admin/ai-assistant-dialog/ai-assistant-dialog-application/ai-assistant-dialog-use-cases/create-ai-assistant-dialog.use-case';
+import { AiAssistantMessage, type AiAssistantMessageModelType } from '../../ai-assistant-domain/ai-assistant-msg.entity';
 
 export class CreateMessageAiAssistantCommand {
     constructor(

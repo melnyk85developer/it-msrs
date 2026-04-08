@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
-import { addPhotoMyProfileAC, addPostMyProfileAC } from "@packages/shared/src/store/MyProfileReducers/myProfileSlice";
-import { createUsersMyAdmin, deleteUserMyAdmin, fetchAvatarFile, getFtpFilesAdminAC, getUserMyAdminAC } from "@packages/shared/src/store/MyAdminReducers/myAdminSlice";
+import { createUsersMyAdmin, deleteUserMyAdmin, getFtpFilesAdminAC, getUserMyAdminAC } from "@packages/shared/src/store/MyAdminReducers/myAdminSlice";
 import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";
-import imageCompression from 'browser-image-compression';
+import { GiRegeneration } from "react-icons/gi";
 import { IUser } from "@packages/shared/src/types/IUser";
-import routeMain from "./routes";
-import classes from '../../../styles.module.scss';
 import { getRandomAvatarFile } from "./utilsAiGenerator/getRandomAvatarFile";
 import { autoCropImage } from "./utilsAiGenerator/autoCropImage";
+import imageCompression from 'browser-image-compression';
+import routeMain from "./routes";
+import classes from './styles.module.scss';
+import { NavLink } from "react-router-dom";
 
 const AiAssistantGeneratorContainer = () => {
     const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const AiAssistantGeneratorContainer = () => {
         // console.log('[AiAssistantGeneratorContainer] mount — загружаю 😡 ftpAvatars');
         dispatch(getFtpFilesAdminAC('avatars'));
     }, [dispatch]);
+
 
     const deleteUsers = async () => {
         for (let i = 0; i < users.length; i++) {
@@ -226,8 +228,20 @@ const AiAssistantGeneratorContainer = () => {
     return (
         <div className={`${classes.wrapAdminContent} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.adminContent}>
+                <ul className={classes.heraderAiAssistantStartPage}>
+                    <li className={classes.tab}>
+                        <NavLink to="/admin/ai-assistant/generator" className={({ isActive }) => `${isActive ? classes.active : classes.button}`}>
+                            <GiRegeneration />Генегатор AI ассистентов
+                        </NavLink>
+                    </li>
+                    <li className={classes.tab}>
+                        <NavLink to="/admin/ai-assistant/setting" className={({ isActive }) => `${isActive ? classes.active : classes.button}`}>
+                            Настройки ассистентов
+                        </NavLink>
+                    </li>
+                </ul>
+                <h1 className={classes.title}>Генегатор AI ассистентов</h1>
 
-                <h1 className={classes.title}>Генегатор ботов</h1>
                 <div className={classes.content}>
                     <div className={classes.wrapCreateUsersBlock}>
                         <div className={classes.leftBlock}>
@@ -326,7 +340,7 @@ const AiAssistantGeneratorContainer = () => {
                         <button onClick={deleteUsers}>Deleted All Bots</button>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     );

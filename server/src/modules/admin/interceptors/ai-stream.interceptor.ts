@@ -6,6 +6,7 @@ export class AiStreamInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const request = context.switchToHttp().getRequest();
         const response = context.switchToHttp().getResponse();
+        
 
         return next.handle().pipe(
             map(data => {

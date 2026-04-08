@@ -35,10 +35,6 @@ export class AiAssistantMessage {
     @Prop({ type: String, required: true })
     dialogId: string;
 
-    @ApiProperty({ example: '94', description: 'ID получателя' })
-    @Prop({ type: String, required: false })
-    status: string;
-
     @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
     @Prop({ type: [Object], required: false, default: [] })
     attachments: Attachment[];

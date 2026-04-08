@@ -123,6 +123,16 @@ export class UpdateUserDto {
     @ApiProperty({ example: 'isBot', description: 'Является ли пользователь ботом?!' })
     @IsOptional()
     isBot?: boolean;
+    @ApiProperty({ example: 'aiProvider', description: 'AI провайдер ассистента (если это бот)!' })
+    @IsOptional()
+    provider?: string;
+    @ApiProperty({ example: 'aiModel', description: 'AI модель ассистента (если это бот)!' })
+    @IsOptional()
+    model?: string;
+    @ApiProperty({ example: 'systemPrompts', description: 'Системные промпты для AI модели ассистента (если это бот)!' })
+    @IsOptional()
+    systemPrompts?: [];
+
     @ApiProperty({ example: 'roles', description: 'Роли пользователя!' })
     @IsOptional()
     roles?: Role[];

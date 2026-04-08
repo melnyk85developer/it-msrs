@@ -9,21 +9,17 @@ import { DialogAiAssistant, type DialogAiAssistantModelType } from '../ai-assist
 import { DialogAiAssistantQueryRepository } from '../ai-assistant-dialog-infrastructure/ai-assistant-dialog-query.repository';
 import { GetDialogsAiAssistantQueryParams } from '../ai-assistant-dialog-dto/get-all-dialogs-ai-assistant-query-params.input-dto';
 import { MessageAiAssistantQueryService } from '../../ai-assistant-msg/ai-assistant-application/msg-ai-assistant-query-service';
-import { DialogsAiAssistantAllViewDto } from '../ai-assistant-dialog-dto/dialog-ai-assistant-all.view-dto';
-import { isDialogAiAssistantDeletedForUser } from '../../ai-assistant-msg/ai-assistant-maper/queryMaper';
-import { AiAssistantDialogViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/ai-assistant-dialog-view.dto';
-import { GetDialogsQueryParams } from 'src/modules/user-messages/msg/msg-dto/msg-input-dto/get-all-dialogs-query-params.input-dto';
 import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
-import { UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
 import { DialogAiAssistantRepository } from '../ai-assistant-dialog-infrastructure/ai-assistant-dialog.repository';
 import { AiAssistantViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/ai-assistant.view.dto';
 import { UserProfileViewDto } from 'src/modules/user-accounts/users-dto/user-profile.view-dto';
 import { AiAssistantMessagesAllViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/msg-all.view-dto';
 import { GetAiAssistantMessageQueryParams } from '../../ai-assistant-msg/ai-assistant-dto/get-msg-query-params.input-dto';
+import { AiAssistantDialogViewDto } from '../../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/ai-assistant-dialog-view.dto';
 
 export type DialogAiAssistantType = {
     allMsg: AiAssistantMessagesAllViewDto[] | [],
-    interlocutor: UserProfileViewDto,
+    interlocutor: AiAssistantViewDto,
     currentChat: AiAssistantDialogViewDto | {}
 }
 
@@ -72,40 +68,54 @@ export class DialogAiAssistantQueryService {
             size: normalizedQuery.pageSize,
         });
     }
-    async getDialogAndMSGQueryService(userId: string, dialogId: string, query: GetAiAssistantMessageQueryParams, receiverId: string): Promise<PaginatedViewDto<DialogAiAssistantType>  | null> {
-        if (dialogId && receiverId) {
-            const assistant = await this.usersQueryRepository.getProfileQueryRepository(receiverId)
-            const isChat = await this.getDialogsByIdService(dialogId)
-            const allMsgAiAssistantForDialog = await this.messageAiAssistantQueryService.getAllAiAssistantMessagesByDialogIdService(
-                userId,
-                dialogId,
-                query
-            );
-            // console.log('getDialogAndMSGQueryService: - assistant', assistant)
-            // console.log('getDialogAndMSGQueryService: - isChat', isChat)
-            // console.log('getDialogAndMSGQueryService: - allMsgAiAssistantForDialog', allMsgAiAssistantForDialog)
+    async getOneDialogBySenderIdOrReceiverIdQueryService(senderId: string, query: GetAiAssistantMessageQueryParams, receiverId: string): Promise<PaginatedViewDto<DialogAiAssistantType> | null> {
+        let isChat
+        let allMsgAiAssistantForDialog
+        const normalizedQuery = GetAiAssistantMessageQueryParams.normalize(query);
+        const isDialog = await this.dialogQueryRepository.findOneDialogBySenderIdOrReceiverIdRepository(senderId, receiverId);
+        const assistant = await this.usersRepository.findUserByIdOrNotFoundFail(receiverId);
 
+        if (!isDialog && !assistant) {
+            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_TO_GET_A_DIALOG);
+        }
+
+        if (isDialog) {
+            const dialogView = AiAssistantDialogViewDto.mapToView(isDialog);
+            isChat = await this.getDialogsByIdService(dialogView.dialogId);
+
+            if (isChat) {
+                allMsgAiAssistantForDialog = await this.messageAiAssistantQueryService.getAllAiAssistantMessagesByDialogIdService(
+                    senderId,
+                    isChat.dialogId,
+                    query
+                );
+            }
+        }
+
+        const interlocutor = AiAssistantViewDto.mapToView(assistant);
+
+        // Если есть сообщения, возвращаем их, иначе формируем пустой ответ
+        if (allMsgAiAssistantForDialog) {
             return {
                 ...allMsgAiAssistantForDialog,
                 items: {
                     allMsg: allMsgAiAssistantForDialog.items.length ? allMsgAiAssistantForDialog.items : [],
-                    interlocutor: assistant,
-                    currentChat: isChat ? isChat : {}
+                    interlocutor,
+                    currentChat: isChat || {}
                 }
-            }
-        } else {
-            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_TO_GET_A_DIALOG)
+            };
         }
-    }
-    async getOneDialogBySenderIdOrReceiverIdQueryService(senderId: string, query: GetAiAssistantMessageQueryParams, receiverId: string): Promise<PaginatedViewDto<DialogAiAssistantType>  | null> {
-        const isDialog = await this.dialogQueryRepository.findOneDialogBySenderIdOrReceiverIdRepository(senderId, receiverId);
-        // console.log('getOneDialogBySenderIdOrReceiverIdQueryService: - isDialog', isDialog)
-        if (isDialog === null) {
-            return null
-        }
-        const dialog = AiAssistantDialogViewDto.mapToView(isDialog)
-        // console.log('getOneDialogBySenderIdOrReceiverIdQueryService: - dialog', dialog)
-        return await this.getDialogAndMSGQueryService(senderId, dialog.dialogId, query, receiverId)
+
+        return PaginatedViewDto.mapToView({
+            items: {
+                allMsg: [],
+                interlocutor,
+                currentChat: isChat || {}
+            },
+            totalCount: 0,
+            page: normalizedQuery.pageNumber,
+            size: normalizedQuery.pageSize,
+        });
     }
     async getDialogsByIdService(dialogId: string): Promise<AiAssistantDialogViewDto> {
         const isDialog = await this.dialogQueryRepository.findDialogByIdOrNotFoundFailRepository(dialogId)

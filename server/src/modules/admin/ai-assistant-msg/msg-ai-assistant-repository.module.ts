@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { AiAssistantMessage, AiAssistantMessageSchema  } from "./ai-assistant-domain/ai-assistant.entity";
+import { AiAssistantMessage, AiAssistantMessageSchema  } from "./ai-assistant-domain/ai-assistant-msg.entity";
 import { MessageAiAssistantQueryRepository } from "./ai-assistant-infrastrucrure/msg-ai-assistant-query.repository";
 import { MessageAiAssistantRepository } from "./ai-assistant-infrastrucrure/msg-ai-assistant.repository";
 

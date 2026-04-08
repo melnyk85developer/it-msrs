@@ -1,0 +1,59 @@
+@import '../../../../../../../host/src/mixins.scss';
+
+.wrapInput {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    // margin-bottom: 10px;
+}
+
+.wrapInputTitle {
+    display: flex;
+    flex-direction: column;
+    max-height: 30px;
+    // flex: 1;
+
+    .inputTitle {
+        max-height: 30px;
+        flex: 1;
+        resize: none;
+        margin: 0;
+        border-radius: 8px;
+        padding: 7px 5px 5px 15px;
+        background-color: #282828;
+        color: wheat;
+        font-size: 15px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        outline: none;
+        border: none;
+        // outline: 1px solid green;
+        @include custom-scrollbar();
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.input {
+    flex: 1;
+    resize: none;
+    margin: 0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #282828;
+    color: wheat;
+    font-size: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    outline: none;
+    border: none;
+    // outline: 1px solid green;
+    @include custom-scrollbar();
+
+    &:focus {
+        outline: none;
+    }
+}

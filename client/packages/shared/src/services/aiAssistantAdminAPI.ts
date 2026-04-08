@@ -1,16 +1,35 @@
 import { AxiosResponse } from "axios";
 import $api from "../http";
-import { MsgAiAssistantType } from "@/types/AiAssistantType";
+import { DesignatedProviderForAIAssistantsType, MsgAiAssistantType, RulesForAIAssistantsType } from "@/types/AiAssistantType";
 
 export default class AiAssistantAdminAPI {
+    static async getSystemPromptsAiAssistantsAPI(): Promise<AxiosResponse<any>> {
+        return $api.get<any[]>('/admin/ai-assistant/system-prompts')
+    }
+    static async addRulesAiAssistantsAPI(addRules: RulesForAIAssistantsType): Promise<AxiosResponse<any>> {
+        console.log('addRulesAiAssistantsAPI: - addRules', addRules)
+        return $api.post<any[]>('/admin/ai-assistant/rules-for-terminators', addRules)
+    }
+    static async updateRulesAiAssistantsAPI(): Promise<AxiosResponse<any>> {
+        return $api.put<any[]>('/admin/ai-assistant/rules-for-terminators')
+    }
+    static async deleteRulesAiAssistantsAPI(): Promise<AxiosResponse<any>> {
+        return $api.delete<any[]>('/admin/ai-assistant/rules-for-terminators')
+    }
     static async getAiProvidersAndModelsAPI(): Promise<AxiosResponse<any>> {
         return $api.get<any[]>('/admin/ai-plenum/all-terminators')
+    }
+    static async saveDesignatedProviderAndModelAPI(aiProvider: DesignatedProviderForAIAssistantsType): Promise<AxiosResponse<any>> {
+        console.log('saveDesignatedProviderAndModelAPI: - aiProvider', aiProvider)
+        
+        return $api.put<any[]>('/admin/ai-assistant/designated-provider', aiProvider)
     }
     static async getAiAssistantInterlocutorAPI(): Promise<AxiosResponse<any>> {
         return $api.get<any[]>('/admin/ai-interlocutors')
     }
     static async getDialogByReceiverIdAPI(receiverId: string, params: { pageSize: number; pageNumber: number }) {
-        // console.log('AiAssistantAdminAPI: getDialogByReceiverIdAPI: - receiverId, params', receiverId, params)
+        // console.log('AiAssistantAdminAPI: getDialogByReceiverIdAPI: - receiverId',  receiverId)
+        // console.log('AiAssistantAdminAPI: getDialogByReceiverIdAPI: - params', params)
         return $api.get(`/admin/ai-messages/dialog/${receiverId}`, { params })
     }
     static async getDialogByDialogIdAPI(dialogId: string) {
@@ -25,13 +44,13 @@ export default class AiAssistantAdminAPI {
         formData.append('receiverId', `${message.receiverId}`);
 
         // formData.append('createdAt', `${message.createdAt}`);
-        // prompt.attachments?.forEach(att => {
-        //     if (att instanceof File || att instanceof Blob) {
-        //         formData.append('attachments[]', att, (att as File).name);
-        //     } else {
-        //         formData.append('attachments[]', att);
-        //     }
-        // });
+        message.attachments?.forEach(att => {
+            if (att instanceof File || att instanceof Blob) {
+                formData.append('attachments[]', att, (att as File).name);
+            } else {
+                formData.append('attachments[]', att);
+            }
+        });
         // console.log('addNewPromptAPI: - message2', message)
 
         return await $api.post<{ userPrompt: MsgAiAssistantType, assistantResponse: MsgAiAssistantType }>('/admin/ai-assistant/orchestrate', message);

@@ -20,14 +20,16 @@ export class CreatePromptAiDto {
     @IsNotEmpty()
     readonly receiverId: string;
 
-    @ApiProperty({ example: 'model', description: 'Имя модели AiAssistant.' })
+    @ApiProperty({ example: 'receiverId', description: 'Уникальный идентификатор диалога.' })
     @IsOptional()
     @IsString()
-    readonly model?: string;
-    @ApiProperty({ example: 'model', description: 'Имя провайдера AiAssistant моделей.' })
-    @IsOptional()
+    readonly dialogId?: string;
+
+    @ApiProperty({ example: 'createdAt', description: 'Локальное время создания промпта.' })
     @IsString()
-    readonly provider?: 'ollama' | 'openai' | 'google'
+    @IsNotEmpty()
+    readonly createdAt?: string;
+
     @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
     @IsOptional()
     readonly attachments?: Attachment[];

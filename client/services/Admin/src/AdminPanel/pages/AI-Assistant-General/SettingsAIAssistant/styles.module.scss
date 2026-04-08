@@ -1,0 +1,98 @@
+@import '../../../../../../host/src/mixins.scss';
+@import '../../../../../../host/src/variables.scss';
+
+.wrapContentSettingAI {
+    width: 100%;
+    min-height: 0;
+    max-height: 100vh;
+    margin-top: 3px;
+    padding: 10px;
+    border: 1px solid black;
+    @include custom-scrollbar();
+
+    .titleSettingAI {
+        display: block;
+        padding: 5px 0;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .headerSystemPrompt {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+
+        .wrapIcon {
+            display: flex;
+            justify-content: space-between;
+            margin-left: auto;
+            cursor: pointer;
+
+            .labelIcon {
+                font-size: 12px;
+            }
+
+            .icon {
+                margin-left: 3px;
+                // font-size: 18px;
+            }
+        }
+    }
+
+    .contentSettingAI {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 10px;
+        margin-bottom: 10px;
+        min-height: 0;
+        max-height: 73vh;
+        border: 1px solid black;
+        @include custom-scrollbar();
+
+        .titleRules {
+            width: 100%;
+            border: 1px solid black;
+            padding: 8px;
+            font-weight: 600;
+            user-select: none;
+            cursor: pointer;
+
+            &:hover {
+                background: #383838;
+            }
+        }
+
+        .contentRules {
+            width: 100%;
+            // border: 1px solid black;
+            padding: 10px;
+            margin-top: 5px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .contentRules {
+            // margin-top: 10px;
+            resize: none;
+            margin: 0;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #282828;
+            color: wheat;
+            font-size: 15px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            outline: none;
+            border: none;
+            @include custom-scrollbar();
+
+            &:focus {
+                outline: none;
+            }
+
+            // outline: 1px solid green;
+        }
+    }
+}

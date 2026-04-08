@@ -4,13 +4,11 @@ import { useAppContext } from "@packages/shared/src/components/contexts/AppConte
 import { FOOTER_OFF, FOOTER_ON, setContentSpanAC, setFooterAC, setLSidebarAC, setLSidebarSpanAC, setRSidebarAC, setRSidebarSpanAC, SIDEBAR_OFF, SIDEBAR_ON } from "@packages/shared/src/store/PageElementsSlice/pageElementsSlice";
 import { NavLink, Outlet } from "react-router-dom";
 import { Button, Col, Row } from "antd";
-import routeMain from './routes'
-import classes from './styles.module.scss';
-import { AiAssistantWidgetListAdmin } from "./pages/AI-Assistant-General/AI-AssistantLSidebar/AiAssistantListWidgetAdmin/AiAssistantListAdminWidget";
 import { AdminTopRightNav } from "./AdminTopNav/adminTopRightNav/adminTopRightNav";
 import { AdminLSidebar, AdminPagesTypeContent } from "./AdminLSidebar/AdminLSidebar";
 import { getAiProvidersAndModelsAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
-
+import routeMain from './routes'
+import classes from './styles.module.scss';
 
 const AppMyAdminContainer: React.FC = React.memo(() => {
     const dispatch = useAppDispatch()

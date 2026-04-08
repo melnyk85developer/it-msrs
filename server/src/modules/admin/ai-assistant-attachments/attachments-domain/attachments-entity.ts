@@ -5,7 +5,7 @@ import { DomainException } from "src/core/exceptions/domain-exceptions";
 import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
 import { CreateAttachmentDomainDto } from "../attachments-dto/add-attachment-domain.dto";
 import { UpdateAttachmentDto } from "../attachments-dto/update-attachment-domain.dto";
-import { AiAssistantMessage } from "../../ai-assistant-msg/ai-assistant-domain/ai-assistant.entity";
+import { AiAssistantMessage } from "../../ai-assistant-msg/ai-assistant-domain/ai-assistant-msg.entity";
 
 @Schema({
     // timestamps: true,

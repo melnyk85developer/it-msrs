@@ -1,49 +1,376 @@
+@import '../../../../../../host/src/mixins.scss';
+@import '../../../../../../host/src/variables.scss';
+
 .headerMessagesList {
     display: flex;
     justify-content: space-between;
     width: 100%;
     height: 60px;
-    // margin: 5px 0 0 0;
     padding: 10px 1px 10px 10px;
     border-bottom: 1px solid black;
     background-color: #282828;
 
-    // outline: 1px solid rgb(255, 3, 3);
     .wrapLeftBlock {
         width: 100%;
 
         .userNameHeaderMsgList {
-            display: block;
+            display: flex;
             font-size: 16px;
-            margin: 0 0 5px 0;
+            margin: 0 0 10px 0;
 
-            .name {
-                margin-right: 5px;
+            .title {
+                color: rgb(184, 110, 36);
             }
 
-            .surname {
-                margin-right: 5px;
+            .wrapAssistantData {
+                color: wheat;
+
+                .name {
+                    margin: 0 5px;
+                }
+            }
+
+            .wrapLastSeen {
+                margin: 2px 0 0 auto;
+                color: gray;
+                font-size: 13px;
+            }
+
+            .icon {
+                margin-left: auto;
+                font-size: 16px;
             }
         }
 
-        .dataHeaderMessagesList {
-            display: block;
-            padding-top: 3px;
-            color: gray;
+        .wrapHeaderProviderData {
+            display: flex;
+            color: grey;
 
-            .poroviderNameProviderLabel {
-                color: gray;
-            }
-            .poroviderNameModelLabel {
-                color: gray;
-                margin-left: 20px;
+            .provider {
+                margin-right: 10px;
             }
 
-            .select {
-                // color: wheat;
+            .model {
+                margin-right: 10px;
+            }
+
+            .wrapEditProvider {
+                margin: 0px 5px 0px auto;
+                cursor: pointer;
+
+                .labelEditProvider {
+                    position: relative;
+                    top: -3px;
+                    left: 0;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .wrapContentModalSettigAssistant {
+            min-width: 70vh;
+            max-width: 90vh;
+            min-height: 50vh;
+            max-height: 70vh;
+            border: 1px solid black;
+            border-radius: 8px;
+            color: rgb(184, 110, 36);
+
+            h3 {
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            .topIconWrapper {
+                width: 10%;
+                display: block;
+                margin: 10px 10px 0px auto;
+                width: 30px;
+                font-size: 22px;
+                color: wheat;
+
+                cursor: pointer;
+
+                .topIcon {
+                    margin: 0 3px;
+                    transition: opacity 0.2s ease;
+                }
+
+                .topIconNormal {
+                    display: inline-block;
+                }
+
+                .topIconHover {
+                    display: none;
+                }
+
+                &:hover {
+                    .topIconNormal {
+                        display: none;
+                    }
+
+                    .topIconHover {
+                        color: #FEA930;
+                        display: inline-block;
+                    }
+                }
+            }
+
+            .selectPrimaryAPI {
+                padding: 10px;
                 color: gray;
-                border: none;
-                background-color: #282828;
+                // border-top: 1px solid black;
+                // border-bottom: 1px solid black;
+                border-radius: 8px;
+
+                .label_1_block_api_provider {
+                    display: block;
+                    margin-bottom: 3px;
+                }
+
+                .wrapSelectProvider {
+                    position: relative;
+                    // outline: 1px solid green;
+
+                    .poroviderNameProviderLabel {
+                        font-size: 16px;
+                        color: wheat;
+                        cursor: pointer;
+                    }
+
+                    .poroviderNameModelLabel {
+                        color: wheat;
+                        margin-left: 20px;
+                        cursor: pointer;
+                    }
+
+                    .iconGooglegemini {
+                        position: relative;
+                        top: 3px;
+                        left: 0;
+                        margin: 0 2px 0 5px;
+                        color: #9F64FB;
+                    }
+
+                    .iconOpenAIOutlined {
+                        position: relative;
+                        top: 3px;
+                        left: 0;
+                        margin: 0 2px 0 5px;
+                        color: wheat;
+                    }
+
+                    .iconSiOllama {
+                        position: relative;
+                        top: 3px;
+                        left: 0;
+                        margin: 0 2px 0 5px;
+                        color: wheat;
+                    }
+
+                    .selectProvider,
+                    .selectModel {
+                        color: wheat;
+                        border: none;
+                        background-color: #353535;
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                        font-size: 16px;
+                        @include custom-scrollbar();
+                        cursor: pointer;
+
+                        &:focus {
+                            outline: none;
+                            cursor: pointer;
+                        }
+
+                        // padding-right: 10px;
+                    }
+                }
+            }
+
+            .selectFallbackAPI {
+                padding: 10px;
+                color: gray;
+                // border-top: 1px solid black;
+                // border-bottom: 1px solid black;
+                border-radius: 8px;
+
+                .label_1_block_api_provider {
+                    display: block;
+                    margin-bottom: 3px;
+                }
+
+                .wrapSelectProvider {
+                    position: relative;
+                    // outline: 1px solid green;
+
+                    .poroviderNameProviderLabel {
+                        font-size: 16px;
+                        color: wheat;
+                        cursor: pointer;
+                    }
+
+                    .poroviderNameModelLabel {
+                        color: wheat;
+                        margin-left: 20px;
+                        cursor: pointer;
+                    }
+
+                    .iconGooglegemini {
+                        position: relative;
+                        top: 3px;
+                        left: 0;
+                        margin: 0 2px 0 5px;
+                        color: #9F64FB;
+                    }
+
+                    .iconOpenAIOutlined {
+                        position: relative;
+                        top: 3px;
+                        left: 0;
+                        margin: 0 2px 0 5px;
+                        color: wheat;
+                    }
+
+                    .iconSiOllama {
+                        position: relative;
+                        top: 3px;
+                        left: 0;
+                        margin: 0 2px 0 5px;
+                        color: wheat;
+                    }
+
+                    .selectProvider,
+                    .selectModel {
+                        color: wheat;
+                        border: none;
+                        background-color: #353535;
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                        font-size: 16px;
+                        @include custom-scrollbar();
+                        cursor: pointer;
+
+                        &:focus {
+                            outline: none;
+                            cursor: pointer;
+                        }
+
+                        // padding-right: 10px;
+                    }
+                }
+            }
+
+            .systemPromptsSection {
+                width: 100%;
+                padding: 10px;
+
+                .label_1_block_api_provider {
+                    display: block;
+                    margin-bottom: 10px;
+                    text-align: center;
+                }
+
+                .promptsListWrapper {
+
+                    .promptAccordionItem {
+                        border: 1px solid black;
+                        margin-bottom: 5px;
+                        overflow: hidden;
+                        display: block;
+                        appearance: none; // Убивает системные артефакты
+
+                        .promptHeader {
+                            display: flex;
+                            align-items: center;
+                            padding: 8px;
+                            // Линии НЕТ по дефолту
+                        }
+
+                        .promptTitleRow {
+                            flex: 1;
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: space-between;
+                            color: wheat;
+                        }
+
+                        // КОНТЕНТ
+                        .promptContentBody {
+                            padding: 10px;
+                            max-height: 30vh;
+                            overflow-y: auto;
+                            @include custom-scrollbar();
+
+                            // Убираем стандартный pre, заменяем на чистый div
+                            .promptPretext {
+                                white-space: pre-wrap;
+                                word-break: break-word;
+                                margin: 0;
+                                padding: 0;
+                                border: none; // Убираем возможные рамки самого pre
+                                outline: none;
+                                resize: none; // На всякий случай
+                            }
+                        }
+
+                        // ЛОГИКА ОТКРЫТОГО СОСТОЯНИЯ
+                        &.active {
+                            .promptHeader {
+                                border-bottom: 1px solid black; // Линия появляется ТОЛЬКО когда открыто
+                            }
+                        }
+                    }
+
+                    // Глобальный костыль против хвостиков (если это Chrome/Edge)
+                    *::-webkit-resizer {
+                        display: none !important;
+                    }
+                }
+            }
+
+            .futerBlockUpdateProviderModal {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+                width: 100%;
+                min-height: 30px;
+                border-radius: 8px;
+                text-align: center;
+
+                .leftBlock {
+                    display: block;
+                    border-radius: 8px;
+                    width: 30%;
+                    padding-top: 7px;
+                    font-size: 16px;
+                    font-weight: 400;
+                    border: 1px solid rgb(68, 68, 68);
+                    background-color: #282828;
+                    cursor: pointer;
+                }
+
+                .rightBlock {
+                    display: block;
+                    border-radius: 8px;
+                    width: 30%;
+                    padding-top: 7px;
+                    font-size: 16px;
+                    font-weight: 400;
+                    border: 1px solid rgb(68, 68, 68);
+                    background-color: #282828;
+                    cursor: pointer;
+                }
+
+                .leftBlock:hover,
+                .rightBlock:hover {
+                    background-color: #454545;
+                    border: 1px solid rgb(24, 24, 24);
+                    color: #FEA930;
+                }
             }
         }
     }

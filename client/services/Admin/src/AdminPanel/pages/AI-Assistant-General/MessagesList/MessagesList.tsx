@@ -63,7 +63,7 @@ const MessagesList: React.FC<PropsType> = React.memo((props) => {
 
             assistantId && renderItems.push(
                 <AdminAiAssistantItemDialog
-                    key={currentMessage.localId || currentMessage.msgId || i}
+                    key={`${currentMessage.senderId}-${currentMessage.msgId || currentMessage.localId || i}`}
                     dispatch={dispatch}
                     localId={currentMessage.localId}
                     msgId={currentMessage.msgId}

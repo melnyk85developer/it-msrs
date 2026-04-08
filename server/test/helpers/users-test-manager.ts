@@ -82,7 +82,7 @@ export class UsersTestManager {
     }
     async updateUser(
         id: string,
-        data: Omit<UpdateUserInputDto, 'id' | 'isEmailConfirmed' | 'lastSeen' | 'avatar'>,
+        data: any,
         accessToken: string,
         codedAuth: string | undefined = undefined,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.NO_CONTENT_204) {

@@ -16,10 +16,15 @@ import { useNavigate } from "react-router-dom";
 type PropsType = {
     dispatch: AppDispatch;
 
-    selectedAIProvider: string
-    setSelectedAIProvider: React.Dispatch<React.SetStateAction<string>>
-    selectedAIModel: string
-    setSelectedAIModel: React.Dispatch<React.SetStateAction<string>>
+    selectedPrimaryAIProvider: string
+    setSelectedPrimaryAIProvider: React.Dispatch<React.SetStateAction<string>>
+    selectedPrimaryAIModel: string
+    setSelectedPrimaryAIModel: React.Dispatch<React.SetStateAction<string>>
+
+    selectedFallbackAIProvider: string
+    setSelectedFallbackAIProvider: React.Dispatch<React.SetStateAction<string>>
+    selectedFallbackAIModel: string
+    setSelectedFallbackAIModel: React.Dispatch<React.SetStateAction<string>>
 
     addNewPrompt: (messageText: string) => void
     setAddMessageText: React.Dispatch<React.SetStateAction<string>>
@@ -48,9 +53,29 @@ const WINDOW_SIZE = 40;
 
 const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
     const {
-        dispatch, addNewPrompt, setAddMessageText, sendingMessages, authorizedUser,
-        assistantId, selectedAIProvider, setSelectedAIProvider, selectedAIModel, setSelectedAIModel, prompts, currentInterlocutor, currentChat, lastMessage, isSending,
-        totalAiAssistantMessageCount, updatingMessages, deletingMessages, addMessageText
+        dispatch,
+        addNewPrompt,
+        setAddMessageText,
+        sendingMessages,
+        authorizedUser,
+        assistantId,
+        selectedPrimaryAIProvider,
+        setSelectedPrimaryAIProvider,
+        selectedPrimaryAIModel,
+        setSelectedPrimaryAIModel,
+        selectedFallbackAIProvider,
+        setSelectedFallbackAIProvider,
+        selectedFallbackAIModel,
+        setSelectedFallbackAIModel,
+        prompts,
+        currentInterlocutor,
+        currentChat,
+        lastMessage,
+        isSending,
+        totalAiAssistantMessageCount,
+        updatingMessages,
+        deletingMessages,
+        addMessageText
     } = props;
 
     const navigate = useNavigate();
@@ -117,31 +142,22 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
 
     useEffect(() => {
         messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [lastMessage]);
+    }, [lastMessage, prompts.length]);
 
     useEffect(() => {
         fetchingRef.current = false;
         windowStartRef.current = 0;
         isWindowInitializedRef.current = false;
         messagesAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
-
-        if (assistantId) {
-            dispatch(getDialogAiAssistantMessagesAC(assistantId, {
-                pageSize: PAGE_SIZE,
-                pageNumber: 1
-            }, 'init'));
-            if (currentChat && currentChat.dialogId) {
-                navigate(`/admin/ai-assistant/${assistantId}/dialog/${currentChat.dialogId}`, {
-                    replace: true
-                });
-            }
-        }
-
-    }, [assistantId, currentChat?.dialogId]);
+    }, [currentChat?.dialogId]);
 
     useEffect(() => {
         if (!assistantId || isWindowInitializedRef.current) return;
         if (prompts.length === 0 && totalAiAssistantMessageCount === 0) return;
+
+        if (prompts.length >= totalAiAssistantMessageCount) {
+            return; // ❌ НЕ ГРУЗИМ
+        }
 
         windowStartRef.current = getInitialWindowStart();
         isWindowInitializedRef.current = true;
@@ -149,7 +165,7 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
         requestAnimationFrame(() => {
             messagesAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
         });
-    }, [assistantId, prompts.length, totalAiAssistantMessageCount]);
+    }, [assistantId, totalAiAssistantMessageCount]);
 
     const scrollHandler = (e: React.UIEvent<HTMLDivElement>) => {
         const el = e.currentTarget;
@@ -235,15 +251,20 @@ const AdminAiAssistant: React.FC<PropsType> = React.memo((props) => {
             <div className={classes.aiAssistantContent}>
                 <HeaderMessagesList
                     title={'GPTermikAI Admin'}
-                    selectedAIProvider={selectedAIProvider}
-                    setSelectedAIProvider={setSelectedAIProvider}
-                    selectedAIModel={selectedAIModel}
-                    setSelectedAIModel={setSelectedAIModel}
+                    selectedPrimaryAIProvider={selectedPrimaryAIProvider}
+                    setSelectedPrimaryAIProvider={setSelectedPrimaryAIProvider}
+                    selectedPrimaryAIModel={selectedPrimaryAIModel}
+                    setSelectedPrimaryAIModel={setSelectedPrimaryAIModel}
+
+                    selectedFallbackAIProvider={selectedFallbackAIProvider}
+                    setSelectedFallbackAIProvider={setSelectedFallbackAIProvider}
+                    selectedFallbackAIModel={selectedFallbackAIModel}
+                    setSelectedFallbackAIModel={setSelectedFallbackAIModel}
                 />
                 <div className={classes.messagesClass}>
                     <div className={classes.wrapMessages} onScroll={scrollHandler}>
                         {
-                            !currentChat && !currentChat?.dialogId || currentChat.dialogId === undefined
+                            (!currentChat || !currentChat.dialogId) && prompts.length === 0
                                 ?
                                 <div className={classes.wrapStartMessages}>
                                     <div className={classes.wrapBlockOfNoPosts}>

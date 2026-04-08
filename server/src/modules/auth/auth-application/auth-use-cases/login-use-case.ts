@@ -30,7 +30,7 @@ export class UserLoginUseCase
         // console.log('UserLoginUseCase: - ', ip, userAgent, refreshToken)
         // const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
         const user = await this.usersRepository.findUserByIdOrNotFoundFail(userId);
-        const roleValues = user.systemUserData.roles.map(role => role.value);
+        const roleValues = user.systemUserData.adminRoles.map(role => role.value);
         // console.log('UserLoginUseCase: - user.accountData', user.accountData)
         // console.log('UserLoginUseCase: - roleValues', roleValues)
         const isParse = await this._myParserService(ip, userAgent)
