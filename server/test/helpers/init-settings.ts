@@ -28,6 +28,13 @@ import { UserRegistrationCommand } from 'src/modules/auth/auth-application/auth-
 import { CommandBus } from '@nestjs/cqrs';
 import { PostsForProfileTestManager } from './posts-for-profile-test-manager';
 import { CoreConfig } from 'src/core/core.config';
+import { ShopBasketTestManager } from './shopHelpers/baske-test-manager';
+import { ShopBasketMerchandiseTestManager } from './shopHelpers/basket-merchandise-test-manager';
+import { MerchandiseBrandTestManager } from './shopHelpers/merchandise-brand-test-manager';
+import { MerchandiseTestManager } from './shopHelpers/merchandise-test-manager';
+import { MerchandiseTypesTestManager } from './shopHelpers/merchandise-types-test-manager';
+import { ShopTypesTestManager } from './shopHelpers/shop-types-test-manager';
+import { ShopTestManager } from './shopHelpers/shops-test-manager';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -81,6 +88,15 @@ export const initSettings = async (
     contextTests.userPhotosTestManager = new UserPhotosTestManager(contextTests.app);
     contextTests.userPhotoAlbumsTestManager = new UserPhotoAlbumsTestManager(contextTests.app);
 
+    contextTests.shopBasketTestManager = new ShopBasketTestManager(contextTests.app);
+    contextTests.shopBasketMerchandiseTestManager = new ShopBasketMerchandiseTestManager(contextTests.app);
+    contextTests.merchandiseBrandTestManager = new MerchandiseBrandTestManager(contextTests.app);
+    contextTests.merchandiseTestManager = new MerchandiseTestManager(contextTests.app);
+    contextTests.merchandiseTypesTestManager = new MerchandiseTypesTestManager(contextTests.app);
+    contextTests.shopTypesTestManager = new ShopTypesTestManager(contextTests.app);
+    contextTests.shopTestManager = new ShopTestManager(contextTests.app);
+
+
     await deleteAllData(contextTests.app);
 
     return {
@@ -97,5 +113,14 @@ export const initSettings = async (
         usersTestManager: contextTests.usersTestManager,
         userPhotosTestManager: contextTests.userPhotosTestManager,
         userPhotoAlbumsTestManager: contextTests.userPhotoAlbumsTestManager,
+
+        shopBasketTestManager: contextTests.shopBasketTestManager,
+        shopBasketMerchandiseTestManager: contextTests.shopBasketMerchandiseTestManager,
+        merchandiseBrandTestManager: contextTests.merchandiseBrandTestManager,
+        merchandiseTestManager: contextTests.merchandiseTestManager,
+        merchandiseTypesTestManager: contextTests.merchandiseTypesTestManager,
+        shopTypesTestManager: contextTests.shopTypesTestManager,
+        shopTestManager: contextTests.shopTestManager,
+
     };
 };

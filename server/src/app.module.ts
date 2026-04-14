@@ -21,6 +21,7 @@ import { LikeModule } from './modules/likes/likes.module';
 import { configModule } from './config-dynamic-module';
 import { CoreConfig } from './core/core.config';
 import { AdminModule } from './modules/admin/admin.module';
+import { ShopsPlatformModule } from './modules/shops-platform/shops-platform.module';
 
 @Module({
     imports: [
@@ -55,6 +56,7 @@ import { AdminModule } from './modules/admin/admin.module';
         NotificationsModule,
         UserAccountsModule,
         BloggersPlatformModule,
+        ShopsPlatformModule,
         PostForProfileModule,
         PhotoModule,
         MessagesModule,

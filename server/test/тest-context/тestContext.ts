@@ -11,6 +11,7 @@ import { LikesTestManager } from '../helpers/likes-test-manager';
 import { PostsTestManager } from '../helpers/posts-test-manager';
 import { UserSessionTestManager } from '../helpers/user-session-test-manager';
 import { UsersTestManager } from '../helpers/users-test-manager';
+import { CommandBus } from '@nestjs/cqrs';
 import { MeViewDto, UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
 import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto';
 import { PostViewDto } from 'src/modules/bloggers-platform/posts/posts-api/posts-view-dto/posts.view-dto';
@@ -36,11 +37,23 @@ import { CodeConfirmationContextClass } from './context-module/code-confirmation
 import { UserPhotosTestManager } from 'test/helpers/user-photos-test-manager';
 import { UserPhotoAlbumsTestManager } from 'test/helpers/user-photo-albums-test-manager';
 import { UserMessagesTestManager } from 'test/helpers/messages-test-manager';
-import { UserRegistrationCommand, UserRegistrationUseCase } from 'src/modules/auth/auth-application/auth-use-cases/registration-use-case';
-import { CommandBus } from '@nestjs/cqrs';
 import { PostsForProfileTestManager } from 'test/helpers/posts-for-profile-test-manager';
 import { PostsForProfileContextClass } from './context-module/posts-for-profile-context';
 import { PostsForBlogContextClass } from './context-module/posts-for-blogs-context';
+import { ShopBasketTestManager } from 'test/helpers/shopHelpers/baske-test-manager';
+import { ShopBasketMerchandiseTestManager } from 'test/helpers/shopHelpers/basket-merchandise-test-manager';
+import { MerchandiseBrandTestManager } from 'test/helpers/shopHelpers/merchandise-brand-test-manager';
+import { MerchandiseTestManager } from 'test/helpers/shopHelpers/merchandise-test-manager';
+import { MerchandiseTypesTestManager } from 'test/helpers/shopHelpers/merchandise-types-test-manager';
+import { ShopTypesTestManager } from 'test/helpers/shopHelpers/shop-types-test-manager';
+import { ShopTestManager } from 'test/helpers/shopHelpers/shops-test-manager';
+import { ShopsContextClass } from './context-module/shopsContext/shops-context';
+import { ShopTypesContextClass } from './context-module/shopsContext/shop-types-context';
+import { BasketContextClass } from './context-module/shopsContext/basket-context';
+import { BasketMerchandiseContextClass } from './context-module/shopsContext/basket-merchandise-context';
+import { MerchandiseBrandContextClass } from './context-module/shopsContext/merchandise-brand-context';
+import { MerchandiseContextClass } from './context-module/shopsContext/merchandise-context';
+import { MerchandiseTypesContextClass } from './context-module/shopsContext/merchandise-types-context';
 
 export class TestContext {
     public app: INestApplication;
@@ -74,6 +87,15 @@ export class TestContext {
     public userPhotosTestManager: UserPhotosTestManager;
     public userPhotoAlbumsTestManager: UserPhotoAlbumsTestManager;
 
+    public shopBasketTestManager: ShopBasketTestManager;
+    public shopBasketMerchandiseTestManager: ShopBasketMerchandiseTestManager;
+    public merchandiseBrandTestManager: MerchandiseBrandTestManager;
+    public merchandiseTestManager: MerchandiseTestManager;
+    public merchandiseTypesTestManager: MerchandiseTypesTestManager;
+    public shopTypesTestManager: ShopTypesTestManager;
+    public shopTestManager: ShopTestManager;
+
+
     // TODO - Добавить
     public createdDialog1: any
     public createdMessage1: any
@@ -88,6 +110,15 @@ export class TestContext {
     public posts_for_profile: PostsForProfileContextClass;
     public comments: CommentsContextClass;
     public codeConfirmation: CodeConfirmationContextClass;
+
+    public shops: ShopsContextClass;
+    public shopType: ShopTypesContextClass;
+    public basket: BasketContextClass;
+    public basketMerchandise: BasketMerchandiseContextClass;
+    public merchandiseBrand: MerchandiseBrandContextClass;
+    public merchandiseType: MerchandiseTypesContextClass;
+    public merchandise: MerchandiseContextClass;
+
 
     constructor() {
         this.constants = new ConstantsContextClass();

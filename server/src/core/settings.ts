@@ -20,6 +20,16 @@ export const SETTINGS = {
         comments: '/comments',
         security: '/security',
         devices: '/devices',
+        backetd: '/backetd',
+        basket: '/basket',
+        brands: '/brands',
+        brand: '/brand',
+        types: '/types',
+        myshops: '/myshops',
+        myshop: '/myshop',
+        shoptype: '/shop-type',
+        merchandise: '/merchandise',
+        merchandisetype: '/merchandise-type',
         __test__: '/testing'
     },
     Nodemailer: {

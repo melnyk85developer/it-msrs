@@ -76,7 +76,7 @@ export class CreatePromptForTerminatorUseCase
         console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 provider2 ', provider2)
         console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 model2 ', model2)
         console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 rule ', rule)
-        console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 ollPrompts ', ollPrompts)
+        console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 ollPrompts ', ollPrompts.lenght)
 
         const createdMessage = await this.commandBus.execute(
             new CreateMessageAiAssistantCommand(command.dto)
@@ -86,7 +86,8 @@ export class CreatePromptForTerminatorUseCase
         let messages: { role: 'user' | 'assistant', content: string }[] = []
 
         if (ollPrompts && Array.isArray(ollPrompts)) {
-            const lastMessages = ollPrompts.slice(-15)
+            const lastMessages = ollPrompts.slice(-10)
+            console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 lastMessages ', lastMessages)
 
             messages = lastMessages.map(m => ({
                 role: m.senderId === senderId ? 'user' : 'assistant',

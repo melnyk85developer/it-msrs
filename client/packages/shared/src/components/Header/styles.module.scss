@@ -36,31 +36,37 @@
 					.logo {
 						// outline: 1px solid red;
 						padding: 14px 0 0 3px;
-						font-size: 32px;
+						// font-size: 26px;
 						font-style: italic;
 						text-shadow: -2px -1px 1px #000000;
 						text-align: left;
 						font-family: Helvetica, 'DejaVu Sans', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', sans-serif;
 						cursor: pointer;
+						color: #fe7130;
 
 						.span1 {
-							color: #FEA930;
+							font-size: 26px;
+							// color: #FEA930;
+							color: #fe7130;
 						}
 
 						.span2 {
-							color: #006dfc;
+							color: #fe7130;
+
+							// color: #FEA930;
+							// color: #006dfc;
 						}
 					}
 
-					.logo:hover {
-						.span1 {
-							color: #006dfc;
-						}
+					// .logo:hover {
+					// 	.span1 {
+					// 		color: #006dfc;
+					// 	}
 
-						.span2 {
-							color: #FEA930;
-						}
-					}
+					// 	.span2 {
+					// 		color: #FEA930;
+					// 	}
+					// }
 
 					z-index: 9999;
 				}
@@ -263,10 +269,12 @@ header.dark {
 				// border: 1px solid red;
 				.logoBlock {
 					position: relative;
-						// outline: 1px solid red;
+
+					// outline: 1px solid red;
 					.wrapImg {
 						// outline: 1px solid rgb(28, 121, 0);
 						display: block;
+
 						.logoImg {
 							// outline: 1px solid rgb(255, 153, 0);
 							width: 70px;
@@ -281,6 +289,7 @@ header.dark {
 							z-index: 5555;
 						}
 					}
+
 					.logo {
 						// outline: 1px solid red;
 						display: block;
@@ -302,23 +311,25 @@ header.dark {
 						z-index: 9999;
 
 						.span1 {
-							color: #FEA930;
+							// color: #FEA930;
+							color: #f35c16;
 						}
 
 						.span2 {
-							color: #006dfc;
+							color: #f35c16;
+							// color: #006dfc;
 						}
 					}
 
-					.logo:hover {
-						.span1 {
-							color: #006dfc;
-						}
+					// .logo:hover {
+					// 	.span1 {
+					// 		color: #006dfc;
+					// 	}
 
-						.span2 {
-							color: #FEA930;
-						}
-					}
+					// 	.span2 {
+					// 		color: #FEA930;
+					// 	}
+					// }
 
 					z-index: 9999;
 				}

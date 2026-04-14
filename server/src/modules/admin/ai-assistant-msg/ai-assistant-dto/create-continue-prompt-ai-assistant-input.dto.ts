@@ -1,0 +1,37 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { Attachment } from 'nodemailer/lib/mailer';
+
+export class CreateContinuePromptAiInputDto {
+    @ApiProperty({ example: 'localId', description: 'Локальный идентификатор сообщения - для обновлении его при ответе сервера.' })
+    @IsString()
+    @IsNotEmpty()
+    readonly localId: string;
+    @ApiProperty({ example: 'prompt', description: 'Prompt для консилиума моделей' })
+    @IsString()
+    @IsNotEmpty()
+    readonly prompt: string;
+    @ApiProperty({ example: 'senderId', description: 'Уникальный идентификатор отправителя сообщения.' })
+    @IsString()
+    @IsNotEmpty()
+    readonly senderId: string;
+    @ApiProperty({ example: 'receiverId', description: 'Уникальный идентификатор модели получателя промпта.' })
+    @IsString()
+    @IsNotEmpty()
+    readonly receiverId: string;
+
+    @ApiProperty({ example: 'receiverId', description: 'Уникальный идентификатор диалога.' })
+    @IsOptional()
+    @IsString()
+    readonly dialogId?: string;
+
+    @ApiProperty({ example: 'createdAt', description: 'Локальное время создания промпта.' })
+    @IsOptional()
+    @IsString()
+    readonly createdAt?: string;
+
+    @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
+    @IsOptional()
+    @IsString()
+    readonly updatedAt?: Attachment[];
+}

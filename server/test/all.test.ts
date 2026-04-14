@@ -20,6 +20,13 @@ import { likesE2eTest } from "src/modules/likes/testing-likes/testing-E2E-Likes.
 import { UserAccountsConfig } from "src/modules/user-accounts/users-config/users.config";
 import { join } from "path";
 import { CoreConfig } from "src/core/core.config";
+import { shopTypeE2ETest } from "src/modules/shops-platform/shop-type/testing-shop-type/shopsTypes-E2E-testing";
+import { shopsE2ETest } from "src/modules/shops-platform/shops/testing-shops/shops-E2E-testing";
+import { merchandiseTypeE2ETest } from "src/modules/shops-platform/merchandise-type/testing-merchandise-type/merchandiseType-E2E-Testing";
+import { merchandiseBrandsE2ETest } from "src/modules/shops-platform/merchandise-brand/testing-merchandise-brand/merchandiseBrands-E2E-testing";
+import { merchandiseE2ETest } from "src/modules/shops-platform/merchandise/testing-merchandise/merchandise-E2E-testing";
+import { basketE2ETest } from "src/modules/shops-platform/basket/testing-basket/basket-E2E-testing";
+import { basketMerchandiseE2ETest } from "src/modules/shops-platform/basketMerchandise/testing-basketMerchandise/basketMerchandise-E2E-testing";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
 
@@ -56,10 +63,10 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         // authIntegrationTest()
         // authUnitTest()
     })
-    describe('USER-SESSIONS-BLOCK-TESTS', () => {
-        userSessionE2eTest()
-        // usersSessionsInegrationTest()
-    })
+    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
+    //     userSessionE2eTest()
+    //     // usersSessionsInegrationTest()
+    // })
     // describe('MESSAGES-BLOCK-TESTS', () => {
     //     userMessagesE2eTest()
     // })
@@ -79,6 +86,15 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     //     photoProfileE2ETest()
     //     photoAlbumsE2ETest()
     // })
+    describe('SHOPS-BLOCK-TESTS', () => {
+        shopTypeE2ETest()
+        // shopsE2ETest()
+        // merchandiseTypeE2ETest()
+        // merchandiseBrandsE2ETest()
+        // merchandiseE2ETest()
+        // basketE2ETest()
+        // basketMerchandiseE2ETest()
+    })
     // describe('USERS-BLOCK-TESTS', () => {
     //     postForProfileE2ETest()
     //     usersE2eTest()
@@ -87,9 +103,9 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     //     registrEmailResendingAndConfirmIntegrationTest()
     //     resetPasswordInegrationTest()
     // })
-    // afterAll(async () => {
-    //     await mongoose.disconnect();
-    //     await contextTests.app.close();
-    // });
+    afterAll(async () => {
+        await mongoose.disconnect();
+        await contextTests.app.close();
+    });
 })
 

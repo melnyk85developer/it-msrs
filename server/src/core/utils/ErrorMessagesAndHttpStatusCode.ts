@@ -8,7 +8,9 @@ import { AUTH_ERRORS, AUTH_STATUS_POSITIVE } from "src/modules/auth/auth-interna
 import { CONFIRMATIONS_ERRORS, CONFIRMATIONS_STATUS_POSITIVE } from "src/modules/confirmationsCodes/confirmations-internal-status-errors/confirmationsErrors";
 import { PHOTO_ERRORS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoErrors";
 import { MESSAGES_ERRORS, MESSAGES_STATUS_POSITIVE } from "src/modules/user-messages/msg/internal-status-msg-errors/user-msg-errors";
-import { LIKES_ERRORS } from "src/modules/likes/internalStatusLikesErrors/likesErrors";
+import { LIKES_ERRORS, LIKES_STATUS_POSITIVE } from "src/modules/likes/internalStatusLikesErrors/likesErrors";
+import { SHOP_INTERNAL_STATUS } from "src/modules/shops-platform/shops/internalStatusShopsErrors/shopsStatus";
+import { SHOP_ERRORS } from "src/modules/shops-platform/shops/internalStatusShopsErrors/shopsErrors";
 
 interface ErrorResponse {
     messages: { message: string; field: string };
@@ -29,6 +31,7 @@ export const ErMsgAndHttpStatusCodeArr: Record<number, ErrorResponse> = {
     ...COMMENTS_ERRORS,
     ...CONFIRMATIONS_ERRORS,
     ...LIKES_ERRORS,
+    ...SHOP_ERRORS,
 
     [HTTP_STATUSES.BAD_REQUEST_400]: {
         messages: { message: 'BAD_REQUEST_400', field: 'BAD_REQUEST_400' },
@@ -61,7 +64,8 @@ export const SuccessfulResAndHttpStatusCodeArr: Record<number, SuccessResponse> 
     ...POSTS_STATUS_POSITIVE,
     ...COMMENTS_STATUS_POSITIVE,
     ...CONFIRMATIONS_STATUS_POSITIVE,
-    // ...LIKES_STATUS_POSITIVE,
+    ...LIKES_STATUS_POSITIVE,
+    ...SHOP_INTERNAL_STATUS,
 
     [HTTP_STATUSES.OK_200]: {
         messages: { message: 'Успех', sucsees: 'sucsees' },

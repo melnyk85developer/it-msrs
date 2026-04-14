@@ -41,6 +41,7 @@ import { RulesAiAssistant } from '../ai-assistant-domain/ai-assistant-global-con
 import { UpdateDesignatedProviderForAiAssistantCommand } from '../ai-assistant-application/ai-assistant.use-case/update-designated-provider-for-terminator.use-case';
 import { UpdateProviderForAiAssistantInputDto } from '../ai-assistant-dto/update-provider-for-ai-assistants-input.dto';
 import { ContinueInterceptor } from '../../interceptors/continueInterceptor';
+import { CreateContinuePromptAiInputDto } from '../ai-assistant-dto/create-continue-prompt-ai-assistant-input.dto';
 
 // @Roles('ADMIN')
 @Controller('admin')
@@ -106,12 +107,12 @@ export class AiAssistantController {
     @UseInterceptors(ContinueInterceptor)
     // @UseInterceptors(AiStreamInterceptor)
     async continueProxyController(
-        @Body() dto: CreatePromptAiInputDto,
+        @Body() dto: any,
     ) {
         // const userMessages = body.messages?.filter((m: any) => m.role !== 'system') || [];
         // const lastMessage = userMessages[userMessages.length - 1]?.content || '';
 
-        console.log('continueProxyController: - 😡 dto', dto)
+        // console.log('continueProxyController: - 😡 dto', dto)
 
         return this.commandBus.execute(
             new CreatePromptForTerminatorCommand(dto)

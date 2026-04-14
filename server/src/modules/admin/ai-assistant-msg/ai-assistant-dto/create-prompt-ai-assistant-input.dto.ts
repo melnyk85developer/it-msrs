@@ -29,22 +29,7 @@ export class CreatePromptAiInputDto {
     @IsString()
     @IsNotEmpty()
     readonly createdAt: string;
-    // @ApiProperty({ example: 'provider', description: 'Имя провайдера AiAssistant моделей.' })
-    // @IsOptional()
-    // @IsString()
-    // readonly provider1?: 'ollama' | 'openai' | 'google'
-    // @ApiProperty({ example: 'model', description: 'Имя модели AiAssistant.' })
-    // @IsOptional()
-    // @IsString()
-    // readonly model1?: string;
-    // @ApiProperty({ example: 'provider2', description: 'Имя провайдера AiAssistant моделей.' })
-    // @IsOptional()
-    // @IsString()
-    // readonly provider2?: 'ollama' | 'openai' | 'google'
-    // @ApiProperty({ example: 'model2', description: 'Имя модели AiAssistant.' })
-    // @IsOptional()
-    // @IsString()
-    // readonly model2?: string;
+    
     @ApiProperty({ example: '2', description: 'ID родительского сообщения, если это ответ' })
     @IsOptional()
     readonly attachments?: Attachment[];

@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
-import { PhotoAlbumRepository } from "../../photo-album-infrastructure/photo-album.repository";
 import { InjectModel } from "@nestjs/mongoose";
 import { PhotoAlbum, type PhotoAlbumModelType } from "../../photo-album-domain/photo-album-entity";
+import { PhotoAlbumRepository } from "../../photo-album-infrastructure/photo-album.repository";
 
 export class GetOrCreatePhotoAlbumCommand {
     constructor(

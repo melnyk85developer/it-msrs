@@ -18,7 +18,7 @@ export class AiStreamInterceptor implements NestInterceptor {
                 response.setHeader('Cache-Control', 'no-cache');
                 response.setHeader('Connection', 'keep-alive');
 
-                const content = data.assistantResponse?.message || '';
+                const content = data.assistantResponse?.content || '';
 
                 // Имитируем чанк для OpenAI/Continue формата
                 const chunk = {
