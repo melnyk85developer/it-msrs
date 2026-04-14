@@ -8,14 +8,14 @@ export class ShopTypeViewDto {
     createdAt: string;
     updatedAt: string;
 
-    static mapShopTypeToView(photo: ShopTypeDocument): ShopTypeViewDto {
+    static mapShopTypeToView(type: ShopTypeDocument): ShopTypeViewDto {
         // console.log('UsersController: mapToView - user 😡 ', user)
         const dto = new ShopTypeViewDto();
-        dto.typeId = photo._id.toString();
-        dto.typeName = photo.typeName;
-        dto.userId = photo.userId;
-        dto.createdAt = photo.createdAt;
-        dto.updatedAt = photo.updatedAt;
+        dto.typeId = type._id.toString();
+        dto.typeName = type.typeName;
+        dto.userId = type.userId;
+        dto.createdAt = type.createdAt;
+        dto.updatedAt = type.updatedAt;
         // console.log('UsersController: mapToView - dto 😡 ', dto)
         return dto;
     }

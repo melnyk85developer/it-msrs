@@ -34,11 +34,11 @@ export class ShopTypeController {
         @ExtractUserIfExistsFromRequest() user: UserContextDto,
     ): Promise<ShopTypeViewDto> {
         console.log('ShopTypeController: createShopTypeController - dto', dto)
-        const photoId = await this.commandBus.execute<CreateShopTypeCommand, string>(
+        const typeId = await this.commandBus.execute<CreateShopTypeCommand, string>(
             new CreateShopTypeCommand(user.id, dto)
         );
-        // console.log('ShopTypeController: createShopTypeController - photoId', photoId)
-        return await this.shopTypeQueryRepository.findShopTypeByIdOrNotFoundFailRepository(photoId);
+        console.log('ShopTypeController: createShopTypeController - typeId', typeId)
+        return await this.shopTypeQueryRepository.findShopTypeByIdOrNotFoundFailRepository(typeId);
     }
     @ApiOperation({ summary: 'Обновление типа магазина!' })
     @ApiResponse({ status: 201, type: ShopType })

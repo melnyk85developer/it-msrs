@@ -28,7 +28,7 @@ export class ShopTypesContextClass {
         numShopType: number;
         addShopType: ShopTypeViewDto;
     }) {
-        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        console.log('ShopTypesContextClass: addShopTypesStateTest - numShopType, addShopType 😡 ', numShopType, addShopType)
         // 1. Если массив пустой
         if (!this.createdShopTypes.length) {
             this.createdShopTypes = [addShopType];
@@ -37,9 +37,13 @@ export class ShopTypesContextClass {
         }
         // 2. Если индекс существует -> обновляем
         if (this.createdShopTypes.length > numShopType) {
-            this.createdShopTypes = this.createdShopTypes.map((shop, index) =>
-                index === numShopType ? addShopType : shop
+            this.createdShopTypes = this.createdShopTypes.map((type, index) =>
+                index === numShopType ? addShopType : type
             );
+            console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 1', this.total_number_of_shop_types_in_tests)
+            this.total_number_of_shop_types_in_tests++
+            console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 2', this.total_number_of_shop_types_in_tests)
+
             return;
         }
         // 3. Если индекса нет -> расширяем массив до нужного индекса
@@ -48,6 +52,7 @@ export class ShopTypesContextClass {
             ...Array(numShopType - this.createdShopTypes.length).fill(null),
             addShopType,
         ];
+        this.total_number_of_shop_types_in_tests++
     }
     public async deleteShopTypesStateTest({
         numShopType

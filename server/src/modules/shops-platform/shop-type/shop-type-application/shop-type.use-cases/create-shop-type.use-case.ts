@@ -30,7 +30,10 @@ export class CreateShopTypeUseCase
         // console.log('CreateShopTypeUseCase - miniatureName 😡 4', miniatureName)
         // isAlbum = await this.photoAlbumService.getPhotoAlbumNameOrCreatedService(userId, dto.albumName, miniatureName)
         
-        const shopType = this.shopTypeModel.createShopTypeInstance(dto);
+        const shopType = this.shopTypeModel.createShopTypeInstance({
+            ...dto,
+            userId
+        });
         console.log('CreateShopTypeUseCase: - shopType 😡 1', shopType)
         await this.shopTypeRepository.save(shopType);
         console.log('CreateShopTypeUseCase: - shopType 😡 2', shopType)

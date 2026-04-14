@@ -7,6 +7,11 @@ export class CreateShopTypeDomainDto {
     @IsNotEmpty({ message: 'Поле albumName не должно быть пустым!' })
     readonly typeName: string;
 
+    @ApiProperty({ example: 'userId', description: 'Имя альбома' })
+    @IsString({ message: 'userId должно быть строкой!' })
+    @IsNotEmpty({ message: 'Поле albumName не должно быть пустым!' })
+    readonly userId: string;
+
     @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
     createdAt: string;
     @ApiProperty({ example: 'updatedAt', description: 'updatedAt!' })

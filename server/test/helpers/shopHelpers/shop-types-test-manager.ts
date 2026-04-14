@@ -56,6 +56,8 @@ export class ShopTypesTestManager {
             .send(shopType)
             .expect(expectedStatusCode);
 
+        console.log('ShopTypesTestManager: - createShopTypes ⚙️ response.body', response.body)
+        
         if (expectedStatusCode === HTTP_STATUSES.CREATED_201) {
             expect(response.body.typeName).toEqual(shopType.typeName);
         }

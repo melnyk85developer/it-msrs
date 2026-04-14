@@ -17,12 +17,17 @@ export const isCreatedShopTypes = async (
             contextTests.sessions.accessTokenUser1Devices[0],
             statusCode
         )
-        // console.log('TEST isCreatedShopType1: createdEntity res ', createdEntity)
+        // console.log('TEST isCreatedShopTypes: createdEntity res ', createdEntity)
+        console.log('TEST isCreatedShopTypes: statusCode ', statusCode)
+        console.log('TEST isCreatedShopTypes: createdEntity response.status ', response.status)
 
         if (response.status === statusCode) {
-            // console.log('isCreatedBlog: bodyBlog 😡', bodyBlog)
+            if (contextTests && contextTests.shopType) {
+                console.log('isCreatedShopTypes: statusCode 😡', statusCode)
+                console.log('TEST isCreatedShopTypes: createdEntity res ', createdEntity)
+                contextTests.shopType.addShopTypesStateTest({ numShopType, addShopType: createdEntity })
+            }
             // Добавляем в тест-сторе Blog после удачного посещения createBlogs!
-            contextTests.shopType?.addShopTypesStateTest({ numShopType, addShopType: createdEntity })
             return response.body;
         } else {
             return response.body;

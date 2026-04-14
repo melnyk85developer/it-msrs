@@ -129,5 +129,14 @@ export class TestContext {
         this.posts_for_profile = new PostsForProfileContextClass();
         this.comments = new CommentsContextClass();
         this.codeConfirmation = new CodeConfirmationContextClass();
+
+        this.shops = new ShopsContextClass();
+        this.shopType = new ShopTypesContextClass();
+        this.basket = new BasketContextClass();
+        this.basketMerchandise = new BasketMerchandiseContextClass();
+        this.merchandiseBrand = new MerchandiseBrandContextClass();
+        this.merchandiseType = new MerchandiseTypesContextClass();
+        this.merchandise = new MerchandiseContextClass();
+
     }
 }

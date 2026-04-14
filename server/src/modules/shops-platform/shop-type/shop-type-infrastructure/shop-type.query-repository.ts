@@ -54,6 +54,8 @@ export class ShopTypeQueryRepository {
     }
 
     async findShopTypeById(typeId: string): Promise<ShopTypeDocument | null> {
+        console.log('ShopTypeQueryRepository: findShopTypeById - typeId', typeId)
+
         return this.shopTypeModel.findOne({
             _id: new Types.ObjectId(typeId),
             deletedAt: null,
@@ -68,6 +70,7 @@ export class ShopTypeQueryRepository {
         } else {
             // console.log('BlogsRepository: findBlogOrNotFoundFailBlogsRepository - ELSE id 😡😡😡 typeof', id, typeof id)
             type = await this.findShopTypeById(typeId);
+            console.log('ShopTypeQueryRepository: findShopTypeByIdOrNotFoundFailRepository - typeId', typeId)
         }
         if (!type) {
             throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_PHOTO);

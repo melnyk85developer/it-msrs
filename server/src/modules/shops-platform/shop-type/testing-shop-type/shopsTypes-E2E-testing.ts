@@ -65,7 +65,10 @@ export const shopTypeE2ETest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(getEntity).toHaveLength(contextTests.shopType.total_number_of_shop_types_in_tests);
+            console.log('TEST getShopTypes: getEntity', getEntity)
+            console.log('TEST getShopTypes: contextTests.shopType?.total_number_of_shop_types_in_tests', contextTests.shopType?.total_number_of_shop_types_in_tests)
+
+            expect(getEntity.items?.length).toHaveLength(contextTests.shopType?.total_number_of_shop_types_in_tests);
         })
         // it(`POST   - Ожидается статус код 201, - успешное создание типа магазина 2 ! Дополнительные запросы: -> GET`, async () => {
         //     const type = await isCreatedShopTypes(

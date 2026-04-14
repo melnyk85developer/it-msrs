@@ -44,6 +44,7 @@ export class ShopType {
         // console.log('TokenEntity: createTokenInstance - dto 😡 ', dto)
 
         type.typeName = dto.typeName;
+        type.userId = dto.userId;
 
         type.createdAt = createdAt;
         type.updatedAt = createdAt;
