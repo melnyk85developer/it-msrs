@@ -5,10 +5,10 @@ import { Trim } from "src/core/decorators/transform/trim";
 
 //dto для боди при создании юзера. Сюда могут быть добавлены декораторы swagger
 export class CreateBasketMerchandiseInputDto {
-    @ApiProperty({ example: 'basketMerchandiseId', description: 'Уникальный идентификатор товара в корзине' })
-    @IsString({ message: 'basketMerchandiseId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле basketMerchandiseId не должно быть пустым!' })
-    readonly basketMerchandiseId: string
+    // @ApiProperty({ example: 'basketMerchandiseId', description: 'Уникальный идентификатор товара в корзине' })
+    // @IsString({ message: 'basketMerchandiseId должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле basketMerchandiseId не должно быть пустым!' })
+    // readonly basketMerchandiseId: string
 
     @ApiProperty({ example: 'basketId', description: 'Уникальный идентификатор корзины' })
     @IsString({ message: 'basketId должно быть строкой!' })
@@ -26,8 +26,8 @@ export class CreateBasketMerchandiseInputDto {
     readonly merchandiseName: string
 
     @ApiProperty({ example: 'image', description: 'Картинка товара' })
-    @IsString({ message: 'image должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле image не должно быть пустым!' })
+    @IsOptional()
+    @IsString({ message: 'merchandiseImgName должно быть строкой!' })
     readonly merchandiseImgName: string
 
     @ApiProperty({ example: 'shopId', description: 'Уникальный идентификатор магазина' })

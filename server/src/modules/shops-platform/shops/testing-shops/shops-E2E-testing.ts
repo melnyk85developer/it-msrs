@@ -32,6 +32,7 @@ export const shopsE2ETest = () => {
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const { response } = await contextTests.shopTestManager.getShops(
                 contextTests.users.createdUsers[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(response.body).toEqual(expect.arrayContaining([]));
@@ -52,10 +53,12 @@ export const shopsE2ETest = () => {
             }
             await contextTests.shopTestManager.createShop(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const { response } = await contextTests.shopTestManager.getShops(
                 contextTests.users.createdUsers[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(response.body).toEqual(expect.arrayContaining([]));
@@ -64,6 +67,7 @@ export const shopsE2ETest = () => {
             const createdShop = await isCreatedShop(
                 0,
                 contextTests.shopType.correctShopTypeNames[0],
+                contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
                 contextTests.users.createdUsers[0]!.id,
@@ -73,18 +77,19 @@ export const shopsE2ETest = () => {
 
             const { getEntity } = await contextTests.shopTestManager.getShops(
                 contextTests.users.createdUsers[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             // console.log('TEST shopsE2ETest: getShops ', getEntity)
 
             // Проверяем, что в теле ответа должен быть только 1 объект в массиве!
-            expect(getEntity).toHaveLength(1);
+            expect(getEntity.items).toHaveLength(1);
             // Сравниваем, что бы вернувшийся ответ совпадал с нашими регистрационными данными!
-            expect(getEntity).toEqual([
+            expect(getEntity.items).toEqual([
                 expect.objectContaining(contextTests.shops.createdShops[0])
             ])
         })
-        it(`POST   - Ожидается статус код 201, - успешное создание создание магазина 2 ! Дополнительные запросы: -> GET`, async () => {
+        it(`POST   - Ожидается статус код 201, - успешное создание магазина 2 ! Дополнительные запросы: -> GET`, async () => {
             const type = await isCreatedShopTypes(
                 1,
                 contextTests.shopType.correctShopTypeNames[3],
@@ -92,24 +97,32 @@ export const shopsE2ETest = () => {
             )
             // console.log('TEST shopTypeE2ETest - type res2: ', type.typeId)
             const createdShop = await isCreatedShop(
-                0,
+                1,
                 contextTests.shopType.correctShopTypeNames[1],
-                contextTests.shops.correctShopNames[0],
+                contextTests.shopType.correctShopBrandsNames[1],
+                contextTests.shops.correctShopNames[1],
                 contextTests.shops.correctShopDescriptions[1],
                 contextTests.users.createdUsers[0]!.id,
                 HTTP_STATUSES.CREATED_201
             )
+            // console.log('TEST shopsE2ETest: createdShop ', createdShop)
+
             // Отправляем GET запрос на получение всех магазинов и ожидаем статус код 200 (OK)!
-            const { response } = await contextTests.shopTestManager.getShops(
+            const { response, getEntity } = await contextTests.shopTestManager.getShops(
                 contextTests.users.createdUsers[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            // Проверяем, что в теле ответа должен быть массив с двумя создаными нами магазинами!
-            expect(response.body).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining(contextTests.shops.createdShops[0]),
-                    expect.objectContaining(contextTests.shops.createdShops[1])
-                ]))
+            // console.log('TEST shopE2ETest - getEntity: ', getEntity)
+            expect(getEntity).toEqual(
+                expect.objectContaining({
+                    pagesCount: 1,
+                    page: 1,
+                    pageSize: 10,
+                    totalCount: 2,
+                    items: [contextTests.shops.createdShops[1], contextTests.shops.createdShops[0]]
+                })
+            )
         })
         it(`PUT    - Ожидается статус код 400, - Не валидные данные для обновления магазина! Дополнительные запросы: -> GET`, async () => {
             // Подготавливаем не валидные данные на обновление магазина!
@@ -123,6 +136,7 @@ export const shopsE2ETest = () => {
             await contextTests.shopTestManager.updateShop(
                 contextTests.shops.createdShops[0]!.shopId,
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             // Отправляем GET запрос на получение магазина и ожидаем ответ 200 (OK) и данные магазина!
@@ -143,7 +157,7 @@ export const shopsE2ETest = () => {
         })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего магазина!`, async () => {
             // Подготавливаем не валидные данные на обновление магазина!
-            const data: CreateMyShopsInputDto = {
+            const data: UpdateMyShopsInputDto = {
                 name: 'Автомаркет',
                 title: 'Широкий выбор качественных запчастей от производителя!',
                 shopTypeId: contextTests.shopType.createdShopTypes[0]!.typeId
@@ -152,6 +166,7 @@ export const shopsE2ETest = () => {
             await contextTests.shopTestManager.updateShop(
                 contextTests.constants.invalidId,
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
         })
@@ -160,14 +175,15 @@ export const shopsE2ETest = () => {
             const data: UpdateMyShopsInputDto = {
                 name: 'Автомаркет',
                 title: 'Широкий выбор качественных запчастей от производителя!',
-                userId: contextTests.users.createdUsers[0]!.id,
+                // userId: contextTests.users.createdUsers[0]!.id,
                 shopTypeId: contextTests.shopType.createdShopTypes[0]!.typeId
             }
             // Отправляем PUT запрос на обновление магазина и ожидаем в ответ статус код 200!
             await contextTests.shopTestManager.updateShop(
                 contextTests.shops.createdShops[0]!.shopId,
                 data,
-                HTTP_STATUSES.OK_200
+                contextTests.sessions.accessTokenUser1Devices[0],
+                HTTP_STATUSES.NO_CONTENT_204
             )
             // Отправляем GET запрос на получение обновленного пользователя и ожидаем в ответ статус код 200!
             const { getEntity } = await contextTests.shopTestManager.getShopById(
@@ -178,7 +194,7 @@ export const shopsE2ETest = () => {
             // Сравниваем поля которые мы отправляли на обновление - с теми которые вернул сервер по GET запросу!
             expect(getEntity.name).toEqual(data.name);
             expect(getEntity.title).toEqual(data.title);
-            expect(getEntity.userId).toEqual(data.userId);
+            // expect(getEntity.userId).toEqual(data.userId);
             // Отправляем GET запрос на получение второго магазина и ожидаем в ответ статус код 200!
             const { response } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[1]!.shopId,
@@ -196,8 +212,9 @@ export const shopsE2ETest = () => {
             // Отправляем DELETE запрос на удаление первого магазина и ожидаем статус код 200 (OK)!
             await contextTests.shopTestManager.deleteShop(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
-                HTTP_STATUSES.OK_200
+                HTTP_STATUSES.NO_CONTENT_204
             )
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res } = await contextTests.shopTestManager.getShopById(
@@ -214,8 +231,9 @@ export const shopsE2ETest = () => {
             // Отправляем DELETE запрос на удаление второго магазина и ожидаем статус код 200 (OK)!
             await contextTests.shopTestManager.deleteShop(
                 contextTests.shops.createdShops[1]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
-                HTTP_STATUSES.OK_200
+                HTTP_STATUSES.NO_CONTENT_204
             )
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res2 } = await contextTests.shopTestManager.getShopById(
@@ -232,6 +250,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение всех магазинов, ожидем статус код 200 (OK)!
             const { response } = await contextTests.shopTestManager.getShops(
                 contextTests.users.createdUsers[0]!.id,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             // Сравниваем полученный результат, должен быть пустой массив!

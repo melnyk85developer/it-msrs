@@ -9,11 +9,12 @@ import { BasketController } from './basket-api/basket.controller';
 import { BasketRepositoryModule } from './basket-repository.module';
 import { BasketQueryRepository } from './basket-infrastructure/basket.query-repository';
 import { BasketRepository } from './basket-infrastructure/basket.repository';
+import { GetQueryBasketUseCase } from './basket-application/basket.use-cases/get-basket-or-create.query-use-case';
 
 const useCases = [
     CreateBasketUseCase,
     DeleteBasketUseCase,
-    BasketRepositoryModule
+    GetQueryBasketUseCase
 ]
 
 @Module({
@@ -21,6 +22,7 @@ const useCases = [
         MongooseModule.forFeature([{ name: Basket.name, schema: BasketSchema }]),
         CqrsModule,
         UserAccountsModule,
+        BasketRepositoryModule
     ],
     controllers: [
         BasketController

@@ -39,6 +39,7 @@ export class MerchandiseBrandContextClass {
             this.createdMerchandiseBrands = this.createdMerchandiseBrands.map((shop, index) =>
                 index === numMerchandiseBrand ? addMerchandiseBrand : shop
             );
+            this.total_number_of_merchandise_brands_in_tests++
             return;
         }
         // 3. Если индекса нет -> расширяем массив до нужного индекса
@@ -47,6 +48,7 @@ export class MerchandiseBrandContextClass {
             ...Array(numMerchandiseBrand - this.createdMerchandiseBrands.length).fill(null),
             addMerchandiseBrand,
         ];
+        this.total_number_of_merchandise_brands_in_tests++
     }
     public async deleteMerchandiseBrandStateTest({
         numMerchandiseBrand

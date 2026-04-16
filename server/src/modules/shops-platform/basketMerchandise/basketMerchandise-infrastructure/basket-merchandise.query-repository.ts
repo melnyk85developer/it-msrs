@@ -46,25 +46,35 @@ export class BasketMerchandiseQueryRepository {
             deletedAt: null,
         };
 
-        if (userId) filter.userId = userId;
+        // if (userId) filter.userId = userId;
+        if (normalizedQuery.basketId) filter.basketId = normalizedQuery.basketId;
+        // if (normalizedQuery.shopId) filter.shopId = normalizedQuery.shopId;
 
         // console.log('getAllPhotoAlbumsQueryRepository: base filter 😡 ', filter)
 
         if (normalizedQuery.searchName) {
             filter.$or = filter.$or || [];
             filter.$or.push({
-                albumName: { $regex: normalizedQuery.searchName, $options: 'i' },
+                searchName: { $regex: normalizedQuery.searchName, $options: 'i' },
             });
         }
+        if (normalizedQuery.basketId) {
+            filter.$or = filter.$or || [];
+            filter.$or.push({
+                basketId: { $regex: normalizedQuery.basketId, $options: 'i' },
+            });
+        }
+        // console.log('getAllBasketMerchandiseQueryRepository: base filter 😡 ', filter)
 
-        const photoAlbum = await this.basketMerchandiseModel.find(filter)
+        const basketMerchandise = await this.basketMerchandiseModel.find(filter)
             .sort({ [normalizedQuery.sortBy]: normalizedQuery.sortDirection, _id: 1 })
             .skip(normalizedQuery.calculateSkip())
             .limit(normalizedQuery.pageSize);
+        // console.log('getAllBasketMerchandiseQueryRepository: RES basketMerchandise 😡 ', basketMerchandise)
 
         const totalCount = await this.basketMerchandiseModel.countDocuments(filter);
 
-        const items = photoAlbum.map(BasketMerchandiseViewDto.mapToView);
+        const items = basketMerchandise.map(BasketMerchandiseViewDto.mapToView);
 
         // console.log('getAllPhotoAlbumsQueryRepository: RES items 😡 ', items)
 

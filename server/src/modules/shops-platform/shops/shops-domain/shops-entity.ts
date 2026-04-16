@@ -17,20 +17,20 @@ export class MyShops {
     name: string;
 
     @ApiProperty({ example: 'title', description: 'Описание типа магазина!' })
-    @Prop({ type: String, required: true })
-    title: string;
+    @Prop({ type: String, nullable: true })
+    title: string | null;
 
     @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор владельца магазина' })
     @Prop({ type: String, required: true })
     userId: string;
 
     @ApiProperty({ example: 'shopTypeId', description: 'Уникальный идентификатор типа магазина!' })
-    @Prop({ type: String, required: true })
-    shopTypeId: string;
+    @Prop({ type: String, nullable: true })
+    shopTypeId: string | null;
 
     @ApiProperty({ example: 'shopBrandId', description: 'Уникальный идентификатор магазина' })
-    @Prop({ type: String, required: true })
-    shopBrandId: string;
+    @Prop({ type: String, nullable: true })
+    shopBrandId: string | null;
 
     @ApiProperty({ example: 'createdAt', description: 'Число создания аккаунта.' })
     @Prop({ type: String, required: true })
@@ -50,22 +50,23 @@ export class MyShops {
     }
 
     static createMyShopsInstance(dto: Omit<CreateMyShopsDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): MyShopsDocument {
-        const photo = new this();
+        const shop = new this();
         const date = new Date();
         const createdAt = date.toISOString();
         // console.log('TokenEntity: createTokenInstance - dto 😡 ', dto)
 
-        photo.name = dto.name;
-        photo.title = dto.title;
-        photo.userId = dto.userId;
-        photo.shopTypeId = dto.shopTypeId;
+        shop.name = dto.name;
+        shop.title = dto.title ? dto.title : null;
+        shop.userId = dto.userId;
+        shop.shopTypeId = dto.shopTypeId ? dto.shopTypeId : null;
+        shop.shopBrandId = dto.shopBrandId ? dto.shopBrandId : null;
 
-        photo.createdAt = createdAt;
-        photo.updatedAt = createdAt;
-        photo.deletedAt = null;
+        shop.createdAt = createdAt;
+        shop.updatedAt = createdAt;
+        shop.deletedAt = null;
 
         // console.log('TokenEntity: createInstance - token 😡 ', token)
-        return photo as MyShopsDocument;
+        return shop as MyShopsDocument;
     }
     updateMyShops(dto: UpdateMyShopsDomainDto) {
         const date = new Date();
@@ -75,6 +76,7 @@ export class MyShops {
             this.name = dto.name ? dto.name : this.name;
             this.title = dto.title ? dto.title : this.title;
             this.shopTypeId = dto.shopTypeId ? dto.shopTypeId : this.shopTypeId;
+            this.shopBrandId = dto.shopBrandId ? dto.shopBrandId : this.shopBrandId;
             this.userId = this.userId;
             this.createdAt = this.createdAt;
             this.updatedAt = updatedAt;

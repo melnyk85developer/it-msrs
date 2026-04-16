@@ -34,7 +34,7 @@ export class BasketMerchandise {
     merchandiseCoverName: string | null;
 
     @ApiProperty({ example: 'shopId', description: 'Уникальный идентификатор магазина' })
-    @Prop({ type: String, nullable: true })
+    @Prop({ type: String, required: true })
     shopId: string;
 
     @ApiProperty({ example: 'price', description: 'Стоимость товара' })
@@ -66,7 +66,7 @@ export class BasketMerchandise {
         const basketMerchandise = new this();
         const date = new Date();
         const createdAt = date.toISOString();
-        // console.log('PhotoAlbumEntity: createInstance - user 😡 ', user)
+        // console.log('createBasketMerchandiseInstance: - user 😡 ', user)
         basketMerchandise.basketId = dto.basketId;
         basketMerchandise.merchandiseId = dto.merchandiseId;
         basketMerchandise.merchandiseName = dto.merchandiseName;
@@ -78,7 +78,7 @@ export class BasketMerchandise {
         basketMerchandise.updatedAt = createdAt;
         basketMerchandise.deletedAt = null;
 
-        // console.log('PhotoAlbumEntity: createInstance - token 😡 ', token)
+        // console.log('createBasketMerchandiseInstance: - basketMerchandise 😡 ', basketMerchandise)
         return basketMerchandise as BasketMerchandiseDocument;
     }
     updateBasketMerchandise(dto: Omit<UpdateBasketMerchandiseDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>) {

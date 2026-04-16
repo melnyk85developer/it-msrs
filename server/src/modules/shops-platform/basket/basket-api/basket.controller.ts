@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { BasketQueryRepository } from '../basket-infrastructure/basket.query-repository';
 import { AuthAccessGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-auth.guard';
@@ -11,12 +11,14 @@ import { CreateBasketInputDto } from '../basket-dto/basket.input-dto';
 import { Basket } from '../basket-domain/basket-entity';
 import { CreateBasketCommand } from '../basket-application/basket.use-cases/create-basket.use-case';
 import { UserContextDto } from 'src/modules/user-accounts/users-guards/dto/user-context.dto';
+import { GetQueryBasketCommand } from '../basket-application/basket.use-cases/get-basket-or-create.query-use-case';
 
 @ApiTags('Корзина')
 @Controller('/basket')
 export class BasketController {
     constructor(
-        private commandBus: CommandBus,
+        private readonly commandBus: CommandBus,
+        private readonly queryBus: QueryBus,
         private basketQueryRepository: BasketQueryRepository,
     ) { }
 
@@ -34,7 +36,7 @@ export class BasketController {
             new CreateBasketCommand(
                 user.id,
                 dto
-            ),
+            )
         );
         // console.log('createBasketController: - albumId', albumId)
         return await this.basketQueryRepository.findBasketByIdOrNotFoundFailRepository(basketId);
@@ -45,10 +47,14 @@ export class BasketController {
     @UseGuards(AuthAccessGuard)
     @Delete('/:basketId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async deleteBasketController(@Param('basketId') basketId: string) {
+    async deleteBasketController(
+        @Param('basketId') basketId: string,
+        @ExtractUserFromRequest() user: UserContextDto,
+    ) {
         // console.log('BasketController: - deleteBasketController basketId', basketId)
         return await this.commandBus.execute<DeleteBasketCommand, string>(
             new DeleteBasketCommand(
+                user.id,
                 basketId
             ),
         );
@@ -68,9 +74,10 @@ export class BasketController {
     @UseGuards(AuthAccessGuard)
     @Get()
     async getMyBasketByIdController(
-        @Query() query: any,
+        @Query() query: { shopId: string, userId: string },
         @ExtractUserFromRequest() user: UserContextDto,
     ) {
-        return await this.basketQueryRepository.findBasketByIdAndUserIdOrNotFoundFailRepository(user.id, query.basketId);
+        // console.log('getMyBasketByIdController: - query', query)
+        return await this.queryBus.execute(new GetQueryBasketCommand(user.id));
     }
 }

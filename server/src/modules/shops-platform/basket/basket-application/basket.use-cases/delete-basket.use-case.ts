@@ -1,10 +1,11 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { INTERNAL_STATUS_CODE } from "src/core/utils/utils";
+import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "src/core/utils/utils";
 import { DomainException } from "src/core/exceptions/domain-exceptions";
 import { BasketRepository } from "../../basket-infrastructure/basket.repository";
 
 export class DeleteBasketCommand {
     constructor(
+        public userId: string,
         public basketId: string,
     ) { }
 }
@@ -16,13 +17,17 @@ export class DeleteBasketUseCase
     ) { }
 
     async execute(command: DeleteBasketCommand) {
-        const { basketId } = command
-        await this.basketRepository.findBasketByIdOrNotFoundFailRepository(basketId);
-        // console.log('DeleteBasketUseCase: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        const isDeletedBasket = await this.basketRepository.deleteBasket(basketId);
-        // console.log('DeleteBasketUseCase: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        // photoAlbum.makeDeletedPhotoAlbum();
-        // await this.photoAlbumRepository.save(photoAlbum);
+        const { userId, basketId } = command
+        // console.log('DeleteBasketUseCase: - basketId 😡 1', basketId)
+        const basket = await this.basketRepository.findBasketByIdOrNotFoundFailRepository(basketId);
+        // console.log('DeleteBasketUseCase: - basket 😡 2', basket)
+        if(userId !== basket.userId){
+            throw new DomainException(HTTP_STATUSES.FORBIDDEN_403)
+        }
+        const isDeletedBasket = await this.basketRepository.deleteBasket(basket._id.toString());
+        // console.log('DeleteBasketUseCase: - isDeletedBasket 😡 3', isDeletedBasket);
+        // basket.makeDeletedBasket();
+        // await this.basketRepository.save(basket);
         return isDeletedBasket._id
     }
 }

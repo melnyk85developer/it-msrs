@@ -10,8 +10,5 @@ export class GetMerchandiseBrandQueryParams extends BaseQueryParams {
     sortBy = MerchandiseBrandSortBy.CreatedAt;
     @IsOptional()
     @IsString()
-    shopId: string;
-    @IsOptional()
-    @IsString()
     searchMerchandiseBrand: string | null = null;
 }

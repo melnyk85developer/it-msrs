@@ -10,8 +10,8 @@ import { MerchandiseRepository } from "../../merchandise-infrastructure/merchand
 export class CreateMerchandiseCommand {
     constructor(
         public userId: string,
-        public merchandiseFile: Multer.File | null,
-        public readonly dto: Omit<CreateMerchandiseDto, 'userId' | 'merchandiseImgName' | 'merchandiseCoverName'>
+        public readonly dto: Omit<CreateMerchandiseDto, 'userId' | 'merchandiseImgName' | 'merchandiseCoverName'>,
+        public merchandiseFile?: Multer.File | null
     ) { }
 }
 @CommandHandler(CreateMerchandiseCommand)
@@ -24,11 +24,10 @@ export class CreateMerchandiseUseCase
 
     async execute(command: CreateMerchandiseCommand) {
         const { dto, userId } = command
-        // console.log('CreatePhotoAlbumUseCase: - dto 😡 1', dto)
-        // console.log('CreatePhotoAlbumUseCase: - albumCoverFile 😡 2', albumCoverFile)
+        // console.log('CreateMerchandiseUseCase: - dto 😡 1', dto)
         let isMerchandise = await this.merchandiseRepository.findMerchandiseByName(userId, dto.merchandiseName);
         let imageName
-
+        // console.log('CreateMerchandiseUseCase: - isMerchandise 😡 2', isMerchandise)
         if (!isMerchandise) {
             const merchandise = this.merchandiseModel.createMerchandiseInstance(
                 {
@@ -38,9 +37,9 @@ export class CreateMerchandiseUseCase
                     userId
                 }
             )
-            // console.log('CreatePhotoAlbumUseCase: - photoAlbum 😡 save', photoAlbum)
+            // console.log('CreateMerchandiseUseCase: - merchandise 😡 save 3', merchandise)
             await this.merchandiseRepository.save(merchandise);
-            // console.log('CreatePhotoAlbumUseCase: - photoAlbum 😡 res', photoAlbum)
+            // console.log('CreateMerchandiseUseCase: - merchandise 😡 res 4', merchandise)
             return merchandise._id.toString();
         } else {
             return isMerchandise._id.toString();

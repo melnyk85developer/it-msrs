@@ -8,9 +8,10 @@ import { UpdateMerchandiseDto } from "../../merchandise-dto/update-merchandise.d
 
 export class UpdateMerchandiseCommand {
     constructor(
-        public productId: string,
-        public readonly dto: Omit<UpdateMerchandiseDto, 'albumId'>,
-        public albumCoverFile: Multer.File | null,
+        public merchandiseId: string,
+        public readonly dto: Omit<UpdateMerchandiseDto, 'productId'>,
+        public userId: string,
+        public merchandiseImg?: Multer.File | null,
     ) { }
 }
 @CommandHandler(UpdateMerchandiseCommand)
@@ -22,23 +23,25 @@ export class UpdateMerchandiseUseCase
     ) { }
 
     async execute(command: UpdateMerchandiseCommand) {
-        const { albumCoverFile, dto, productId } = command
+        const { merchandiseImg, dto, userId, merchandiseId } = command
         let newImageFileName
-        // console.log('PhotoAlbumService: updatePhotoAlbumService - albumId, dto 😡 ', albumId, dto)
-        const merchandise = await this.merchandiseRepository.findMerchandiseByIdOrNotFoundFailRepository(productId);
-        if (albumCoverFile) {
-            newImageFileName = await this.filesService.createPostFile(albumCoverFile);
+        // console.log('UpdateMerchandiseUseCase: - productId, dto 😡 ', productId, dto)
+        const merchandise = await this.merchandiseRepository.findMerchandiseByIdOrNotFoundFailRepository(merchandiseId);
+        if (merchandiseImg) {
+            newImageFileName = await this.filesService.createPostFile(merchandiseImg);
         }
-        // console.log('PhotoAlbumService: updatePhotoAlbumService - newImageFileName 😡 ', newImageFileName)
+        // console.log('UpdateMerchandiseUseCase: - merchandiseImg 😡 ', merchandiseImg)
+
         merchandise.updateMerchandise({
             ...dto,
-            productId,
+            userId,
+            merchandiseId,
             merchandiseImgName: newImageFileName ? newImageFileName : dto.merchandiseCoverName ? dto.merchandiseCoverName : null,
             merchandiseCoverName: newImageFileName ? newImageFileName : dto.merchandiseCoverName ? dto.merchandiseCoverName : null
         });
-        // console.log('PhotoAlbumService: updatePhotoAlbumService - photo1 😡 ', photo)
+        // console.log('UpdateMerchandiseUseCase: - merchandise1 😡 ', merchandise)
         await this.merchandiseRepository.save(merchandise);
-        // console.log('PhotoAlbumService: updatePhotoAlbumService - photo2 😡 ', photo)
+        // console.log('UpdateMerchandiseUseCase: - merchandise2 😡 ', merchandise)
         return merchandise._id.toString();
     }
 }

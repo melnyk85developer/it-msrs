@@ -8,12 +8,13 @@ export const isCreatedMerchandiseTypes = async (
 ) => {
     if (contextTests.merchandiseType.createdMerchandiseTypes[numMerchandiseType] === undefined || contextTests.merchandiseType.createdMerchandiseTypes[numMerchandiseType] === null) {
         const dataType: any = {
-            name: typeName,
+            merchandiseTypeName: typeName,
             shopId: contextTests.shops.createdShops[0]!.shopId
         }
         // Отправляем POST запрос на регистрацию типа товара магазина и ожидаем в ответ статус код 201 (CREATED) !
         const { createdEntity, response } = await contextTests.merchandiseTypesTestManager.createMerchandiseType(
             dataType,
+            contextTests.sessions.accessTokenUser1Devices[0],
             statusCode
         )
         if (response.status === statusCode) {

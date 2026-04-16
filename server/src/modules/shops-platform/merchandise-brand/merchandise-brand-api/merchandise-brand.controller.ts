@@ -19,8 +19,10 @@ import { CreateMerchandiseBrandCommand } from '../merchandise-brand-application/
 import { UpdateMerchandiseBrandCommand } from '../merchandise-brand-application/merchandise-brand-use-cases/update-merchandise-brand.use-case';
 import { DeleteMerchandiseBrandCommand } from '../merchandise-brand-application/merchandise-brand-use-cases/delete-merchandise-brand.use-case';
 import { MerchandiseViewDto } from '../../merchandise/merchandise-dto/merchandise.view-dto';
+import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
+import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
 
-@ApiTags('Бренды')
+// @ApiTags('Бренды')
 @Controller('/brands')
 export class MerchandiseBrandController {
     constructor(
@@ -28,27 +30,27 @@ export class MerchandiseBrandController {
         private merchandiseBrandQueryRepository: MerchandiseBrandQueryRepository,
     ) { }
 
-    @ApiOperation({ summary: 'Создание бренда для товара!' })
+    @ApiOperation({ summary: 'Создание бренда для товара в магазине!' })
     @ApiResponse({ status: 200 })
     @UseGuards(AuthAccessGuard)
-    @Post()
+    @Post('/brand')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     async createMerchandiseBrandController(
         @Body() dto: CreateMerchandiseBrandInputDto,
         @ExtractUserFromRequest() user: UserContextDto,
     ): Promise<MerchandiseBrandViewDto> {
-        // console.log('createPhotoAlbumController: - dto', dto)
+        // console.log('createMerchandiseBrandController: - dto', dto)
         const brandId = await this.commandBus.execute<CreateMerchandiseBrandCommand, string>(
             new CreateMerchandiseBrandCommand(
                 user.id,
                 dto
             ),
         );
-        // console.log('createPhotoAlbumController: - albumId', albumId)
+        // console.log('createMerchandiseBrandController: - brandId', brandId)
         return await this.merchandiseBrandQueryRepository.findMerchandiseBrandByIdOrNotFoundFailRepository(brandId);
     }
 
-    @ApiOperation({ summary: 'Обновление бренда товара!' })
+    @ApiOperation({ summary: 'Обновление бренда для товара в магазине!' })
     @ApiResponse({ status: 201, type: MerchandiseBrand })
     @UseGuards(AuthAccessGuard)
     @Put('/brand/:brandId')
@@ -57,7 +59,7 @@ export class MerchandiseBrandController {
         @Param('brandId') brandId: string,
         @Body() dto: UpdateMerchandiseBrandInputDto
     ) {
-        // console.log('updatePhotoAlbumController: - dto', dto)
+        // console.log('MerchandiseBrandController: - dto', dto)
         return await this.commandBus.execute<UpdateMerchandiseBrandCommand, string>(
             new UpdateMerchandiseBrandCommand(
                 brandId,
@@ -65,33 +67,41 @@ export class MerchandiseBrandController {
             ),
         );
     }
-    @ApiOperation({ summary: 'Удаление бренда товара!' })
+    @ApiOperation({ summary: 'Удаление бренда для товара в магазине!' })
     @ApiResponse({ status: 204, type: MerchandiseBrand })
     @UseGuards(AuthAccessGuard)
-    @Put('/brand/:brandId')
+    @Delete('/brand/:brandId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async deleteMerchandiseBrandController(@Param('albumId') albumId: string) {
-        // console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
+    async deleteMerchandiseBrandController(
+        @Param('brandId') brandId: string
+    ) {
+        // console.log('MerchandiseBrandController: - deleteMerchandiseBrandController brandId', brandId)
         return await this.commandBus.execute<DeleteMerchandiseBrandCommand, string>(
             new DeleteMerchandiseBrandCommand(
-                albumId
+                brandId
             ),
         );
     }
-    @ApiOperation({ summary: 'Получить все бренды магазина!' })
+    @ApiOperation({ summary: 'Получить все бренды товаров магазина!' })
     @ApiResponse({ status: 200, type: MerchandiseBrand })
-    @Get('/brands')
+    @UseGuards(JwtOptionalAuthGuard)
+    @Get('/brand')
+    @HttpCode(HTTP_STATUSES.OK_200)
     async getAllMerchandiseBrandController(
-        @Param('userId') userId: string, 
-        @Query() query: GetMerchandiseBrandQueryParams
+        @Query() query: GetMerchandiseBrandQueryParams,
+        // @ExtractUserIfExistsFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MerchandiseBrandViewDto[]>> {
-        // console.log('PhotoAlbumController: - getAllPhotoController userId', userId)
-        return await this.merchandiseBrandQueryRepository.getAllMerchandiseBrandQueryRepository(query, userId)
+        // console.log('MerchandiseBrandController: - getAllMerchandiseBrandController query', query)
+        return await this.merchandiseBrandQueryRepository.getAllMerchandiseBrandQueryRepository(query)
     }
-    @ApiOperation({ summary: 'Получение одного бренда товара!' })
+    @ApiOperation({ summary: 'Получение одного бренда товара в магазине!' })
     @ApiResponse({ status: 200, type: MerchandiseBrand })
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/brand/:brandId')
-    async getMerchandiseBrandByIdController(@Param('albumId') albumId: string) {
-        return await this.merchandiseBrandQueryRepository.findMerchandiseBrandByIdOrNotFoundFailRepository(albumId);
+    @HttpCode(HTTP_STATUSES.OK_200)
+    async getMerchandiseBrandByIdController(
+        @Param('brandId') brandId: string
+    ) {
+        return await this.merchandiseBrandQueryRepository.findMerchandiseBrandByIdOrNotFoundFailRepository(brandId);
     }
 }

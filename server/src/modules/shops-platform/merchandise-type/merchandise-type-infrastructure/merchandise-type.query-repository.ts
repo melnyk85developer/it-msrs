@@ -47,7 +47,7 @@ export class MerchandiseTypeQueryRepository {
             deletedAt: null,
         };
 
-        if (userId) filter.userId = userId;
+        // if (userId) filter.userId = userId;
 
         // console.log('getAllPhotoAlbumsQueryRepository: base filter 😡 ', filter)
 

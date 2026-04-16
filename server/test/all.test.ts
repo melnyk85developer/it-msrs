@@ -82,19 +82,19 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     // describe('LIKES-BLOCK-TESTS', () => {
     //     likesE2eTest()
     // })
+    describe('SHOPS-BLOCK-TESTS', () => {
+        shopTypeE2ETest()
+        shopsE2ETest()
+        merchandiseTypeE2ETest()
+        merchandiseBrandsE2ETest()
+        merchandiseE2ETest()
+        basketE2ETest()
+        basketMerchandiseE2ETest()
+    })
     // describe('PHOTOS-BLOCK-TESTS', () => {
     //     photoProfileE2ETest()
     //     photoAlbumsE2ETest()
     // })
-    describe('SHOPS-BLOCK-TESTS', () => {
-        shopTypeE2ETest()
-        // shopsE2ETest()
-        // merchandiseTypeE2ETest()
-        // merchandiseBrandsE2ETest()
-        // merchandiseE2ETest()
-        // basketE2ETest()
-        // basketMerchandiseE2ETest()
-    })
     // describe('USERS-BLOCK-TESTS', () => {
     //     postForProfileE2ETest()
     //     usersE2eTest()

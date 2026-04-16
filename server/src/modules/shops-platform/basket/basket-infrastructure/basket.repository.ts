@@ -4,17 +4,18 @@ import { Types } from 'mongoose';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { Basket, BasketDocument, type BasketModelType } from '../basket-domain/basket-entity';
+import { BasketViewDto } from '../basket-dto/basket.view-dto';
 
 @Injectable()
 export class BasketRepository {
     constructor(
-        @InjectModel(Basket.name) private basketModelType: BasketModelType
+        @InjectModel(Basket.name) private basketModel: BasketModelType
     ) { }
     async save(basket: BasketDocument) {
         await basket.save();
     }
     async findBasketById(albumId: string): Promise<BasketDocument | null> {
-        return this.basketModelType.findOne({
+        return this.basketModel.findOne({
             _id: new Types.ObjectId(albumId),
             deletedAt: null,
         });
@@ -35,8 +36,38 @@ export class BasketRepository {
     }
 
     async deleteBasket(basketId: string): Promise<any> {
-        return this.basketModelType.deleteOne({
+        return this.basketModel.deleteOne({
             _id: new Types.ObjectId(basketId),
         });
+    }
+    async findBasketByUserId(userId: string): Promise<BasketDocument | null> {
+        return this.basketModel.findOne({
+            userId: userId,
+            deletedAt: null,
+        });
+    }
+
+    async findBasketByUserIdOrNotFoundFailRepository(userId: string): Promise<BasketViewDto> {
+        let basket;
+        console.log('BasketQueryRepository: - userId', userId)
+
+        if (
+            !userId || userId === 'undefined'
+        ) {
+            throw new DomainException(
+                INTERNAL_STATUS_CODE.BAD_REQUEST,
+                'basketId или userId сука говняные 😡😡😡'
+            );
+        } else {
+            basket = await this.findBasketByUserId(userId);
+        }
+        console.log('BasketQueryRepository: - basket', basket)
+
+        if (!basket) {
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_ALBUM_NAME);
+        }
+        console.log('BasketQueryRepository: - basket', basket)
+
+        return BasketViewDto.mapToView(basket);
     }
 }

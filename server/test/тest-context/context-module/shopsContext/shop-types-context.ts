@@ -4,9 +4,11 @@ import { ShopTypeViewDto } from "src/modules/shops-platform/shop-type/shop-type-
 
 export class ShopTypesContextClass {
     public correctShopTypeNames: string[]
+    public correctShopBrandsNames: string[]
     public total_number_of_shop_types_in_tests: number = 0;
 
     public createdShopTypes: (ShopTypeViewDto | null)[] = [];
+
     public readonly users: UserContextClass;
 
     constructor() {
@@ -20,6 +22,13 @@ export class ShopTypesContextClass {
             `Автозапчасти`,
             `Концелярия`,
         ]
+        this.correctShopBrandsNames = [
+            `Apple`,
+            `Samsung`,
+            `Lenowo`,
+            `ASUS`,
+            `LG`,
+        ]
     }
     public async addShopTypesStateTest({
         numShopType,
@@ -28,7 +37,7 @@ export class ShopTypesContextClass {
         numShopType: number;
         addShopType: ShopTypeViewDto;
     }) {
-        console.log('ShopTypesContextClass: addShopTypesStateTest - numShopType, addShopType 😡 ', numShopType, addShopType)
+        // console.log('ShopTypesContextClass: addShopTypesStateTest - numShopType, addShopType 😡 ', numShopType, addShopType)
         // 1. Если массив пустой
         if (!this.createdShopTypes.length) {
             this.createdShopTypes = [addShopType];
@@ -40,9 +49,9 @@ export class ShopTypesContextClass {
             this.createdShopTypes = this.createdShopTypes.map((type, index) =>
                 index === numShopType ? addShopType : type
             );
-            console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 1', this.total_number_of_shop_types_in_tests)
+            // console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 1', this.total_number_of_shop_types_in_tests)
             this.total_number_of_shop_types_in_tests++
-            console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 2', this.total_number_of_shop_types_in_tests)
+            // console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 2', this.total_number_of_shop_types_in_tests)
 
             return;
         }

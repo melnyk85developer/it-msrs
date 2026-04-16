@@ -4,15 +4,16 @@ import { isCreatedShopTypes } from "../../shop-type/testing-shop-type/testFuncti
 
 export const isCreatedShop = async (
     numShop: number,
-    typeName: string,
     shopName: string,
-    description: string,
-    websiteUrl: string,
+    userId: string,
+    description?: string,
+    typeName?: string,
+    brandName?: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
     if (contextTests.shops.createdShops[numShop] === undefined || contextTests.shops.createdShops[numShop] === null) {
-        // console.log('isCreatedBlog: - contextTests.createdBlogs[num]', contextTests.createdBlogs[num])
-        if (!contextTests.shopType.createdShopTypes.length) {
+        // console.log('isCreatedShop: - contextTests.createdBlogs[num]', contextTests.createdBlogs[num])
+        if (typeName && !contextTests.shopType.createdShopTypes[shopName]) {
             const type = await isCreatedShopTypes(
                 0,
                 typeName,
@@ -20,16 +21,26 @@ export const isCreatedShop = async (
             )
             // console.log('TEST isCreatedShopType1: type res1 ', type)
         }
-        // Подготавливаем данные магазина для регистрации!
+
+        // if (!contextTests.shopType.createdShopTypes[shopName]) {
+        //     const type = await isCreatedShopBrands(
+        //         0,
+        //         typeName,
+        //         statusCode
+        //     )
+        //     // console.log('TEST isCreatedShopType1: type res1 ', type)
+        // }
+        // console.log('isCreatedShop: - contextTests.shopType.createdShopTypes', contextTests.shopType.createdShopTypes)
+
         const shopsData = {
             name: shopName,
             title: description,
             shopTypeId: contextTests.shopType.createdShopTypes[0]!.typeId,
-            // description,
-            // websiteUrl
+            // shopBrandId: ''
         }
         const { createdShop, response } = await contextTests.shopTestManager.createShop(
             shopsData,
+            contextTests.sessions.accessTokenUser1Devices[0],
             HTTP_STATUSES.CREATED_201
         )
 

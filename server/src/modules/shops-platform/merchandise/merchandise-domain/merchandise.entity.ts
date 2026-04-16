@@ -34,16 +34,16 @@ export class Merchandise {
     merchandiseName: string;
 
     @ApiProperty({ example: '1000', description: 'Цена устройства' })
-    @Prop({ type: String, required: true })
-    price: string;
+    @Prop({ type: Number, required: true })
+    price: number;
 
     @ApiProperty({ example: 'quantity', description: 'Колличество!' })
-    @Prop({ type: String, required: true })
-    quantity: string;
+    @Prop({ type: Number, required: true })
+    quantity: number;
 
     @ApiProperty({ example: '5', description: 'Рейтинг устройства' })
-    @Prop({ type: String, required: true })
-    rating: string;
+    @Prop({ type: Number, required: true })
+    rating: number;
 
     @ApiProperty({ example: 'image.jpg', description: 'Имя файла изображения устройства' })
     @Prop({ type: String, nullable: true })
@@ -78,6 +78,13 @@ export class Merchandise {
 
         merchandise.userId = dto.userId;
         merchandise.merchandiseName = dto.merchandiseName;
+        merchandise.brandId = dto.brandId;
+        merchandise.typeId = dto.typeId;
+        merchandise.shopId = dto.shopId;
+        merchandise.price = dto.price;
+        merchandise.rating = dto.rating;
+        merchandise.quantity = dto.quantity;
+        // merchandise.info = dto.info
         merchandise.merchandiseImgName = dto.merchandiseImgName ? dto.merchandiseImgName : null;
         merchandise.merchandiseCoverName = dto.merchandiseCoverName ? dto.merchandiseCoverName : null;
         merchandise.createdAt = createdAt;
@@ -88,8 +95,14 @@ export class Merchandise {
         return merchandise as MerchandiseDocument;
     }
     updateMerchandise(dto: Omit<UpdateMerchandiseDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>) {
-        if (this.id === dto.productId) {
+        if (this.id === dto.merchandiseId) {
             this.userId = this.userId;
+            this.brandId = dto.brandId;
+            this.typeId = dto.typeId;
+            this.shopId = dto.shopId;
+            this.price = dto.price;
+            this.rating = dto.rating;
+            this.quantity = dto.quantity;
             this.merchandiseName = dto.merchandiseName ? dto.merchandiseName : this.merchandiseName
             this.merchandiseImgName = dto.merchandiseImgName ? dto.merchandiseImgName : this.merchandiseImgName;
             this.merchandiseCoverName = dto.merchandiseCoverName ? dto.merchandiseCoverName : this.merchandiseCoverName;

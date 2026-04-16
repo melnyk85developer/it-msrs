@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Length } from "class-validator";
+import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Length } from "class-validator";
 import { Multer } from 'multer';
 import { Trim } from "src/core/decorators/transform/trim";
 
@@ -11,19 +11,21 @@ export class CreateMerchandiseInputDto {
     merchandiseName: string;
 
     @ApiProperty({ example: 'price', description: 'Уникальный идентификатор фото' })
-    @IsString({ message: 'price должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле price не должно быть пустым!' })
-    price: string;
-
-    @ApiProperty({ example: 'price', description: 'Уникальный идентификатор фото' })
-    @IsString({ message: 'price должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле price не должно быть пустым!' })
-    info: string;
+    @IsNumber()
+    price: number;
 
     @ApiProperty({ example: 'rating', description: 'Уникальный идентификатор фото' })
-    @IsString({ message: 'rating должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле price не должно быть пустым!' })
-    rating: string;
+    @IsNumber()
+    rating: number;
+
+    @ApiProperty({ example: 'quantity', description: 'Уникальный идентификатор фото' })
+    @IsNumber()
+    quantity: number;
+
+    @ApiProperty({ example: 'info', description: 'Уникальный идентификатор фото' })
+    @IsArray({ message: 'info должно быть массивом!' })
+    @IsNotEmpty({ message: 'Поле info не должно быть пустым!' })
+    info: [];
 
     @ApiProperty({ example: 'brandId', description: 'Уникальный идентификатор фото' })
     @IsString({ message: 'brandId должно быть строкой!' })

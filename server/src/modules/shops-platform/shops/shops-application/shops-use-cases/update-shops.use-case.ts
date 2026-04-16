@@ -10,9 +10,9 @@ export class UpdateMyShopsCommand {
     constructor(
         public userId: string,
         public shopId: string,
-        public readonly dto: UpdateMyShopsDto,
-        public image: Multer.File | null,
-        public miniature: Multer.File | null
+        public readonly dto: Omit<UpdateMyShopsDto, 'userId'>,
+        // public image: Multer.File | null,
+        // public miniature: Multer.File | null
     ) { }
 }
 @CommandHandler(UpdateMyShopsCommand)
@@ -21,22 +21,28 @@ export class UpdateMyShopsUseCase
     constructor(
         private commandBus: CommandBus,
 
-        private photoRepository: MyShopsRepository,
+        private myShopsRepository: MyShopsRepository,
         private filesService: FilesService
     ) { }
 
     async execute(command: UpdateMyShopsCommand) {
-        const { userId, shopId, image, dto, miniature } = command
+        const { 
+            userId, 
+            shopId, 
+            dto, 
+            // image, 
+            // miniature 
+        } = command
         let newImageFileName
         let newMiniatureFileName
 
         // console.log('PhotoService: updatePhotoService - photoId, dto 😡 ', photoId, dto)
-        const shop = await this.photoRepository.findMyShopsByIdOrNotFoundFailRepository(shopId);
+        const shop = await this.myShopsRepository.findMyShopsByIdOrNotFoundFailRepository(shopId);
 
-        if (image && miniature) {
-            newImageFileName = await this.filesService.createPostFile(image);
-            newMiniatureFileName = await this.filesService.createPostFile(miniature);
-        }
+        // if (image && miniature) {
+        //     newImageFileName = await this.filesService.createPostFile(image);
+        //     newMiniatureFileName = await this.filesService.createPostFile(miniature);
+        // }
 
         // isAlbum = await this.photoAlbumService.getPhotoAlbumNameOrCreatedService(dto.userId, dto.albumName, dto.miniatureName)
 
@@ -44,7 +50,7 @@ export class UpdateMyShopsUseCase
         // console.log('PhotoService: updatePhotoService - newImageFileName 😡 ', newImageFileName)
 
         shop.updateMyShops({
-            userId: userId,
+            userId,
             shopId: shopId,
             name: dto.name,
             title: dto.title,
@@ -55,7 +61,7 @@ export class UpdateMyShopsUseCase
             // miniature: newMiniatureFileName ? newMiniatureFileName : dto.miniatureName
         });
         // console.log('PhotoService: updatePhotoService - photo1 😡 ', photo)
-        await this.photoRepository.save(shop);
+        await this.myShopsRepository.save(shop);
         // console.log('PhotoService: updatePhotoService - photo2 😡 ', photo)
         return shop._id.toString();
     }

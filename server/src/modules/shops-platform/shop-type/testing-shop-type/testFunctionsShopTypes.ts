@@ -6,7 +6,7 @@ export const isCreatedShopTypes = async (
     typeName: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
-    if (contextTests.shopType?.createdShopTypes[numShopType] === undefined || contextTests.shopType.createdShopTypes[numShopType] === null) {
+    if (contextTests.shopType.createdShopTypes[numShopType] === undefined || contextTests.shopType.createdShopTypes[numShopType] === null) {
         // Подготавливаем данные типа магазина для регистрации!
         const data: any = {
             typeName: typeName
@@ -18,15 +18,13 @@ export const isCreatedShopTypes = async (
             statusCode
         )
         // console.log('TEST isCreatedShopTypes: createdEntity res ', createdEntity)
-        console.log('TEST isCreatedShopTypes: statusCode ', statusCode)
-        console.log('TEST isCreatedShopTypes: createdEntity response.status ', response.status)
+        // console.log('TEST isCreatedShopTypes: statusCode ', statusCode)
+        // console.log('TEST isCreatedShopTypes: createdEntity response.status ', response.status)
 
-        if (response.status === statusCode) {
-            if (contextTests && contextTests.shopType) {
-                console.log('isCreatedShopTypes: statusCode 😡', statusCode)
-                console.log('TEST isCreatedShopTypes: createdEntity res ', createdEntity)
-                contextTests.shopType.addShopTypesStateTest({ numShopType, addShopType: createdEntity })
-            }
+        if (response.status === HTTP_STATUSES.CREATED_201) {
+            // console.log('isCreatedShopTypes: statusCode 😡', statusCode)
+            // console.log('TEST isCreatedShopTypes: createdEntity res ', createdEntity)
+            contextTests.shopType.addShopTypesStateTest({ numShopType, addShopType: createdEntity })
             // Добавляем в тест-сторе Blog после удачного посещения createBlogs!
             return response.body;
         } else {

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, IsUrl, Length } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, IsUrl, Length } from "class-validator";
 
 export class UpdateMyShopsDomainDto {
     @ApiProperty({ example: 'shopId', description: 'Имя магазина' })
@@ -18,9 +18,13 @@ export class UpdateMyShopsDomainDto {
     readonly title: string
 
     @ApiProperty({ example: 'shopTypeId', description: 'Уникальный идентификатор типа магазина' })
+    @IsOptional()
     @IsString({ message: 'shopTypeId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле shopTypeId не должно быть пустым!' })
-    readonly shopTypeId: string
+    readonly shopTypeId?: string
+    @ApiProperty({ example: 'shopBrandId', description: 'Уникальный идентификатор типа магазина' })
+    @IsOptional()
+    @IsString({ message: 'shopBrandId должно быть строкой!' })
+    readonly shopBrandId?: string
 
     @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор хозяина фото' })
     @IsString({ message: 'userId должно быть строкой!' })

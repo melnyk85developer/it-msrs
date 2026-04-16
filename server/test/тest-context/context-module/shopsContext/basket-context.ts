@@ -19,7 +19,7 @@ export class BasketContextClass {
         numBasket: number;
         addBasket: BasketViewDto;
     }) {
-        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        // console.log('BasketContextClass: addBasketStateTest - numBasket, addBasket 😡 ', numBasket, addBasket)
         // 1. Если массив пустой
         if (!this.createdBaskets.length) {
             this.createdBaskets = [addBasket];

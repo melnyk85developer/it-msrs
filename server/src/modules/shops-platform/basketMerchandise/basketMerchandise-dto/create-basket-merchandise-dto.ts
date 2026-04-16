@@ -2,10 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateABasketMerchandiseDto {
-    @ApiProperty({ example: 'basketMerchandiseId', description: 'Уникальный идентификатор товара в корзине' })
-    @IsString({ message: 'basketMerchandiseId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле basketMerchandiseId не должно быть пустым!' })
-    readonly basketMerchandiseId: string
+    // @ApiProperty({ example: 'basketMerchandiseId', description: 'Уникальный идентификатор товара в корзине' })
+    // @IsString({ message: 'basketMerchandiseId должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле basketMerchandiseId не должно быть пустым!' })
+    // readonly basketMerchandiseId: string
 
     @ApiProperty({ example: 'basketId', description: 'Уникальный идентификатор корзины' })
     @IsString({ message: 'basketId должно быть строкой!' })

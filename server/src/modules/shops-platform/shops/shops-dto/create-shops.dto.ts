@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, Length } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, Length } from "class-validator";
 
 export class CreateMyShopsDto {
     @ApiProperty({ example: 'Визит', description: 'Название магазина' })
@@ -8,17 +8,21 @@ export class CreateMyShopsDto {
     readonly name: string;
 
     @ApiProperty({ example: 'Компьютерная техника', description: 'Название подзаголовка' })
+    @IsOptional()
     @IsString({ message: 'Title должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле albumName не должно быть пустым!' })
-    readonly title: string;
+    readonly title?: string;
 
     @ApiProperty({ example: 'Компьютерная техника', description: 'Название подзаголовка' })
     @IsString({ message: 'userId должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле userId не должно быть пустым!' })
     readonly userId: string;
 
-    @ApiProperty({ example: 'Компьютерная техника', description: 'Название подзаголовка' })
+    @ApiProperty({ example: 'shopTypeId', description: 'Уникальный идентификатор типа магазина' })
+    @IsOptional()
     @IsString({ message: 'shopTypeId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле shopTypeId не должно быть пустым!' })
-    readonly shopTypeId: string;
+    readonly shopTypeId?: string
+    @ApiProperty({ example: 'shopBrandId', description: 'Уникальный идентификатор типа магазина' })
+    @IsOptional()
+    @IsString({ message: 'shopBrandId должно быть строкой!' })
+    readonly shopBrandId?: string
 }

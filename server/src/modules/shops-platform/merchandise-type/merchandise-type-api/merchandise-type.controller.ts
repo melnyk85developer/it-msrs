@@ -18,6 +18,8 @@ import { UpdateMerchandiseTypeCommand } from '../merchandise-type-application/me
 import { DeleteMerchandiseTypeCommand } from '../merchandise-type-application/merchandise-type.use-cases/delete-merchandise-type.use-case';
 import { GetMerchandiseTypeQueryParams } from '../merchandise-type-dto/get-merchandise-type-query-params.input-dto';
 import { CreateMerchandiseTypeCommand } from '../merchandise-type-application/merchandise-type.use-cases/create-merchandise-type.use-case';
+import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
+import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
 @Controller('/merchandise-type')
 export class MerchandiseTypeController {
@@ -26,7 +28,7 @@ export class MerchandiseTypeController {
         private merchandiseTypeQueryRepository: MerchandiseTypeQueryRepository,
     ) { }
 
-    @ApiOperation({ summary: 'Создание фотоальбома!' })
+    @ApiOperation({ summary: 'Создание типа товара!' })
     @ApiResponse({ status: 200 })
     @UseGuards(AuthAccessGuard)
     @Post()
@@ -46,10 +48,10 @@ export class MerchandiseTypeController {
         return await this.merchandiseTypeQueryRepository.findMerchandiseTypeByIdOrNotFoundFailRepository(typeId);
     }
 
-    @ApiOperation({ summary: 'Обновление фото!' })
+    @ApiOperation({ summary: 'Обновление типа товара!' })
     @ApiResponse({ status: 201, type: MerchandiseType })
     @UseGuards(AuthAccessGuard)
-    @Put('/type/:typeId')
+    @Put('/:typeId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateMerchandiseTypeController(
         @Param('typeId') typeId: string,
@@ -63,31 +65,33 @@ export class MerchandiseTypeController {
             ),
         );
     }
-    @ApiOperation({ summary: 'Удаление фотоальбома!' })
+    @ApiOperation({ summary: 'Удаление типа товара!' })
     @ApiResponse({ status: 204, type: MerchandiseType })
     @UseGuards(AuthAccessGuard)
-    @Delete('/type/:typeId')
+    @Delete('/:typeId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteMerchandiseTypeController(@Param('typeId') typeId: string) {
         // console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
         return await this.commandBus.execute<DeleteMerchandiseTypeCommand, string>(
             new DeleteMerchandiseTypeCommand(
                 typeId
-            ),
+            )
         );
     }
     @ApiOperation({ summary: 'Получить все типы товаров!' })
     @ApiResponse({ status: 200, type: MerchandiseType })
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/types')
     async getAllMerchandiseTypeController(
-        @Param('userId') userId: string, 
-        @Query() query: GetMerchandiseTypeQueryParams
+        @Query() query: GetMerchandiseTypeQueryParams,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MerchandiseTypeViewDto[]>> {
         // console.log('PhotoAlbumController: - getAllPhotoController userId', userId)
-        return await this.merchandiseTypeQueryRepository.getAllMerchandiseTypeQueryRepository(query, userId)
+        return await this.merchandiseTypeQueryRepository.getAllMerchandiseTypeQueryRepository(query)
     }
     @ApiOperation({ summary: 'Получить тип товарa!' })
     @ApiResponse({ status: 200, type: MerchandiseType })
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/type/:typeId')
     async getMerchandiseTypeByIdController(
         @Param('typeId') typeId: string

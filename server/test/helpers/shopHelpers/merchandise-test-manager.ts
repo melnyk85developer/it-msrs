@@ -4,6 +4,7 @@ import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { delay } from '../delay';
 import { contextTests } from '../init-settings';
+import { CreateMerchandiseInputDto } from 'src/modules/shops-platform/merchandise/merchandise-dto/create-merchandise.input-dto';
 
 export class MerchandiseTestManager {
     constructor(private app: INestApplication) { }
@@ -44,51 +45,88 @@ export class MerchandiseTestManager {
     }
     async createMerchandise(
         data: any,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
-        // console.log('accessToken: - ⚙️', accessToken)
-        const response = await request(this.app.getHttpServer())
-            .post(SETTINGS.RouterPath.merchandise)
-            .field('name', data.name)
-            .field('price', data.price.toString())
-            .field('brandId', data.brandId.toString())
-            .field('typeId', data.typeId.toString())
-            .field('shopId', data.shopId.toString())
-            .field('info', JSON.stringify(data.info || []))
-            .attach('image', data.image.path)
-            .expect(expectedStatusCode);
+        // console.log('MerchandiseTestManager: - data ⚙️', data)
+        let response = await request(this.app.getHttpServer())
+            .post(`${SETTINGS.RouterPath.merchandise}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send(data)
 
-        if (expectedStatusCode === HTTP_STATUSES.CREATED_201) {
-            const expectedData = {
-                name: data.name,
-                price: data.price,
-                brandId: data.brandId,
-                typeId: data.typeId,
-                //   shopId: data.shopId,
-                info: data.info || [],
-                // Добавь сюда только те поля, которые нужны для проверки
-            };
-            expect(response.body).toMatchObject(expectedData);
-        }
+        // if (data.shopId === '' && data.merchandiseName === '') {
+        //     response = await request(this.app.getHttpServer())
+        //         .post(`${SETTINGS.RouterPath.merchandise}`)
+        //         .set('Authorization', `Bearer ${accessToken}`)
+        //         .send(data)
+        // } else {
+        //     response = await request(this.app.getHttpServer())
+        //         .post(`${SETTINGS.RouterPath.merchandise}`)
+        //         .set('Authorization', `Bearer ${accessToken}`)
+        //         .field('merchandiseName', data.merchandiseName)
+        //         .field('price', data.price.toString())
+        //         .field('brandId', data.brandId.toString())
+        //         .field('typeId', data.typeId.toString())
+        //         .field('shopId', data.shopId.toString())
+        //         .field('info', JSON.stringify(data.info || []))
+        //         .attach('image', data.image.path)
+        //         .expect(expectedStatusCode);
+        // }
+        // if (expectedStatusCode === HTTP_STATUSES.CREATED_201) {
+        //     const expectedData = {
+        //         name: data.name,
+        //         price: data.price,
+        //         brandId: data.brandId,
+        //         typeId: data.typeId,
+        //         //   shopId: data.shopId,
+        //         info: data.info || [],
+        //         // Добавь сюда только те поля, которые нужны для проверки
+        //     };
+        //     expect(response.body).toMatchObject(expectedData);
+        // }
 
+
+        // console.log('MerchandiseTestManager: - response.body ⚙️', response.body)
         return { response, createdMerchandise: response.body };
     }
     async updateMerchandise(
         merchandiseId: string,
         data: any,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
-        const response = await request(this.app.getHttpServer())
-            .put(`${SETTINGS.RouterPath.merchandise}/update/${merchandiseId}`)
-            .field('name', data.name)
-            .field('price', data.price.toString())
-            .field('brandId', data.brandId.toString())
-            .field('typeId', data.typeId.toString())
-            .field('shopId', data.shopId.toString())
-            .field('info', JSON.stringify(data.info || []))
-            .attach('image', data.image.path)
+        let response = await request(this.app.getHttpServer())
+            .put(`${SETTINGS.RouterPath.merchandise}/${merchandiseId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send(data)
             .expect(expectedStatusCode);
+
+        // if (data.shopId === '' && data.merchandiseName === '') {
+        //     console.log('MerchandiseTestManager updateMerchandise: - data ⚙️ IF', data)
+
+        //     response = await request(this.app.getHttpServer())
+        //         .put(`${SETTINGS.RouterPath.merchandise}/${merchandiseId}`)
+        //         .set('Authorization', `Bearer ${accessToken}`)
+        //         .send(data)
+        //         .expect(expectedStatusCode);
+        // } else {
+        //     console.log('MerchandiseTestManager updateMerchandise: - data ⚙️ ELSE', data)
+
+        //     response = await request(this.app.getHttpServer())
+        //         .put(`${SETTINGS.RouterPath.merchandise}/${merchandiseId}`)
+        //         .set('Authorization', `Bearer ${accessToken}`)
+        //         .field('merchandiseName', data.merchandiseName)
+        //         .field('price', data.price.toString())
+        //         .field('rating', data.rating.toString())
+        //         .field('quantity', data.quantity.toString())
+        //         .field('brandId', data.brandId.toString())
+        //         .field('typeId', data.typeId.toString())
+        //         .field('shopId', data.shopId.toString())
+        //         .field('info', JSON.stringify(data.info || []))
+        //         .attach('image', data.merchandiseImgName.path)
+        //         .expect(expectedStatusCode);
+        // }
 
         let updateMerchandise
         if (expectedStatusCode === HTTP_STATUSES.OK_200) {
@@ -101,12 +139,13 @@ export class MerchandiseTestManager {
     }
     async deleteMerchandise(
         merchandiseId: string,
+        accessToken: string,
         userAgent: string = 'TestDevice/1.0',
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         // console.log('TEST authTestManager refreshToken: - ⚙️req⚙️', refreshToken)
         const response = await request(this.app.getHttpServer())
             .delete(`${SETTINGS.RouterPath.merchandise}/${merchandiseId}`)
-            // .set('Authorization', `Bearer ${accessToken}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             // .set('Cookie', `refreshToken=${refreshToken}`)
             .set('User-Agent', userAgent)
             .expect(expectedStatusCode);

@@ -7,7 +7,8 @@ import { ShopTypeRepository } from "../../shop-type-infrastructure/shop-type.rep
 export class UpdateShopTypeCommand {
     constructor(
         public typeId: string,
-        public readonly dto: UpdateShopTypeDto
+        public userId: string,
+        public readonly dto: Omit<UpdateShopTypeDto, 'typeId' | 'userId'>
     ) { }
 }
 @CommandHandler(UpdateShopTypeCommand)
@@ -19,21 +20,14 @@ export class UpdateShopTypeUseCase
     ) { }
 
     async execute(command: UpdateShopTypeCommand) {
-        const { typeId, dto } = command
-        let isAlbum
-
+        const { typeId, userId, dto } = command
         // console.log('PhotoService: updatePhotoService - photoId, dto 😡 ', photoId, dto)
         const shopType = await this.shopTypeRepository.findShopTypeByIdOrNotFoundFailRepository(typeId);
 
-        // isAlbum = await this.photoAlbumService.getPhotoAlbumNameOrCreatedService(dto.userId, dto.albumName, dto.miniatureName)
-
-        // console.log('PhotoService: updatePhotoService - newImageFileName 😡 ', newImageFileName)
-        // console.log('PhotoService: updatePhotoService - newImageFileName 😡 ', newImageFileName)
-
         shopType.updateShopType({
-            userId: dto.userId,
+            userId: userId,
             typeId: shopType._id.toString(),
-            typeName: isAlbum.albumName,
+            typeName: dto.typeName,
         });
         // console.log('PhotoService: updatePhotoService - photo1 😡 ', photo)
         await this.shopTypeRepository.save(shopType);

@@ -8,12 +8,15 @@ export const isCreatedMerchandises = async (
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
     // console.log('TEST isCreatedMerchandise1: merchandiseData ', merchandiseData)
-    const { image, name, price, info, brandId, typeId, shopId } = merchandiseData
+    // console.log('TEST isCreatedMerchandise1: contextTests.merchandise.createdMerchandises[numMerchandise] ', contextTests.merchandise.createdMerchandises[numMerchandise])
+    const { image, merchandiseName, price, rating, quantity, info, brandId, typeId, shopId } = merchandiseData
     if (contextTests.merchandise.createdMerchandises[numMerchandise] === undefined || contextTests.merchandise.createdMerchandises[numMerchandise] === null) {
         const data = {
-            image,
-            name,
+            // image,
+            merchandiseName,
             price,
+            rating,
+            quantity,
             info,
             brandId,
             typeId,
@@ -22,10 +25,14 @@ export const isCreatedMerchandises = async (
         // Отправляем POST запрос на добавление товара в магазин и ожидаем статус код 201 (CREATED)!
         const { createdMerchandise, response } = await contextTests.merchandiseTestManager.createMerchandise(
             data,
+            contextTests.sessions.accessTokenUser1Devices[0],
             statusCode
         )
-        if (response.status === statusCode) {
-            // console.log('isCreatedBlog: bodyBlog 😡', bodyBlog)
+        // console.log('isCreatedMerchandises: response.status 😡', response.status)
+        // console.log('isCreatedMerchandises: createdMerchandise 😡', createdMerchandise)
+
+        if (response.status === HTTP_STATUSES.CREATED_201) {
+            // console.log('isCreatedMerchandises: createdMerchandise 😡', createdMerchandise)
             // Добавляем в тест-сторе Blog после удачного посещения createBlogs!
             contextTests.merchandise.addMerchandiseStateTest({ numMerchandise, addMerchandise: createdMerchandise })
             return response.body;

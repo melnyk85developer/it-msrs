@@ -2,13 +2,13 @@ import { OmitType } from "@nestjs/swagger";
 import { MerchandiseDocument } from "../merchandise-domain/merchandise.entity";
 
 export class MerchandiseViewDto {
-    productId: string;
+    merchandiseId: string;
     merchandiseName: string;
     shopId: string;
     typeId: string;
     brandId: string;
-    price: string;
-    rating: string;
+    price: number;
+    rating: number;
     merchandiseImgName: string | null;
     merchandiseCoverName: string | null;
     userId: string;
@@ -18,7 +18,7 @@ export class MerchandiseViewDto {
     static mapToView(product: MerchandiseDocument): MerchandiseViewDto {
         // console.log('PhotoAlbumViewDto: mapToView - photoAlbum 😡 ', photoAlbum)
         const dto = new MerchandiseViewDto();
-        dto.productId = product._id.toString();
+        dto.merchandiseId = product._id.toString();
         dto.merchandiseName = product.merchandiseName;
         dto.shopId = product.shopId;
         dto.typeId = product.typeId;

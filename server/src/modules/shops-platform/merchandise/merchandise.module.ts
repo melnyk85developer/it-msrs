@@ -11,8 +11,8 @@ import { MerchandiseRepository } from './merchandise-infrastructure/merchandise.
 import { UpdateMerchandiseUseCase } from './merchandise-application/merchandise.use-cases/update-merchandise.use-case';
 import { MerchandiseRepositoryModule } from './merchandise-repository.module';
 import { MerchandiseTypeModule } from '../merchandise-type/merchandise-type.module';
-import { MerchandiseBrandModule } from '../merchandise-brand/merchandise-brand-repository.module';
 import { MerchandiseInfoModule } from '../merchandiseInfo/merchandise-info.module';
+import { MerchandiseBrandModule } from '../merchandise-brand/merchandise-brand.module';
 
 const useCases = [
     CreateMerchandiseUseCase,

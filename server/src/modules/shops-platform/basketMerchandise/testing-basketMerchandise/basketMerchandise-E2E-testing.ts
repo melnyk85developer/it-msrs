@@ -3,7 +3,6 @@ import { isLoginUser } from "src/modules/auth/auth-testing/testFunctionsAuth"
 import { isCreatedUser } from "src/modules/user-accounts/testing-users/testFunctionsUser"
 import { contextTests } from "test/helpers/init-settings"
 import { isCreatedShop } from "../../shops/testing-shops/testFunctionsShop"
-import { BasketViewDto } from "../../basket/basket-dto/basket.view-dto"
 import { isCreatedMerchandiseTypes } from "../../merchandise-type/testing-merchandise-type/testFunctionsMerchandiseType"
 import { isCreatedMerchandiseBrands } from "../../merchandise-brand/testing-merchandise-brand/testFunctionsMerchandiseBrands"
 import { isCreatedMerchandises } from "../../merchandise/testing-merchandise/testFunctionsMerchandise"
@@ -34,19 +33,26 @@ export const basketMerchandiseE2ETest = () => {
             const createdShop = await isCreatedShop(
                 0,
                 contextTests.shopType.correctShopTypeNames[0],
+                contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
                 contextTests.users.createdUsers[0]!.id,
                 HTTP_STATUSES.CREATED_201
             )
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
-                shopId: contextTests.shops.createdShops[0]!.shopId
+                userId: contextTests.users.createdUsers[0]!.id
             }
-            const { getBasket } = await contextTests.shopBasketTestManager.getBasket(
+            const { getBasket, response: res1 } = await contextTests.shopBasketTestManager.getBasket(
                 dataBasket,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
+            if (res1.status === HTTP_STATUSES.OK_200) {
+                contextTests.basket.addBasketStateTest({
+                    numBasket: 0,
+                    addBasket: getBasket
+                });
+            }
             // contextTests.createBasketMerchandise = getBasket
 
             const dataBasketDevice: any = {
@@ -56,9 +62,10 @@ export const basketMerchandiseE2ETest = () => {
             }
             const { response } = await contextTests.shopBasketMerchandiseTestManager.getAllBasketsMerchandise(
                 dataBasketDevice,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(response.body).toEqual(expect.arrayContaining([]));
+            expect(response.body.items).toEqual([]);
         })
         it('GET    - Ожидается статус код 404, - Запрос на не существующий товар в корзине!', async () => {
             await contextTests.shopBasketMerchandiseTestManager.getBasketMerchandiseById(
@@ -70,7 +77,7 @@ export const basketMerchandiseE2ETest = () => {
         it(`POST   - Ожидается статус код 400, - Не валидные данные товара для добавления их в корзину! Дополнительные запросы: -> GET`, async () => {
             const data: any = {
                 basketId: '',
-                productId: '',
+                merchandiseId: '',
                 merchandiseName: '',
                 shopId: '',
                 price: '',
@@ -78,6 +85,7 @@ export const basketMerchandiseE2ETest = () => {
             }
             await contextTests.shopBasketMerchandiseTestManager.createBasketMerchandise(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const dataBasket: any = {
@@ -87,6 +95,7 @@ export const basketMerchandiseE2ETest = () => {
             }
             const { response } = await contextTests.shopBasketMerchandiseTestManager.getAllBasketsMerchandise(
                 dataBasket,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             // Сравниваем полученный результат, должен быть пустой массив!
@@ -111,6 +120,8 @@ export const basketMerchandiseE2ETest = () => {
                     merchandiseImgName: contextTests.constants.image1Path,
                     merchandiseName: 'Компьютер',
                     price: 500,
+                    rating: 0,
+                    quantity: 1,
                     info: [{ title: 'Процессор', description: '64Гг Х-128' }],
                     brandId: contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
                     typeId: contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
@@ -124,23 +135,36 @@ export const basketMerchandiseE2ETest = () => {
             }
             const { createdBasket } = await contextTests.shopBasketTestManager.createBasket(
                 dataBasket,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             // contextTests.createdBasket1 = createdBasket;
 
             const data: any = {
                 basketId: contextTests.basket.createdBaskets[0]!.basketId,
-                productId: contextTests.merchandise.createdMerchandises[0]!.productId,
-                name: 'Компьютер',
+                merchandiseId: contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                merchandiseName: contextTests.merchandise.createdMerchandises[0]!.merchandiseName,
+                merchandiseImgName: contextTests.merchandise.createdMerchandises[0]!.merchandiseImgName,
+                merchandiseCoverName: contextTests.merchandise.createdMerchandises[0]!.merchandiseCoverName,
                 shopId: contextTests.shops.createdShops[0]!.shopId,
                 price: 500,
                 quantity: 1
             }
-            const { createdBasketMerchandise } = await contextTests.shopBasketMerchandiseTestManager.createBasketMerchandise(
+            const { createdBasketMerchandise, response } = await contextTests.shopBasketMerchandiseTestManager.createBasketMerchandise(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
+
             // contextTests.createBasketMerchandise = createdBasketMerchandise;
+            if (response.status === HTTP_STATUSES.CREATED_201) {
+                contextTests.basketMerchandise.addBasketMerchandiseStateTest(
+                    {
+                        numBasketMerchandise: 0,
+                        addBasketMerchandise: createdBasketMerchandise
+                    }
+                )
+            }
 
             const dataBasketMerchandise: any = {
                 shopId: contextTests.shops.createdShops[0]!.shopId,
@@ -148,9 +172,12 @@ export const basketMerchandiseE2ETest = () => {
             }
             const { getBasketMerchandise } = await contextTests.shopBasketMerchandiseTestManager.getAllBasketsMerchandise(
                 dataBasketMerchandise,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(getBasketMerchandise).toEqual(expect.arrayContaining([
+            // console.log('TEST: - ⚙️ getBasketMerchandise', getBasketMerchandise)
+            // console.log('TEST: - ⚙️ contextTests.basketMerchandise.createdBasketMerchandises[0]', contextTests.basketMerchandise.createdBasketMerchandises[0])
+            expect(getBasketMerchandise.items).toEqual(expect.arrayContaining([
                 expect.objectContaining({
                     basketId: contextTests.basketMerchandise.createdBasketMerchandises[0]!.basketId,
                     basketMerchandiseId: contextTests.basketMerchandise.createdBasketMerchandises[0]!.basketMerchandiseId,
@@ -159,27 +186,34 @@ export const basketMerchandiseE2ETest = () => {
                 })
             ]))
         })
-        it(`DELETE - Ожидается статус код 200, - Должен удалить товар из корзины! Дополнительные запросы: -> GET`, async () => {
+        it(`DELETE - Ожидается статус код 204, - Должен удалить товар из корзины! Дополнительные запросы: -> GET`, async () => {
             const dataBasketMerchandise: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
                 shopId: contextTests.shops.createdShops[0]!.shopId,
-                basketId: contextTests.basketMerchandise.createdBasketMerchandises[0]!.basketId
+                basketId: contextTests.basket.createdBaskets[0]!.basketId,
             }
-            await contextTests.shopBasketMerchandiseTestManager.deleteBasketMerchandise(
+            const { response: res1 } = await contextTests.shopBasketMerchandiseTestManager.deleteBasketMerchandise(
                 contextTests.basketMerchandise.createdBasketMerchandises[0]!.basketMerchandiseId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
-                HTTP_STATUSES.OK_200
+                HTTP_STATUSES.NO_CONTENT_204
             )
             await contextTests.shopBasketMerchandiseTestManager.getBasketMerchandiseById(
                 contextTests.basketMerchandise.createdBasketMerchandises[0]!.basketId,
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
+            if (res1.status === HTTP_STATUSES.NO_CONTENT_204) {
+                contextTests.basketMerchandise.deleteAllBasketMerchandisesStateTest()
+                // console.log('TEST: - ⚙️ dataBasketMerchandise', dataBasketMerchandise)
+            }
             const { response } = await contextTests.shopBasketMerchandiseTestManager.getAllBasketsMerchandise(
                 dataBasketMerchandise,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(response.body).toEqual(expect.arrayContaining([]));
+            // console.log('TEST: - ⚙️ response.body', response.body)
+
+            expect(response.body.items).toEqual([]);
         })
     })
 }

@@ -30,15 +30,15 @@ export class BasketMerchandiseController {
         @Body() dto: CreateBasketMerchandiseInputDto,
         @ExtractUserFromRequest() user: UserContextDto,
     ): Promise<BasketMerchandiseViewDto> {
-        // console.log('createPhotoAlbumController: - dto', dto)
-        const albumId = await this.commandBus.execute<CreateBasketMerchandiseCommand, string>(
+        // console.log('BasketMerchandiseController: - dto', dto)
+        const basketMerchandiseId = await this.commandBus.execute<CreateBasketMerchandiseCommand, string>(
             new CreateBasketMerchandiseCommand(
                 user.id,
                 dto
             ),
         );
-        // console.log('createPhotoAlbumController: - albumId', albumId)
-        return await this.basketMerchandiseQueryRepository.findBasketMerchandiseByIdOrNotFoundFailRepository(albumId);
+        // console.log('BasketMerchandiseController: - albumId', albumId)
+        return await this.basketMerchandiseQueryRepository.findBasketMerchandiseByIdOrNotFoundFailRepository(basketMerchandiseId);
     }
     @ApiOperation({ summary: 'Удаление фотоальбома!' })
     @ApiResponse({ status: 204, type: BasketMerchandise })
@@ -48,7 +48,7 @@ export class BasketMerchandiseController {
     async deleteBasketMerchandiseController(
         @Param('basketMerchandiseId') basketMerchandiseId: string
     ) {
-        // console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
+        // console.log('BasketMerchandiseController: - deleteBasketMerchandiseController albumId', albumId)
         return await this.commandBus.execute<DeleteBasketMerchandiseCommand, string>(
             new DeleteBasketMerchandiseCommand(
                 basketMerchandiseId
@@ -57,18 +57,21 @@ export class BasketMerchandiseController {
     }
     @ApiOperation({ summary: 'Получить все товары добавленные в корзину!' })
     @ApiResponse({ status: 200, type: BasketMerchandise })
-    @Get('/all/:userId')
+    @UseGuards(AuthAccessGuard)
+    @Get('/all')
     async getAllBasketMerchandiseController(
-        @Param('userId') userId: string, 
-        @Query() query: GetBasketMerchandiseQueryParams
+        @Query() query: GetBasketMerchandiseQueryParams,
+        @ExtractUserFromRequest() user: UserContextDto,
     ): Promise<PaginatedViewDto<BasketMerchandiseViewDto[]>> {
-        // console.log('PhotoAlbumController: - getAllPhotoController userId', userId)
-        return await this.basketMerchandiseQueryRepository.getAllBasketMerchandiseQueryRepository(query, userId)
+        // console.log('BasketMerchandiseController: - getAllBasketMerchandiseController query', query)
+        return await this.basketMerchandiseQueryRepository.getAllBasketMerchandiseQueryRepository(query, user.id)
     }
     @ApiOperation({ summary: 'Получить одно устройство в корзине!' })
     @ApiResponse({ status: 200, type: BasketMerchandise })
     @Get('/:basketMerchandiseId')
-    async getBasketMerchandiseByIdController(@Param('albumId') albumId: string) {
-        return await this.basketMerchandiseQueryRepository.findBasketMerchandiseByIdOrNotFoundFailRepository(albumId);
+    async getBasketMerchandiseByIdController(
+        @Param('basketMerchandiseId') basketMerchandiseId: string
+    ) {
+        return await this.basketMerchandiseQueryRepository.findBasketMerchandiseByIdOrNotFoundFailRepository(basketMerchandiseId);
     }
 }

@@ -13,8 +13,10 @@ import { MyShops, MyShopsSchema } from './shops/shops-domain/shops-entity';
 import { ShopTypeModule } from './shop-type/shop-type.module';
 import { MerchandiseInfoModule } from './merchandiseInfo/merchandise-info.module';
 import { MerchandiseTypeModule } from './merchandise-type/merchandise-type.module';
-import { MerchandiseBrandModule } from './merchandise-brand/merchandise-brand-repository.module';
 import { MerchandiseModule } from './merchandise/merchandise.module';
+import { MerchandiseBrandModule } from './merchandise-brand/merchandise-brand.module';
+import { BasketModule } from './basket/basket.module';
+import { BasketMerchandiseModule } from './basketMerchandise/basket-merchandise.module';
 
 const useCases = [
     CreateMyShopsUseCase,
@@ -29,7 +31,12 @@ const useCases = [
         UserAccountsModule,
         MyShopsRepositoryModule,
         ShopTypeModule,
+        MerchandiseInfoModule,
+        MerchandiseTypeModule,
+        MerchandiseBrandModule,
         MerchandiseModule,
+        BasketModule,
+        BasketMerchandiseModule
     ],
     controllers: [
         MyShopsController

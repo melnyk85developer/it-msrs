@@ -10,15 +10,16 @@ export const isCreatedMerchandiseBrands = async (
     if (contextTests.merchandiseBrand.createdMerchandiseBrands[numMerchandiseBrand] === undefined || contextTests.merchandiseBrand.createdMerchandiseBrands[numMerchandiseBrand] === null) {
         // Подготавливаем валидные данные для создания типа товара магазина!
         const data: any = {
-            name: brandName,
+            merchandiseBrandName: brandName,
             shopId: contextTests.shops.createdShops[0]!.shopId
         }
-        // console.log('TEST isCreatedShopBrand1: contextTests.createdShop1.shopId', contextTests.createdShop1.shopId)
+        // console.log('TEST isCreatedMerchandiseBrands: brandName', brandName)
         // console.log('TEST isCreatedShopBrand1: createdBrand res ', brand)
 
         // Отправляем POST запрос на регистрацию типа товара магазина и ожидаем в ответ статус код 201 (CREATED) !
         const { createdBrand, response } = await contextTests.merchandiseBrandTestManager.createMerchandiseBrand(
             data,
+            contextTests.sessions.accessTokenUser1Devices[0],
             statusCode
         )
         // console.log('TEST isCreatedShopBrand1: createdBrand res ', createdBrand)

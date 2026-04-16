@@ -12,8 +12,8 @@ export class CreateMyShopsCommand {
     constructor(
         public userId: string,
         public readonly dto: Omit<CreateMyShopsDto, 'userId'>,
-        public image: Multer.File | null,
-        public miniature: Multer.File | null
+        // public image: Multer.File | null,
+        // public miniature: Multer.File | null
     ) { }
 }
 @CommandHandler(CreateMyShopsCommand)
@@ -22,32 +22,34 @@ export class CreateMyShopsUseCase
     constructor(
         @InjectModel(MyShops.name) private myShopsModel: MyShopsModelType,
         private commandBus: CommandBus,
-        private photoRepository: MyShopsRepository,
+        private myShopsRepository: MyShopsRepository,
         private filesService: FilesService,
     ) { }
 
     async execute(command: CreateMyShopsCommand) {
-        const { image, miniature, dto, userId } = command
-        // console.log('createPhotoService - userId 😡 1', userId)
-        // console.log('createPhotoService - dto 😡 2', dto.albumName)
+        const { 
+            // image, 
+            // miniature, 
+            dto, 
+            userId 
+        } = command
+        // console.log('CreateMyShopsUseCase - userId 😡 1', userId)
+        // console.log('CreateMyShopsUseCase - dto 😡 2 dto.name', dto.name)
 
-        const imageName = await this.filesService.createPostFile(image);
-        const miniatureName = await this.filesService.createPostFile(miniature);
+        // const imageName = await this.filesService.createPostFile(image);
+        // const miniatureName = await this.filesService.createPostFile(miniature);
         // console.log('createPhotoService - imageName 😡 3', imageName)
         // console.log('createPhotoService - miniatureName 😡 4', miniatureName)
 
         const shop = this.myShopsModel.createMyShopsInstance({
             ...dto,
             userId: userId,
-            name: dto.name,
-            title: dto.title,
-            shopTypeId: dto.shopTypeId,
             // image: imageName,
             // miniature: miniatureName,
         });
-        // console.log('PhotoAlbumService: IS createPhotoInstance - photo 😡 11', photo)
-        await this.photoRepository.save(shop);
-        // console.log('PhotoAlbumService: IS createPhotoAlbumService - isAlbum 😡 12', photo)
+        // console.log('CreateMyShopsUseCase: IS createMyShopsInstance - shop 😡 1', shop)
+        await this.myShopsRepository.save(shop);
+        // console.log('CreateMyShopsUseCase: IS createMyShopsInstance - shop 😡 2', shop)
         return shop._id.toString();
     }
 }

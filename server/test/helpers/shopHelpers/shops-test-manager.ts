@@ -4,17 +4,22 @@ import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { delay } from '../delay';
 import { contextTests } from '../init-settings';
+import { CreateMyShopsInputDto } from 'src/modules/shops-platform/shops/shops-dto/create-shops-input-dto';
+import { UpdateMyShopsInputDto } from 'src/modules/shops-platform/shops/shops-dto/update-shops.input-dto';
 
 export class ShopTestManager {
     constructor(private app: INestApplication) { }
     async getShops(
         userId: string,
+        accessToken: string,
         expectedStatusCode: number = HTTP_STATUSES.OK_200,
     ) {
-        // console.log('TEST - ⚙️ : - AuthTestManager - registration: req data', data)
+        // console.log('TEST - ⚙️ : - ShopTestManager - accessToken', accessToken)
         const response = await request(this.app.getHttpServer())
-            .get(`${SETTINGS.RouterPath.myshops}/${userId}`)
+            .get(`${SETTINGS.RouterPath.myshops}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .expect(expectedStatusCode)
+        // console.log('TEST - ⚙️ : - ShopTestManager - response.body', response.body)
 
         let getEntity
         if (expectedStatusCode === HttpStatus.OK) {
@@ -29,7 +34,7 @@ export class ShopTestManager {
     ) {
         // console.log('TEST - ⚙️ : - AuthTestManager - login: req data', data)
         const response = await request(this.app.getHttpServer())
-            .get(`${SETTINGS.RouterPath.myshop}/${shopId}`)
+            .get(`${SETTINGS.RouterPath.myshops}/myshop/${shopId}`)
             .set('User-Agent', userAgent)
             .expect(expectedStatusCode);
         // console.log('TEST - ⚙️ : - AuthTestManager - response.body: ', response.body)
@@ -40,12 +45,16 @@ export class ShopTestManager {
         return { response: response, getEntity: getEntity }
     }
     async createShop(
-        data: any,
+        data: CreateMyShopsInputDto,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
+        // console.log('ShopTestManager: - createShop ⚙️ data ', data)
+
         const response = await request(this.app.getHttpServer())
-            .post(SETTINGS.RouterPath.myshop)
+            .post(`${SETTINGS.RouterPath.myshops}/myshop`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode);
 
@@ -58,12 +67,14 @@ export class ShopTestManager {
     }
     async updateShop(
         shopId: string,
-        data: any,
+        data: UpdateMyShopsInputDto,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
         const response = await request(this.app.getHttpServer())
-            .put(`${SETTINGS.RouterPath.myshops}/${shopId}`)
+            .put(`${SETTINGS.RouterPath.myshops}/myshop/${shopId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode);
 
@@ -78,12 +89,13 @@ export class ShopTestManager {
     }
     async deleteShop(
         shopId: string,
+        accessToken: string,
         userAgent: string = 'TestDevice/1.0',
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
         // console.log('TEST authTestManager refreshToken: - ⚙️req⚙️', refreshToken)
         const response = await request(this.app.getHttpServer())
-            .delete(`${SETTINGS.RouterPath.myshops}/${shopId}`)
-            // .set('Authorization', `Bearer ${accessToken}`)
+            .delete(`${SETTINGS.RouterPath.myshops}/myshop/${shopId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             // .set('Cookie', `refreshToken=${refreshToken}`)
             .set('User-Agent', userAgent)
             .expect(expectedStatusCode);

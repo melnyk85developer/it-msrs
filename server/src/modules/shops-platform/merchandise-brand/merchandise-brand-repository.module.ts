@@ -11,4 +11,4 @@ import { CqrsModule } from '@nestjs/cqrs';
     providers: [MerchandiseBrandRepository],
     exports: [MerchandiseBrandRepository],
 })
-export class MerchandiseBrandModule { }
+export class MerchandiseBrandRepositoryModule { }

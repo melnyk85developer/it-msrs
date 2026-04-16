@@ -56,7 +56,7 @@ export class ShopTypesTestManager {
             .send(shopType)
             .expect(expectedStatusCode);
 
-        console.log('ShopTypesTestManager: - createShopTypes ⚙️ response.body', response.body)
+        // console.log('ShopTypesTestManager: - createShopTypes ⚙️ response.body', response.body)
         
         if (expectedStatusCode === HTTP_STATUSES.CREATED_201) {
             expect(response.body.typeName).toEqual(shopType.typeName);
@@ -70,11 +70,13 @@ export class ShopTypesTestManager {
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
+        // console.log('ShopTypesTestManager: - data ⚙️', data)
         const response = await request(this.app.getHttpServer())
             .put(`${SETTINGS.RouterPath.shoptype}/${typeId}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode);
+        // console.log('ShopTypesTestManager: - ⚙️ response.body', response.body)
 
         let updateEntity
         if (expectedStatusCode === HTTP_STATUSES.OK_200) {

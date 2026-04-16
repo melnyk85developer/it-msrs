@@ -12,14 +12,17 @@ export class MerchandiseBrandTestManager {
     constructor(private app: INestApplication) { }
     async getMerchandiseBrands(
         dataBrand: any,
+        accessToken: string,
         expectedStatusCode: number = HTTP_STATUSES.OK_200,
     ) {
-        const { shopId } = dataBrand
-        // console.log('TEST - ⚙️ : - AuthTestManager - registration: req data', data)
+        // console.log('TEST - ⚙️ : - MerchandiseBrandTestManager - dataBrand', dataBrand)
         const response = await request(this.app.getHttpServer())
-            .get(`${SETTINGS.RouterPath.brands}`)
+            .get(`${SETTINGS.RouterPath.brands}/brand`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .query(dataBrand)
             .expect(expectedStatusCode)
+        // console.log('TEST - ⚙️ : - MerchandiseBrandTestManager - response.body', response.body)
+
         let getBrands
         if (expectedStatusCode === HttpStatus.OK) {
             getBrands = response.body
@@ -45,11 +48,13 @@ export class MerchandiseBrandTestManager {
     }
     async createMerchandiseBrand(
         shopBrand: CreateMerchandiseBrandInputDto,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
         const response = await request(this.app.getHttpServer())
-            .post(SETTINGS.RouterPath.brands)
+            .post(`${SETTINGS.RouterPath.brands}/brand`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .send(shopBrand)
             .expect(expectedStatusCode);
 
@@ -63,14 +68,15 @@ export class MerchandiseBrandTestManager {
     async updateMerchandiseBrand(
         brandId: string,
         data: UpdateMerchandiseBrandInputDto,
+        accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
         const response = await request(this.app.getHttpServer())
-            .put(`${SETTINGS.RouterPath.brand}/${brandId}`)
+            .put(`${SETTINGS.RouterPath.brands}/brand/${brandId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode);
-
 
         let updateBrand
         if (expectedStatusCode === HttpStatus.OK) {
@@ -83,16 +89,17 @@ export class MerchandiseBrandTestManager {
     }
     async deleteMerchandiseBrand(
         brandId: string,
+        accessToken: string,
         userAgent: string = 'TestDevice/1.0',
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
+        // console.log('TEST authTestManager: - ⚙️ brandId ⚙️ - ', brandId)
         // console.log('TEST authTestManager refreshToken: - ⚙️req⚙️', refreshToken)
         const response = await request(this.app.getHttpServer())
-            .delete(`${SETTINGS.RouterPath.brand}/${brandId}`)
-            // .set('Authorization', `Bearer ${accessToken}`)
+            .delete(`${SETTINGS.RouterPath.brands}/brand/${brandId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             // .set('Cookie', `refreshToken=${refreshToken}`)
             .set('User-Agent', userAgent)
             .expect(expectedStatusCode);
-        // console.log('TEST - ⚙️ authTestManager refreshToken: - response', response.body)
         let deleteBrand
         if (expectedStatusCode === HttpStatus.OK) {
             deleteBrand = response.body

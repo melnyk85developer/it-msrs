@@ -16,9 +16,9 @@ export class Basket {
     @Prop({ type: String, required: true })
     userId: string;
 
-    @ApiProperty({ example: 'shopId', description: 'Уникальный идентификатор магазина' })
-    @Prop({ type: String, required: true })
-    shopId: string;
+    // @ApiProperty({ example: 'shopId', description: 'Уникальный идентификатор магазина' })
+    // @Prop({ type: String, required: true })
+    // shopId: string;
 
     @ApiProperty({ example: 'createdAt', description: 'Число создания аккаунта.' })
     @Prop({ type: String, required: true })
@@ -44,7 +44,7 @@ export class Basket {
         // console.log('PhotoAlbumEntity: createInstance - user 😡 ', user)
 
         basket.userId = dto.userId;
-        basket.shopId = dto.shopId;
+        // basket.shopId = dto.shopId;
         basket.createdAt = createdAt;
         basket.updatedAt = createdAt;
         basket.deletedAt = null;

@@ -62,4 +62,34 @@ export class BasketQueryRepository {
 
         return BasketViewDto.mapToView(basket);
     }
+    async findBasketByUserI(userId: string): Promise<BasketDocument | null> {
+        return this.basketModel.findOne({
+            userId: userId,
+            deletedAt: null,
+        });
+    }
+
+    async findBasketByUserIdOrNotFoundFailRepository(userId: string): Promise<BasketViewDto> {
+        let basket;
+        console.log('BasketQueryRepository: - userId', userId)
+
+        if (
+            !userId || userId === 'undefined'
+        ) {
+            throw new DomainException(
+                INTERNAL_STATUS_CODE.BAD_REQUEST,
+                'basketId или userId сука говняные 😡😡😡'
+            );
+        } else {
+            basket = await this.findBasketByUserI(userId);
+        }
+        console.log('BasketQueryRepository: - basket', basket)
+
+        if (!basket) {
+            throw new DomainException(INTERNAL_STATUS_CODE.NOT_FOUND_ALBUM_NAME);
+        }
+        console.log('BasketQueryRepository: - basket', basket)
+
+        return BasketViewDto.mapToView(basket);
+    }
 }

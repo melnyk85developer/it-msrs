@@ -7,10 +7,10 @@ export class CreateBasketDomainDto {
     @IsNotEmpty({ message: 'Поле login не должно быть пустым!' })
     readonly userId: string
 
-    @ApiProperty({ example: 'shopId', description: 'Уникальный идентификатор магазины' })
-    @IsString({ message: 'shopId должно быть строкой!' })
-    @IsNotEmpty({ message: 'Поле shopId не должно быть пустым!' })
-    readonly shopId: string;
+    // @ApiProperty({ example: 'shopId', description: 'Уникальный идентификатор магазины' })
+    // @IsString({ message: 'shopId должно быть строкой!' })
+    // @IsNotEmpty({ message: 'Поле shopId не должно быть пустым!' })
+    // readonly shopId: string;
 
     @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
     createdAt: string;

@@ -16,6 +16,7 @@ import { UpdateShopTypeCommand } from '../shop-type-application/shop-type.use-ca
 import { DeleteShopTypeCommand } from '../shop-type-application/shop-type.use-cases/delete-shop-type.use-case';
 import { ShopType } from '../shop-type-domain/shop-type-entity';
 import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
+import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
 
 @Controller('/shop-type')
 export class ShopTypeController {
@@ -33,11 +34,11 @@ export class ShopTypeController {
         @Body() dto: CreateShopTypeInputDto,
         @ExtractUserIfExistsFromRequest() user: UserContextDto,
     ): Promise<ShopTypeViewDto> {
-        console.log('ShopTypeController: createShopTypeController - dto', dto)
+        // console.log('ShopTypeController: createShopTypeController - dto', dto)
         const typeId = await this.commandBus.execute<CreateShopTypeCommand, string>(
             new CreateShopTypeCommand(user.id, dto)
         );
-        console.log('ShopTypeController: createShopTypeController - typeId', typeId)
+        // console.log('ShopTypeController: createShopTypeController - typeId', typeId)
         return await this.shopTypeQueryRepository.findShopTypeByIdOrNotFoundFailRepository(typeId);
     }
     @ApiOperation({ summary: 'Обновление типа магазина!' })
@@ -48,13 +49,18 @@ export class ShopTypeController {
     async updateShopTypeController(
         @Param('typeId') typeId: string,
         @Body() dto: UpdateShopTypeInputDto,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ) {
-        // console.log('updatePhotoController: - dto', dto)
+        // console.log('ShopTypeController: - updateShopTypeController dto', dto)
         return await this.commandBus.execute<UpdateShopTypeCommand, string>(
-            new UpdateShopTypeCommand(typeId, dto)
+            new UpdateShopTypeCommand(
+                typeId,
+                user.id,
+                dto
+            )
         );
     }
-    @ApiOperation({ summary: 'Удаление фото!' })
+    @ApiOperation({ summary: 'Удаление типа магазина!' })
     @ApiResponse({ status: 204, type: ShopType })
     @UseGuards(AuthAccessGuard)
     @Delete('/:typeId')
@@ -70,8 +76,9 @@ export class ShopTypeController {
         );
     }
 
-    @ApiOperation({ summary: 'Получение одного фото!' })
+    @ApiOperation({ summary: 'Получение одного типа магазина по typeId!' })
     @ApiResponse({ status: 200, type: ShopType })
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/:typeId')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getShopTypeByIdController(
@@ -79,9 +86,9 @@ export class ShopTypeController {
     ) {
         return await this.shopTypeQueryRepository.findShopTypeByIdOrNotFoundFailRepository(typeId);
     }
-    @ApiOperation({ summary: 'Создание всех фото!' })
+    @ApiOperation({ summary: 'Получение всех типов магазинов!' })
     @ApiResponse({ status: 200, type: ShopType })
-    @UseGuards(AuthAccessGuard)
+    @UseGuards(JwtOptionalAuthGuard)
     @Get()
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllShopTypeController(

@@ -3,12 +3,13 @@ import {BasketMerchandiseDocument } from "../basketMerchandise-domain/basket-mer
 
 export class BasketMerchandiseViewDto {
     basketMerchandiseId: string;
+    merchandiseId: string;
     basketId: string;
     shopId: string;
     merchandiseName: string;
     merchandiseCoverName: string | null;
-    quantity: string;
-    // userId: string;
+    quantity: number;
+    price: number;
     createdAt: string;
     updatedAt: string;
 
@@ -17,11 +18,12 @@ export class BasketMerchandiseViewDto {
         const dto = new BasketMerchandiseViewDto();
         dto.basketMerchandiseId = product._id.toString();
         dto.basketId = product.basketId;
+        dto.merchandiseId = product.merchandiseId;
         dto.shopId = product.shopId;
         dto.merchandiseName = product.merchandiseName;
         dto.merchandiseCoverName = product.merchandiseCoverName;
-        dto.quantity = product.quantity;
-        // dto.userId = product.userId;
+        dto.quantity = Number(product.quantity);
+        dto.price = Number(product.price);
         dto.createdAt = product.createdAt;
         dto.updatedAt = product.updatedAt;
         // console.log('PhotoAlbumViewDto: mapToView - dto 😡 ', dto)

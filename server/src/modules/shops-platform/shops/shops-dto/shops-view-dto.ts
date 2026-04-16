@@ -5,8 +5,8 @@ export class MyShopsViewDto {
     shopId: string;
     name: string | null;
     title: string | null;
-    shopTypeId: string;
-    shopBrandId: string;
+    shopTypeId: string | null;
+    shopBrandId: string | null;
     userId: string;
     createdAt: string;
     updatedAt: string;

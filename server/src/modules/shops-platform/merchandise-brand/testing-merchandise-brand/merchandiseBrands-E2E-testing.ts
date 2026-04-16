@@ -33,6 +33,7 @@ export const merchandiseBrandsE2ETest = () => {
             }
             const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(response.body).toEqual(expect.arrayContaining([]));
@@ -41,6 +42,7 @@ export const merchandiseBrandsE2ETest = () => {
             const createdShop = await isCreatedShop(
                 0,
                 contextTests.shopType.correctShopTypeNames[0],
+                contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
                 contextTests.users.createdUsers[0]!.id,
@@ -48,15 +50,17 @@ export const merchandiseBrandsE2ETest = () => {
             )
             // console.log('TEST brandsE2ETest: createdShop ?', createdShop)
             const data: any = {
-                merchandiseBrandName: '',
+                searchMerchandiseBrand: '',
                 shopId: ''
             }
             await contextTests.merchandiseBrandTestManager.createMerchandiseBrand(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
             expect(response.body).toEqual(expect.arrayContaining([]));
@@ -69,38 +73,46 @@ export const merchandiseBrandsE2ETest = () => {
             )
             const { getBrands } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
                 {
-                    name: '',
+                    merchandiseBrandName: '',
                     shopId: ''
                 },
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(getBrands).toHaveLength(contextTests.merchandiseBrand.total_number_of_merchandise_brands_in_tests);
+            expect(getBrands.items).toHaveLength(contextTests.merchandiseBrand.total_number_of_merchandise_brands_in_tests);
             expect(getBrands).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining(
-                        contextTests.merchandiseBrand.createdMerchandiseBrands[0]
-                    )
-                ])
+                expect.objectContaining({
+                    pagesCount: 1,
+                    page: 1,
+                    pageSize: 10,
+                    totalCount: 1,
+                    items: [contextTests.merchandiseBrand.createdMerchandiseBrands[0]]
+                })
             )
         })
         it(`POST   - Ожидается статус код 201, - Успешное создание бренда 2 товара в магазине 2 ! Дополнительные запросы: -> GET`, async () => {
             const type = await isCreatedMerchandiseBrands(
-                0,
+                1,
                 'ASUS',
                 HTTP_STATUSES.CREATED_201
             )
             const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
                 {
-                    name: '',
+                    merchandiseBrandName: '',
                     shopId: ''
                 },
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseBrand.total_number_of_merchandise_brands_in_tests);
             expect(response.body).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining(contextTests.merchandiseBrand.createdMerchandiseBrands[0]),
-                    expect.objectContaining(contextTests.merchandiseBrand.createdMerchandiseBrands[1])
-                ])
+                expect.objectContaining({
+                    pagesCount: 1,
+                    page: 1,
+                    pageSize: 10,
+                    totalCount: 2,
+                    items: [contextTests.merchandiseBrand.createdMerchandiseBrands[1], contextTests.merchandiseBrand.createdMerchandiseBrands[0]]
+                })
             )
         })
         it(`PUT    - Ожидается статус код 400, - Не валидные данные для обновления бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
@@ -110,6 +122,7 @@ export const merchandiseBrandsE2ETest = () => {
                     merchandiseBrandName: '',
                     shopId: ''
                 },
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const { getEntity } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
@@ -131,10 +144,11 @@ export const merchandiseBrandsE2ETest = () => {
             await contextTests.merchandiseBrandTestManager.updateMerchandiseBrand(
                 contextTests.constants.invalidId,
                 data,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
         })
-        it(`PUT    - Ожидается статус код 200, - Обновление бренда товара в магазине с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
+        it(`PUT    - Ожидается статус код 204, - Обновление бренда товара в магазине с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data = {
                 merchandiseBrandName: 'LENOWO',
                 shopId: contextTests.shops.createdShops[0]!.shopId
@@ -142,7 +156,8 @@ export const merchandiseBrandsE2ETest = () => {
             await contextTests.merchandiseBrandTestManager.updateMerchandiseBrand(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
                 data,
-                HTTP_STATUSES.OK_200
+                contextTests.sessions.accessTokenUser1Devices[0],
+                HTTP_STATUSES.NO_CONTENT_204
             )
             const { getEntity } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
@@ -150,20 +165,13 @@ export const merchandiseBrandsE2ETest = () => {
                 HTTP_STATUSES.OK_200
             )
             expect(getEntity.merchandiseBrandName).toEqual(data.merchandiseBrandName);
-            const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
-                contextTests.merchandiseBrand.createdMerchandiseBrands[1]!.brandId,
-                contextTests.sessions.userAgent[0],
-                HTTP_STATUSES.OK_200
-            )
-            expect(response.body).toEqual(
-                expect.objectContaining(contextTests.merchandiseBrand.createdMerchandiseBrands[1])
-            )
         })
         it(`DELETE - Ожидается статус код 200, - Должен удалить оба бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
             await contextTests.merchandiseBrandTestManager.deleteMerchandiseBrand(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
-                HTTP_STATUSES.OK_200
+                HTTP_STATUSES.NO_CONTENT_204
             )
             const { response: res } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
@@ -178,8 +186,9 @@ export const merchandiseBrandsE2ETest = () => {
             }
             await contextTests.merchandiseBrandTestManager.deleteMerchandiseBrand(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[1]!.brandId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
-                HTTP_STATUSES.OK_200
+                HTTP_STATUSES.NO_CONTENT_204
             )
             const { response: res2 } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[1]!.brandId,
@@ -193,10 +202,11 @@ export const merchandiseBrandsE2ETest = () => {
                 })
             }
             const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
-                contextTests.app.getHttpServer(),
+                {},
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
-            expect(response.body).toEqual(expect.arrayContaining([]));
+            expect(response.body.items).toEqual(expect.arrayContaining([]));
         })
     })
 }

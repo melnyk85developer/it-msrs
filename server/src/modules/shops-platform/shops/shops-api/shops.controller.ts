@@ -18,15 +18,16 @@ import { CommandBus } from '@nestjs/cqrs';
 import { CreateMyShopsCommand } from '../shops-application/shops-use-cases/create-shops.use-case';
 import { UpdateMyShopsCommand } from '../shops-application/shops-use-cases/update-shops.use-case';
 import { DeleteMyShopsCommand } from '../shops-application/shops-use-cases/delete-shops.use-case';
+import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
 
-@Controller('/shops')
+@Controller('/myshops')
 export class MyShopsController {
     constructor(
         private commandBus: CommandBus,
         private myShopsQueryRepository: MyShopsQueryRepository
     ) { }
 
-    @ApiOperation({ summary: 'Создание фото!' })
+    @ApiOperation({ summary: 'Создание магазина!' })
     @ApiResponse({ status: 201, type: MyShops })
     @UseGuards(AuthAccessGuard)
     @Post('/myshop')
@@ -37,29 +38,30 @@ export class MyShopsController {
     ]))
     async createMyShopsController(
         @Body() dto: CreateMyShopsInputDto,
+        @UploadedFiles() files: { image?: Multer.File[], miniature?: Multer.File[] },
         @ExtractUserFromRequest() user: UserContextDto,
-        @UploadedFiles() files: { image?: Multer.File[], miniature?: Multer.File[] }
     ): Promise<MyShopsViewDto> {
-        const { image, miniature } = files;
-        const imageFile = files?.image?.[0] || null;
-        const miniatureFile = files?.miniature?.[0] || null;
-        // console.log('PhotoController: createPhotoController - dto', dto)
-        // console.log('PhotoController: createPhotoController - imageFile', imageFile)
+        // const { image, miniature } = files;
+        // const imageFile = files?.image?.[0] || null;
+        // const miniatureFile = files?.miniature?.[0] || null;
+
+        // console.log('MyShopsController: createMyShopsController - dto', dto)
+        // console.log('MyShopsController: createMyShopsController - imageFile', imageFile)
         const shopId = await this.commandBus.execute<CreateMyShopsCommand, string>(
             new CreateMyShopsCommand(
                 user.id,
                 dto,
-                imageFile,
-                miniatureFile
+                // imageFile,
+                // miniatureFile
             )
         );
-        // console.log('PhotoController: createPhotoController - photoId', photoId)
+        // console.log('MyShopsController: createPhotoController - photoId', photoId)
         return await this.myShopsQueryRepository.findMyShopsByIdOrNotFoundFailRepository(shopId);
     }
-    @ApiOperation({ summary: 'Обновление фото!' })
+    @ApiOperation({ summary: 'Обновление моего магазина!' })
     @ApiResponse({ status: 201, type: MyShops })
     @UseGuards(AuthAccessGuard)
-    @Put('myshops/:shopId')
+    @Put('myshop/:shopId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'image', maxCount: 1 },
@@ -67,35 +69,35 @@ export class MyShopsController {
     ]))
     async updateMyShopsController(
         @Param('shopId') shopId: string,
-        @ExtractUserFromRequest() user: UserContextDto,
         @Body() dto: UpdateMyShopsInputDto,
+        @ExtractUserFromRequest() user: UserContextDto,
         @UploadedFiles() files: { image?: Multer.File[], miniature?: Multer.File[] }
     ) {
-        // console.log('updatePhotoController: - dto', dto)
+        // console.log('MyShopsController: - dto', dto)
         // console.log('FILES:', files)
-        if (files === undefined) {
-            throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_UPDATED_PHOTO)
-        }
-        const imageFile = files?.image?.[0] || null;
-        const miniatureFile = files?.miniature?.[0] || null;
+        // if (files === undefined) {
+        //     throw new DomainException(INTERNAL_STATUS_CODE.BAD_REQUEST_INCORRECT_DATA_FOR_UPDATED_PHOTO)
+        // }
+        // const imageFile = files?.image?.[0] || null;
+        // const miniatureFile = files?.miniature?.[0] || null;
 
         return await this.commandBus.execute<UpdateMyShopsCommand, string>(
             new UpdateMyShopsCommand(
                 user.id,
                 shopId,
                 dto,
-                imageFile,
-                miniatureFile
+                // imageFile,
+                // miniatureFile
             )
         );
     }
-    @ApiOperation({ summary: 'Удаление фото!' })
+    @ApiOperation({ summary: 'Удаление моего магазина!' })
     @ApiResponse({ status: 204, type: MyShops })
     @UseGuards(AuthAccessGuard)
-    @Delete('myshops/:shopId')
+    @Delete('/myshop/:shopId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteMyShopsController(@Param('shopId') shopId: string) {
-        // console.log('PhotoController: - deletePhotoController photoId', photoId)
+        // console.log('MyShopsController: - deletePhotoController photoId', photoId)
         return await this.commandBus.execute<DeleteMyShopsCommand, string>(
             new DeleteMyShopsCommand(
                 shopId
@@ -103,33 +105,35 @@ export class MyShopsController {
         );
     }
 
-    @ApiOperation({ summary: 'Получение одного фото!' })
+    @ApiOperation({ summary: 'Получение одного моего магазина!' })
     @ApiResponse({ status: 200, type: MyShops })
-    @Get('/myshops/:shopId')
+    @Get('/myshop/:shopId')
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getMyShopsByIdController(@Param('userId') shopId: string) {
+    async getMyShopsByIdController(@Param('shopId') shopId: string) {
         return await this.myShopsQueryRepository.findMyShopsByIdOrNotFoundFailRepository(shopId);
     }
-    @ApiOperation({ summary: 'Создание всех фото!' })
+    @ApiOperation({ summary: 'Получение всех моих магазинов!' })
     @ApiResponse({ status: 200, type: MyShops })
-    @Get('/myshops/all')
+    @UseGuards(AuthAccessGuard)
+    @Get()
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllMyShopsController(
-        @ExtractUserFromRequest() user: UserContextDto,
-        @Query() query: GetMyShopsQueryParams
+        @Query() query: GetMyShopsQueryParams,
+        @ExtractUserFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MyShopsViewDto[]>> {
-        // console.log('PhotoController: - getAllPhotoController userId', userId)
+        // console.log('MyShopsController: - getAllMyShopsController query', query)
         return await this.myShopsQueryRepository.getAllMyShopsQueryRepository(query, user.id)
     }
-    @ApiOperation({ summary: 'Создание всех фото!' })
+    @ApiOperation({ summary: 'Получение всех магазинов в проекте!' })
     @ApiResponse({ status: 200, type: MyShops })
+    @UseGuards(JwtOptionalAuthGuard)
     @Get('/myshops/all')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllShopsController(
         @ExtractUserFromRequest() user: UserContextDto,
         @Query() query: GetMyShopsQueryParams
     ): Promise<PaginatedViewDto<MyShopsViewDto[]>> {
-        // console.log('PhotoController: - getAllPhotoController userId', userId)
+        // console.log('MyShopsController: - getAllShopsController userId', userId)
         return await this.myShopsQueryRepository.getAllMyShopsQueryRepository(query)
     }
 }

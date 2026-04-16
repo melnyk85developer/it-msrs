@@ -31,7 +31,7 @@ export class UsersRepository {
         return isAdmin
     }
     async findByLoginOrEmail(loginOrEmail: string): Promise<UserDocument | null> {
-        console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail)
+        // console.log('UsersRepository → findByLogin 👍 loginOrEmail', loginOrEmail)
         return this.UserModel.findOne(
             {
                 $or: [

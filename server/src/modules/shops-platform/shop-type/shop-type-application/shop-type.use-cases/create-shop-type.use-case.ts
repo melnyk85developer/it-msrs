@@ -23,8 +23,8 @@ export class CreateShopTypeUseCase
 
     async execute(command: CreateShopTypeCommand) {
         const { dto, userId } = command
-        console.log('CreateShopTypeUseCase - userId 😡 1', userId)
-        console.log('CreateShopTypeUseCase - dto 😡 2', dto.typeName)
+        // console.log('CreateShopTypeUseCase - userId 😡 1', userId)
+        // console.log('CreateShopTypeUseCase - dto 😡 2', dto.typeName)
 
         // console.log('CreateShopTypeUseCase - imageName 😡 3', imageName)
         // console.log('CreateShopTypeUseCase - miniatureName 😡 4', miniatureName)
@@ -34,9 +34,9 @@ export class CreateShopTypeUseCase
             ...dto,
             userId
         });
-        console.log('CreateShopTypeUseCase: - shopType 😡 1', shopType)
+        // console.log('CreateShopTypeUseCase: - shopType 😡 1', shopType)
         await this.shopTypeRepository.save(shopType);
-        console.log('CreateShopTypeUseCase: - shopType 😡 2', shopType)
+        // console.log('CreateShopTypeUseCase: - shopType 😡 2', shopType)
         return shopType._id.toString();
     }
 }
