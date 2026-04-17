@@ -11,7 +11,7 @@ import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { PaginatedViewDto } from 'src/core/dto/base.paginated.viev-dto';
 import { MerchandiseTypeQueryRepository } from '../merchandise-type-infrastructure/merchandise-type.query-repository';
 import { MerchandiseType } from '../merchandise-type-domain/merchandise-type-entity';
-import { CreateMerchandiseTypeInputDto } from '../merchandise-type-dto/merchandise-type.input-dto';
+import { CreateMerchandiseTypeInputDto } from '../merchandise-type-dto/create-merchandise-type.input-dto';
 import { MerchandiseTypeViewDto } from '../merchandise-type-dto/merchandise-type.view-dto';
 import { UpdateMerchandiseTypeInputDto } from '../merchandise-type-dto/update-input-merchandise-type.dto';
 import { UpdateMerchandiseTypeCommand } from '../merchandise-type-application/merchandise-type.use-cases/update-merchandise-type.use-case';
@@ -55,12 +55,14 @@ export class MerchandiseTypeController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateMerchandiseTypeController(
         @Param('typeId') typeId: string,
-        @Body() dto: UpdateMerchandiseTypeInputDto
+        @Body() dto: UpdateMerchandiseTypeInputDto,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ) {
         // console.log('updateMerchandiseTypeController: - dto', dto)
         return await this.commandBus.execute<UpdateMerchandiseTypeCommand, string>(
             new UpdateMerchandiseTypeCommand(
                 typeId,
+                user.id,
                 dto
             ),
         );
@@ -70,11 +72,15 @@ export class MerchandiseTypeController {
     @UseGuards(AuthAccessGuard)
     @Delete('/:typeId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async deleteMerchandiseTypeController(@Param('typeId') typeId: string) {
-        // console.log('PhotoAlbumController: - deletePhotoAlbumController albumId', albumId)
+    async deleteMerchandiseTypeController(
+        @Param('typeId') typeId: string,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
+    ) {
+        // console.log('MerchandiseTypeController: - deleteMerchandiseTypeController albumId', albumId)
         return await this.commandBus.execute<DeleteMerchandiseTypeCommand, string>(
             new DeleteMerchandiseTypeCommand(
-                typeId
+                typeId,
+                user.id
             )
         );
     }
@@ -86,7 +92,7 @@ export class MerchandiseTypeController {
         @Query() query: GetMerchandiseTypeQueryParams,
         @ExtractUserIfExistsFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MerchandiseTypeViewDto[]>> {
-        // console.log('PhotoAlbumController: - getAllPhotoController userId', userId)
+        // console.log('MerchandiseTypeController: - getAllMerchandiseTypeController userId', userId)
         return await this.merchandiseTypeQueryRepository.getAllMerchandiseTypeQueryRepository(query)
     }
     @ApiOperation({ summary: 'Получить тип товарa!' })

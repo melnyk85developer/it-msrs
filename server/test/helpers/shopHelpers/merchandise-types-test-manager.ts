@@ -4,7 +4,7 @@ import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { delay } from '../delay';
 import { contextTests } from '../init-settings';
-import { CreateMerchandiseTypeInputDto } from 'src/modules/shops-platform/merchandise-type/merchandise-type-dto/merchandise-type.input-dto';
+import { CreateMerchandiseTypeInputDto } from 'src/modules/shops-platform/merchandise-type/merchandise-type-dto/create-merchandise-type.input-dto';
 import { GetMerchandiseTypeQueryParams } from 'src/modules/shops-platform/merchandise-type/merchandise-type-dto/get-merchandise-type-query-params.input-dto';
 import { UpdateMerchandiseTypeInputDto } from 'src/modules/shops-platform/merchandise-type/merchandise-type-dto/update-input-merchandise-type.dto';
 

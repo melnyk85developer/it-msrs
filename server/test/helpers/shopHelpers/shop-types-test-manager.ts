@@ -44,7 +44,7 @@ export class ShopTypesTestManager {
         }
         return { response: response, getEntity: getEntity }
     }
-    async createShopTypes(
+    async createShopType(
         shopType: CreateShopTypeInputDto,
         accessToken: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201
@@ -63,7 +63,7 @@ export class ShopTypesTestManager {
         }
         return { response: response, createdEntity: response.body }
     }
-    async updateShopTypes(
+    async updateShopType(
         typeId: string,
         data: any,
         accessToken: string,
@@ -87,7 +87,7 @@ export class ShopTypesTestManager {
         }
         return { response: response, updatedEntity: updateEntity }
     }
-    async deleteShopTypes(
+    async deleteShopType(
         typeId: string,
         accessToken: string,
         userAgent: string = 'TestDevice/1.0',

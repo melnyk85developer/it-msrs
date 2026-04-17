@@ -4,7 +4,8 @@ import { MerchandiseBrandDocument } from "../merchandise-brand-domain/merchandis
 export class MerchandiseBrandViewDto {
     brandId: string;
     merchandiseBrandName: string;
-    shopId: string;
+    userId: string | null;
+    shopId: string | null;
     createdAt: string;
     updatedAt: string;
 
@@ -13,6 +14,7 @@ export class MerchandiseBrandViewDto {
         const dto = new MerchandiseBrandViewDto();
         dto.brandId = brand._id.toString();
         dto.merchandiseBrandName = brand.merchandiseBrandName;
+        dto.userId = brand.userId;
         dto.shopId = brand.shopId;
         dto.createdAt = brand.createdAt;
         dto.updatedAt = brand.updatedAt;

@@ -94,12 +94,14 @@ export class MerchandiseController {
     @Delete('/:merchandiseId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteMerchandiseController(
-        @Param('merchandiseId') merchandiseId: string
+        @Param('merchandiseId') merchandiseId: string,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ) {
         // console.log('MerchandiseController: - deleteMerchandiseController merchandiseId', merchandiseId)
         return await this.commandBus.execute<DeleteMerchandiseCommand, string>(
             new DeleteMerchandiseCommand(
-                merchandiseId
+                merchandiseId,
+                user.id
             ),
         );
     }

@@ -3,7 +3,6 @@ import { isLoginUser } from "src/modules/auth/auth-testing/testFunctionsAuth"
 import { isCreatedUser } from "src/modules/user-accounts/testing-users/testFunctionsUser"
 import { contextTests } from "test/helpers/init-settings"
 import { isCreatedShop } from "../../shops/testing-shops/testFunctionsShop"
-import { isCreatedShopTypes } from "../../shop-type/testing-shop-type/testFunctionsShopTypes"
 import { isCreatedMerchandiseTypes } from "./testFunctionsMerchandiseType"
 
 export const merchandiseTypeE2ETest = () => {
@@ -27,10 +26,29 @@ export const merchandiseTypeE2ETest = () => {
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
+            const isUser2 = await isCreatedUser(
+                1,
+                contextTests.users.correctUserNames[1],
+                contextTests.users.correctUserEmails[1],
+                contextTests.users.correctUserPasswords[1],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            // console.log('TEST: - blogsE2eTest: isUser1 😡', isUser1)
+            const isLogin2 = await isLoginUser(
+                1,
+                0,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.users.correctUserEmails[1],
+                contextTests.users.correctUserPasswords[1],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
         })
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const createdShop = await isCreatedShop(
                 0,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.shopType.correctShopTypeNames[0],
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
@@ -57,6 +75,7 @@ export const merchandiseTypeE2ETest = () => {
         it(`POST   - Ожидается статус код 400, - Не валидные данные для создания типа товара в магазине! Дополнительные запросы: -> GET`, async () => {
             const createdShop = await isCreatedShop(
                 0,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.shopType.correctShopTypeNames[0],
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
@@ -178,10 +197,34 @@ export const merchandiseTypeE2ETest = () => {
                 })
             )
         })
+        it(`PUT    - Ожидается статус код 401, - Попытка без авторизации обновления типа товара в магазине магазина!`, async () => {
+            const data = {
+                merchandiseTypeName: 'Компьютерная техника'
+            }
+            const { response: res } = await contextTests.merchandiseTypesTestManager.updateMerchandiseType(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                data,
+                contextTests.constants.invalidToken,
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { getEntity, response: res2 } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(getEntity.merchandiseTypeName).toEqual(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.merchandiseTypeName
+            );
+            expect(res2.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseType.createdMerchandiseTypes[0]
+                )
+            )
+        })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего типа товара магазина!`, async () => {
             const data = {
                 merchandiseTypeName: contextTests.merchandiseType.correctMerchandiseTypesNames[3],
-                // shopId: contextTests.shops.createdShops[0]!.shopId
+                shopId: contextTests.shops.createdShops[0]!.shopId
             }
             await contextTests.merchandiseTypesTestManager.updateMerchandiseType(
                 contextTests.constants.invalidId,
@@ -190,23 +233,53 @@ export const merchandiseTypeE2ETest = () => {
                 HTTP_STATUSES.NOT_FOUND_404
             )
         })
+        it(`PUT    - Ожидается статус код 403, - Попытка обновления чужого типа товара в магазине магазина!`, async () => {
+            const data = {
+                merchandiseTypeName: 'Компьютерная техника'
+            }
+            const { response: res } = await contextTests.merchandiseTypesTestManager.updateMerchandiseType(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                data,
+                contextTests.sessions.accessTokenUser2Devices[0],
+                HTTP_STATUSES.FORBIDDEN_403
+            )
+            const { getEntity, response: res2 } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(getEntity.merchandiseTypeName).toEqual(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.merchandiseTypeName
+            );
+            expect(res2.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseType.createdMerchandiseTypes[0]
+                )
+            )
+        })
         it(`PUT    - Ожидается статус код 204, - Обновление типа товара магазина с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             const data = {
                 merchandiseTypeName: 'Компьютерная техника'
             }
-            await contextTests.merchandiseTypesTestManager.updateMerchandiseType(
+            const { response: res } = await contextTests.merchandiseTypesTestManager.updateMerchandiseType(
                 contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
                 data,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
-            const { getEntity } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
+            const { getEntity, response: res2 } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
                 contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
             expect(getEntity.merchandiseTypeName).toEqual(data.merchandiseTypeName);
-
+            if (res.status === HTTP_STATUSES.NO_CONTENT_204 && res2.status === HTTP_STATUSES.OK_200) {
+                // console.log('TEST: - res', res.status)
+                contextTests.merchandiseType.updateMerchandiseStateTest({
+                    numMerchandiseType: 0,
+                    updateMerchandiseType: getEntity
+                })
+            }
             const { response } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
                 contextTests.merchandiseType.createdMerchandiseTypes[1]!.typeId,
                 contextTests.sessions.userAgent[0],
@@ -218,7 +291,97 @@ export const merchandiseTypeE2ETest = () => {
                 )
             )
         })
-        it(`DELETE - Ожидается статус код 200, - Должен удалить оба типа товара магазина! Дополнительные запросы: -> GET`, async () => {
+        it(`DELETE - Ожидается статус код 401, - Попытка без авторизации удалить тип товара магазина! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.merchandiseTypesTestManager.deleteMerchandiseTypes(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.constants.invalidToken,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { response: res } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseType.createdMerchandiseTypes[0]
+                )
+            )
+            const data = {
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+                typeId: contextTests.shops.createdShops[0]!.shopTypeId,
+                brandId: contextTests.shops.createdShops[0]!.shopBrandId,
+                pageNumber: 1,
+                pageSize: 10,
+            }
+            const { response } = await contextTests.merchandiseTypesTestManager.getAllMerchandiseTypes(
+                data,
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseType.total_number_of_merchandise_types_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 403, - Попытка удалить чужой тип товара магазина! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.merchandiseTypesTestManager.deleteMerchandiseTypes(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.sessions.accessTokenUser2Devices[0],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.FORBIDDEN_403
+            )
+            const { response: res } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseType.createdMerchandiseTypes[0]
+                )
+            )
+            const data = {
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+                typeId: contextTests.shops.createdShops[0]!.shopTypeId,
+                brandId: contextTests.shops.createdShops[0]!.shopBrandId,
+                pageNumber: 1,
+                pageSize: 10,
+            }
+            const { response } = await contextTests.merchandiseTypesTestManager.getAllMerchandiseTypes(
+                data,
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseType.total_number_of_merchandise_types_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 404, - Попытка удалить чужой тип товара магазина! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.merchandiseTypesTestManager.deleteMerchandiseTypes(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.constants.invalidId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { response: res } = await contextTests.merchandiseTypesTestManager.getMerchandiseTypeById(
+                contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseType.createdMerchandiseTypes[0]
+                )
+            )
+            const data = {
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+                typeId: contextTests.shops.createdShops[0]!.shopTypeId,
+                brandId: contextTests.shops.createdShops[0]!.shopBrandId,
+                pageNumber: 1,
+                pageSize: 10,
+            }
+            const { response } = await contextTests.merchandiseTypesTestManager.getAllMerchandiseTypes(
+                data,
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseType.total_number_of_merchandise_types_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 204, - Должен удалить оба типа товара магазина! Дополнительные запросы: -> GET`, async () => {
             await contextTests.merchandiseTypesTestManager.deleteMerchandiseTypes(
                 contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
                 contextTests.sessions.accessTokenUser1Devices[0],

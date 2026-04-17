@@ -35,6 +35,7 @@ import { MerchandiseTestManager } from './shopHelpers/merchandise-test-manager';
 import { MerchandiseTypesTestManager } from './shopHelpers/merchandise-types-test-manager';
 import { ShopTypesTestManager } from './shopHelpers/shop-types-test-manager';
 import { ShopTestManager } from './shopHelpers/shops-test-manager';
+import { ShopBrandsTestManager } from './shopHelpers/shop-brands-test-manager copy';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -94,6 +95,7 @@ export const initSettings = async (
     contextTests.merchandiseTestManager = new MerchandiseTestManager(contextTests.app);
     contextTests.merchandiseTypesTestManager = new MerchandiseTypesTestManager(contextTests.app);
     contextTests.shopTypesTestManager = new ShopTypesTestManager(contextTests.app);
+    contextTests.shopBrandsTestManager = new ShopBrandsTestManager(contextTests.app);
     contextTests.shopTestManager = new ShopTestManager(contextTests.app);
 
 
@@ -120,6 +122,7 @@ export const initSettings = async (
         merchandiseTestManager: contextTests.merchandiseTestManager,
         merchandiseTypesTestManager: contextTests.merchandiseTypesTestManager,
         shopTypesTestManager: contextTests.shopTypesTestManager,
+        shopTypesBrandManager: contextTests.shopBrandsTestManager,
         shopTestManager: contextTests.shopTestManager,
 
     };

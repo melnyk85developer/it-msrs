@@ -1,4 +1,4 @@
-import { fetchAvatarFile } from "@packages/shared/src/store/MyAdminReducers/myAdminSlice";
+import { fetchAvatarFileAC } from "@packages/shared/src/store/MyAdminReducers/myAdminSlice";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 
 // Получение случайного файла аватара с оригинальным именем
@@ -16,8 +16,8 @@ export const getRandomAvatarFile = async (
     const randomIndexFtpAvatars = Math.floor(Math.random() * avatars.files.length);
     const avatarServerFileName = avatars.files[randomIndexFtpAvatars];
     try {
-        const file = await dispatch(fetchAvatarFile(avatarServerFileName, 'avatars')) as unknown as File;
-        console.log('getRandomAvatarFile: - avatarServerFileName', avatarServerFileName)
+        const file = await dispatch(fetchAvatarFileAC(avatarServerFileName, 'avatars')) as unknown as File;
+        // console.log('getRandomAvatarFile: - avatarServerFileName', avatarServerFileName)
         if (!file) throw new Error('File not loaded');
         setResFile(file);
         return { file, fileName: avatarServerFileName };

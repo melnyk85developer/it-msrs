@@ -56,6 +56,21 @@ export class MerchandiseContextClass {
         ];
         this.total_number_of_merchandise_in_tests++
     }
+    public async updateMerchandiseStateTest({
+        numMerchandise,
+        updateMerchandise
+    }: {
+        numMerchandise: number;
+        updateMerchandise: MerchandiseViewDto;
+    }) {
+        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        if (this.createdMerchandises.length > numMerchandise) {
+            this.createdMerchandises = this.createdMerchandises.map((m, index) =>
+                index === numMerchandise ? updateMerchandise : m
+            );
+            return;
+        }
+    }
     public async deleteMerchandiseStateTest({
         numMerchandise
     }: {

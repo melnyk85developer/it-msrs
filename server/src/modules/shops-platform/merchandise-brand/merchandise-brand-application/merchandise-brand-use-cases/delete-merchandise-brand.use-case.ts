@@ -5,7 +5,8 @@ import { MerchandiseBrandRepository } from "../../merchandise-brand-infrastructu
 
 export class DeleteMerchandiseBrandCommand {
     constructor(
-        public albumId: string,
+        public brandId: string,
+        public userId: string,
     ) { }
 }
 @CommandHandler(DeleteMerchandiseBrandCommand)
@@ -16,13 +17,14 @@ export class DeleteMerchandiseBrandUseCase
     ) { }
 
     async execute(command: DeleteMerchandiseBrandCommand) {
-        const { albumId } = command
-        const photoAlbum = await this.merchandiseBrandRepository.findMerchandiseBrandByIdOrNotFoundFailRepository(albumId);
+        const { brandId, userId } = command
+        const brand = await this.merchandiseBrandRepository.findMerchandiseBrandByIdOrNotFoundFailRepository(brandId);
+        if (userId !== brand.userId) {
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_MERCHANDISE_BRAND_UPDATE)
+        }
         // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        const isDeletedPhoto = await this.merchandiseBrandRepository.deleteMerchandiseBrand(albumId);
+        const isDeletedPhoto = await this.merchandiseBrandRepository.deleteMerchandiseBrand(brandId);
         // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        // photoAlbum.makeDeletedPhotoAlbum();
-        // await this.photoAlbumRepository.save(photoAlbum);
         return isDeletedPhoto._id
     }
 }

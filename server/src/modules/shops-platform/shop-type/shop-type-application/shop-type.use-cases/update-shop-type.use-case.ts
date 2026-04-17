@@ -24,6 +24,10 @@ export class UpdateShopTypeUseCase
         // console.log('PhotoService: updatePhotoService - photoId, dto 😡 ', photoId, dto)
         const shopType = await this.shopTypeRepository.findShopTypeByIdOrNotFoundFailRepository(typeId);
 
+        if(userId !== shopType.userId){
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_SHOP_TYPES_UPDATE)
+        }
+
         shopType.updateShopType({
             userId: userId,
             typeId: shopType._id.toString(),

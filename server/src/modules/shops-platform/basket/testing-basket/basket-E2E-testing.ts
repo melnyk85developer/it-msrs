@@ -47,6 +47,7 @@ export const basketE2ETest = () => {
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const createdShop = await isCreatedShop(
                 0,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.shopType.correctShopTypeNames[0],
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],

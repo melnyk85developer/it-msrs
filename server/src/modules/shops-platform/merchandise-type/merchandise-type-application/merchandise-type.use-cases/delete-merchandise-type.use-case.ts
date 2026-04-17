@@ -6,7 +6,8 @@ import { MerchandiseTypeRepository } from "../../merchandise-type-infrastructure
 
 export class DeleteMerchandiseTypeCommand {
     constructor(
-        public albumId: string,
+        public merchandiseId: string,
+        public userId: string,
     ) { }
 }
 @CommandHandler(DeleteMerchandiseTypeCommand)
@@ -17,13 +18,14 @@ export class DeleteMerchandiseTypeUseCase
     ) { }
 
     async execute(command: DeleteMerchandiseTypeCommand) {
-        const { albumId } = command
-        const photoAlbum = await this.merchandiseTypeRepository.findMerchandiseTypeByIdOrNotFoundFailRepository(albumId);
-        // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        const isDeletedPhoto = await this.merchandiseTypeRepository.deleteMerchandiseType(albumId);
-        // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        // photoAlbum.makeDeletedPhotoAlbum();
-        // await this.photoAlbumRepository.save(photoAlbum);
-        return isDeletedPhoto._id
+        const { merchandiseId, userId } = command
+        const merchandise = await this.merchandiseTypeRepository.findMerchandiseTypeByIdOrNotFoundFailRepository(merchandiseId);
+        if (userId !== merchandise.userId) {
+            // console.log('DeleteMerchandiseTypeUseCase: - merchandise 😡 userId !== merchandise.userId', merchandise)
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_SHOP_DELETE)
+        }
+        const isDeleteMerchandise = await this.merchandiseTypeRepository.deleteMerchandiseType(merchandiseId);
+        // console.log('DeleteMerchandiseTypeUseCase: - isDeleteMerchandise 😡 ', isDeleteMerchandise)
+        return isDeleteMerchandise._id
     }
 }

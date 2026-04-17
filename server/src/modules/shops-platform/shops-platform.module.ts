@@ -16,7 +16,8 @@ import { MerchandiseTypeModule } from './merchandise-type/merchandise-type.modul
 import { MerchandiseModule } from './merchandise/merchandise.module';
 import { MerchandiseBrandModule } from './merchandise-brand/merchandise-brand.module';
 import { BasketModule } from './basket/basket.module';
-import { BasketMerchandiseModule } from './basketMerchandise/basket-merchandise.module';
+import { BasketMerchandiseModule } from './basket-merchandise/basket-merchandise.module';
+import { ShopBrandModule } from './shop-brand/shop-brand.module';
 
 const useCases = [
     CreateMyShopsUseCase,
@@ -31,6 +32,7 @@ const useCases = [
         UserAccountsModule,
         MyShopsRepositoryModule,
         ShopTypeModule,
+        ShopBrandModule,
         MerchandiseInfoModule,
         MerchandiseTypeModule,
         MerchandiseBrandModule,

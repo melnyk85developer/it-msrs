@@ -10,7 +10,7 @@ import { CreateMerchandiseTypeDto } from "../../merchandise-type-dto/create-merc
 export class CreateMerchandiseTypeCommand {
     constructor(
         public userId: string,
-        public readonly dto: Omit<CreateMerchandiseTypeDto, 'userId'>
+        public readonly dto: CreateMerchandiseTypeDto
     ) { }
 }
 @CommandHandler(CreateMerchandiseTypeCommand)
@@ -31,6 +31,7 @@ export class CreateMerchandiseTypeUseCase
             const productType = this.merchandiseTypeModel.createMerchandiseTypeInstance(
                 {
                     ...dto,
+                    userId,
                     merchandiseTypeName: dto.merchandiseTypeName
                 }
             )

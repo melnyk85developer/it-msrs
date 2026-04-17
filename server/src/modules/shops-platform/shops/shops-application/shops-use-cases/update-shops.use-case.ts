@@ -26,17 +26,18 @@ export class UpdateMyShopsUseCase
     ) { }
 
     async execute(command: UpdateMyShopsCommand) {
-        const { 
-            userId, 
-            shopId, 
-            dto, 
+        const {
+            userId,
+            shopId,
+            dto,
             // image, 
             // miniature 
         } = command
         let newImageFileName
         let newMiniatureFileName
 
-        // console.log('PhotoService: updatePhotoService - photoId, dto 😡 ', photoId, dto)
+        // console.log('UpdateMyShopsUseCase: - userId 😡 ', userId)
+        // console.log('UpdateMyShopsUseCase: - dto 😡 ', dto)
         const shop = await this.myShopsRepository.findMyShopsByIdOrNotFoundFailRepository(shopId);
 
         // if (image && miniature) {
@@ -49,20 +50,26 @@ export class UpdateMyShopsUseCase
         // console.log('PhotoService: updatePhotoService - newImageFileName 😡 ', newImageFileName)
         // console.log('PhotoService: updatePhotoService - newImageFileName 😡 ', newImageFileName)
 
+        if (userId !== shop.userId) {
+            // console.log('UpdateMyShopsUseCase: - shop 😡 userId !== shop.userId', shop)
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_SHOP_UPDATE)
+        }
+
         shop.updateMyShops({
             userId,
             shopId: shopId,
             name: dto.name,
             title: dto.title,
             shopTypeId: dto.shopTypeId,
+            shopBrandId: dto.shopBrandId,
             // image: imageName,
             // miniature: miniatureName,
             // image: newImageFileName ? newImageFileName : dto.imageName,
             // miniature: newMiniatureFileName ? newMiniatureFileName : dto.miniatureName
         });
-        // console.log('PhotoService: updatePhotoService - photo1 😡 ', photo)
+        // console.log('UpdateMyShopsUseCase: - shop1 😡 ', shop)
         await this.myShopsRepository.save(shop);
-        // console.log('PhotoService: updatePhotoService - photo2 😡 ', photo)
+        // console.log('UpdateMyShopsUseCase: - shop2 😡 ', shop)
         return shop._id.toString();
     }
 }

@@ -8,6 +8,7 @@ import { CONFIRMATIONS_INTERNAL_STATUS } from "src/modules/confirmationsCodes/co
 import { PHOTO_INTERNAL_STATUS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoStatus"
 import { MESSAGES_INTERNAL_STATUS } from "src/modules/user-messages/msg/internal-status-msg-errors/user-msg-status"
 import { LIKES_INTERNAL_STATUS } from "src/modules/likes/internalStatusLikesErrors/likesStatus"
+import { SHOP_INTERNAL_STATUS } from "src/modules/shops-platform/internal-status-shops-errors/shops-status"
 
 export const HTTP_STATUSES = {
     OK_200: 200,
@@ -34,6 +35,7 @@ export const INTERNAL_STATUS_CODE = {
     ...COMMENT_INTERNAL_STATUS,
     ...CONFIRMATIONS_INTERNAL_STATUS,
     ...LIKES_INTERNAL_STATUS,
+    ...SHOP_INTERNAL_STATUS,
 
     SUCCESS: 900, // Успешное создание с оправкой ответа!
     CREATED: 960,

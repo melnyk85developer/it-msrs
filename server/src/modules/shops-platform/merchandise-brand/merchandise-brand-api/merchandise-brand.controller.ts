@@ -57,12 +57,14 @@ export class MerchandiseBrandController {
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async updateMerchandiseBrandController(
         @Param('brandId') brandId: string,
-        @Body() dto: UpdateMerchandiseBrandInputDto
+        @Body() dto: UpdateMerchandiseBrandInputDto,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ) {
         // console.log('MerchandiseBrandController: - dto', dto)
         return await this.commandBus.execute<UpdateMerchandiseBrandCommand, string>(
             new UpdateMerchandiseBrandCommand(
                 brandId,
+                user.id,
                 dto
             ),
         );
@@ -73,12 +75,14 @@ export class MerchandiseBrandController {
     @Delete('/brand/:brandId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteMerchandiseBrandController(
-        @Param('brandId') brandId: string
+        @Param('brandId') brandId: string,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ) {
         // console.log('MerchandiseBrandController: - deleteMerchandiseBrandController brandId', brandId)
         return await this.commandBus.execute<DeleteMerchandiseBrandCommand, string>(
             new DeleteMerchandiseBrandCommand(
-                brandId
+                brandId,
+                user.id
             ),
         );
     }

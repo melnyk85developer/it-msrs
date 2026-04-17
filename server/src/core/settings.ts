@@ -28,6 +28,7 @@ export const SETTINGS = {
         myshops: '/myshops',
         myshop: '/myshop',
         shoptype: '/shop-type',
+        shopbrand: '/shop-brand',
         merchandise: '/merchandise',
         merchandisetype: '/merchandise-type',
         __test__: '/testing'

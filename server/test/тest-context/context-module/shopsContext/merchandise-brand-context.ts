@@ -50,6 +50,22 @@ export class MerchandiseBrandContextClass {
         ];
         this.total_number_of_merchandise_brands_in_tests++
     }
+    public async updateMerchandiseBrandStateTest({
+        numMerchandiseBrand,
+        updateMerchandiseBrand
+    }: {
+        numMerchandiseBrand: number;
+        updateMerchandiseBrand: MerchandiseBrandViewDto;
+    }) {
+        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        // 2. Если индекс существует -> обновляем
+        if (this.createdMerchandiseBrands.length > numMerchandiseBrand) {
+            this.createdMerchandiseBrands = this.createdMerchandiseBrands.map((mb, index) =>
+                index === numMerchandiseBrand ? updateMerchandiseBrand : mb
+            );
+            return;
+        }
+    }
     public async deleteMerchandiseBrandStateTest({
         numMerchandiseBrand
     }: {

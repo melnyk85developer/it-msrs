@@ -13,23 +13,27 @@ import { UpdateMerchandiseTypeDomainDto } from "../merchandise-type-dto/update-m
     toJSON: { virtuals: true, versionKey: false }
 })
 export class MerchandiseType {
-    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя!' })
-    @Prop({ type: String, nullable: false })
-    shopId: string;
-
-    @ApiProperty({ example: 'albumName', description: 'Имя альбома' })
+    @ApiProperty({ example: 'merchandiseTypeName', description: 'Имя типа товара' })
     @Prop({ type: String, required: true })
     merchandiseTypeName: string;
 
-    @ApiProperty({ example: 'createdAt', description: 'Число создания аккаунта.' })
+    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя!' })
+    @Prop({ type: String, required: false })
+    userId: string;
+
+    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор магазина!' })
+    @Prop({ type: String, required: false })
+    shopId: string;
+
+    @ApiProperty({ example: 'createdAt', description: 'Число создания записи.' })
     @Prop({ type: String, required: true })
     createdAt: string;
 
-    @ApiProperty({ example: 'updatedAt', description: 'Число обновления аккаунта.' })
+    @ApiProperty({ example: 'updatedAt', description: 'Число обновления записи.' })
     @Prop({ type: String, required: false })
     updatedAt: string;
 
-    @ApiProperty({ example: 'deletedAt', description: 'Число удаления  аккаунта.' })
+    @ApiProperty({ example: 'deletedAt', description: 'Число удаления  записи.' })
     @Prop({ type: String, nullable: false })
     deletedAt: string | null;
 
@@ -39,23 +43,27 @@ export class MerchandiseType {
     }
 
     static createMerchandiseTypeInstance(dto: Omit<CreateMerchandiseTypeDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>): MerchandiseTypeDocument {
-        const photoAlbum = new this();
+        const merchandiseType = new this();
         const date = new Date();
         const createdAt = date.toISOString();
         // console.log('PhotoAlbumEntity: createInstance - user 😡 ', user)
 
-        photoAlbum.merchandiseTypeName = dto.merchandiseTypeName;
-        photoAlbum.createdAt = createdAt;
-        photoAlbum.updatedAt = createdAt;
-        photoAlbum.deletedAt = null;
+        merchandiseType.merchandiseTypeName = dto.merchandiseTypeName;
+        merchandiseType.userId = dto.userId;
+        merchandiseType.shopId = dto.shopId;
+        merchandiseType.createdAt = createdAt;
+        merchandiseType.updatedAt = createdAt;
+        merchandiseType.deletedAt = null;
 
         // console.log('PhotoAlbumEntity: createInstance - token 😡 ', token)
-        return photoAlbum as MerchandiseTypeDocument;
-    } 
+        return merchandiseType as MerchandiseTypeDocument;
+    }
     updateMerchandiseType(dto: Omit<UpdateMerchandiseTypeDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>) {
         if (this.id === dto.typeId) {
             this.shopId = this.shopId;
             this.merchandiseTypeName = dto.merchandiseTypeName ? dto.merchandiseTypeName : this.merchandiseTypeName;
+            this.userId = this.userId;
+            this.shopId = this.shopId;
             this.createdAt = this.createdAt;
             this.updatedAt = new Date().toISOString();
             this.deletedAt = this.deletedAt

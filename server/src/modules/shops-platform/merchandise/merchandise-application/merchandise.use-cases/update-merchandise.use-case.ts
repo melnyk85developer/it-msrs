@@ -31,7 +31,9 @@ export class UpdateMerchandiseUseCase
             newImageFileName = await this.filesService.createPostFile(merchandiseImg);
         }
         // console.log('UpdateMerchandiseUseCase: - merchandiseImg 😡 ', merchandiseImg)
-
+        if (userId !== merchandise.userId) {
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_MERCHANDISE_UPDATE)
+        }
         merchandise.updateMerchandise({
             ...dto,
             userId,

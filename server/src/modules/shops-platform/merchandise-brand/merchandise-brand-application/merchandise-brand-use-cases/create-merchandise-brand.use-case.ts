@@ -22,14 +22,18 @@ export class CreateMerchandiseBrandUseCase
 
     async execute(command: CreateMerchandiseBrandCommand) {
         const { dto, userId } = command
-        // console.log('CreatePhotoAlbumUseCase: - dto 😡 1', dto)
-        // console.log('CreatePhotoAlbumUseCase: - albumCoverFile 😡 2', albumCoverFile)
+        // console.log('CreateMerchandiseBrandUseCase: - dto 😡 1', dto)
+
         let isBrand = await this.merchandiseBrandRepository.findMerchandiseBrandByName(userId, dto.merchandiseBrandName);
+
         if (!isBrand) {
-            const brand = this.merchandiseBrandModel.createMerchandiseBrandInstance(dto)
-            // console.log('CreatePhotoAlbumUseCase: - photoAlbum 😡 save', photoAlbum)
+            const brand = this.merchandiseBrandModel.createMerchandiseBrandInstance({
+                ...dto,
+                userId
+            })
+            // console.log('CreateMerchandiseBrandUseCase: - brand 😡 save', brand)
             await this.merchandiseBrandRepository.save(brand);
-            // console.log('CreatePhotoAlbumUseCase: - photoAlbum 😡 res', photoAlbum)
+            // console.log('CreateMerchandiseBrandUseCase: - brand 😡 res', brand)
             return brand._id.toString();
         } else {
             return isBrand._id.toString();

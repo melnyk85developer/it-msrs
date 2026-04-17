@@ -19,6 +19,7 @@ import { CreateMyShopsCommand } from '../shops-application/shops-use-cases/creat
 import { UpdateMyShopsCommand } from '../shops-application/shops-use-cases/update-shops.use-case';
 import { DeleteMyShopsCommand } from '../shops-application/shops-use-cases/delete-shops.use-case';
 import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
+import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
 @Controller('/myshops')
 export class MyShopsController {
@@ -96,11 +97,15 @@ export class MyShopsController {
     @UseGuards(AuthAccessGuard)
     @Delete('/myshop/:shopId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
-    async deleteMyShopsController(@Param('shopId') shopId: string) {
+    async deleteMyShopsController(
+        @Param('shopId') shopId: string,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
+    ) {
         // console.log('MyShopsController: - deletePhotoController photoId', photoId)
         return await this.commandBus.execute<DeleteMyShopsCommand, string>(
             new DeleteMyShopsCommand(
-                shopId
+                shopId,
+                user.id
             )
         );
     }

@@ -3,9 +3,10 @@ import { UserContextClass } from "../user-context";
 import { MyShopsViewDto } from "src/modules/shops-platform/shops/shops-dto/shops-view-dto";
 
 export class ShopsContextClass {
-    public correctShopNames: string[]
-    public correctShopDescriptions: string[]
-    public correctWebsiteUrls: string[]
+    public correctShopNames: string[];
+    public correctShopDescriptions: string[];
+    public correctWebsiteUrls: string[];
+    public total_number_of_shops_in_tests: number = 0;
 
     public createdShops: (MyShopsViewDto | null)[] = [];
     public readonly users: UserContextClass;
@@ -47,6 +48,7 @@ export class ShopsContextClass {
         // 1. Если массив пустой
         if (!this.createdShops.length) {
             this.createdShops = [addShop];
+            this.total_number_of_shops_in_tests++
             return;
         }
         // 2. Если индекс существует -> обновляем
@@ -54,6 +56,7 @@ export class ShopsContextClass {
             this.createdShops = this.createdShops.map((shop, index) =>
                 index === numShop ? addShop : shop
             );
+            this.total_number_of_shops_in_tests++
             return;
         }
         // 3. Если индекса нет -> расширяем массив до нужного индекса
@@ -62,6 +65,23 @@ export class ShopsContextClass {
             ...Array(numShop - this.createdShops.length).fill(null),
             addShop,
         ];
+        this.total_number_of_shops_in_tests++
+    }
+    public async updateShopStateTest({
+        numShop,
+        updateShop
+    }: {
+        numShop: number;
+        updateShop: MyShopsViewDto;
+    }) {
+        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        // 2. Если индекс существует -> обновляем
+        if (this.createdShops.length > numShop) {
+            this.createdShops = this.createdShops.map((shop, index) =>
+                index === numShop ? updateShop : shop
+            );
+            return;
+        }
     }
     public async deleteShopStateTest({
         numShop
@@ -73,10 +93,12 @@ export class ShopsContextClass {
             this.createdShops = this.createdShops.map((shop, index) =>
                 index === numShop ? null : shop
             );
+            this.total_number_of_shops_in_tests--
             return;
         }
     }
     public async deleteAllShopsStateTest() {
+        this.total_number_of_shops_in_tests = 0
         this.createdShops = []
     }
 }

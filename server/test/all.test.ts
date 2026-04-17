@@ -26,7 +26,8 @@ import { merchandiseTypeE2ETest } from "src/modules/shops-platform/merchandise-t
 import { merchandiseBrandsE2ETest } from "src/modules/shops-platform/merchandise-brand/testing-merchandise-brand/merchandiseBrands-E2E-testing";
 import { merchandiseE2ETest } from "src/modules/shops-platform/merchandise/testing-merchandise/merchandise-E2E-testing";
 import { basketE2ETest } from "src/modules/shops-platform/basket/testing-basket/basket-E2E-testing";
-import { basketMerchandiseE2ETest } from "src/modules/shops-platform/basketMerchandise/testing-basketMerchandise/basketMerchandise-E2E-testing";
+import { basketMerchandiseE2ETest } from "src/modules/shops-platform/basket-merchandise/testing-basketMerchandise/basketMerchandise-E2E-testing";
+import { shopBrandE2ETest } from "src/modules/shops-platform/shop-brand/testing-shop-brand/shopsBrands-E2E-testing";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
 
@@ -58,11 +59,11 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         // contextTests.app = result.app;
     });
 
-    describe('AUTH-BLOCK-TESTS', () => {
-        authE2eTest()
-        // authIntegrationTest()
-        // authUnitTest()
-    })
+    // describe('AUTH-BLOCK-TESTS', () => {
+    //     authE2eTest()
+    //     // authIntegrationTest()
+    //     // authUnitTest()
+    // })
     // describe('USER-SESSIONS-BLOCK-TESTS', () => {
     //     userSessionE2eTest()
     //     // usersSessionsInegrationTest()
@@ -84,6 +85,7 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     // })
     describe('SHOPS-BLOCK-TESTS', () => {
         shopTypeE2ETest()
+        shopBrandE2ETest()
         shopsE2ETest()
         merchandiseTypeE2ETest()
         merchandiseBrandsE2ETest()

@@ -1,6 +1,6 @@
 import { BlogViewDto } from "src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto";
 import { UserContextClass } from "../user-context";
-import { BasketMerchandiseViewDto } from "src/modules/shops-platform/basketMerchandise/basketMerchandise-dto/basket-merchandise.view-dto";
+import { BasketMerchandiseViewDto } from "src/modules/shops-platform/basket-merchandise/basketMerchandise-dto/basket-merchandise.view-dto";
 
 export class BasketMerchandiseContextClass {
     public total_number_of_basket_merchandises_in_tests: number = 0;

@@ -63,6 +63,23 @@ export class ShopTypesContextClass {
         ];
         this.total_number_of_shop_types_in_tests++
     }
+    public async updateShopTypesStateTest({
+        numShopType,
+        updateShopType
+    }: {
+        numShopType: number;
+        updateShopType: ShopTypeViewDto;
+    }) {
+        // console.log('ShopTypesContextClass: addShopTypesStateTest - numShopType, addShopType 😡 ', numShopType, addShopType)
+        // 2. Если индекс существует -> обновляем
+        if (this.createdShopTypes.length > numShopType) {
+            this.createdShopTypes = this.createdShopTypes.map((type, index) =>
+                index === numShopType ? updateShopType : type
+            );
+            // console.log('ShopTypesContextClass: addShopTypesStateTest - this.total_number_of_shop_types_in_tests 😡 1', this.total_number_of_shop_types_in_tests)
+            return;
+        }
+    }
     public async deleteShopTypesStateTest({
         numShopType
     }: {

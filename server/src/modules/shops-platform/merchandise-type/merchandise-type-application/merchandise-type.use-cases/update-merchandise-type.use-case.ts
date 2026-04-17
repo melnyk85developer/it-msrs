@@ -9,6 +9,7 @@ import { MerchandiseTypeRepository } from "../../merchandise-type-infrastructure
 export class UpdateMerchandiseTypeCommand {
     constructor(
         public typeId: string,
+        public userId: string,
         public readonly dto: Omit<UpdateMerchandiseTypeDto, 'typeId'>
     ) { }
 }
@@ -21,10 +22,13 @@ export class UpdateMerchandiseTypeUseCase
     ) { }
 
     async execute(command: UpdateMerchandiseTypeCommand) {
-        const { typeId, dto } = command
+        const { typeId, userId, dto } = command
         // console.log('PhotoAlbumService: updatePhotoAlbumService - albumId, dto 😡 ', albumId, dto)
         let merchandiseType = await this.merchandiseTypeRepository.findMerchandiseTypeByIdOrNotFoundFailRepository(typeId);
-
+        if (userId !== merchandiseType.userId) {
+            // console.log('UpdateMerchandiseTypeCommand: - merchandiseType 😡 userId !== merchandiseType.userId', merchandiseType)
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_SHOP_DELETE)
+        }
         merchandiseType.updateMerchandiseType({
             ...dto,
             typeId,

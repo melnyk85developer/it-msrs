@@ -29,10 +29,29 @@ export const merchandiseE2ETest = () => {
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
+            const isUser2 = await isCreatedUser(
+                1,
+                contextTests.users.correctUserNames[1],
+                contextTests.users.correctUserEmails[1],
+                contextTests.users.correctUserPasswords[1],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            // console.log('TEST: - blogsE2eTest: isUser1 😡', isUser1)
+            const isLogin2 = await isLoginUser(
+                1,
+                0,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.users.correctUserEmails[1],
+                contextTests.users.correctUserPasswords[1],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
         })
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const createdShop = await isCreatedShop(
                 0,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.shopType.correctShopTypeNames[0],
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
@@ -140,6 +159,7 @@ export const merchandiseE2ETest = () => {
                     typeId: contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
                     shopId: contextTests.shops.createdShops[0]!.shopId
                 },
+                contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.CREATED_201
             )
             // console.log('TEST merchandiseE2ETest - merchandise: ', merchandise)
@@ -196,7 +216,9 @@ export const merchandiseE2ETest = () => {
                     brandId: contextTests.merchandiseBrand.createdMerchandiseBrands[1]!.brandId,
                     typeId: contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
                     shopId: contextTests.shops.createdShops[0]!.shopId
-                })
+                },
+                contextTests.sessions.accessTokenUser1Devices[0],
+            )
             // console.log('merchandiseE2ETest: isMerchandise', isMerchandise)
             const dataMerchandise = {
                 shopId: contextTests.shops.createdShops[0]!.shopId,
@@ -258,6 +280,40 @@ export const merchandiseE2ETest = () => {
             expect(getEntity.brandId).toEqual(contextTests.merchandise.createdMerchandises[0]!.brandId);
             expect(getEntity.typeId).toEqual(contextTests.merchandise.createdMerchandises[0]!.typeId);
         })
+        it(`PUT    - Ожидается статус код 401, - Не валидные данные для обновления товара! Дополнительные запросы: -> GET`, async () => {
+            // Подготавливаем не валидные данные товара!
+            const data = {
+                // productId: contextTests.merchandise.createdMerchandises[0]!.productId,
+                merchandiseImgName: contextTests.constants.image2Path,
+                merchandiseName: 'UpdateComputer',
+                price: 1000,
+                rating: 0,
+                quantity: 1,
+                info: [{ "deviceInfoId": 1, "title": "Морозит", "description": "Лучше всех", "deviceId": 1, "shopId": 1, "createdAt": "2024-10-24T15:55:55.876Z", "updatedAt": "2024-10-24T15:55:55.876Z" }],
+                brandId: contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                typeId: contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+            }
+            // Отправляем не валидный PUT запрос на обновление товара и ожидаем в ответ статус код 400 (BAD_REQUEST)!
+            await contextTests.merchandiseTestManager.updateMerchandise(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                data,
+                contextTests.constants.invalidToken,
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            // Отправляем GET запрос на получение товара и ожидаем ответ 200 (OK) и данные товара!
+            const { getEntity } = await contextTests.merchandiseTestManager.getMerchandiseById(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            // Сверяем ответ от сервера с данными и убеждаемся, что они не изменились!
+            expect(getEntity.shopId).toEqual(contextTests.merchandise.createdMerchandises[0]!.shopId);
+            expect(getEntity.merchandiseName).toEqual(contextTests.merchandise.createdMerchandises[0]!.merchandiseName);
+            expect(getEntity.price).toEqual(contextTests.merchandise.createdMerchandises[0]!.price);
+            expect(getEntity.brandId).toEqual(contextTests.merchandise.createdMerchandises[0]!.brandId);
+            expect(getEntity.typeId).toEqual(contextTests.merchandise.createdMerchandises[0]!.typeId);
+        })
         it(`PUT    - Ожидается статус код 404, - Обновление не существующего товара!`, async () => {
             // Подготавливаем данные товара!
             const data: any = {
@@ -280,6 +336,40 @@ export const merchandiseE2ETest = () => {
                 HTTP_STATUSES.NOT_FOUND_404
             )
         })
+        it(`PUT    - Ожидается статус код 403, - Попытка обновления чужого товара! Дополнительные запросы: -> GET`, async () => {
+            // Подготавливаем не валидные данные товара!
+            const data = {
+                // productId: contextTests.merchandise.createdMerchandises[0]!.productId,
+                merchandiseImgName: contextTests.constants.image2Path,
+                merchandiseName: 'UpdateComputer',
+                price: 1000,
+                rating: 0,
+                quantity: 1,
+                info: [{ "deviceInfoId": 1, "title": "Морозит", "description": "Лучше всех", "deviceId": 1, "shopId": 1, "createdAt": "2024-10-24T15:55:55.876Z", "updatedAt": "2024-10-24T15:55:55.876Z" }],
+                brandId: contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                typeId: contextTests.merchandiseType.createdMerchandiseTypes[0]!.typeId,
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+            }
+            // Отправляем не валидный PUT запрос на обновление товара и ожидаем в ответ статус код 400 (BAD_REQUEST)!
+            await contextTests.merchandiseTestManager.updateMerchandise(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                data,
+                contextTests.sessions.accessTokenUser2Devices[0],
+                HTTP_STATUSES.FORBIDDEN_403
+            )
+            // Отправляем GET запрос на получение товара и ожидаем ответ 200 (OK) и данные товара!
+            const { getEntity } = await contextTests.merchandiseTestManager.getMerchandiseById(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            // Сверяем ответ от сервера с данными и убеждаемся, что они не изменились!
+            expect(getEntity.shopId).toEqual(contextTests.merchandise.createdMerchandises[0]!.shopId);
+            expect(getEntity.merchandiseName).toEqual(contextTests.merchandise.createdMerchandises[0]!.merchandiseName);
+            expect(getEntity.price).toEqual(contextTests.merchandise.createdMerchandises[0]!.price);
+            expect(getEntity.brandId).toEqual(contextTests.merchandise.createdMerchandises[0]!.brandId);
+            expect(getEntity.typeId).toEqual(contextTests.merchandise.createdMerchandises[0]!.typeId);
+        })
         it(`PUT    - Ожидается статус код 204, - Обновление товара с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
             // Подготавливаем данные товара!
             const data = {
@@ -295,14 +385,14 @@ export const merchandiseE2ETest = () => {
                 shopId: contextTests.shops.createdShops[0]!.shopId,
             }
             // Отправляем PUT запрос на обновление товара и ожидаем в ответ статус код 200!
-            await contextTests.merchandiseTestManager.updateMerchandise(
+            const { response: res } = await contextTests.merchandiseTestManager.updateMerchandise(
                 contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
                 data,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.NO_CONTENT_204
             )
             // Отправляем GET запрос на получение обновленного товара и ожидаем в ответ статус код 200!
-            const { getEntity } = await contextTests.merchandiseTestManager.getMerchandiseById(
+            const { getEntity, response: res2 } = await contextTests.merchandiseTestManager.getMerchandiseById(
                 contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
@@ -314,6 +404,13 @@ export const merchandiseE2ETest = () => {
             expect(getEntity.brandId).toEqual(data.brandId);
             expect(getEntity.typeId).toEqual(data.typeId);
             expect(getEntity.shopId).toEqual(data.shopId);
+            if (res.status === HTTP_STATUSES.NO_CONTENT_204 && res2.status === HTTP_STATUSES.OK_200) {
+                // console.log('TEST: - res', res.status)
+                contextTests.merchandise.updateMerchandiseStateTest({
+                    numMerchandise: 0,
+                    updateMerchandise: getEntity
+                })
+            }
             // Отправляем GET запрос на получение второго товара и ожидаем в ответ статус код 200!
             const { response } = await contextTests.merchandiseTestManager.getMerchandiseById(
                 contextTests.merchandise.createdMerchandises[1]!.merchandiseId,
@@ -328,6 +425,105 @@ export const merchandiseE2ETest = () => {
             expect(response.body.brandId).toEqual(contextTests.merchandise.createdMerchandises[1]!.brandId);
             expect(response.body.typeId).toEqual(contextTests.merchandise.createdMerchandises[1]!.typeId);
             expect(response.body.shopId).toEqual(contextTests.merchandise.createdMerchandises[1]!.shopId);
+        })
+        it(`DELETE - Ожидается статус код 401, - Попытка удаления товара без авторизации! Дополнительные запросы: -> GET`, async () => {
+            const merchandise = {
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+                userId: contextTests.shops.createdShops[0]!.userId,
+                brandId: null,
+                pageSize: 9,
+                page: 1
+            }
+            // Отправляем DELETE запрос на удаление первого пользователя и ожидаем статус код 200 (OK)!
+            await contextTests.merchandiseTestManager.deleteMerchandise(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.constants.invalidToken,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            // Отправляем GET запрос по удаленному userId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
+            const { response: res } = await contextTests.merchandiseTestManager.getMerchandiseById(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandise.createdMerchandises[0]
+                )
+            )
+            // Отправляем GET запрос на получение всех пользователей, ожидем статус код 200 (OK)!
+            const { response } = await contextTests.merchandiseTestManager.getMerchandise(
+                merchandise,
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandise.total_number_of_merchandise_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 403, - Попытка удаления чужого товара! Дополнительные запросы: -> GET`, async () => {
+            const merchandise = {
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+                userId: contextTests.shops.createdShops[0]!.userId,
+                brandId: null,
+                pageSize: 9,
+                page: 1
+            }
+            // Отправляем DELETE запрос на удаление первого пользователя и ожидаем статус код 200 (OK)!
+            await contextTests.merchandiseTestManager.deleteMerchandise(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.sessions.accessTokenUser2Devices[0],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.FORBIDDEN_403
+            )
+            // Отправляем GET запрос по удаленному userId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
+            const { response: res } = await contextTests.merchandiseTestManager.getMerchandiseById(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandise.createdMerchandises[0]
+                )
+            )
+            // Отправляем GET запрос на получение всех пользователей, ожидем статус код 200 (OK)!
+            const { response } = await contextTests.merchandiseTestManager.getMerchandise(
+                merchandise,
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandise.total_number_of_merchandise_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 404, - Попытка удаления не существующего товара! Дополнительные запросы: -> GET`, async () => {
+            const merchandise = {
+                shopId: contextTests.shops.createdShops[0]!.shopId,
+                userId: contextTests.shops.createdShops[0]!.userId,
+                brandId: null,
+                pageSize: 9,
+                page: 1
+            }
+            // Отправляем DELETE запрос на удаление первого пользователя и ожидаем статус код 200 (OK)!
+            await contextTests.merchandiseTestManager.deleteMerchandise(
+                contextTests.constants.invalidId,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.NOT_FOUND_404
+            )
+            // Отправляем GET запрос по удаленному userId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
+            const { response: res } = await contextTests.merchandiseTestManager.getMerchandiseById(
+                contextTests.merchandise.createdMerchandises[0]!.merchandiseId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandise.createdMerchandises[0]
+                )
+            )
+            // Отправляем GET запрос на получение всех пользователей, ожидем статус код 200 (OK)!
+            const { response } = await contextTests.merchandiseTestManager.getMerchandise(
+                merchandise,
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandise.total_number_of_merchandise_in_tests);
         })
         it(`DELETE - Ожидается статус код 204, - Должен удалить оба товара! Дополнительные запросы: -> GET`, async () => {
             const merchandise = {

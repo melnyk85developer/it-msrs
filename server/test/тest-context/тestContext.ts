@@ -54,6 +54,8 @@ import { BasketMerchandiseContextClass } from './context-module/shopsContext/bas
 import { MerchandiseBrandContextClass } from './context-module/shopsContext/merchandise-brand-context';
 import { MerchandiseContextClass } from './context-module/shopsContext/merchandise-context';
 import { MerchandiseTypesContextClass } from './context-module/shopsContext/merchandise-types-context';
+import { ShopBrandsTestManager } from 'test/helpers/shopHelpers/shop-brands-test-manager copy';
+import { ShopBrandsContextClass } from './context-module/shopsContext/shop-brands-context';
 
 export class TestContext {
     public app: INestApplication;
@@ -93,6 +95,7 @@ export class TestContext {
     public merchandiseTestManager: MerchandiseTestManager;
     public merchandiseTypesTestManager: MerchandiseTypesTestManager;
     public shopTypesTestManager: ShopTypesTestManager;
+    public shopBrandsTestManager: ShopBrandsTestManager;
     public shopTestManager: ShopTestManager;
 
 
@@ -113,6 +116,7 @@ export class TestContext {
 
     public shops: ShopsContextClass;
     public shopType: ShopTypesContextClass;
+    public shopBrand: ShopBrandsContextClass;
     public basket: BasketContextClass;
     public basketMerchandise: BasketMerchandiseContextClass;
     public merchandiseBrand: MerchandiseBrandContextClass;
@@ -132,6 +136,7 @@ export class TestContext {
 
         this.shops = new ShopsContextClass();
         this.shopType = new ShopTypesContextClass();
+        this.shopBrand = new ShopBrandsContextClass();
         this.basket = new BasketContextClass();
         this.basketMerchandise = new BasketMerchandiseContextClass();
         this.merchandiseBrand = new MerchandiseBrandContextClass();

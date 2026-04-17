@@ -130,7 +130,7 @@ export const getFtpFilesAdminAC = (folder: string) => async (dispatch: AppDispat
     }
 };
 
-export const fetchAvatarFile = (fileName: string, folder: string) => async (dispatch: AppDispatch) => {
+export const fetchAvatarFileAC = (fileName: string, folder: string) => async (dispatch: AppDispatch) => {
     try {
         dispatch(myAdminSlice.actions.usersFetching());
         const res = await MyAdminAPI.getFtpAvatarFileAPI(fileName, folder);

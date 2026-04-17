@@ -4,6 +4,7 @@ import { contextTests } from "test/helpers/init-settings";
 export const isCreatedShopTypes = async (
     numShopType: number,
     typeName: string,
+    accessToken: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
     if (contextTests.shopType.createdShopTypes[numShopType] === undefined || contextTests.shopType.createdShopTypes[numShopType] === null) {
@@ -12,9 +13,9 @@ export const isCreatedShopTypes = async (
             typeName: typeName
         }
         // Отправляем POST запрос на регистрацию типа магазина и ожидаем статус код 201 (CREATED)!
-        const { createdEntity, response } = await contextTests.shopTypesTestManager.createShopTypes(
+        const { createdEntity, response } = await contextTests.shopTypesTestManager.createShopType(
             data,
-            contextTests.sessions.accessTokenUser1Devices[0],
+            accessToken,
             statusCode
         )
         // console.log('TEST isCreatedShopTypes: createdEntity res ', createdEntity)

@@ -15,9 +15,11 @@ export class AdminQueryService {
     async getFtpFilesByFolder(folder: string): Promise<string[]> {
         const dir = this.resolveFolderPath(folder);
         if (!dir) return [];
-
+        // console.log('AdminQueryService: getFtpFilesByFolder: dir', dir)
         try {
             const files = await fs.readdir(dir);
+            // console.log('AdminQueryService: getFtpFilesByFolder: files', files)
+
             return files.filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f));
         } catch {
             return [];

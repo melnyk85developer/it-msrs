@@ -14,13 +14,17 @@ import { UpdateMerchandiseBrandDomainDto } from "../merchandise-brand-dto/update
     toJSON: { virtuals: true, versionKey: false }
 })
 export class MerchandiseBrand {
-    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя!' })
-    @Prop({ type: String, nullable: false })
-    shopId: string;
-
     @ApiProperty({ example: 'merchandiseBrandName', description: 'Имя альбома' })
     @Prop({ type: String, required: true })
     merchandiseBrandName: string;
+
+    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя!' })
+    @Prop({ type: String, nullable: false })
+    shopId: string | null;;
+
+    @ApiProperty({ example: 'userId', description: 'Уникальный идентификатор пользователя!' })
+    @Prop({ type: String, nullable: false })
+    userId: string | null;;
 
     @ApiProperty({ example: 'createdAt', description: 'Число создания аккаунта.' })
     @Prop({ type: String, required: true })
@@ -45,7 +49,8 @@ export class MerchandiseBrand {
         const createdAt = date.toISOString();
         // console.log('PhotoAlbumEntity: createInstance - user 😡 ', user)
 
-        brand.shopId = dto.shopId;
+        brand.shopId = dto.shopId ? dto.shopId : null;
+        brand.userId = dto.userId ? dto.userId : null;
         brand.merchandiseBrandName = dto.merchandiseBrandName;
         brand.createdAt = createdAt;
         brand.updatedAt = createdAt;
@@ -53,10 +58,11 @@ export class MerchandiseBrand {
 
         // console.log('PhotoAlbumEntity: createInstance - token 😡 ', token)
         return brand as MerchandiseBrandDocument;
-    } 
+    }
     updateMerchandiseBrand(dto: Omit<UpdateMerchandiseBrandDomainDto, 'createdAt' | 'updatedAt' | 'deletedAt'>) {
         if (this.id === dto.brandId) {
             this.shopId = this.shopId;
+            this.userId = this.userId;
             this.merchandiseBrandName = dto.merchandiseBrandName;
             this.createdAt = this.createdAt;
             this.updatedAt = new Date().toISOString();

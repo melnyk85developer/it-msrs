@@ -26,6 +26,24 @@ export const merchandiseBrandsE2ETest = () => {
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
+            const isUser2 = await isCreatedUser(
+                1,
+                contextTests.users.correctUserNames[1],
+                contextTests.users.correctUserEmails[1],
+                contextTests.users.correctUserPasswords[1],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            // console.log('TEST: - blogsE2eTest: isUser1 😡', isUser1)
+            const isLogin2 = await isLoginUser(
+                2,
+                0,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                contextTests.sessions.refreshTokenUser1Devices[0],
+                contextTests.users.correctUserEmails[1],
+                contextTests.users.correctUserPasswords[1],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
         })
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const data = {
@@ -41,6 +59,7 @@ export const merchandiseBrandsE2ETest = () => {
         it(`POST   - Ожидается статус код 400, - Не валидные данные для создания бренда товара магазина! Дополнительные запросы: -> GET`, async () => {
             const createdShop = await isCreatedShop(
                 0,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.shopType.correctShopTypeNames[0],
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
@@ -115,6 +134,28 @@ export const merchandiseBrandsE2ETest = () => {
                 })
             )
         })
+        it(`PUT    - Ожидается статус код 401, - Попытка без авторизации обновления бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
+            const data = {
+                merchandiseBrandName: 'LENOWO',
+                shopId: contextTests.shops.createdShops[0]!.shopId
+            }
+            await contextTests.merchandiseBrandTestManager.updateMerchandiseBrand(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                data,
+                contextTests.constants.invalidToken,
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { getEntity } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(getEntity).toEqual(
+                expect.objectContaining({
+                    merchandiseBrandName: contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.merchandiseBrandName,
+                })
+            )
+        })
         it(`PUT    - Ожидается статус код 400, - Не валидные данные для обновления бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
             await contextTests.merchandiseBrandTestManager.updateMerchandiseBrand(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
@@ -148,7 +189,7 @@ export const merchandiseBrandsE2ETest = () => {
                 HTTP_STATUSES.NOT_FOUND_404
             )
         })
-        it(`PUT    - Ожидается статус код 204, - Обновление бренда товара в магазине с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
+        it(`PUT    - Ожидается статус код 403, - Попытка обновления чужого бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
             const data = {
                 merchandiseBrandName: 'LENOWO',
                 shopId: contextTests.shops.createdShops[0]!.shopId
@@ -156,15 +197,119 @@ export const merchandiseBrandsE2ETest = () => {
             await contextTests.merchandiseBrandTestManager.updateMerchandiseBrand(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
                 data,
-                contextTests.sessions.accessTokenUser1Devices[0],
-                HTTP_STATUSES.NO_CONTENT_204
+                contextTests.sessions.accessTokenUser2Devices[0],
+                HTTP_STATUSES.FORBIDDEN_403
             )
             const { getEntity } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
                 contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
+            expect(getEntity).toEqual(
+                expect.objectContaining({
+                    merchandiseBrandName: contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.merchandiseBrandName,
+                })
+            )
+        })
+        it(`PUT    - Ожидается статус код 204, - Обновление бренда товара в магазине с правильными исходными данными! Дополнительные запросы: -> GET`, async () => {
+            const data = {
+                merchandiseBrandName: 'LENOWO',
+                shopId: contextTests.shops.createdShops[0]!.shopId
+            }
+            const { response: res } = await contextTests.merchandiseBrandTestManager.updateMerchandiseBrand(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                data,
+                contextTests.sessions.accessTokenUser1Devices[0],
+                HTTP_STATUSES.NO_CONTENT_204
+            )
+            const { getEntity, response: res2 } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
             expect(getEntity.merchandiseBrandName).toEqual(data.merchandiseBrandName);
+            if (res.status === HTTP_STATUSES.NO_CONTENT_204 && res2.status === HTTP_STATUSES.OK_200) {
+                // console.log('TEST: - res', res.status)
+                contextTests.merchandiseBrand.updateMerchandiseBrandStateTest({
+                    numMerchandiseBrand: 0,
+                    updateMerchandiseBrand: getEntity
+                })
+            }
+        })
+        it(`DELETE - Ожидается статус код 401, - Попытка без авторизации удаления бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.merchandiseBrandTestManager.deleteMerchandiseBrand(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.constants.invalidToken,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { response: res } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseBrand.createdMerchandiseBrands[0]
+                )
+            )
+            const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
+                {},
+                contextTests.sessions.accessTokenUser1Devices[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseBrand.total_number_of_merchandise_brands_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 404, - Попытка удаления не существующего бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.merchandiseBrandTestManager.deleteMerchandiseBrand(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.constants.invalidToken,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.UNAUTHORIZED_401
+            )
+            const { response: res } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseBrand.createdMerchandiseBrands[0]
+                )
+            )
+            const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
+                {},
+                contextTests.sessions.accessTokenUser1Devices[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseBrand.total_number_of_merchandise_brands_in_tests);
+        })
+        it(`DELETE - Ожидается статус код 403, - Попытка удаления чужого бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
+            await contextTests.merchandiseBrandTestManager.deleteMerchandiseBrand(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.accessTokenUser2Devices[0],
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.FORBIDDEN_403
+            )
+            const { response: res } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrandById(
+                contextTests.merchandiseBrand.createdMerchandiseBrands[0]!.brandId,
+                contextTests.sessions.userAgent[0],
+                HTTP_STATUSES.OK_200
+            )
+
+            expect(res.body).toEqual(
+                expect.objectContaining(
+                    contextTests.merchandiseBrand.createdMerchandiseBrands[0]
+                )
+            )
+            const { response } = await contextTests.merchandiseBrandTestManager.getMerchandiseBrands(
+                {},
+                contextTests.sessions.accessTokenUser1Devices[0],
+                HTTP_STATUSES.OK_200
+            )
+            expect(response.body.items).toHaveLength(contextTests.merchandiseBrand.total_number_of_merchandise_brands_in_tests);
         })
         it(`DELETE - Ожидается статус код 200, - Должен удалить оба бренда товара в магазине! Дополнительные запросы: -> GET`, async () => {
             await contextTests.merchandiseBrandTestManager.deleteMerchandiseBrand(

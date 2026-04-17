@@ -9,8 +9,8 @@ import { CONFIRMATIONS_ERRORS, CONFIRMATIONS_STATUS_POSITIVE } from "src/modules
 import { PHOTO_ERRORS } from "src/modules/gallery/photos/internalStatusPhotoErrors/photoErrors";
 import { MESSAGES_ERRORS, MESSAGES_STATUS_POSITIVE } from "src/modules/user-messages/msg/internal-status-msg-errors/user-msg-errors";
 import { LIKES_ERRORS, LIKES_STATUS_POSITIVE } from "src/modules/likes/internalStatusLikesErrors/likesErrors";
-import { SHOP_INTERNAL_STATUS } from "src/modules/shops-platform/shops/internalStatusShopsErrors/shopsStatus";
-import { SHOP_ERRORS } from "src/modules/shops-platform/shops/internalStatusShopsErrors/shopsErrors";
+import { SHOP_INTERNAL_STATUS } from "src/modules/shops-platform/internal-status-shops-errors/shops-status";
+import { SHOP_ERRORS } from "src/modules/shops-platform/internal-status-shops-errors/shops-errors";
 
 interface ErrorResponse {
     messages: { message: string; field: string };

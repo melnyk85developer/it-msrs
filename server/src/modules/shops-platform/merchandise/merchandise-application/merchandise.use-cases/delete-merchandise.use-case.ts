@@ -5,24 +5,27 @@ import { MerchandiseRepository } from "../../merchandise-infrastructure/merchand
 
 export class DeleteMerchandiseCommand {
     constructor(
-        public albumId: string,
+        public merchandiseId: string,
+        public userId: string,
     ) { }
 }
 @CommandHandler(DeleteMerchandiseCommand)
 export class DeleteMerchandiseUseCase
     implements ICommandHandler<DeleteMerchandiseCommand, string> {
     constructor(
-        private photoAlbumRepository: MerchandiseRepository
+        private merchandiseRepository: MerchandiseRepository
     ) { }
 
     async execute(command: DeleteMerchandiseCommand) {
-        const { albumId } = command
-        const photoAlbum = await this.photoAlbumRepository.findMerchandiseByIdOrNotFoundFailRepository(albumId);
-        // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        const isDeletedPhoto = await this.photoAlbumRepository.deletePhotoAlbum(albumId);
-        // console.log('PhotoService: deletePhotoService - photoAlbum 😡 ', photoAlbum)
-        // photoAlbum.makeDeletedPhotoAlbum();
-        // await this.photoAlbumRepository.save(photoAlbum);
+        const { merchandiseId, userId } = command
+        const merchandise = await this.merchandiseRepository.findMerchandiseByIdOrNotFoundFailRepository(merchandiseId);
+        // console.log('DeleteMerchandiseUseCase: - merchandise 😡 ', merchandise)
+        if (userId !== merchandise.userId) {
+            // console.log('DeleteMerchandiseUseCase: - merchandiseType 😡 userId !== merchandiseType.userId', merchandiseType)
+            throw new DomainException(INTERNAL_STATUS_CODE.FORBIDDEN_MERCHANDISE_DELETE)
+        }
+        const isDeletedPhoto = await this.merchandiseRepository.deletePhotoAlbum(merchandiseId);
+        // console.log('DeleteMerchandiseUseCase: - merchandise 😡 ', merchandise)
         return isDeletedPhoto._id
     }
 }

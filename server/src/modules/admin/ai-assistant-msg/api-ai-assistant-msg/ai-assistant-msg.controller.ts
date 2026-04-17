@@ -44,7 +44,7 @@ import { ContinueInterceptor } from '../../interceptors/continueInterceptor';
 import { CreateContinuePromptAiInputDto } from '../ai-assistant-dto/create-continue-prompt-ai-assistant-input.dto';
 
 // @Roles('ADMIN')
-@Controller('admin')
+@Controller('/admin')
 export class AiAssistantController {
     constructor(
         private readonly commandBus: CommandBus,
@@ -259,7 +259,7 @@ export class AiAssistantController {
         return dialog
     }
     // @Roles('ADMIN')
-    // @UseGuards(AuthAccessGuard)
+    @UseGuards(AuthAccessGuard)
     @Get('/static/ftp/img/:folder')
     async getFtpFilesController(@Param('folder') folder: string) {
         console.log('getFtpFilesController: folder', folder)
@@ -267,16 +267,17 @@ export class AiAssistantController {
     }
     // @Roles('ADMIN')
     @Get('/static/ftp/:folder')
-    // @UseGuards(AuthAccessGuard)
+    @UseGuards(AuthAccessGuard)
     @UseInterceptors(ValidateFtpFileInterceptor)
     async getFtpFileController(
         @Param('folder') folder: string,
         @Query('fileName') fileName: string,
         @Res() res: any // Добавь @Res()
     ) {
+        // console.log('getFtpFileController: folder, fileName 😡', folder, fileName)
         const resFileName = await this.adminQueryService.getMimeType(fileName);
         const resFilePath = await this.adminQueryService.getFtpFileByFolderAndName(folder, fileName);
-        console.log('getFtpFileController: folder, resFileName, resFilePath 😡', folder, resFileName, resFilePath)
+        // console.log('getFtpFileController: folder, resFileName, resFilePath 😡', folder, resFileName, resFilePath)
 
         res.type(resFileName);
         res.setHeader(

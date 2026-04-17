@@ -66,12 +66,14 @@ export class ShopTypeController {
     @Delete('/:typeId')
     @HttpCode(HTTP_STATUSES.NO_CONTENT_204)
     async deleteShopTypeController(
-        @Param('typeId') typeId: string
+        @Param('typeId') typeId: string,
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ) {
         // console.log('PhotoController: - deletePhotoController photoId', photoId)
         return await this.commandBus.execute<DeleteShopTypeCommand, string>(
             new DeleteShopTypeCommand(
-                typeId
+                typeId,
+                user.id
             )
         );
     }

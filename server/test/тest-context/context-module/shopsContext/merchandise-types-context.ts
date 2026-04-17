@@ -42,6 +42,7 @@ export class MerchandiseTypesContextClass {
             this.createdMerchandiseTypes = this.createdMerchandiseTypes.map((shop, index) =>
                 index === numMerchandiseType ? addMerchandiseType : shop
             );
+            this.total_number_of_merchandise_types_in_tests++
             return;
         }
         // 3. Если индекса нет -> расширяем массив до нужного индекса
@@ -50,6 +51,23 @@ export class MerchandiseTypesContextClass {
             ...Array(numMerchandiseType - this.createdMerchandiseTypes.length).fill(null),
             addMerchandiseType,
         ];
+        this.total_number_of_merchandise_types_in_tests++
+    }
+    public async updateMerchandiseStateTest({
+        numMerchandiseType,
+        updateMerchandiseType
+    }: {
+        numMerchandiseType: number;
+        updateMerchandiseType: MerchandiseTypeViewDto;
+    }) {
+        // console.log('BlogsContextClass: addBlogStateTest - numBlog, addBlog 😡 ', numBlog, addBlog)
+        // 2. Если индекс существует -> обновляем
+        if (this.createdMerchandiseTypes.length > numMerchandiseType) {
+            this.createdMerchandiseTypes = this.createdMerchandiseTypes.map((shop, index) =>
+                index === numMerchandiseType ? updateMerchandiseType : shop
+            );
+            return;
+        }
     }
     public async deleteMerchandiseTest({
         numMerchandiseType

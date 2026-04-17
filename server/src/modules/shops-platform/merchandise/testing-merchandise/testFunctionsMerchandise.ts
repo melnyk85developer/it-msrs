@@ -5,6 +5,7 @@ import { CreateMerchandiseInputDto } from "../merchandise-dto/create-merchandise
 export const isCreatedMerchandises = async (
     numMerchandise: number,
     merchandiseData: any,
+    accessToken: string,
     statusCode: number = HTTP_STATUSES.CREATED_201
 ) => {
     // console.log('TEST isCreatedMerchandise1: merchandiseData ', merchandiseData)
@@ -25,7 +26,7 @@ export const isCreatedMerchandises = async (
         // Отправляем POST запрос на добавление товара в магазин и ожидаем статус код 201 (CREATED)!
         const { createdMerchandise, response } = await contextTests.merchandiseTestManager.createMerchandise(
             data,
-            contextTests.sessions.accessTokenUser1Devices[0],
+            accessToken,
             statusCode
         )
         // console.log('isCreatedMerchandises: response.status 😡', response.status)
