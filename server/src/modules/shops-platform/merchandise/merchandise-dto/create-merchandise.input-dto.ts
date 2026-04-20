@@ -18,14 +18,14 @@ export class CreateMerchandiseInputDto {
     @IsNumber()
     rating: number;
 
-    @ApiProperty({ example: 'quantity', description: 'Уникальный идентификатор фото' })
-    @IsNumber()
-    quantity: number;
+    // @ApiProperty({ example: 'quantity', description: 'Уникальный идентификатор фото' })
+    // @IsNumber()
+    // quantity: number;
 
     @ApiProperty({ example: 'info', description: 'Уникальный идентификатор фото' })
-    @IsArray({ message: 'info должно быть массивом!' })
-    @IsNotEmpty({ message: 'Поле info не должно быть пустым!' })
-    info: [];
+    // @IsArray({ message: 'info должно быть массивом!' })
+    // @IsNotEmpty({ message: 'Поле info не должно быть пустым!' })
+    info: any;
 
     @ApiProperty({ example: 'brandId', description: 'Уникальный идентификатор фото' })
     @IsString({ message: 'brandId должно быть строкой!' })

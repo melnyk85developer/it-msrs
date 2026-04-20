@@ -10,11 +10,8 @@ export class GetMyShopsQueryParams extends BaseQueryParams {
     sortBy = MyShopsSortBy.CreatedAt;
     @IsOptional()
     @IsString()
-    searchAlbumName: string | null = null;
+    searchName: string | null = null;
     @IsOptional()
     @IsString()
-    searchImage: string | null = null;
-    @IsOptional()
-    @IsString()
-    searchMiniature: string | null = null;
+    searchTitle: string | null = null;
 }

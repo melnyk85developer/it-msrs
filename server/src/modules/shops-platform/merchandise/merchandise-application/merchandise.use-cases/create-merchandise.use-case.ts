@@ -6,6 +6,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { CreateMerchandiseDto } from "../../merchandise-dto/create-merchandise.dto";
 import { Merchandise, type MerchandiseModelType } from "../../merchandise-domain/merchandise.entity";
 import { MerchandiseRepository } from "../../merchandise-infrastructure/merchandise.repository";
+import { FilesService } from "src/modules/files/files.service";
 
 export class CreateMerchandiseCommand {
     constructor(
@@ -19,27 +20,29 @@ export class CreateMerchandiseUseCase
     implements ICommandHandler<CreateMerchandiseCommand, string> {
     constructor(
         @InjectModel(Merchandise.name) private merchandiseModel: MerchandiseModelType,
-        private merchandiseRepository: MerchandiseRepository
+        private merchandiseRepository: MerchandiseRepository,
+        private filesService: FilesService,
     ) { }
 
     async execute(command: CreateMerchandiseCommand) {
-        const { dto, userId } = command
-        // console.log('CreateMerchandiseUseCase: - dto 😡 1', dto)
+        const { dto, userId, merchandiseFile } = command
+        console.log('CreateMerchandiseUseCase: - dto 😡 1', dto)
         let isMerchandise = await this.merchandiseRepository.findMerchandiseByName(userId, dto.merchandiseName);
-        let imageName
-        // console.log('CreateMerchandiseUseCase: - isMerchandise 😡 2', isMerchandise)
+        const imageName = merchandiseFile ? await this.filesService.createShopFile(merchandiseFile) : null;
+
+        console.log('CreateMerchandiseUseCase: - isMerchandise 😡 2', isMerchandise)
         if (!isMerchandise) {
             const merchandise = this.merchandiseModel.createMerchandiseInstance(
                 {
                     ...dto,
-                    merchandiseImgName: imageName ? imageName : null,
-                    merchandiseCoverName: imageName ? imageName : null,
+                    merchandiseImgName:  imageName,
+                    merchandiseCoverName:  imageName,
                     userId
                 }
             )
-            // console.log('CreateMerchandiseUseCase: - merchandise 😡 save 3', merchandise)
+            console.log('CreateMerchandiseUseCase: - merchandise 😡 save 3', merchandise)
             await this.merchandiseRepository.save(merchandise);
-            // console.log('CreateMerchandiseUseCase: - merchandise 😡 res 4', merchandise)
+            console.log('CreateMerchandiseUseCase: - merchandise 😡 res 4', merchandise)
             return merchandise._id.toString();
         } else {
             return isMerchandise._id.toString();

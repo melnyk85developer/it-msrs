@@ -21,9 +21,10 @@ import { DeleteMerchandiseBrandCommand } from '../merchandise-brand-application/
 import { MerchandiseViewDto } from '../../merchandise/merchandise-dto/merchandise.view-dto';
 import { ExtractUserIfExistsFromRequest } from 'src/modules/user-accounts/users-guards/decorators/param/extract-user-if-exists-from-request.decorator';
 import { JwtOptionalAuthGuard } from 'src/modules/user-accounts/users-guards/bearer/jwt-optional-auth.guard';
+import { SETTINGS } from 'src/core/settings';
 
 // @ApiTags('Бренды')
-@Controller('/brands')
+@Controller(`${SETTINGS.RouterPath.merchandisebrands}`)
 export class MerchandiseBrandController {
     constructor(
         private commandBus: CommandBus,
@@ -93,10 +94,11 @@ export class MerchandiseBrandController {
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllMerchandiseBrandController(
         @Query() query: GetMerchandiseBrandQueryParams,
-        // @ExtractUserIfExistsFromRequest() user: UserContextDto
+        @ExtractUserIfExistsFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MerchandiseBrandViewDto[]>> {
+        // console.log('MerchandiseBrandController: - getAllMerchandiseBrandController user', user)
         // console.log('MerchandiseBrandController: - getAllMerchandiseBrandController query', query)
-        return await this.merchandiseBrandQueryRepository.getAllMerchandiseBrandQueryRepository(query)
+        return await this.merchandiseBrandQueryRepository.getAllMerchandiseBrandQueryRepository(query, user.id)
     }
     @ApiOperation({ summary: 'Получение одного бренда товара в магазине!' })
     @ApiResponse({ status: 200, type: MerchandiseBrand })

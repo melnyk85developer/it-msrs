@@ -37,12 +37,12 @@ export class MerchandiseController {
         { name: 'image', maxCount: 1 },
     ]))
     async createMerchandiseController(
-        @Body() dto: CreateMerchandiseInputDto,
+        @Body() dto: any,
         @UploadedFiles() files: { image?: Multer.File },
         @ExtractUserFromRequest() user: UserContextDto
     ): Promise<MerchandiseViewDto> {
-        // console.log('createMerchandiseController: - dto', dto)
-        // console.log('createMerchandiseController: - files', files)
+        console.log('createMerchandiseController: - dto', dto)
+        console.log('createMerchandiseController: - files', files)
 
         const merchandiseFile = files?.image?.[0] || null;
         // console.log('createMerchandiseController: - merchandiseFile', merchandiseFile)

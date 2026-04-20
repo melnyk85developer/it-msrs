@@ -1,11 +1,11 @@
 import React from "react";
 import { MyBasket, MyShopsType, ProductBrands, TypesOfGoods, TypesShopsTypes } from "@packages/shared/src/types/shopsTypes";
 import { NavLink } from "react-router-dom";
-import { routeMain as routeShop} from "../../MyShops/src/Shop/myShopsContainer"
+import { routeMain as routeShop} from "../../MyShops/src/UserShops/userShopsContainer"
 import { IUser } from "@packages/shared/src/types/IUser";
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import ModalWindows from "@packages/shared/src/components/ModalWindows";
-import Basket from "../../MyShops/src/Shop/AllShopDetail/Basket/basket";
+import Basket from "../../MyShops/src/UserShops/AllShopDetail/Basket/basket";
 import classes from './styles.module.scss';
 
 type PropsType = {

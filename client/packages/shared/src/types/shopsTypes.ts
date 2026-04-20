@@ -1,86 +1,96 @@
 export type MyShopsType = {
-    shopId: number;
+    shopId: string;
     name: string;
     title: string;
-    userId: number;
-    shopTypeId: number;
-    types: TypesOfGoods[];
-    brands: ProductBrands[];
-    devices: Devices[];
-    shoppingCart: any;
-}
-export type TypesShopsTypes = {
-    typeId: number;
-    typeName: string;
+    userId: string;
+    shopTypeId: string;
+    shopBrandId: string;
+    createdAt: string;
+    updatedAt: string;
+
+    merchandises: Merchandise[];
+    // shoppingCart: any;
 }
 export type AllShopsType = {
-    shopId: number;
+    shopId: string;
     name: string;
     title: string;
-    userId: number;
-    types: TypesOfGoods[];
-    brands: ProductBrands[];
+    userId: string;
+    shopTypeId: string;
+    shopBrandId: string;
+    createdAt: string;
+    updatedAt: string;
 }
 export type MyBasket = {
-    id: number;
-    userId: number;
-    shopId: number;
-    basketDevices: BasketDevice[];
+    id: string;
+    userId: string;
+    shopId: string;
+    basketMerchandises: BasketMerchandise[];
 }
-export type BasketDevice = {
-    basketDeviceId: number
-    basketId: number
-    deviceId: number
-    deviceName: string
+export type BasketMerchandise = {
+    basketMerchandiseId: string
+    basketId: string
+    merchandiseId: string
+    merchandiseName: string
     image: string
     price: number
-    shopId: number
+    shopId: string
     quantity: number
 }
-export type TypesOfGoods = {
-    id: number
-    name: string
+export type ShopTypes = {
+    typeId: string
+    typeName: string
 }
-export type ProductBrands = {
-    id: number
-    name: string
+export type ShopBrands = {
+    brandId: string
+    brandName: string
 }
-export type Devices = {
-    deviceId: number
+export type MerchandisesTypes = {
+    typeId: string
+    merchandiseTypeName: string
+}
+export type MerchandisesBrands = {
+    brandId: string
+    merchandiseBrandName: string
+}
+export type Merchandise = {
+    merchandiseId: string
     name: string
     price: number
     rating: number
-    image: string
+    merchandiseImgName: string
     file?: File
-    shopId: number
-    brandId: number | null
+    shopId: string
+    brandId: string | null
     info: Array<Info> | null
-    typeId: number | null
+    typeId: string | null
     createdAt: string
     updatedAt: string
     infos: Info[]
 }
 export type SetDevicesParams = {
-    typeId: number
-    brandId: number
+    typeId: string
+    brandId: string
     page: number
     limit: number
 }
 export type Info = {
-    deviceInfoId: number | null
+    deviceInfoId: string | null
     title: string
     description: string
 }
-export type addDeviceType = {
-    name: string
-    price: number
-    file: File | null
-    brandId?: number | null
-    info: Array<addInfo> | null
-    typeId: number | null
-    shopId: number | null
+export type addMerchandiseType = {
+    merchandiseName: string
+    price: number;
+    rating: number;
+    quantity: number;
+    info: Array<addInfo> | null;
+    brandId?: string | null;
+    typeId: string | null;
+    shopId: string | null;
+    file: File | null;
 }
 export type addInfo = {
-    title: string
-    description: string
+    title: string;
+    description: string;
 }

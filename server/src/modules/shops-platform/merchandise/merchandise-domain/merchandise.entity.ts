@@ -38,12 +38,12 @@ export class Merchandise {
     price: number;
 
     @ApiProperty({ example: 'quantity', description: 'Колличество!' })
-    @Prop({ type: Number, required: true })
-    quantity: number;
+    @Prop({ type: Number, nullable: true })
+    quantity: number | null;
 
     @ApiProperty({ example: '5', description: 'Рейтинг устройства' })
-    @Prop({ type: Number, required: true })
-    rating: number;
+    @Prop({ type: Number, nullable: false })
+    rating: number | null;
 
     @ApiProperty({ example: 'image.jpg', description: 'Имя файла изображения устройства' })
     @Prop({ type: String, nullable: true })
@@ -74,7 +74,7 @@ export class Merchandise {
         const merchandise = new this();
         const date = new Date();
         const createdAt = date.toISOString();
-        // console.log('PhotoAlbumEntity: createInstance - user 😡 ', user)
+        // console.log('PhotoAlbumEntity: createMerchandiseInstance - dto 😡 ', dto)
 
         merchandise.userId = dto.userId;
         merchandise.merchandiseName = dto.merchandiseName;
@@ -82,8 +82,8 @@ export class Merchandise {
         merchandise.typeId = dto.typeId;
         merchandise.shopId = dto.shopId;
         merchandise.price = dto.price;
-        merchandise.rating = dto.rating;
-        merchandise.quantity = dto.quantity;
+        merchandise.rating = dto.rating ? dto.rating : null;
+        merchandise.quantity = null;
         // merchandise.info = dto.info
         merchandise.merchandiseImgName = dto.merchandiseImgName ? dto.merchandiseImgName : null;
         merchandise.merchandiseCoverName = dto.merchandiseCoverName ? dto.merchandiseCoverName : null;

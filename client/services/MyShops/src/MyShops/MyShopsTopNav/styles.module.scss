@@ -1,0 +1,49 @@
+.wrapTopNawShop.light {
+    width: 200%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 5px;
+    height: 100%;
+
+    // border: 1px solid red;
+    .leftBlockTopNavNoAuthorization {
+        margin-left: 40px;
+        // border: 1px solid red;
+    }
+
+    h1 {
+        display: block;
+        margin-top: -2px;
+        color: #FFAC00;
+        width: 100%;
+    }
+
+    .basketImg {
+        margin: -3px 10px 0 auto;
+    }
+}
+
+.wrapTopNawShop.dark {
+    width: 200%;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 7px 0 0;
+    height: 100%;
+
+    // border: 1px solid red;
+    .leftBlockTopNavNoAuthorization {
+        margin-left: 40px;
+        // border: 1px solid red;
+    }
+
+    h1 {
+        display: block;
+        margin-top: -2px;
+        color: #FFAC00;
+        width: 100%;
+    }
+
+    .basketImg {
+        margin: -3px 10px 0 auto;
+    }
+}

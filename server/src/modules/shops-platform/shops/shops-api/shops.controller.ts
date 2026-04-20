@@ -112,9 +112,14 @@ export class MyShopsController {
 
     @ApiOperation({ summary: 'Получение одного моего магазина!' })
     @ApiResponse({ status: 200, type: MyShops })
+    @UseGuards(AuthAccessGuard)
     @Get('/myshop/:shopId')
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getMyShopsByIdController(@Param('shopId') shopId: string) {
+    async getMyShopsByIdController(
+        @Param('shopId') shopId: string,
+        @ExtractUserFromRequest() user: UserContextDto
+    ) {
+        
         return await this.myShopsQueryRepository.findMyShopsByIdOrNotFoundFailRepository(shopId);
     }
     @ApiOperation({ summary: 'Получение всех моих магазинов!' })
@@ -132,13 +137,13 @@ export class MyShopsController {
     @ApiOperation({ summary: 'Получение всех магазинов в проекте!' })
     @ApiResponse({ status: 200, type: MyShops })
     @UseGuards(JwtOptionalAuthGuard)
-    @Get('/myshops/all')
+    @Get('/all/shops')
     @HttpCode(HTTP_STATUSES.OK_200)
     async getAllShopsController(
-        @ExtractUserFromRequest() user: UserContextDto,
-        @Query() query: GetMyShopsQueryParams
+        @Query() query: GetMyShopsQueryParams,
+        @ExtractUserFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MyShopsViewDto[]>> {
-        // console.log('MyShopsController: - getAllShopsController userId', userId)
+        // console.log('MyShopsController: - getAllShopsController user', user)
         return await this.myShopsQueryRepository.getAllMyShopsQueryRepository(query)
     }
 }

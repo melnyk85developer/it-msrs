@@ -1,22 +1,34 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "../redux-store";
 import MyShopsAPI from "../../services/shopsAPI";
-import { AllShopsType, BasketDevice, Devices, MyBasket, MyShopsType, ProductBrands, TypesOfGoods, TypesShopsTypes, addDeviceType } from "@/types/shopsTypes";
+import {
+    AllShopsType,
+    BasketMerchandise,
+    Merchandise,
+    MerchandisesBrands,
+    MerchandisesTypes,
+    MyBasket,
+    MyShopsType,
+    ShopBrands,
+    ShopTypes,
+    addMerchandiseType
+} from "@/types/shopsTypes";
 
 const initialState = {
     shop: {} as MyShopsType,
-    shop_types: [] as Array<TypesShopsTypes>,
     myshops: [] as Array<MyShopsType>,
     allshops: [] as Array<AllShopsType>,
-    types: [] as Array<TypesOfGoods>,
-    brands: [] as Array<ProductBrands>,
+    shopTypes: [] as Array<ShopTypes>,
+    shopBrands: [] as Array<ShopBrands>,
+    merchandisesTypes: [] as Array<MerchandisesTypes>,
+    merchandisesBrands: [] as Array<MerchandisesBrands>,
     basket: {} as MyBasket | null,
-    device: {} as Devices,
+    merchandise: {} as Merchandise,
     shoppingCart: {} as any,
-    click_typeId: null as number | null,
-    click_shop_typeId: null as number | null,
-    click_brandId: null as number | null,
-    click_deviceId: null as number | null,
+    click_typeId: null as string | null,
+    click_shop_typeId: null as string | null,
+    click_brandId: null as string | null,
+    click_deviceId: null as string | null,
     page: 1,
     totalCount: 0,
     limit: 9,
@@ -26,299 +38,343 @@ export const myShopsSlice = createSlice({
     name: 'my-shops',
     initialState,
     reducers: {
-        createShop(state, action: PayloadAction<MyShopsType>){
+        createShop(state, action: PayloadAction<MyShopsType>) {
             state.error = '';
             state.myshops.push(action.payload);
         },
-        updateShop(state, action: PayloadAction<MyShopsType>){
+        updateShop(state, action: PayloadAction<MyShopsType>) {
             state.error = '';
             state.shop = action.payload
         },
-        setMyAllShops(state, action: PayloadAction<Array<MyShopsType>>){
+        setMyAllShops(state, action: PayloadAction<Array<MyShopsType>>) {
             state.error = ''
             state.myshops = action.payload
         },
-        setAllShops(state, action: PayloadAction<Array<AllShopsType>>){
+        setAllShops(state, action: PayloadAction<Array<AllShopsType>>) {
             state.error = ''
             state.allshops = action.payload
         },
-        setShopDetail(state, action: PayloadAction<MyShopsType>){
+        setShopDetail(state, action: PayloadAction<MyShopsType>) {
             state.error = ''
             state.shop = action.payload
         },
-        setShopsTypes(state, action: PayloadAction<Array<TypesShopsTypes>>){
+        setShopsTypes(state, action: PayloadAction<Array<ShopTypes>>) {
             state.error = ''
-            state.shop_types = action.payload
+            state.shopTypes = action.payload
         },
-        createType(state, action: PayloadAction<any>){
+        createShopType(state, action: PayloadAction<ShopTypes>) {
             state.error = '';
-            state.shop.types.push(action.payload);
+            state.shopTypes.push(action.payload);
         },
-        createBrand(state, action: PayloadAction<any>){
+        createShopBrand(state, action: PayloadAction<ShopBrands>) {
             state.error = '';
-            state.shop.brands.push(action.payload);
+            state.shopBrands.push(action.payload);
         },
-        addDevices(state, action: PayloadAction<Devices>){
+        addMerchandise(state, action: PayloadAction<Merchandise>) {
             state.error = ''
-            state.shop.devices.push(action.payload)
+            state.shop.merchandises.push(action.payload)
         },
-        setTypes(state, action: PayloadAction<Array<TypesOfGoods>>){
-            state.error = ''
-            state.types = action.payload
-        },
-        setBrands(state, action: PayloadAction<Array<ProductBrands>>){
-            state.error = ''
-            state.brands = action.payload
-        },
-        setDevices(state, action: PayloadAction<Array<Devices>>){
-            state.error = ''
-            state.shop.devices = action.payload
-        },
-        setDeviceDetail(state, action: PayloadAction<Devices>){
+        createMerchandiseType(state, action: PayloadAction<any>) {
             state.error = '';
-            state.device = action.payload;
+            state.merchandisesTypes.push(action.payload);
         },
-        createMyBasket(state, action: PayloadAction<MyBasket>){
+        setMerchandisesTypes(state, action: PayloadAction<Array<MerchandisesTypes>>) {
+            state.error = ''
+            state.merchandisesTypes = action.payload
+        },
+        createMerchandisesBrand(state, action: PayloadAction<MerchandisesBrands>) {
+            state.error = '';
+            state.merchandisesBrands.push(action.payload);
+        },
+        setMerchandisesBrands(state, action: PayloadAction<Array<MerchandisesBrands>>) {
+            state.error = ''
+            state.merchandisesBrands = action.payload
+        },
+
+        setMerchandises(state, action: PayloadAction<Array<Merchandise>>) {
+            state.error = ''
+            state.shop.merchandises = action.payload
+        },
+        setMerchandiseDetail(state, action: PayloadAction<Merchandise>) {
+            state.error = '';
+            state.merchandise = action.payload;
+        },
+        createMyBasket(state, action: PayloadAction<MyBasket>) {
             state.error = '';
             state.basket = action.payload;
         },
-        getMyBasket(state, action: PayloadAction<MyBasket>){
+        getMyBasket(state, action: PayloadAction<MyBasket>) {
             state.error = '';
             state.basket = action.payload;
         },
-        addItemToCart(state, action: PayloadAction<BasketDevice>){
+        addMerchandiseToBasket(state, action: PayloadAction<BasketMerchandise>) {
             state.error = '';
-            state.basket.basketDevices.push(action.payload);
+            state.basket.basketMerchandises.push(action.payload);
         },
-        removeAnItemFromTheCart(state, action: PayloadAction<BasketDevice>){
-            state.error = '';
-            const deviceIdToDelete = action.payload;
-            state.basket.basketDevices = state.basket.basketDevices.filter(item => item.deviceId !== deviceIdToDelete.deviceId);
-        },
-        updateDivice(state, action: PayloadAction<Devices>){
-            state.error = '';
-            const deviceIdToUpdate = action.payload;
-            let updateDevice = state.shop.devices.filter(item => item.deviceId === deviceIdToUpdate.deviceId);
-            let devices = state.shop.devices.filter(item => item.deviceId !== deviceIdToUpdate.deviceId);
-            updateDevice[0] = action.payload
-            devices.push(updateDevice[0])
-            state.shop.devices = devices
-        },
-        deleteDivice(state, action: PayloadAction<Devices>){
+        deleteBasketToMerchandise(state, action: PayloadAction<BasketMerchandise>) {
             state.error = '';
             const deviceIdToDelete = action.payload;
-            state.shop.devices = state.shop.devices.filter(item => item.deviceId !== deviceIdToDelete.deviceId);
+            state.basket.basketMerchandises = state.basket.basketMerchandises.filter(item => item.merchandiseId !== deviceIdToDelete.merchandiseId);
         },
-        setPage(state, action: PayloadAction<number>){
+        updateMerchandise(state, action: PayloadAction<Merchandise>) {
+            state.error = '';
+            const merchandiseIdToUpdate = action.payload;
+            let updateMerchandise = state.shop.merchandises.filter(item => item.merchandiseId === merchandiseIdToUpdate.merchandiseId);
+            let merchandise = state.shop.merchandises.filter(item => item.merchandiseId !== merchandiseIdToUpdate.merchandiseId);
+            updateMerchandise[0] = action.payload
+            merchandise.push(updateMerchandise[0])
+            state.shop.merchandises = merchandise
+        },
+        deleteMerchandise(state, action: PayloadAction<Merchandise>) {
+            state.error = '';
+            const merchandiseIdToDelete = action.payload;
+            state.shop.merchandises = state.shop.merchandises.filter(item => item.merchandiseId !== merchandiseIdToDelete.merchandiseId);
+        },
+        setPage(state, action: PayloadAction<number>) {
             state.error = '';
             state.page = action.payload;
         },
-        setTotalCount(state, action: PayloadAction<number>){
+        setTotalCount(state, action: PayloadAction<number>) {
             state.error = '';
             state.totalCount = action.payload;
         },
-        setClickShopTypeId(state, action: PayloadAction<number>){
+        setClickShopTypeId(state, action: PayloadAction<string>) {
             state.error = '';
             state.click_shop_typeId = action.payload;
             state.page = 1;
         },
-        setClickTypeId(state, action: PayloadAction<number>){
+        setClickTypeId(state, action: PayloadAction<string>) {
             state.error = '';
             state.click_typeId = action.payload;
             state.page = 1;
         },
-        setClickBrandId(state, action: PayloadAction<number>){
+        setClickBrandId(state, action: PayloadAction<string>) {
             state.error = '';
             state.click_brandId = action.payload;
         },
-        setClickDeviceId(state, action: PayloadAction<number>){
+        setClickDeviceId(state, action: PayloadAction<string>) {
             state.error = '';
             state.click_deviceId = action.payload;
         },
-        myShopsFetchingError(state, action: PayloadAction<string>){
+        myShopsFetchingError(state, action: PayloadAction<string>) {
             state.error = action.payload
         }
     }
 })
 export const createShopAC = (shop: any) => async (dispatch: AppDispatch) => {
-    // console.log('createShopAC req - ', shop)
+    console.log('createShopAC req - ', shop)
     try {
         const data = await MyShopsAPI.createShopAPI(shop)
         console.log('createShopAC req - ', data.data)
         dispatch(myShopsSlice.actions.createShop(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         alert(e.response.data.messages)
-    }  
+    }
 }
 export const createShopTypeAC = (typeName: string) => async (dispatch: AppDispatch) => {
     // console.log('createShopTypeAC req - ', typeName)
     try {
         const data = await MyShopsAPI.createShopsTypesAPI(typeName)
         dispatch(myShopsSlice.actions.createShop(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         alert(e.response.data.messages)
-    }  
+    }
 }
 export const updateShopAC = (shop: any) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyShopsAPI.updateShopAPI(shop)
         dispatch(myShopsSlice.actions.updateShop(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         alert(e.response.data.messages)
-    }  
+    }
 }
-export const setAllShopsAC = (click_shop_typeId?: number, page?: number, limit?: number) => async (dispatch: AppDispatch) => {
+export const setAllShopsAC = (click_shop_typeId?: string, page?: number, limit?: number) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.getAllShopsAPI(click_shop_typeId, page, limit)
-        dispatch(myShopsSlice.actions.setAllShops(data.data))
-    } catch(e: any) {
+        const response = await MyShopsAPI.getAllShopsAPI(click_shop_typeId, page, limit)
+        if (response.data && response.data.item) {
+            dispatch(myShopsSlice.actions.setAllShops(response.data.items))
+        }
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const getMyAllShopsByIdAC = (userId: string) => async (dispatch: AppDispatch) => {
+export const getMyAllShopsAC = () => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.getMyShopsByIdAPI(userId)
-        // console.log('setMyShopsAC res - ', data.data)
-        dispatch(myShopsSlice.actions.setMyAllShops(data.data))
-    } catch(e: any) {
-        dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+        const response = await MyShopsAPI.getAllMyShopsAPI()
+        // console.log('setMyShopsAC res - response.data.item', response.data.items)
+        if (response.data) {
+            dispatch(myShopsSlice.actions.setMyAllShops(response.data.items))
+        } else {
+            return response.data
+        }
+    } catch (error: any) {
+        dispatch(myShopsSlice.actions.myShopsFetchingError(error.response?.data?.message))
+    }
 }
-export const setShopDetailAC = (shopId: number) => async (dispatch: AppDispatch) => {
+export const setShopDetailAC = (shopId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyShopsAPI.getShopDetaiAPI(shopId)
         dispatch(myShopsSlice.actions.setShopDetail(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
 export const setShopsTypesAC = () => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.getShopsTypesAPI()
-        dispatch(myShopsSlice.actions.setShopsTypes(data.data))
-    } catch(e: any) {
+        const response = await MyShopsAPI.getShopsTypesAPI()
+        if (response.data && response.data.items) {
+            dispatch(myShopsSlice.actions.setShopsTypes(response.data.items))
+        }
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
     }
 }
-export const createTypeAC = (type: any) => async (dispatch: AppDispatch) => {
+export const setShopsBrandsAC = () => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.createTypeAPI(type)
-        dispatch(myShopsSlice.actions.createType(data.data))
-    } catch(e: any) {
-        dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
-}
-export const createBrandAC = (brand: any) => async (dispatch: AppDispatch) => {
-    try {
-        const data = await MyShopsAPI.createBrandAPI(brand)
-        dispatch(myShopsSlice.actions.createBrand(data.data))
-    } catch(e: any) {
-        dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
-}
-export const addDeviceAC = (device: addDeviceType) => async (dispatch: AppDispatch) => {
-    try {
-        const data = await MyShopsAPI.addDeviceAPI(device)
-        dispatch(myShopsSlice.actions.addDevices(data.data))
-    } catch(e: any) {
+        const response = await MyShopsAPI.getShopsTypesAPI()
+        if (response.data && response.data.items) {
+            dispatch(myShopsSlice.actions.setShopsTypes(response.data.items))
+        }
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
     }
 }
-export const setTypesAC = () => async (dispatch: AppDispatch) => {
+
+export const createMerchandiseTypeAC = (type: { shopId: string, merchandiseTypeName: string }) => async (dispatch: AppDispatch) => {
+    // console.log('createMerchandiseTypeAC: - dto', type)
     try {
-        const data = await MyShopsAPI.getTypesAPI()
-        dispatch(myShopsSlice.actions.setTypes(data.data))
-    } catch(e: any) {
-        dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
+        const data = await MyShopsAPI.createMerchandiseTypeAPI(type)
+        dispatch(myShopsSlice.actions.createMerchandiseType(data.data))
+    } catch (error: any) {
+        dispatch(myShopsSlice.actions.myShopsFetchingError(error.response?.data?.message))
     }
 }
-export const setBrandsAC = () => async (dispatch: AppDispatch) => {
+export const createMerchandiseBrandAC = (brand: { shopId: string, merchandiseBrandName: string }) => async (dispatch: AppDispatch) => {
+    // console.log('createMerchandiseBrandAC: - brand', brand)
     try {
-        const data = await MyShopsAPI.getBrandsAPI()
-        dispatch(myShopsSlice.actions.setBrands(data.data))
-    } catch(e: any) {
-        dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
+        const response = await MyShopsAPI.createMerchandiseBrandAPI(brand)
+        // console.log('createMerchandiseBrandAC: - response.data', response.data)
+        dispatch(myShopsSlice.actions.createMerchandisesBrand(response.data))
+    } catch (error: any) {
+        dispatch(myShopsSlice.actions.myShopsFetchingError(error.response?.data?.message))
     }
 }
-export const setDevicesAC = (shopId: number, typeId?: number, brandId?: number, page?: number, limit?: number) => async (dispatch: AppDispatch) => {
+export const addMerchandiseAC = (merchandise: addMerchandiseType) => async (dispatch: AppDispatch) => {
+    // console.log('addMerchandiseAC: - merchandise', merchandise)
     try {
-        const data = await MyShopsAPI.setDevicesAPI(shopId, typeId, brandId, page, limit)
+        const response = await MyShopsAPI.addMerchandiseAPI(merchandise)
+        // console.log('addMerchandiseAC: - response.data', response.data)
+
+        dispatch(myShopsSlice.actions.addMerchandise(response.data))
+    } catch (error: any) {
+        dispatch(myShopsSlice.actions.myShopsFetchingError(error.response?.data?.message))
+    }
+}
+export const setMerchandisesTypesAC = () => async (dispatch: AppDispatch) => {
+    try {
+        const response = await MyShopsAPI.getMerchandiseTypesAPI()
+        if (response.data) {
+            dispatch(myShopsSlice.actions.setMerchandisesTypes(response.data.items))
+        } else {
+            return response.data
+        }
+    } catch (error: any) {
+        dispatch(myShopsSlice.actions.myShopsFetchingError(error.response?.data?.message))
+    }
+}
+export const setMerchandisesBrandsAC = () => async (dispatch: AppDispatch) => {
+    try {
+        const response = await MyShopsAPI.getMerchandiseBrandsAPI()
+        if (response.data) {
+            dispatch(myShopsSlice.actions.setMerchandisesBrands(response.data.items))
+        } else {
+            return response.data
+        }
+    } catch (error: any) {
+        dispatch(myShopsSlice.actions.myShopsFetchingError(error.response?.data?.message))
+    }
+}
+export const setMerchandisesAC = (shopId: string, typeId?: string, brandId?: string, page?: number, limit?: number) => async (dispatch: AppDispatch) => {
+    try {
+        const response = await MyShopsAPI.setMerchandisesAPI(shopId, typeId, brandId, page, limit)
         // console.log('setDevicesAC res - ', data.data)
+        if (response.data) {
+            dispatch(myShopsSlice.actions.setMerchandises(response.data.items))
+        }
         // dispatch(myShopsSlice.actions.setTotalCount(data.data.count))
-        dispatch(myShopsSlice.actions.setDevices(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
     }
 }
-export const setDeviceDetailAC = (deviceId: number) => async (dispatch: AppDispatch) => {
+export const setMerchandisesDetailAC = (merchandiseId: string) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.getOneDeviceAPI(deviceId)
-        dispatch(myShopsSlice.actions.setDeviceDetail(data.data))
-    } catch(e: any) {
+        const data = await MyShopsAPI.getOneMerchandiseAPI(merchandiseId)
+        dispatch(myShopsSlice.actions.setMerchandiseDetail(data.data))
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const createMyBasketAC = (userId: number, shopId: number) => async (dispatch: AppDispatch) => {
+export const createMyBasketAC = (userId: string, shopId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyShopsAPI.createMyBasketAPI(userId, shopId)
         dispatch(myShopsSlice.actions.createMyBasket(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const getMyBasketAC = (userId: number, shopId: number) => async (dispatch: AppDispatch) => {
+export const getMyBasketAC = (userId: string, shopId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyShopsAPI.getMyBasketAPI(userId, shopId)
         dispatch(myShopsSlice.actions.getMyBasket(data.data))
-    } catch(e: any) {
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const addItemToCartAC = (basketId: number, deviceDetailId: number, name: string, shopId: number, price: number, quantity: number) => async (dispatch: AppDispatch) => {
+export const addToBasketMerchandiseAC = (basketId: string, deviceDetailId: string, name: string, shopId: string, price: number, quantity: number) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.addItemToCartAPI(basketId, deviceDetailId, name, shopId, price, quantity)
-        dispatch(myShopsSlice.actions.addItemToCart(data.data))
-    } catch(e: any) {
+        const data = await MyShopsAPI.addToBasketMerchandiseAPI(basketId, deviceDetailId, name, shopId, price, quantity)
+        dispatch(myShopsSlice.actions.addMerchandiseToBasket(data.data))
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const removeAnItemFromTheCartAC = (deviceId: number) => async (dispatch: AppDispatch) => {
+export const deleteToBasketMerchandiseAC = (merchandiseId: string) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.removeAnItemFromTheCartAPI(deviceId)
-        dispatch(myShopsSlice.actions.removeAnItemFromTheCart(data.data))
-    } catch(e: any) {
+        const data = await MyShopsAPI.deleteToBasketMerchandiseAPI(merchandiseId)
+        dispatch(myShopsSlice.actions.deleteBasketToMerchandise(data.data))
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const updateDiviceAC = (device: Devices) => async (dispatch: AppDispatch) => {
+export const updateMerchandiseAC = (device: Merchandise) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.updateDiviceAPI(device)
-        dispatch(myShopsSlice.actions.updateDivice(data.data))
-    } catch(e: any) {
+        const data = await MyShopsAPI.updateMerchandiseAPI(device)
+        dispatch(myShopsSlice.actions.updateMerchandise(data.data))
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const deleteDiviceAC = (deviceId: number) => async (dispatch: AppDispatch) => {
+export const deleteMerchandiseAC = (deviceId: string) => async (dispatch: AppDispatch) => {
     try {
-        const data = await MyShopsAPI.deleteDiviceAPI(deviceId)
-        dispatch(myShopsSlice.actions.deleteDivice(data.data))
-    } catch(e: any) {
+        const data = await MyShopsAPI.deleteMerchandiseAPI(deviceId)
+        dispatch(myShopsSlice.actions.deleteMerchandise(data.data))
+    } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))
-    }  
+    }
 }
-export const setClickShopTypeAC = (typeId: number) => async (dispatch: AppDispatch) => {
-    dispatch(myShopsSlice.actions.setClickShopTypeId(typeId));    
+export const setClickShopTypeAC = (typeId: string) => async (dispatch: AppDispatch) => {
+    dispatch(myShopsSlice.actions.setClickShopTypeId(typeId));
 }
-export const setClickTypeAC = (typeId: number) => async (dispatch: AppDispatch) => {
-    dispatch(myShopsSlice.actions.setClickTypeId(typeId));    
+export const setClickTypeAC = (typeId: string) => async (dispatch: AppDispatch) => {
+    dispatch(myShopsSlice.actions.setClickTypeId(typeId));
 }
-export const setClickBrandAC = (brandId: number) => async (dispatch: AppDispatch) => {
-    dispatch(myShopsSlice.actions.setClickBrandId(brandId));    
+export const setClickBrandAC = (brandId: string) => async (dispatch: AppDispatch) => {
+    dispatch(myShopsSlice.actions.setClickBrandId(brandId));
 }
-export const setClickDeviceAC = (deviceId: number) => async (dispatch: AppDispatch) => {
-    dispatch(myShopsSlice.actions.setClickDeviceId(deviceId));    
+export const setClickMerchandiseAC = (merchandiseId: string) => async (dispatch: AppDispatch) => {
+    dispatch(myShopsSlice.actions.setClickDeviceId(merchandiseId));
 }
 export const setPageAC = (page: number) => async (dispatch: AppDispatch) => {
-    dispatch(myShopsSlice.actions.setPage(page));    
+    dispatch(myShopsSlice.actions.setPage(page));
 }
 export default myShopsSlice.reducer

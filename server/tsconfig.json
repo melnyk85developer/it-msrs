@@ -18,8 +18,12 @@
       "src/*": [
         "./src/*"
       ],
-      "@modules/*": ["./src/modules/*"],
-      "@core/*": ["./src/core/*"]
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ]
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -29,12 +29,14 @@ export class ShopTestManager {
     }
     async getShopById(
         shopId: string,
+        accessToken: string,
         userAgent: string = 'TestDevice/1.0',
         expectedStatusCode: number = HTTP_STATUSES.OK_200
     ) {
         // console.log('TEST - ⚙️ : - AuthTestManager - login: req data', data)
         const response = await request(this.app.getHttpServer())
             .get(`${SETTINGS.RouterPath.myshops}/myshop/${shopId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
             .set('User-Agent', userAgent)
             .expect(expectedStatusCode);
         // console.log('TEST - ⚙️ : - AuthTestManager - response.body: ', response.body)

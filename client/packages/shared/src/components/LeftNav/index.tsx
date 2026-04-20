@@ -5,16 +5,16 @@ import { RiAliensFill, RiAliensLine, RiCriminalFill, RiCriminalLine, RiHome3Line
 import { GrBlog } from "react-icons/gr";
 import { routeMain as routeMyProfile } from '../../../../../services/MyProfile/src/MyProfile/MyProfileContainer';
 import { routeMain as routeMessages } from '../../../../../services/Message/src/StartMessage/startMessage';
-import { routeMain as routeShop } from '../../../../../services/MyShops/src/Shop/myShopsContainer';
+import { routeMain as routeMyShops } from '../../../../../services/MyShops/src/MyShops/myShopsContainer';
 import { routeMain as routeBlogs } from '../../../../../services/Blogs/src/MyBlogs/BlogsContainer';
 import { routeMain as routeUsers } from '../../../../../services/Users/src/Users/UsersContainer';
 import { routeMain as routeSettings } from '../../../../../services/SettingsMyProfile/src/SettingsMyProfile/SettingsProfile';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { routeMain as routePlaylist } from '../../../../../services/Music/src/Music/MusicContainer';
 import { HomeOutlined, MessageOutlined, ShopOutlined, TeamOutlined, SettingOutlined, UsergroupAddOutlined, CustomerServiceOutlined, VideoCameraOutlined, CommentOutlined, MailOutlined } from '@ant-design/icons';
-import classes from './styles.module.scss'
 import { IoMdChatboxes } from "react-icons/io";
 import { MdOutlineSubscriptions } from "react-icons/md";
+import classes from './styles.module.scss'
 
 type Item = {
     to: string;
@@ -49,7 +49,7 @@ const LeftNav: React.FC = () => {
             label: 'Friends',
         },
         {
-            to: routeShop(myshops?.[0]?.shopId || 'fallback'),
+            to: routeMyShops(),
             icon: <ShopOutlined className={classes.icon} />,
             label: 'Shops',
         },

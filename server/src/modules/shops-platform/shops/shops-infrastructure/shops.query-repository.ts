@@ -11,7 +11,7 @@ import { GetMyShopsQueryParams } from '../shops-dto/get-shops-query-params.input
 @Injectable()
 export class MyShopsQueryRepository {
     constructor(
-        @InjectModel(MyShops.name) private photoModel: MyShopsModelType
+        @InjectModel(MyShops.name) private myShopsModel: MyShopsModelType
     ) { }
 
     async getAllMyShopsQueryRepository(query: GetMyShopsQueryParams, userId?: string): Promise<PaginatedViewDto<MyShopsViewDto[]>> {
@@ -27,30 +27,25 @@ export class MyShopsQueryRepository {
 
         // console.log('UsersQueryRepository: base filter 😡 ', filter)
 
-        if (normalizedQuery.searchImage) {
+        if (normalizedQuery.searchName) {
             filter.$or = filter.$or || [];
             filter.$or.push({
-                searchImage: { $regex: normalizedQuery.searchImage, $options: 'i' },
+                name: { $regex: normalizedQuery.searchName, $options: 'i' },
             });
         }
-        if (normalizedQuery.searchMiniature) {
+        if (normalizedQuery.searchTitle) {
             filter.$or = filter.$or || [];
             filter.$or.push({
-                searchMiniature: { $regex: normalizedQuery.searchMiniature, $options: 'i' },
+                title: { $regex: normalizedQuery.searchTitle, $options: 'i' },
             });
         }
-        if (normalizedQuery.searchAlbumName) {
-            filter.$or = filter.$or || [];
-            filter.$or.push({
-                searchAlbumName: { $regex: normalizedQuery.searchAlbumName, $options: 'i' },
-            });
-        }
-        const shops = await this.photoModel.find(filter)
+
+        const shops = await this.myShopsModel.find(filter)
             .sort({ [normalizedQuery.sortBy]: normalizedQuery.sortDirection, _id: 1 })
             .skip(normalizedQuery.calculateSkip())
             .limit(normalizedQuery.pageSize);
 
-        const totalCount = await this.photoModel.countDocuments(filter);
+        const totalCount = await this.myShopsModel.countDocuments(filter);
 
         // const items = blogs.map(BlogViewDto.mapToBlogsView).reverse();
         const items = shops.map(MyShopsViewDto.mapMyShopsToView);
@@ -66,7 +61,7 @@ export class MyShopsQueryRepository {
     }
 
     async findMyShopsById(shopId: string): Promise<MyShopsDocument | null> {
-        return this.photoModel.findOne({
+        return this.myShopsModel.findOne({
             _id: new Types.ObjectId(shopId),
             deletedAt: null,
         });

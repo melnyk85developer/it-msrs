@@ -58,6 +58,7 @@ export const shopsE2ETest = () => {
         it('GET    - Ожидается статус код 404, - Запрос на не существующий магазин!', async () => {
             await contextTests.shopTestManager.getShopById(
                 contextTests.constants.invalidId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
@@ -189,6 +190,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение обновленного пользователя и ожидаем в ответ статус код 200!
             const { getEntity } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -199,6 +201,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение второго магазина и ожидаем в ответ статус код 200!
             const { response } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[1]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -227,6 +230,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение магазина и ожидаем ответ 200 (OK) и данные магазина!
             const { getEntity } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[1],
                 HTTP_STATUSES.OK_200
             )
@@ -273,6 +277,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение обновленного пользователя и ожидаем в ответ статус код 200!
             const { getEntity } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -283,6 +288,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение второго магазина и ожидаем в ответ статус код 200!
             const { response } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[1]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -311,6 +317,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение обновленного пользователя и ожидаем в ответ статус код 200!
             const { getEntity, response: res2 } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -329,6 +336,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос на получение второго магазина и ожидаем в ответ статус код 200!
             const { response } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[1]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -350,6 +358,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -374,6 +383,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -398,6 +408,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.OK_200
             )
@@ -422,6 +433,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[0]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )
@@ -441,6 +453,7 @@ export const shopsE2ETest = () => {
             // Отправляем GET запрос по удаленному shopId, что бы убедится, что его не существует, ожидаем статус код 404 (NOT_FOUND)!
             const { response: res2 } = await contextTests.shopTestManager.getShopById(
                 contextTests.shops.createdShops[1]!.shopId,
+                contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.userAgent[0],
                 HTTP_STATUSES.NOT_FOUND_404
             )

@@ -8,7 +8,6 @@ import { MerchandiseType, MerchandiseTypeDocument, type MerchandiseTypeModelType
 import { MerchandiseTypeViewDto } from '../merchandise-type-dto/merchandise-type.view-dto';
 import { GetMerchandiseTypeQueryParams } from '../merchandise-type-dto/get-merchandise-type-query-params.input-dto';
 
-
 @Injectable()
 export class MerchandiseTypeQueryRepository {
     constructor(

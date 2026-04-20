@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client';
-import AppMyShops from './router/Router';
 import { BrowserRouter } from 'react-router-dom';
-import { routeMain as routeMyShops }  from './Shop/myShopsContainer';
+import { routeMain as routeMyShops } from './MyShops/routes';
+import AppShops from './router/Router';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -9,6 +9,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <BrowserRouter basename={routeMyShops()}>
-    <AppMyShops />
+    <AppShops />
   </BrowserRouter>
 );

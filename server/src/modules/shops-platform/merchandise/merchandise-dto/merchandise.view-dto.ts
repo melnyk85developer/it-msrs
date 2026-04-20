@@ -8,7 +8,7 @@ export class MerchandiseViewDto {
     typeId: string;
     brandId: string;
     price: number;
-    rating: number;
+    rating: number | null;
     merchandiseImgName: string | null;
     merchandiseCoverName: string | null;
     userId: string;

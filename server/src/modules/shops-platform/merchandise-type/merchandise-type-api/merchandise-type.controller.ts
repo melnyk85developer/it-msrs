@@ -92,7 +92,8 @@ export class MerchandiseTypeController {
         @Query() query: GetMerchandiseTypeQueryParams,
         @ExtractUserIfExistsFromRequest() user: UserContextDto
     ): Promise<PaginatedViewDto<MerchandiseTypeViewDto[]>> {
-        // console.log('MerchandiseTypeController: - getAllMerchandiseTypeController userId', userId)
+        // console.log('MerchandiseTypeController: - getAllMerchandiseTypeController user', user)
+        // console.log('MerchandiseTypeController: - getAllMerchandiseTypeController query', query)
         return await this.merchandiseTypeQueryRepository.getAllMerchandiseTypeQueryRepository(query)
     }
     @ApiOperation({ summary: 'Получить тип товарa!' })

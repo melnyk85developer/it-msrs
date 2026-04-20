@@ -20,9 +20,9 @@ export class CreateMerchandiseDomainDto {
     @IsNumber()
     rating: number;
 
-    @ApiProperty({ example: 'quantity', description: 'Уникальный идентификатор фото' })
-    @IsNumber()
-    quantity: number;
+    // @ApiProperty({ example: 'quantity', description: 'Уникальный идентификатор фото' })
+    // @IsNumber()
+    // quantity: number;
 
     @ApiProperty({ example: 'info', description: 'Уникальный идентификатор фото' })
     @IsArray({ message: 'info должно быть массивом!' })
@@ -47,12 +47,12 @@ export class CreateMerchandiseDomainDto {
     @ApiProperty({ example: 'Новогодние Фото', description: 'Новогодняя подборка 2024' })
     @IsString({ message: 'merchandiseImgName должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле merchandiseImgName не должно быть пустым!' })
-    merchandiseImgName: string;
+    merchandiseImgName: string | null;
 
     @ApiProperty({ example: 'Новогодние Фото', description: 'Новогодняя подборка 2024' })
     @IsString({ message: 'merchandiseCoverName должно быть строкой!' })
     @IsNotEmpty({ message: 'Поле merchandiseCoverName не должно быть пустым!' })
-    merchandiseCoverName: string;
+    merchandiseCoverName: string | null;
 
     @ApiProperty({ example: 'createdAt', description: 'createdAt!' })
     createdAt: string;

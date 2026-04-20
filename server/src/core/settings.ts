@@ -31,6 +31,7 @@ export const SETTINGS = {
         shopbrand: '/shop-brand',
         merchandise: '/merchandise',
         merchandisetype: '/merchandise-type',
+        merchandisebrands: '/merchandise-brand',
         __test__: '/testing'
     },
     Nodemailer: {

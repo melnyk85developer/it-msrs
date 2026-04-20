@@ -15,8 +15,8 @@ import { routeMain as routeMyBlog } from '../../../../../services/Blogs/src/MyBl
 import AppSettings from '../../../../../services/SettingsMyProfile/src/router/Router';
 import { routeMain as routeSettingsMyProfile } from '../../../../../services/SettingsMyProfile/src/SettingsMyProfile/SettingsProfile';
 import UserProfileContainer, { routeMain as routeUserProfile } from '../../../../../services/UserProfile/src/UserProfile/UserProfileContainer';
-import MyShopsContainer from '../../../../../services/MyShops/src/Shop/myShopsContainer';
-import { routeMain as routeMyShop } from '../../../../../services/MyShops/src/Shop/routes';
+import AppShops from '../../../../../services/MyShops/src/router/Router';
+import { routeMain as routeMyShop } from '../../../../../services/MyShops/src/MyShops/myShopsContainer';
 import ShopsListContainer, { routeMain as routeShopsList } from '../../../../../services/ShopsList/src/ShopListContainer';
 import BlogsListContainer, { routeMain as routeBlogsList } from '../../../../../services/BlogsList/src/BlogListContainer';
 import AuthContainer, { routeMain as routeAuth } from '../../../../../services/Auth/src/AuthContainer';
@@ -166,10 +166,10 @@ const MyRoutes: React.FC = () => {
                             <Route path={`${routeMyProfile()}/*`} element={<AppProfile />} />
                             <Route path={`${routeMessage()}/*`} element={<AppMessages />} />
                             <Route path={`${routeMyBlog()}/*`} element={<AppBlogs />} />
+                            <Route path={`${routeMyShop()}/*`} element={<AppShops />} />
 
                             <Route path={`${routeSettingsMyProfile()}/*`} element={<AppSettings />} />
                             <Route path={`${routeUserProfile()}/*`} element={<UserProfileContainer />} />
-                            <Route path={`${routeMyShop()}/*`} element={<MyShopsContainer />} />
                             <Route path={`${routeShopsList()}/*`} element={<ShopsListContainer />} />
                             <Route path={`${routeBlogsList()}/*`} element={<BlogsListContainer />} />
                             <Route path={`${routeMusicContainer()}/*`} element={<MusicContainer />} />

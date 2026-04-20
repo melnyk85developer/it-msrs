@@ -17,7 +17,7 @@ export class MerchandiseBrandTestManager {
     ) {
         // console.log('TEST - ⚙️ : - MerchandiseBrandTestManager - dataBrand', dataBrand)
         const response = await request(this.app.getHttpServer())
-            .get(`${SETTINGS.RouterPath.brands}/brand`)
+            .get(`${SETTINGS.RouterPath.merchandisebrands}/brand`)
             .set('Authorization', `Bearer ${accessToken}`)
             .query(dataBrand)
             .expect(expectedStatusCode)
@@ -36,7 +36,7 @@ export class MerchandiseBrandTestManager {
     ) {
         // console.log('TEST - ⚙️ : - AuthTestManager - login: req data', data)
         const response = await request(this.app.getHttpServer())
-            .get(`${SETTINGS.RouterPath.brands}/brand/${brandId}`)
+            .get(`${SETTINGS.RouterPath.merchandisebrands}/brand/${brandId}`)
             .set('User-Agent', userAgent)
             .expect(expectedStatusCode);
         // console.log('TEST - ⚙️ : - AuthTestManager - response.body: ', response.body)
@@ -53,7 +53,7 @@ export class MerchandiseBrandTestManager {
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
         const response = await request(this.app.getHttpServer())
-            .post(`${SETTINGS.RouterPath.brands}/brand`)
+            .post(`${SETTINGS.RouterPath.merchandisebrands}/brand`)
             .set('Authorization', `Bearer ${accessToken}`)
             .send(shopBrand)
             .expect(expectedStatusCode);
@@ -73,7 +73,7 @@ export class MerchandiseBrandTestManager {
     ) {
         // console.log('accessToken: - ⚙️', accessToken)
         const response = await request(this.app.getHttpServer())
-            .put(`${SETTINGS.RouterPath.brands}/brand/${brandId}`)
+            .put(`${SETTINGS.RouterPath.merchandisebrands}/brand/${brandId}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .send(data)
             .expect(expectedStatusCode);
@@ -95,7 +95,7 @@ export class MerchandiseBrandTestManager {
         // console.log('TEST authTestManager: - ⚙️ brandId ⚙️ - ', brandId)
         // console.log('TEST authTestManager refreshToken: - ⚙️req⚙️', refreshToken)
         const response = await request(this.app.getHttpServer())
-            .delete(`${SETTINGS.RouterPath.brands}/brand/${brandId}`)
+            .delete(`${SETTINGS.RouterPath.merchandisebrands}/brand/${brandId}`)
             .set('Authorization', `Bearer ${accessToken}`)
             // .set('Cookie', `refreshToken=${refreshToken}`)
             .set('User-Agent', userAgent)

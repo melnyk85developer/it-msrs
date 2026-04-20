@@ -93,7 +93,7 @@ export class ShopTypeController {
     @UseGuards(JwtOptionalAuthGuard)
     @Get()
     @HttpCode(HTTP_STATUSES.OK_200)
-    async getAllShopTypeController(
+    async getAllShopTypesController(
         @Query() query: GetShopTypeQueryParams,
         @ExtractUserIfExistsFromRequest() user: UserContextDto,
     ): Promise<PaginatedViewDto<ShopTypeViewDto[]>> {
