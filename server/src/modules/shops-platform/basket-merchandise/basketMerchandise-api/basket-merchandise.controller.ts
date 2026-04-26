@@ -30,14 +30,14 @@ export class BasketMerchandiseController {
         @Body() dto: CreateBasketMerchandiseInputDto,
         @ExtractUserFromRequest() user: UserContextDto,
     ): Promise<BasketMerchandiseViewDto> {
-        // console.log('BasketMerchandiseController: - dto', dto)
+        console.log('BasketMerchandiseController: - dto', dto)
         const basketMerchandiseId = await this.commandBus.execute<CreateBasketMerchandiseCommand, string>(
             new CreateBasketMerchandiseCommand(
                 user.id,
                 dto
             ),
         );
-        // console.log('BasketMerchandiseController: - albumId', albumId)
+        console.log('BasketMerchandiseController: - basketMerchandiseId', basketMerchandiseId)
         return await this.basketMerchandiseQueryRepository.findBasketMerchandiseByIdOrNotFoundFailRepository(basketMerchandiseId);
     }
     @ApiOperation({ summary: 'Удаление фотоальбома!' })
@@ -49,7 +49,7 @@ export class BasketMerchandiseController {
         @Param('basketMerchandiseId') basketMerchandiseId: string,
         @ExtractUserFromRequest() user: UserContextDto,
     ) {
-        // console.log('BasketMerchandiseController: - deleteBasketMerchandiseController albumId', albumId)
+        console.log('BasketMerchandiseController: - deleteBasketMerchandiseController basketMerchandiseId', basketMerchandiseId)
         return await this.commandBus.execute<DeleteBasketMerchandiseCommand, string>(
             new DeleteBasketMerchandiseCommand(
                 basketMerchandiseId,
@@ -65,7 +65,7 @@ export class BasketMerchandiseController {
         @Query() query: GetBasketMerchandiseQueryParams,
         @ExtractUserFromRequest() user: UserContextDto,
     ): Promise<PaginatedViewDto<BasketMerchandiseViewDto[]>> {
-        // console.log('BasketMerchandiseController: - getAllBasketMerchandiseController query', query)
+        console.log('BasketMerchandiseController: - getAllBasketMerchandiseController query', query)
         return await this.basketMerchandiseQueryRepository.getAllBasketMerchandiseQueryRepository(query, user.id)
     }
     @ApiOperation({ summary: 'Получить одно устройство в корзине!' })

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import basketImg from '@packages/shared/src/assets/basketBlack.png'
-import star from '@packages/shared/src/assets/star.png'
+import { useNavigate, useParams } from 'react-router-dom';
+import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
 import { CheckCircleFilled, LoadingOutlined } from "@ant-design/icons";
-import { API_URL } from "@packages/shared/src/http";
-import { Merchandise, Info, MyBasket, MyShopsType } from "@packages/shared/src/types/shopsTypes";
-import { AppDispatch } from "@packages/shared/src/store/redux-store";
-import { addToBasketMerchandiseAC, deleteToBasketMerchandiseAC } from "@packages/shared/src/store/MyShopsReducers/myShopsSlice";
-import { IUser } from "@packages/shared/src/types/IUser";
-import { Input } from "antd";
+import { API_URL } from "../../../../../../packages/shared/src/http";
+import { Merchandise, Info, MyBasket, MyShopsType } from "../../../../../../packages/shared/src/types/shopsTypes";
+import { AppDispatch } from "../../../../../../packages/shared/src/store/redux-store";
+import { addToBasketMerchandiseAC, deleteToBasketMerchandiseAC } from "../../../../../../packages/shared/src/store/MyShopsReducers/myShopsSlice";
+import { IUser } from "../../../../../../packages/shared/src/types/IUser";
+import { Col, Input } from "antd";
+import { IoCloseSharp } from "react-icons/io5";
+import { PiShoppingCartThin } from "react-icons/pi";
 import classes from './styles.module.scss';
 
 type PropsType = {
@@ -20,33 +21,31 @@ type PropsType = {
     dispatch: AppDispatch;
     authorizedUser: IUser;
     setModalActiveBasket: any;
-    modalActive: boolean;
+    setRemodal: React.Dispatch<React.SetStateAction<boolean>>
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>
 };
 const MerchandiseDetail: React.FC<PropsType> = React.memo(({
-    merchandiseId, shop, basket, reModal, merchandise,
-    authorizedUser, setModalActiveBasket, dispatch,
-    modalActive, setModalActive
+    merchandiseId,
+    shop, basket, reModal, merchandise,
+    authorizedUser, setModalActiveBasket,
+    dispatch,
+    setModalActive
 }) => {
     const [inputQuantityValue, setInputQuantityValue] = useState(1);
     const [addedDevice, setAdedDevice] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
     let quantity = inputQuantityValue
 
     if (quantity === 0) {
         quantity = 1
     }
-
-    // useEffect(() => {
-    //     if (modalActive === true && shop && merchandiseId) {
-    //         navigate(`/myshops/${shop.shopId}/merchandise/${merchandiseId}`,
-    //             {
-    //                 replace: true
-    //             }
-    //         );
-    //     }
-    // }, [modalActive]);
+    const closeModal = (e: any) => {
+        e.stopPropagation();
+        navigate(`/myshops/${shop.shopId}`);
+        setModalActive(false);
+    }
 
     useEffect(() => {
         let added = basket.basketMerchandises?.some(item => item.merchandiseId === merchandiseId);
@@ -56,7 +55,7 @@ const MerchandiseDetail: React.FC<PropsType> = React.memo(({
     const addItemToCart = () => {
         if (basket.id && merchandiseId && shop.shopId) {
             setLoading(true)
-            dispatch(addToBasketMerchandiseAC(basket.id, merchandiseId, merchandise.name, shop.shopId, merchandise.price, quantity))
+            dispatch(addToBasketMerchandiseAC(basket.id, merchandiseId, merchandise.merchandiseName, shop.shopId, merchandise.price, quantity))
                 .then(() => setAdedDevice(true))
                 .then(() => setLoading(false))
         }
@@ -70,73 +69,81 @@ const MerchandiseDetail: React.FC<PropsType> = React.memo(({
     }
 
     return (
-        <div className={classes.wrapDetailDevice}>
-            <div className={classes.headerDetailDevice}>
-                <div className={classes.wrapNameRatingDetailDevice}>
-                    <div className={classes.deviceDetailName}>
-                        <h4>{merchandise?.name}</h4>
-                    </div>
-                    <div className={classes.wrapDeviceDetailRating}>
-                        <div className={classes.deviceDetailRatingNumber}>
-                            <strong>{merchandise?.rating}</strong>
+        <Col span={24} className={classes.wrapDetailMerchandise}>
+            <Col span={24} className={classes.wrapHeaderDetailMerchandise}>
+                <div className={classes.wrapMerchandiseDetailName}>
+                    <h1>
+                        {merchandise.merchandiseName}
+                    </h1>
+                    <IoCloseSharp
+                        className={`${classes.topIcon} ${classes.topIconHover}`}
+                        onClick={closeModal}
+                    />
+                </div>
+            </Col>
+            <Col span={24}>
+                <div className={classes.wrapBasketDetailMerchandise}>
+                    <div className={classes.basketDetailMerchandise}>
+                        <div className={classes.priceBlock}>
+                            <strong className={classes.price}>Цена{' ' + merchandise?.price + ' '}$</strong>
+                            <div className={loading === true ? `${classes.loadingActive}` : `${classes.loadingDisabled}`}>
+                                <LoadingOutlined />
+                            </div>
+                            <div className={classes.wrapAdded}>
+                                <div className={addedDevice === true ? `${classes.addedActive}` : `${classes.addedDisabled}`}>
+                                    <CheckCircleFilled style={{ color: '#43ca04' }} />
+                                    <strong>Добавленно</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div className={classes.wrapStarRaiting}>
-                            <img src={star} />
-                            <img src={star} />
-                            <img src={star} />
-                            <img src={star} />
-                            <img src={star} />
+                        <PiShoppingCartThin className={classes.shopingCartIcon} />
+                    </div>
+                    <div className={classes.basket}>
+                        <h4>Укажите количество единиц товара</h4>
+                        <Input
+                            value={inputQuantityValue}
+                            onChange={(e) => setInputQuantityValue(Number(e.target.value))}
+                            type="number"
+                            placeholder="Введите стоимость устройства"
+                            className={classes.numberOfPiecesInput}
+                        />
+                        <div className={classes.addЕoСart}>
+                            {authorizedUser.id
+                                ?
+                                addedDevice === false
+                                    ?
+                                    <strong onClick={addItemToCart}>Добавить в корзину</strong>
+                                    :
+                                    <strong onClick={removeItemToCart}>Отменить добавление в корзину</strong>
+                                :
+                                <strong onClick={() => setModalActiveBasket(true)}>Добавить в корзину</strong>
+                            }
                         </div>
                     </div>
                 </div>
-                <div className={classes.blockImgDevice}>
+            </Col>
+            <Col span={24}>
+                <div className={classes.blockImgMerchandise}>
                     <img src={API_URL + '/' + merchandise?.merchandiseImgName} />
                 </div>
-                <div className={classes.wrapBasketDetailDevice}>
-                    <div className={classes.headerBasketDetailDevice}>
-                        <h4>От{' ' + merchandise?.price + ' '}$</h4>
-                        <div className={loading === true ? `${classes.loadingActive}` : `${classes.loadingDisabled}`}>
-                            <LoadingOutlined />
-                        </div>
-                        <div className={addedDevice === true ? `${classes.addedActive}` : `${classes.addedDisabled}`}>
-                            <strong>Добавленно</strong>
-                            <CheckCircleFilled style={{ color: '#43ca04' }} />
-                        </div>
-                    </div>
-                    <img src={basketImg} />
-                    <h4>Укажите количество единиц товара</h4>
-                    <Input
-                        value={inputQuantityValue}
-                        onChange={(e) => setInputQuantityValue(Number(e.target.value))}
-                        type="number"
-                        placeholder="Введите стоимость устройства"
-                        className={classes.numberOfPiecesInput}
-                    />
-                    <div className={classes.addЕoСart}>
-                        {authorizedUser.id
-                            ?
-                            addedDevice === false
-                                ?
-                                <strong onClick={addItemToCart}>Добавить в корзину</strong>
-                                :
-                                <strong onClick={removeItemToCart}>Отменить добавление в корзину</strong>
-                            :
-                            <strong onClick={() => setModalActiveBasket(true)}>Добавить в корзину</strong>
-                        }
-                    </div>
+            </Col>
+            <Col span={24} className={classes.ratingBlockMerchandise}>
+                <div className={classes.wrapStarRaiting}>
+                    <IoStarOutline className={classes.starIcon} />
+                    <IoStarHalf className={classes.starIcon} />
+                    <IoStar className={classes.starIcon} />
                 </div>
-            </div>
-
-            <div className={classes.сharacteristicsDetailDevice}>
-                <h1>Характеристики товара</h1>
+            </Col>
+            <div className={classes.сharacteristicsDetailMerchandise}>
+                <h2>Характеристики товара</h2>
                 {merchandise.infos?.map((info: Info, index: number) =>
-                    <div key={info.deviceInfoId} style={{ background: index % 2 === 0 ? '#454545' : 'transparent', color: index % 2 === 0 ? "black" : '', padding: 5 }} className={classes.descriptionCharacteristicsDetailDevice}>
+                    <div key={info.deviceInfoId} style={{ background: index % 2 === 0 ? '#454545' : 'transparent', color: index % 2 === 0 ? "black" : '', padding: 5 }} className={classes.descriptionCharacteristicsDetailMerchandise}>
                         <strong>{info.title} : </strong>
                         <strong>{info.description}</strong>
                     </div>
                 )}
             </div>
-        </div>
+        </Col>
     )
 })
 export default MerchandiseDetail

@@ -61,11 +61,11 @@ const MyShopsContainer: React.FC = React.memo(() => {
     // console.log('MyShopsContainer: - merchandisesTypes', merchandisesTypes)
     // console.log('MyShopsContainer: - merchandisesBrands', merchandisesBrands)
 
-    const allTypeDevices = () => {
+    const allTypeMerchandises = () => {
         dispatch(setClickTypeAC(null))
             .then(() => setClickAllType(true))
     }
-    const allBrandsDevices = () => {
+    const allBrandsMerchandises = () => {
         dispatch(setClickBrandAC(null))
             .then(() => setClickAllBrand(true))
     }
@@ -80,8 +80,8 @@ const MyShopsContainer: React.FC = React.memo(() => {
     };
 
     useEffect(() => {
-        allTypeDevices()
-        allBrandsDevices()
+        allTypeMerchandises()
+        allBrandsMerchandises()
         dispatch(setLSidebarAC(SIDEBAR_ON));
         dispatch(setLSidebarSpanAC(5));
         dispatch(setContentSpanAC(10));
@@ -123,7 +123,7 @@ const MyShopsContainer: React.FC = React.memo(() => {
                 <h4>Типы товаров</h4>
 
                 <ul onClick={(e) => e.stopPropagation()} className={classes.type_product}>
-                    <li onClick={allTypeDevices} className={clickAllType === true ? `${classes.activeAllDevices}` : ''}>
+                    <li onClick={allTypeMerchandises} className={clickAllType === true ? `${classes.activeAllDevices}` : ''}>
                         Все товары
                     </li>
                     {/* {typesName} */}
@@ -184,6 +184,7 @@ const MyShopsContainer: React.FC = React.memo(() => {
                     setModalActiveMerchandise,
                     
                     shop,
+                    merchandise,
                     basket,
                     myshops,
                     allshops,
@@ -191,8 +192,8 @@ const MyShopsContainer: React.FC = React.memo(() => {
                     shopBrands,
                     merchandisesTypes,
                     merchandisesBrands,
-                    allBrandsDevices,
-                    allTypeDevices,
+                    allBrandsMerchandises,
+                    allTypeMerchandises,
 
                     selectedShop,
                     setSelectedShop,

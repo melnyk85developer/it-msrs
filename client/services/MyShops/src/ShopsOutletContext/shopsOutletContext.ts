@@ -1,11 +1,12 @@
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { IUser } from "@packages/shared/src/types/IUser";
-import { MerchandisesBrands, MerchandisesTypes, MyBasket, MyShopsType, ShopBrands, ShopTypes } from "@packages/shared/src/types/shopsTypes";
+import { Merchandise, MerchandisesBrands, MerchandisesTypes, MyBasket, MyShopsType, ShopBrands, ShopTypes } from "@packages/shared/src/types/shopsTypes";
 
 export type ShopsOutletContext = {
     setTitleMyShop: React.Dispatch<React.SetStateAction<string>>;
     titleMyShop: string;
     shop: MyShopsType;
+    merchandise: Merchandise;
     basket: MyBasket;
     allshops: MyShopsType[];
     myshops: MyShopsType[];
@@ -24,19 +25,19 @@ export type ShopsOutletContext = {
     setModalActiveType: React.Dispatch<React.SetStateAction<boolean>>;
     modalActiveBrand: boolean;
     setModalActiveBrand: React.Dispatch<React.SetStateAction<boolean>>;
-    modalActiveDevice: boolean;
-    setModalActiveDevice: React.Dispatch<React.SetStateAction<boolean>>;
+    modalActiveMerchandise: boolean;
+    setModalActiveMerchandise: React.Dispatch<React.SetStateAction<boolean>>;
     modalActiveBasket: boolean;
     setModalActiveBasket: React.Dispatch<React.SetStateAction<boolean>>;
     modalActiveCreateShop: boolean;
     setModalActiveCreateShop: React.Dispatch<React.SetStateAction<boolean>>;
     modalActiveUpdateShop: boolean;
     setModalActiveUpdateShop: React.Dispatch<React.SetStateAction<boolean>>;
-    allBrandsDevices: () => void;
-    allTypeDevices: () => void;
+    allBrandsMerchandises: () => void;
+    allTypeMerchandises: () => void;
     clickBrand: (id: string) => void;
-    page: number;
-    limit: number;
+    pageNumber: number;
+    pageSize: number;
     isAuth: boolean;
     authorizedUser: IUser;
     isDarkTheme: string;

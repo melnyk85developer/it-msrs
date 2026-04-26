@@ -23,58 +23,48 @@ import { useNavigate } from 'react-router-dom';
 
 type PropsType = {
     merchandiseId: string
-    shopTypes: ShopTypes[];
-    shopBrands: ShopBrands[];
-    merchandisesTypes: MerchandisesTypes[];
-    merchandisesBrands: MerchandisesBrands[];
-    name: string
-    price: number
-    rating: number
-    merchandiseImgName: string
+    merchandise: Merchandise,
+
+    setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+    setRemodal: React.Dispatch<React.SetStateAction<boolean>>;
+    setModalWarningActive: React.Dispatch<React.SetStateAction<boolean>>;
+    setModalUpdateMerchandiseActive: React.Dispatch<React.SetStateAction<boolean>>;
+    merchandiseName: string;
+    price: number;
+    rating: number;
+    merchandiseImgName: string;
     shop: MyShopsType;
     basket: MyBasket;
     dispatch: AppDispatch;
     authorizedUser: IUser;
-    click_typeId: string;
-    click_brandId: string;
     click_deviceId: string;
-    page: number;
     setModalActiveBasket: any;
 }
 const MerchandiseItem: React.FC<PropsType> = React.memo(({
-    merchandiseId, shopTypes, shopBrands, merchandisesTypes,
-    merchandisesBrands, name, price, rating, merchandiseImgName,
-    shop, basket, authorizedUser, click_brandId, click_typeId,
-    click_deviceId, page, setModalActiveBasket, dispatch
+    dispatch,
+    merchandiseId,
+    merchandise,
+
+    merchandiseImgName,
+    shop,
+    basket,
+    authorizedUser,
+    click_deviceId,
+    setModalActiveBasket,
+    setModalActive,
+    setModalWarningActive,
+    setModalUpdateMerchandiseActive,
 }) => {
-    const [modalActive, setModalActive] = useState(false);
-    const [modalWarningActive, setModalWarningActive] = useState(false);
-    const [modalUpdateMerchandiseActive, setModalUpdateMerchandiseActive] = useState(false);
     const [addedMerchandise, setAdedMerchandise] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [reModal, setRemodal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
-    const typeId = click_typeId
-    const brandId = click_brandId
     let quantity = 1
-
-    const merchandise = shop.merchandises.filter(item => item.merchandiseId === merchandiseId)[0]
 
     if (quantity === 0) {
         quantity = 1
     }
-
-    // useEffect(() => {
-    //     if (modalActive === false && shop) {
-    //         navigate(`/myshops/${shop.shopId}`,
-    //             {
-    //                 replace: true
-    //             }
-    //         );
-    //     }
-    // }, [modalActive]);
 
     useEffect(() => {
         let added = basket.basketMerchandises?.some(item => item.merchandiseId === merchandiseId);
@@ -88,10 +78,36 @@ const MerchandiseItem: React.FC<PropsType> = React.memo(({
         };
     }, []);
 
-    const addItemToCart = () => {
-        if (basket.id && merchandiseId && shop.shopId) {
+    // const merchandise = shop.merchandises.filter(item => item.merchandiseId === merchandiseId)[0]
+
+    // console.log('MerchandiseItem: - merchandise', merchandise)
+    console.log('MerchandiseItem: - basket', basket)
+
+    const openModal = (e: any) => {
+        e.stopPropagation();
+        setModalActive(true);
+        dispatch(setMerchandisesDetailAC(merchandiseId))
+        navigate(`/myshops/${shop.shopId}/merchandise/${merchandiseId}`);
+
+        // dispatch(setClickMerchandiseAC(merchandiseId));
+        // setRemodal(prevState => !prevState)
+
+        // if (basket && Object.keys(basket).length === 0) {
+        //     dispatch(createMyBasketAC(authorizedUser.id, shop.shopId));
+        // }
+    }
+
+    const addToBasketMerchandise = () => {
+        if (basket.basketId && merchandiseId && shop.shopId) {
             setLoading(true)
-            dispatch(addToBasketMerchandiseAC(basket.id, merchandiseId, merchandise.name, shop.shopId, merchandise.price, quantity))
+            dispatch(addToBasketMerchandiseAC(
+                basket.basketId,
+                merchandiseId,
+                merchandise.merchandiseName,
+                shop.shopId,
+                merchandise.price,
+                quantity
+            ))
                 .then(() => setAdedMerchandise(true))
                 .then(() => setLoading(false))
         }
@@ -106,19 +122,6 @@ const MerchandiseItem: React.FC<PropsType> = React.memo(({
     const clickUpdateMerchandise = () => {
         dispatch(setMerchandisesDetailAC(merchandiseId))
             .then(() => setModalUpdateMerchandiseActive(true))
-    }
-    const deleteMerchandise = () => {
-        dispatch(deleteMerchandiseAC(merchandiseId))
-            .then(() => dispatch(setMerchandisesAC(shop.shopId, typeId, brandId, page, 9)))
-    }
-    const openModal = (e: any) => {
-        e.stopPropagation();
-        setModalActive(true);
-        dispatch(setClickMerchandiseAC(merchandiseId));
-        setRemodal(prevState => !prevState)
-        if (basket && Object.keys(basket).length === 0) {
-            dispatch(createMyBasketAC(authorizedUser.id, shop.shopId));
-        }
     }
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -161,7 +164,7 @@ const MerchandiseItem: React.FC<PropsType> = React.memo(({
                             {authorizedUser.id
                                 ?
                                 addedMerchandise === false
-                                    ? <span onClick={addItemToCart}>Добавить в корзину</span>
+                                    ? <span onClick={addToBasketMerchandise}>Добавить в корзину</span>
                                     : <span onClick={removeItemToCart}>Отменить</span>
                                 :
                                 <span onClick={() => setModalActiveBasket(true)}>Добавить в корзину</span>
@@ -175,59 +178,21 @@ const MerchandiseItem: React.FC<PropsType> = React.memo(({
             </div>
             <div onClick={openModal} className={classes.itemMerchandise}>
                 <div className={classes.wrapImgMerchandise}>
-                    <img src={API_URL + '/' + merchandiseImgName} />
+                    <img src={API_URL + '/' + merchandise?.merchandiseImgName} />
                 </div>
                 <div className={classes.wrapItemDescription}>
                     <div className={classes.nameMerchandiseItem}>
-                        <strong>{name}</strong>
+                        <strong>{merchandise?.merchandiseName}</strong>
                     </div>
                     <div className={classes.ratingMerchandiseItem}>
-                        <strong>{rating}</strong><StarOutlined />
+                        <strong>{merchandise?.rating}</strong><StarOutlined />
                     </div>
                     <div className={classes.priceMerchandiseItem}>
-                        <strong>{price}</strong>$
+                        <strong>{merchandise?.price}</strong>$
                     </div>
                 </div>
             </div>
-            <ModalWindows modalActive={modalActive} setModalActive={setModalActive}>
-                <MerchandiseDetail
-                    merchandiseId={merchandiseId}
-                    shop={shop}
-                    reModal={reModal}
-                    basket={basket}
-                    dispatch={dispatch}
-                    merchandise={merchandise}
-                    authorizedUser={authorizedUser}
-                    setModalActiveBasket={setModalActiveBasket}
-                    modalActive={modalActive}
-                    setModalActive={setModalActive}
-                />
-            </ModalWindows>
-            <ModalWindows modalActive={modalUpdateMerchandiseActive} setModalActive={setModalUpdateMerchandiseActive}>
-                <UpdateMerchandise
-                    shop={shop}
-                    shopTypes={shopTypes}
-                    shopBrands={shopBrands}
-                    merchandisesTypes={merchandisesTypes}
-                    merchandisesBrands={merchandisesBrands}
-                    merchandise={merchandise}
-                    dispatch={dispatch}
-                    page={page}
-                    setModalUpdateDeviceActive={setModalUpdateMerchandiseActive}
-                />
-            </ModalWindows>
-            <ModalWindows modalActive={modalWarningActive} setModalActive={setModalWarningActive}>
-                <div className={classes.wrapWarningBlock}>
-                    <div className={classes.WarningBlock}>
-                        <h1>Вы уверенны, что хотите удалить этот товар?</h1>
-                        <h2>Это действие не возможно будет отменить!</h2>
-                        <div className={classes.buttonBlock}>
-                            <Button onClick={() => setModalWarningActive(false)}>Нет</Button>
-                            <Button onClick={deleteMerchandise}>Да</Button>
-                        </div>
-                    </div>
-                </div>
-            </ModalWindows>
+
         </div>
     );
 })

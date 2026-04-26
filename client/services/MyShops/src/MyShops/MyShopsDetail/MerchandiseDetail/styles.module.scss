@@ -1,129 +1,106 @@
-.wrapDetailDevice {
-    height: auto;
+.wrapDetailMerchandise {
+    min-width: 70vh;
+    max-width: 90vh;
+    min-height: 77vh;
+    max-height: 81vh;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 8px;
+    color: wheat;
 
-    .headerDetailDevice {
+    .wrapHeaderDetailMerchandise {
+        margin-bottom: 10px;
+        .wrapMerchandiseDetailName {
+            display: flex;
+            justify-content: space-between;
+
+            h1 {
+                display: inline-block;
+                text-align: center;
+            }
+
+            .topIcon {
+                margin-left: auto;
+                font-size: 20px;
+            }
+
+            .topIcon:hover {
+                color: #FFAC00;
+            }
+
+            // outline: 1px solid green;
+        }
+    }
+
+    .wrapBasketDetailMerchandise {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
+        justify-content: space-between;
+        // flex-direction: column;
+        border-radius: 8px;
+        margin-bottom: 10px;
 
-        .wrapNameRatingDetailDevice {
-            display: flex;
-            flex-direction: column; /* Вертикальное расположение элементов */
-            margin-right: 20px;
-            padding: 15px 10px;
-            min-width: 300px;
-            width: 33%;
-            min-height: 300px;
-            max-height: 400px;
-            border: 1px solid #9c9797;
-            border-radius: 8px;
-            .deviceDetailName {
-                h4 {
-                    font-size: 22px;
-                    text-align: center;
+        .basketDetailMerchandise {
+
+            // outline: 1px solid rgb(255, 153, 0);
+            .priceBlock {
+                .price {
+                    display: block;
                 }
-            }
 
-            .wrapDeviceDetailRating {
-                margin-top: auto;
-                width: 100%;
-                .deviceDetailRatingNumber {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-bottom: 50px;
-                    strong {
-                        display: block;
-                        margin: 0 auto;
-                        font-size: 30px;
-                        text-align: center;
-                    }
-                }
-                .wrapStarRaiting {
-                    display: flex;
-                    justify-content: space-between;
-                    img {
-                        width: 50px;
-                        // margin-left: auto;
-                    }
-                }
-            }
-        }
-
-        .blockImgDevice {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 300px;
-            width: 33%;
-            max-height: 400px;
-            overflow: hidden; /* Чтобы скрыть части изображения, выходящие за границы блока */
-            border-radius: 8px;
-            margin-right: 20px;
-
-            img {
-                max-width: 400px;
-                max-height: 400px;
-                object-fit: contain; /* Сохранение пропорций изображения */
-                display: block;
-                border-radius: 8px;
-            }
-        }
-
-        .wrapBasketDetailDevice {
-            display: flex;
-            flex-direction: column; /* Вертикальное расположение элементов */
-            min-width: 300px;
-            width: 33%;
-            min-height: 300px;
-            max-height: 400px;
-            padding: 15px 10px;
-            border: 1px solid #9c9797;
-            border-radius: 8px;
-
-            .headerBasketDetailDevice {
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                h4 {
-                    margin-left: 5px;
-                    text-align: center;
-                }
                 .loadingDisabled {
                     display: none;
                 }
+
                 .loadingActive {
                     color: rgb(0, 255, 0);
                     margin: 2px 20px 0 0;
                 }
-                .addedDisabled {
-                    display: none;
-                }
-                .addedActive {
-                    strong {
-                        margin-right: 5px;
+
+                .wrapAdded {
+                    display: block;
+                    margin-top: 5px;
+                    height: 15px;
+
+                    // outline: 1px solid rgb(255, 153, 0);
+                    .addedDisabled {
+                        display: none;
+                    }
+
+                    .addedActive {
+                        strong {
+                            margin-left: 3px;
+                        }
                     }
                 }
             }
 
-            img {
-                width: 150px;
-                display: block;
+            .shopingCartIcon {
+                margin-top: 5px;
+                font-size: 50px;
+                font-weight: 100;
+                color: black;
             }
+        }
+
+        .basket {
+            color: wheat;
+
             .numberOfPiecesInput {
-                color: #e2e2e2;
+                color: wheat;
                 background-color: #282828;
-                border: 1px solid black;
+                border: 1px solid rgb(85, 84, 84);
             }
+
             h4 {
                 margin-bottom: 8px;
             }
+
             .addЕoСart {
                 margin-top: auto;
                 padding: 5px;
                 background-color: #282828;
-                border: 1px solid black;
+                border: 1px solid rgb(85, 84, 84);
+
                 border-radius: 8px;
                 cursor: pointer;
 
@@ -141,13 +118,57 @@
         }
     }
 
-    .сharacteristicsDetailDevice {
+    .blockImgMerchandise {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        width: 100%;
+        min-height: 0;
+        max-height: 300px;
+        overflow: hidden;
+        border-radius: 8px;
+        border: 1px solid rgb(85, 84, 84);
+        border-radius: 8px;
+
+        img {
+            min-width: 375px;
+            max-width: 600px;
+            object-fit: contain;
+            display: block;
+            border-radius: 8px;
+        }
+    }
+
+    .ratingBlockMerchandise {
+        padding: 5px 0;
+
+        .wrapStarRaiting {
+            display: flex;
+            justify-content: space-between;
+            width: 20%;
+            margin: 0 auto;
+
+            .starIcon {
+                font-size: 25px;
+                color: grey;
+                cursor: pointer;
+                // margin-left: auto;
+            }
+
+            .starIcon:hover {
+                color: #FFAC00;
+            }
+        }
+    }
+
+    .сharacteristicsDetailMerchandise {
         width: auto;
-        min-height: 30vh;
-        max-height: 52vh;
-        margin-top: 20px;
+        min-height: 25vh;
+        max-height: 30vh;
+        // margin-top: 20px;
         padding: 20px;
-        border: 1px solid #9c9797;
+        border: 1px solid rgb(85, 84, 84);
         border-radius: 8px;
 
         h1 {
@@ -155,7 +176,7 @@
             margin-bottom: 15px;
         }
 
-        .descriptionCharacteristicsDetailDevice {
+        .descriptionCharacteristicsDetailMerchandise {
             display: flex;
             justify-content: space-between;
             margin: 5px 0;

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios"
 import $api from "../http"
-import { Merchandise, MyShopsType, MerchandisesTypes, ShopTypes, addMerchandiseType } from "@/types/shopsTypes"
+import { Merchandise, MyShopsType, MerchandisesTypes, ShopTypes, addMerchandiseType, UpdateMerchandise } from "@/types/shopsTypes"
 
 export default class MyShopsAPI {
     static async createShopAPI(shop: any): Promise<AxiosResponse<MyShopsType>> {
@@ -78,10 +78,10 @@ export default class MyShopsAPI {
 
         return await $api.post<Merchandise>(`/merchandise/`, formData)
     }
-    static async updateMerchandiseAPI(merchandise: Merchandise): Promise<AxiosResponse<Merchandise>> {
+    static async updateMerchandiseAPI(merchandise: UpdateMerchandise): Promise<AxiosResponse<Merchandise>> {
         const merchandiseId = merchandise.merchandiseId
         const formData = new FormData()
-        formData.append('name', merchandise.name)
+        formData.append('merchandiseName', merchandise.merchandiseName)
         formData.append('price', `${merchandise.price}`)
         formData.append('image', merchandise.file)
         formData.append('info', JSON.stringify(merchandise.info))
@@ -104,13 +104,13 @@ export default class MyShopsAPI {
     static async addToBasketMerchandiseAPI(
         basketId: string,
         merchandiseId: string,
-        name: string,
+        merchandiseName: string,
         shopId: string,
         price: number,
         quantity: number
     ): Promise<AxiosResponse<any>> {
 
-        return await $api.post<any>(`/basket-merchandise`, { basketId, merchandiseId, name, shopId, price, quantity })
+        return await $api.post<any>(`/basket-merchandise`, { basketId, merchandiseId, merchandiseName, shopId, price, quantity })
     }
     static async deleteToBasketMerchandiseAPI(basketMerchandiseId: string): Promise<AxiosResponse<any>> {
         return await $api.delete<any>(`/basket-merchandise/${basketMerchandiseId}`)

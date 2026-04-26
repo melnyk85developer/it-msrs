@@ -22,7 +22,7 @@ export type AllShopsType = {
     updatedAt: string;
 }
 export type MyBasket = {
-    id: string;
+    basketId: string;
     userId: string;
     shopId: string;
     basketMerchandises: BasketMerchandise[];
@@ -53,22 +53,55 @@ export type MerchandisesBrands = {
     brandId: string
     merchandiseBrandName: string
 }
-export type Merchandise = {
-    merchandiseId: string
-    name: string
-    price: number
-    rating: number
-    merchandiseImgName: string
+export type CreateMerchandise = {
+    merchandiseName: string;
+    price: number;
+    rating: number;
     file?: File
-    shopId: string
-    brandId: string | null
-    info: Array<Info> | null
-    typeId: string | null
-    createdAt: string
-    updatedAt: string
-    infos: Info[]
+    info: Array<Info> | null;
+    infos: Info[];
+    userId: string;
+    shopId: string;
+    brandId: string | null;
+    typeId: string | null;
+    createdAt: string;
+    updatedAt: string;
 }
-export type SetDevicesParams = {
+export type UpdateMerchandise = {
+    merchandiseId: string;
+    merchandiseName: string;
+    price: number;
+    rating: number;
+    merchandiseImgName: string;
+    merchandiseCoverName: string;
+    file?: File
+    userId: string;
+    shopId: string;
+    brandId: string | null;
+    info: Array<Info> | null;
+    typeId: string | null;
+    createdAt: string;
+    updatedAt: string;
+    infos: Info[];
+}
+export type Merchandise = {
+    merchandiseId: string;
+    merchandiseName: string;
+    price: number;
+    rating: number;
+    merchandiseImgName: string;
+    merchandiseCoverName: string;
+    // file?: File
+    userId: string;
+    shopId: string;
+    brandId: string | null;
+    info: Array<Info> | null;
+    typeId: string | null;
+    createdAt: string;
+    updatedAt: string;
+    infos: Info[];
+}
+export type SetMerchandisesParams = {
     typeId: string
     brandId: string
     page: number

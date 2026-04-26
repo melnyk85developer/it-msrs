@@ -55,7 +55,7 @@ export class CreatePromptForTerminatorUseCase
             ollPrompts = await this.messageAiAssistantRepository.findMessagesByDialogId(dialogId)
         }
         const assistant = await this.usersRepository.findById(receiverId)
-        // console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 assistant ', assistant)
+        console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 assistant ', assistant)
         if (assistant && assistant.systemUserData && assistant.systemUserData.systemPrompts) {
             systemPrompts = assistant.systemUserData.systemPrompts
             provider1 = assistant.systemUserData.provider1
@@ -75,8 +75,8 @@ export class CreatePromptForTerminatorUseCase
         console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 model1 ', model1)
         console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 provider2 ', provider2)
         console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 model2 ', model2)
-        console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 rule ', rule)
-        console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 ollPrompts ', ollPrompts.lenght)
+        // console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 rule ', rule)
+        // console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 ollPrompts ', ollPrompts?.lenght)
 
         const createdMessage = await this.commandBus.execute(
             new CreateMessageAiAssistantCommand(command.dto)
@@ -100,7 +100,7 @@ export class CreatePromptForTerminatorUseCase
             role: 'user',
             content: prompt
         })
-        // console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 messages ', messages)
+        console.log('CreateMessageAiAssistantUseCase: - 👍🏻👍🏻👍🏻 messages ', messages)
 
         // 🔥 1. ВНЕШНИЕ ПРОВАЙДЕРЫ (ПЕРВЫЕ)
         try {

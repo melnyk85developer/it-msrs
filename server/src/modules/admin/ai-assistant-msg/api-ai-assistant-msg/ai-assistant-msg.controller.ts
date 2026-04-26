@@ -121,7 +121,10 @@ export class AiAssistantController {
     @Post('/ai-assistant/orchestrate')
     @HttpCode(HTTP_STATUSES.CREATED_201)
     @UseInterceptors(FileInterceptor('image'))
-    @UseInterceptors(AiStreamInterceptor)
+    @UseInterceptors(
+        // ContinueInterceptor,
+        AiStreamInterceptor
+    )
     async createPromptForTerminatorController(
         @Body() dto: CreatePromptAiInputDto,
         @UploadedFile() image: Multer.File

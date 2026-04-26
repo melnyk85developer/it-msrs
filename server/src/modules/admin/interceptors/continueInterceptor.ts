@@ -45,8 +45,9 @@ export class ContinueInterceptor implements NestInterceptor {
         // console.log('ContinueInterceptor: - 👍🏻👍🏻👍🏻 assistant ID', assistant)
 
         if (!assistant) {
-            assistant = await this.usersRepository.findByLoginOrEmail('MR 3');
-            console.log('ContinueInterceptor: - 👍🏻👍🏻👍🏻 assistant LOGIN', assistant)
+            // assistant = await this.usersRepository.findByLoginOrEmail('MR 3');
+            assistant = await this.usersRepository.findByAdminRepository('ORCHESTRATOR');
+            // console.log('ContinueInterceptor: - 👍🏻👍🏻👍🏻 assistant LOGIN', assistant)
         }
 
         if (!assistant) {

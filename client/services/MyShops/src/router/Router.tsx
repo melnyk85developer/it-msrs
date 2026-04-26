@@ -1,6 +1,6 @@
 import MyShopsList from "../MyShops/myShopsList"
 import MyShopsContainer from "../MyShops/myShopsContainer"
-import MyShopsDetail, { routeMain as routeMyShopsDetail } from "../MyShops/MyShopsDetail"
+import MyShop, { routeMain as routeMyShopsDetail } from "../MyShops/MyShopsDetail"
 import ShopDetailContainer from "../UserShops/AllShopDetail/ShopDetailContainer"
 import UsersShopsContainer from "../UserShops/userShopsContainer"
 import { Suspense } from "react"
@@ -27,10 +27,14 @@ const AppShops = () => {
                 <Route path=":myshopId">
                     <Route index element={
                         <Suspense fallback={'Loading...'}>
-                            <MyShopsDetail />
+                            <MyShop />
                         </Suspense>
                     } />
-                    <Route path=":myshopId/merchandise/:merchandiseId" element={null} />
+                    <Route path="merchandise/:merchandiseId" element={
+                        <Suspense fallback={'Loading...'}>
+                            <MyShop />
+                        </Suspense>
+                    } />
                 </Route>
                 <Route path="shops">
                     <Route index element={

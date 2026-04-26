@@ -309,6 +309,7 @@ export const setMerchandisesAC = (shopId: string, typeId?: string, brandId?: str
 export const setMerchandisesDetailAC = (merchandiseId: string) => async (dispatch: AppDispatch) => {
     try {
         const data = await MyShopsAPI.getOneMerchandiseAPI(merchandiseId)
+        console.log('setMerchandisesDetailAC res - ', data.data)
         dispatch(myShopsSlice.actions.setMerchandiseDetail(data.data))
     } catch (e: any) {
         dispatch(myShopsSlice.actions.myShopsFetchingError(e.response?.data?.message))

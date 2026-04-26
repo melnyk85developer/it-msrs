@@ -9,14 +9,12 @@ import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import classes from './styles.module.scss';
 
 type PropsType = {
+    dispatch: AppDispatch;
     shop: MyShopsType;
     shopTypes: ShopTypes[];
     shopBrands: ShopBrands[];
-    merchandisesTypes: MerchandisesTypes[];
-    merchandisesBrands: MerchandisesBrands[];
     merchandise: Merchandise;
-    page: number;
-    dispatch: AppDispatch;
+    pageNumber: number;
     setModalUpdateDeviceActive: any;
 }
 
@@ -24,8 +22,6 @@ const UpdateMerchandise: React.FC<PropsType> = ({
     shop,
     shopTypes,
     shopBrands,
-    merchandisesTypes,
-    merchandisesBrands,
     merchandise,
     dispatch,
     setModalUpdateDeviceActive
@@ -47,7 +43,7 @@ const UpdateMerchandise: React.FC<PropsType> = ({
             setSelectedTypeId(shopTypes.filter(type => type.typeId === merchandise.typeId)[0]?.typeId)
             setSelectedBrand(shopBrands.filter(brand => brand.brandId === merchandise.brandId)[0]?.brandName)
             setSelectedBrandId(shopBrands.filter(brand => brand.brandId === merchandise.brandId)[0]?.brandId)
-            setInputNameValue(merchandise.name)
+            setInputNameValue(merchandise.merchandiseName)
             setInputPriceValue(merchandise.price)
             if (merchandise.infos?.length) {
                 setInfo(merchandise.infos)
