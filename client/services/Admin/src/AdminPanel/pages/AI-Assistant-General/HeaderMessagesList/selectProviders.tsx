@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import { SiOllama } from "react-icons/si";
 import { SiGooglegemini } from "react-icons/si";
 import { AiFillOpenAI } from "react-icons/ai";
@@ -6,9 +6,9 @@ import { AiAssistantInterlocutor, AIProvidersType, GoogleProviderType, OllamaLoc
 import { IoChevronDownOutline, IoChevronUpOutline, IoCloseOutline, IoCloseSharp } from 'react-icons/io5';
 import { Col, Tooltip } from 'antd';
 import { BsEmojiSmile, BsEmojiSmileFill } from 'react-icons/bs';
-import classes from './styles.module.scss'
 import { useAppDispatch } from '@packages/shared/src/components/hooks/redux';
 import { getAiProvidersAndModelsAC, getAllSystemPromptsAiAssistantsAC } from '@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice';
+import classes from './styles.module.scss'
 
 type PropsType = {
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -28,34 +28,41 @@ type PropsType = {
     handlePrimaryProviderChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
     handleFallbackProviderChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
     saveProviderAndModel: () => void;
+    ipAddress: string;
+    handleIpChange: ChangeEventHandler<HTMLInputElement>;
     systemPromptsForTerminators: RulesForAIAssistantsType[];
     selectedPromptIds: string[];
     setSelectedPromptIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const SelectProviderAndModel: React.FC<PropsType> = React.memo(({
-    setModalActive,
-    providers,
-    goole_provider_ai,
-    openai_provider_ai,
-    ollama_local_provider_ai,
-    currentInterlocutor,
-    selectedPrimaryAIProvider,
-    setSelectedPrimaryAIProvider,
-    selectedPrimaryAIModel,
-    setSelectedPrimaryAIModel,
-    selectedFallbackAIProvider,
-    setSelectedFallbackAIProvider,
-    selectedFallbackAIModel,
-    setSelectedFallbackAIModel,
-    handlePrimaryProviderChange,
-    handleFallbackProviderChange,
-    saveProviderAndModel,
-    systemPromptsForTerminators,
-    selectedPromptIds,
-    setSelectedPromptIds
-}) => {
+const SelectProviderAndModel: React.FC<PropsType> = React.memo((props) => {
     const dispatch = useAppDispatch();
+
+    const {
+        setModalActive,
+        providers,
+        goole_provider_ai,
+        openai_provider_ai,
+        ollama_local_provider_ai,
+        currentInterlocutor,
+        selectedPrimaryAIProvider,
+        setSelectedPrimaryAIProvider,
+        selectedPrimaryAIModel,
+        setSelectedPrimaryAIModel,
+        selectedFallbackAIProvider,
+        setSelectedFallbackAIProvider,
+        selectedFallbackAIModel,
+        setSelectedFallbackAIModel,
+        handlePrimaryProviderChange,
+        handleFallbackProviderChange,
+        saveProviderAndModel,
+        ipAddress,
+        handleIpChange,
+        systemPromptsForTerminators,
+        selectedPromptIds,
+        setSelectedPromptIds
+    } = props
+
     useEffect(() => {
         if (!systemPromptsForTerminators || systemPromptsForTerminators.length === 0) {
             dispatch(getAllSystemPromptsAiAssistantsAC());
@@ -64,7 +71,7 @@ const SelectProviderAndModel: React.FC<PropsType> = React.memo(({
             dispatch(getAiProvidersAndModelsAC());
         }
     }, []);
-    
+
     const closeModal = () => {
         setModalActive(false)
     }
@@ -82,7 +89,7 @@ const SelectProviderAndModel: React.FC<PropsType> = React.memo(({
     }
 
     // console.log('SelectProviderAndModel - systemPromptsForTerminators', systemPromptsForTerminators)
-    // console.log('SelectProviderAndModel - ollama_local_provider_ai', ollama_local_provider_ai)
+    console.log('SelectProviderAndModel - ollama_local_provider_ai', ollama_local_provider_ai)
     return (
         <Col span={24} className={classes.wrapContentModalSettigAssistant}>
             <span className={classes.topIconWrapper}>
@@ -234,6 +241,24 @@ const SelectProviderAndModel: React.FC<PropsType> = React.memo(({
                             })
                         }
                     </select>
+                </div>
+            </Col>
+
+            <Col className={classes.selectIpLocalServer}>
+                <strong className={classes.label_1_block_node}>
+                    IP адрес локального сервера или ПК (не обязательно):
+                </strong>
+                <div className={classes.wrapIpLocalServer}>
+                    <strong className={classes.node}>
+                        Node: {currentInterlocutor.node ? currentInterlocutor.node : 'Не указано'}
+                    </strong>
+                    <input
+                        type="text"
+                        value={ipAddress}
+                        onChange={handleIpChange}
+                        placeholder="Введите IP адрес локального сервера или ПК..."
+                        className={classes.input}
+                    />
                 </div>
             </Col>
 

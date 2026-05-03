@@ -264,6 +264,41 @@
                 }
             }
 
+            .selectIpLocalServer {
+                padding: 10px;
+                color: gray;
+                // border-top: 1px solid black;
+                // border-bottom: 1px solid black;
+                border-radius: 8px;
+
+                .label_1_block_node {
+                    display: block;
+                    margin-bottom: 3px;
+                }
+
+                .wrapIpLocalServer {
+                    display: flex;
+                    justify-content: space-between;
+                    // outline: 1px solid green;
+
+                    .node {
+                        margin-top: 7px;
+                        font-size: 16px;
+                        color: wheat;
+                    }
+
+                    .input {
+                        height: 30px;
+                        width: 50%;
+                        padding-left: 5px;
+                        border-radius: 8px;
+                        color: wheat;
+                        background-color: #282828;
+                        cursor: pointer;
+                    }
+                }
+            }
+
             .systemPromptsSection {
                 width: 100%;
                 padding: 10px;

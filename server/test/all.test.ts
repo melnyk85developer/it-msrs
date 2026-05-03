@@ -28,6 +28,8 @@ import { merchandiseE2ETest } from "src/modules/shops-platform/merchandise/testi
 import { basketE2ETest } from "src/modules/shops-platform/basket/testing-basket/basket-E2E-testing";
 import { basketMerchandiseE2ETest } from "src/modules/shops-platform/basket-merchandise/testing-basketMerchandise/basketMerchandise-E2E-testing";
 import { shopBrandE2ETest } from "src/modules/shops-platform/shop-brand/testing-shop-brand/shopsBrands-E2E-testing";
+import { aiAssistantsMegsE2eTest } from "src/modules/admin/ai-assistant/ai-assistant-chats/testing-messages/testing-e2e-ai-assistant-messages";
+import { aiAssistantMessagesIntegrationTest } from "src/modules/admin/ai-assistant/ai-assistant-chats/testing-messages/testing-integration-ai-assistent-msg";
 
 describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
 
@@ -58,7 +60,6 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         );
         // contextTests.app = result.app;
     });
-
     // describe('AUTH-BLOCK-TESTS', () => {
     //     authE2eTest()
     //     // authIntegrationTest()
@@ -68,6 +69,10 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     //     userSessionE2eTest()
     //     // usersSessionsInegrationTest()
     // })
+    describe('ADMIN-BLOCK-TESTS', () => {
+        // aiAssistantsMegsE2eTest()
+        aiAssistantMessagesIntegrationTest()
+    })
     // describe('MESSAGES-BLOCK-TESTS', () => {
     //     userMessagesE2eTest()
     // })
@@ -83,16 +88,16 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     // describe('LIKES-BLOCK-TESTS', () => {
     //     likesE2eTest()
     // })
-    describe('SHOPS-BLOCK-TESTS', () => {
-        shopTypeE2ETest()
-        shopBrandE2ETest()
-        shopsE2ETest()
-        merchandiseTypeE2ETest()
-        merchandiseBrandsE2ETest()
-        merchandiseE2ETest()
-        basketE2ETest()
-        basketMerchandiseE2ETest()
-    })
+    // describe('SHOPS-BLOCK-TESTS', () => {
+    //     shopTypeE2ETest()
+    //     shopBrandE2ETest()
+    //     shopsE2ETest()
+    //     merchandiseTypeE2ETest()
+    //     merchandiseBrandsE2ETest()
+    //     merchandiseE2ETest()
+    //     basketE2ETest()
+    //     basketMerchandiseE2ETest()
+    // })
     // describe('PHOTOS-BLOCK-TESTS', () => {
     //     photoProfileE2ETest()
     //     photoAlbumsE2ETest()

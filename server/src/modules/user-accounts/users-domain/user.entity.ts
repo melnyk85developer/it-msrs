@@ -9,7 +9,7 @@ import { UpdateUserDto } from '../users-dto/create-user.dto';
 import { CreateUserDomainDto } from '../users-dto/create-user.domain.dto';
 import { ProfileData, ProfileDataSchema } from './profile.data';
 import { SystemUserData, SystemUserSchema } from './system-user.data';
-import { UpdateProviderForAiAssistantDomainDto } from 'src/modules/admin/ai-assistant-msg/ai-assistant-dto/update-provider-for-ai-assistants-domain.dto';
+import { UpdateProviderForAiAssistantDomainDto } from 'src/modules/admin/ai-assistant/ai-assistant-dto/update-provider-for-ai-assistants-domain.dto';
 
 @Schema({
     // _id: false,
@@ -87,6 +87,7 @@ export class User {
             model1: null,
             provider2: null,
             model2: null,
+            node: null,
             assistantRole: null,
             systemPrompts: null,
             banneds: [],
@@ -179,11 +180,12 @@ export class User {
         const date = new Date();
         const updatedAt = date.toISOString();
         if (this.id === id) {
-            this.systemUserData.provider1 = dto.provider1;
-            this.systemUserData.model1 = dto.model1;
-            this.systemUserData.provider2 = dto.provider2;
-            this.systemUserData.model2 = dto.model2;
-            this.systemUserData.systemPrompts = dto.systemPrompts;
+            this.systemUserData.provider1 = dto.provider1 ? dto.provider1 : this.systemUserData.provider1;
+            this.systemUserData.model1 = dto.model1 ? dto.model1 : this.systemUserData.model1;
+            this.systemUserData.provider2 = dto.provider2 ? dto.provider2 : this.systemUserData.provider2;
+            this.systemUserData.model2 = dto.model2 ? dto.model2 : this.systemUserData.model2;
+            this.systemUserData.node = dto.node ? dto.node : this.systemUserData.node
+            this.systemUserData.systemPrompts = dto.systemPrompts ? dto.systemPrompts : this.systemUserData.systemPrompts;
             this.updatedAt = updatedAt;
             this.deletedAt = null;
         }

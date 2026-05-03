@@ -3,8 +3,8 @@ import { map, Observable } from 'rxjs';
 import { DomainException } from 'src/core/exceptions/domain-exceptions';
 import { HTTP_STATUSES } from 'src/core/utils/utils';
 import { UsersRepository } from 'src/modules/user-accounts/users-infrastructure/users.repository';
-import { AiAssistantDialogViewDto } from '../ai-assistant-msg/api-ai-assistant-msg/viev-dto-msg/ai-assistant-dialog-view.dto';
-import { DialogAiAssistantQueryRepository } from '../ai-assistant-dialog/ai-assistant-dialog-infrastructure/ai-assistant-dialog-query.repository';
+import { AiAssistantDialogViewDto } from '../ai-assistant/ai-assistant-chats/ai-assistant-dialog/ai-assistant-dialog-dto/ai-assistant-dialog-view.dto';
+import { DialogAiAssistantQueryRepository } from '../ai-assistant/ai-assistant-chats/ai-assistant-dialog/ai-assistant-dialog-infrastructure/ai-assistant-dialog-query.repository';
 
 @Injectable()
 export class ContinueInterceptor implements NestInterceptor {

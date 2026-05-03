@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, ChangeEventHandler } from "react";
 import { IoMdSettings } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "@packages/shared/src/components/hooks/redux";
 import { useEffect, useRef, useState } from "react";
@@ -51,6 +51,7 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [modalActive, setModalActive] = useState(false);
     const [selectedPromptIds, setSelectedPromptIds] = React.useState<string[]>([]);
+    const [ipAddress, setIpAddress] = useState(''); // Сюда придет значение из бэка или пустота
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -60,6 +61,7 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
     }, []);
     // console.log('HeaderMessagesList - currentInterlocutor', currentInterlocutor)
     // console.log('HeaderMessagesList - selectedPromptIds', selectedPromptIds)
+    console.log('HeaderMessagesList - ipAddress', ipAddress)
 
     const saveProviderAndModel = () => {
         const data = {
@@ -68,6 +70,7 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
             model1: selectedPrimaryAIModel,
             provider2: selectedFallbackAIProvider,
             model2: selectedFallbackAIModel,
+            node: ipAddress,
             systemPrompts: selectedPromptIds
         }
         dispatch(saveDesignatedProviderAndModelAC(data))
@@ -114,6 +117,11 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
 
         setSelectedFallbackAIModel(firstModelId);
     };
+
+    const handleIpChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setIpAddress(e.target.value);
+    };
+
     const clearChat = () => {
         setDeleteOption('all')
         dispatch(deleteAiAssistantAllMessagesAC(
@@ -166,6 +174,9 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
                             selectedFallbackAIModel={selectedFallbackAIModel}
                             setSelectedFallbackAIModel={setSelectedFallbackAIModel}
 
+                            ipAddress={ipAddress}
+                            handleIpChange={handleIpChange}
+
                             handlePrimaryProviderChange={handlePrimaryProviderChange}
                             handleFallbackProviderChange={handleFallbackProviderChange}
                             saveProviderAndModel={saveProviderAndModel}
@@ -179,6 +190,7 @@ const HeaderMessagesList: React.FC<PropsType> = React.memo((props) => {
                 <span className={classes.wrapHeaderProviderData}>
                     <span className={classes.provider}>Provider: {currentInterlocutor.provider1}</span>
                     <span className={classes.model}>Model: {currentInterlocutor.model1}</span>
+                    <span className={classes.model}>Node: {currentInterlocutor.node}</span>
                     <span className={classes.wrapEditProvider} onClick={() => setModalActive(prevIsOpen => !prevIsOpen)}>
                         <span className={classes.labelEditProvider}>Настроить</span>
                         <IoMdSettings className={classes.icon} />

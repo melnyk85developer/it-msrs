@@ -10,7 +10,8 @@ export enum FileType {
     IMAGE = 'post-images',
     AVATAR = 'avatars',
     MESSAGE = 'message-files',
-    SHOP = 'shop'
+    SHOP = 'shop',
+    KNOWLEDGE = 'knowledge'
 }
 
 @Injectable()
@@ -79,5 +80,8 @@ export class FilesService {
 
     async createShopFile(file: { originalname: string; buffer: Buffer }): Promise<string> {
         return this.createFile(FileType.SHOP, file);
+    }
+    async createKnowledgeFile(file: { originalname: string; buffer: Buffer }): Promise<string> {
+        return this.createFile(FileType.KNOWLEDGE, file);
     }
 }

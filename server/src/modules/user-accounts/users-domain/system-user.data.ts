@@ -49,6 +49,10 @@ export class SystemUserData {
     @Prop({ type: String, nullable: true })
     model2: string | null;
 
+    @ApiProperty({ example: 'locol ip node', description: 'Локальный ip адрес где расположен Server или ПК на котором работает локальная LLM модель (если это бот)!' })
+    @Prop({ type: String, nullable: true })
+    node: string | null;
+
     @ApiProperty({ example: 'assistantRole', description: 'Роль Ассистента Терминатора.' })
     @Prop({ type: String, nullable: true })
     assistantRole: string | null;

@@ -10,7 +10,7 @@ export const AiAssistantWidgetListAdmin: React.FC = React.memo(() => {
     const { users } = useAppSelector(state => state.usersPage)
     const { interlocutors } = useAppSelector(state => state.adminAdminAiAssistantPage);
 
-    // console.log('AiAssistantWidgetListAdmin: - interlocutors', interlocutors)
+    console.log('AiAssistantWidgetListAdmin: - interlocutors', interlocutors)
 
     useEffect(() => {
         dispatch(getAiAssistantInterlocutorAC())
@@ -24,15 +24,16 @@ export const AiAssistantWidgetListAdmin: React.FC = React.memo(() => {
                 </h3>
             </div>
             <ul>
-                {!interlocutors.length
-                    ? <span>Вы еще не переписывались ни с кем из Термиков! </span>
-                    : interlocutors.map(
+                {interlocutors && interlocutors.length
+                    ? interlocutors.map(
                         (bot: any) => <AiAssistantAdminItemWidget
                             key={bot.userId}
                             assistantId={bot.userId}
                             avatar={bot.avatar}
                             name={bot.name}
                         />)
+                    :
+                    <span>Вы еще не переписывались ни с кем из Термиков! </span>
                 }
             </ul>
         </>

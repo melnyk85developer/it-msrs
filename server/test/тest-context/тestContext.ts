@@ -11,7 +11,7 @@ import { LikesTestManager } from '../helpers/likes-test-manager';
 import { PostsTestManager } from '../helpers/posts-test-manager';
 import { UserSessionTestManager } from '../helpers/user-session-test-manager';
 import { UsersTestManager } from '../helpers/users-test-manager';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { MeViewDto, UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
 import { BlogViewDto } from 'src/modules/bloggers-platform/blogs/blogs-api/view-dto-blogs/blogs.view-dto';
 import { PostViewDto } from 'src/modules/bloggers-platform/posts/posts-api/posts-view-dto/posts.view-dto';
@@ -56,6 +56,11 @@ import { MerchandiseContextClass } from './context-module/shopsContext/merchandi
 import { MerchandiseTypesContextClass } from './context-module/shopsContext/merchandise-types-context';
 import { ShopBrandsTestManager } from 'test/helpers/shopHelpers/shop-brands-test-manager copy';
 import { ShopBrandsContextClass } from './context-module/shopsContext/shop-brands-context';
+import { AiAssistantMessagesTestManager } from 'test/helpers/ai-assistant-msgs-test-manager';
+import { MessagesContextClass } from './context-module/messages-context';
+import { AiAssistantContextClass } from './context-module/ai-assistant-msg-context';
+import { MessageAiAssistantRepository } from 'src/modules/admin/ai-assistant/ai-assistant-chats/ai-assistant-msg/ai-assistant-msg-infrastrucrure/msg-ai-assistant.repository';
+import { DialogAiAssistantRepository } from 'src/modules/admin/ai-assistant/ai-assistant-chats/ai-assistant-dialog/ai-assistant-dialog-infrastructure/ai-assistant-dialog.repository';
 
 export class TestContext {
     public app: INestApplication;
@@ -63,9 +68,12 @@ export class TestContext {
     public httpServer: INestApplication;
 
     public сommandBus: CommandBus;
+    public queryBus: QueryBus;
 
     public authServices: AuthService;
     public usersRepository: UsersRepository;
+    public messageAiAssistantRepository: MessageAiAssistantRepository;
+    public dialogAiAssistantRepository: DialogAiAssistantRepository;
     public sessiosRepository: SessionsRepository;
     public mailService: EmailService | any;
     public tokenService: TokenService | any;
@@ -84,6 +92,7 @@ export class TestContext {
     public postsForProfileTestManager: PostsForProfileTestManager;
     
     public userSessionTestManager: UserSessionTestManager;
+    public aiAssistantMessagesTestManager: AiAssistantMessagesTestManager;
     public userMessagesTestManager: UserMessagesTestManager;
     public usersTestManager: UsersTestManager;
     public userPhotosTestManager: UserPhotosTestManager;
@@ -98,7 +107,6 @@ export class TestContext {
     public shopBrandsTestManager: ShopBrandsTestManager;
     public shopTestManager: ShopTestManager;
 
-
     // TODO - Добавить
     public createdDialog1: any
     public createdMessage1: any
@@ -108,6 +116,8 @@ export class TestContext {
     public constants: ConstantsContextClass;
     public sessions: SessionContextClass;
     public users: UserContextClass;
+    public messages: MessagesContextClass;
+    public ai_assistant_msg: AiAssistantContextClass;
     public blogs: BlogsContextClass;
     public posts_for_blog: PostsForBlogContextClass;
     public posts_for_profile: PostsForProfileContextClass;
@@ -123,11 +133,12 @@ export class TestContext {
     public merchandiseType: MerchandiseTypesContextClass;
     public merchandise: MerchandiseContextClass;
 
-
     constructor() {
         this.constants = new ConstantsContextClass();
         this.sessions = new SessionContextClass();
         this.users = new UserContextClass();
+        this.ai_assistant_msg = new AiAssistantContextClass();
+        this.messages = new MessagesContextClass();
         this.blogs = new BlogsContextClass();
         this.posts_for_blog = new PostsForBlogContextClass();
         this.posts_for_profile = new PostsForProfileContextClass();

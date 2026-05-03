@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { HttpModule } from '@nestjs/axios';
-import { AdminAiAssistantModule } from './ai-assistant-msg/admin-ai-assistant.module';
+import { AdminAiAssistantModule } from './ai-assistant/ai-assistant-chats/ai-assistant-msg/admin-ai-assistant.module';
 import { AdminQueryService } from './admin-application/admin-query-service';;
 import { UserAccountsModule } from '../user-accounts/user-accounts.module';
-import { DialogAiAssistantRepositoryModule } from './ai-assistant-dialog/ai-assistant-dialog-repository.module';
+import { DialogAiAssistantRepositoryModule } from './ai-assistant/ai-assistant-chats/ai-assistant-dialog/ai-assistant-dialog-repository.module';
 
 const useCases = [
     AdminQueryService,

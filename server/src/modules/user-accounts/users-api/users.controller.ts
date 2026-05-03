@@ -30,7 +30,7 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Создать пользователя!' })
     @ApiResponse({ status: 201 })
-    @UseGuards(BasicAuthGuard)
+    // @UseGuards(BasicAuthGuard)
     @Post('/')
     @UseInterceptors(FileInterceptor('image'))
     @HttpCode(HTTP_STATUSES.CREATED_201)

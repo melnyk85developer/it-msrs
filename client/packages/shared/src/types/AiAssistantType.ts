@@ -8,6 +8,7 @@ export type DesignatedProviderForAIAssistantsType = {
     model1: string;
     provider2: string;
     model2: string;
+    node?: string;
     systemPrompts: string[]
 }
 export type ModelProviderType = {
@@ -46,6 +47,7 @@ export type AiAssistantInterlocutor = {
     model1?: string | null;
     provider2?: string | null;
     model2?: string | null;
+    node?: string | null;
 }
 export type CreateMsgAiAssistantType = {
     localId: string;

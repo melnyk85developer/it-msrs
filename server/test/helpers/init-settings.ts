@@ -36,6 +36,9 @@ import { MerchandiseTypesTestManager } from './shopHelpers/merchandise-types-tes
 import { ShopTypesTestManager } from './shopHelpers/shop-types-test-manager';
 import { ShopTestManager } from './shopHelpers/shops-test-manager';
 import { ShopBrandsTestManager } from './shopHelpers/shop-brands-test-manager copy';
+import { AiAssistantMessagesTestManager } from './ai-assistant-msgs-test-manager';
+import { MessageAiAssistantRepository } from 'src/modules/admin/ai-assistant/ai-assistant-chats/ai-assistant-msg/ai-assistant-msg-infrastrucrure/msg-ai-assistant.repository';
+import { DialogAiAssistantRepository } from 'src/modules/admin/ai-assistant/ai-assistant-chats/ai-assistant-dialog/ai-assistant-dialog-infrastructure/ai-assistant-dialog.repository';
 
 // 1. Создаем ЕДИНЫЙ ЭКЗЕМПЛЯР
 export const contextTests = new TestContext()
@@ -71,6 +74,8 @@ export const initSettings = async (
 
     contextTests.authServices = contextTests.app.get<AuthService>(AuthService);
     contextTests.usersRepository = contextTests.app.get<UsersRepository>(UsersRepository);
+    contextTests.messageAiAssistantRepository = contextTests.app.get<MessageAiAssistantRepository>(MessageAiAssistantRepository);
+    contextTests.dialogAiAssistantRepository = contextTests.app.get<DialogAiAssistantRepository>(DialogAiAssistantRepository);
     contextTests.sessiosRepository = contextTests.app.get<SessionsRepository>(SessionsRepository);
     contextTests.confirmationService = contextTests.app.get<ConfirmationsCodesService>(ConfirmationsCodesService);
     contextTests.isBlockedEmailResendingService = contextTests.app.get<IsBlockedEmailResendingService>(IsBlockedEmailResendingService);
@@ -84,6 +89,7 @@ export const initSettings = async (
     contextTests.postsForProfileTestManager = new PostsForProfileTestManager(contextTests.app);
 
     contextTests.userSessionTestManager = new UserSessionTestManager(contextTests.app);
+    contextTests.aiAssistantMessagesTestManager = new AiAssistantMessagesTestManager(contextTests.app);
     contextTests.userMessagesTestManager = new UserMessagesTestManager(contextTests.app);
     contextTests.usersTestManager = new UsersTestManager(contextTests.app);
     contextTests.userPhotosTestManager = new UserPhotosTestManager(contextTests.app);
@@ -111,6 +117,7 @@ export const initSettings = async (
         likesTestManager: contextTests.likesTestManager,
         postsTestManager: contextTests.postsTestManager,
         userSessionTestManager: contextTests.userSessionTestManager,
+        aiAssistantMessagesTestManager: contextTests.aiAssistantMessagesTestManager,
         userMessagesTestManager: contextTests.userMessagesTestManager,
         usersTestManager: contextTests.usersTestManager,
         userPhotosTestManager: contextTests.userPhotosTestManager,
