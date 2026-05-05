@@ -31,6 +31,7 @@ import { DeleteAllRulesForTerminatorsUseCase } from '../../ai-assistant-rules/ai
 import { GetAllRulesForTerminatorsQueryUseCase } from '../../ai-assistant-rules/ai-assistant-rules-application/get-rules-for-terminators-query.use-case';
 import { EmbeddingModule } from '../../ai-assistant-embedding/embedding.module';
 import { FileParserService } from 'src/modules/files/fileParserService';
+import { GetDialogAiAssistantQueryUseCase } from '../ai-assistant-dialog/ai-assistant-dialog-application/get-dialog-ai-assistant.query.use-case';
 
 const useCases = [
     CreateAllRulesForTerminatorsUseCase,
@@ -43,6 +44,8 @@ const useCases = [
     DeleteAiAssistantOneMessagegUseCase,
     DeleteAiAssistantAllMessagesUseCase,
     CheckAiClusterConnectionUseCase,
+
+    GetDialogAiAssistantQueryUseCase,
 
     GetAllRulesForTerminatorsQueryUseCase,
     MessageAiAssistantQueryService,

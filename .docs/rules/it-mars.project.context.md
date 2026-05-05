@@ -1,12 +1,12 @@
 # IT-MARS PROJECT CONTEXT (STATIC)
 
 ## 1. Project Overview
-Backend социальной сети уровня production.
+Backend + Frontend социальной сети уровня production.
 Цель: сильный проект для портфолио и трудоустройства.
 
 ---
 
-## 2. Technology Stack
+## 2. Backend Technology Stack
 - Node.js
 - NestJS
 - TypeScript
@@ -15,6 +15,21 @@ Backend социальной сети уровня production.
 Архитектура:
 - DDD (Domain-Driven Design)
 - UseCase-ориентированный подход
+
+---
+
+## 2.1 Frontend Technology Stack
+- React
+- Redux Toolkit
+- TypeScript
+
+Архитектура:
+- Микрофронтенд
+
+Принцип:
+→ frontend НЕ существует отдельно  
+→ frontend работает строго через backend API  
+→ архитектурные решения backend напрямую влияют на frontend
 
 ---
 
@@ -47,69 +62,88 @@ Backend социальной сети уровня production.
 
 ---
 
-### 3.4 Frontend State Rules
-- File / Blob запрещено хранить в Redux
-- Использовать useState для файлов
+# 4. Implemented Modules (STABLE)
+
+- Необходимо выбрать моуль md файла для прочтения - только в соответствии с поставленной задачей!!!
+
+## 4.1.1 - auth-frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.1.2 - auth-backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+---
+
+## 4.1.3 - user-sessions.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.1.4 - user-sessions.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+## 4.1.5 - admin.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.1.6 - ai-assistant.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.1.7 - ai-assistant.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
-## 4. Implemented Modules (STABLE)
-
-### 4.1 User / Profile
-- профили пользователей
-- аватары
-- галереи
-- карусель изображений
+## 4.1.8 - my-profile.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.1.9 - user-profile.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.2.0 - user-accounts.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
-### 4.2 Posts (Profile)
-- создание постов
-- изображения постов
-- галерея
-- карусель
+## 4.2.1 - posts-for-profile.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+## 4.2.2 - posts-for-profile.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
-### 4.3 Blogs (migration)
-- блоги
-- посты
+### 4.2.3 - bloggers-platform.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+### 4.3.4 - bloggers-platform.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+### 4.2.5 - posts-bloggers-platform.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+### 4.2.6 - posts-bloggers-platform.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
-### 4.4 Messages
-- отправка сообщений
-- хранение
-- удаление:
-  - у себя
-  - у всех
-- модель:
-  deletedFor: string[]
+### 4.2.7 - comments.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
-### 4.5 FileService
-- хранение файлов в static/
-  - avatars/
-  - post-images/
-- сохранение оригинальных имен файлов
-- доступ через:
-  ${API_URL}/{path}
+### 4.2.8 - user-messages.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+### 4.2.9 - user-messages.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
-### 4.6 Bots Generator
-- генерация пользователей
-- генерация постов
-- генерация фото
-- случайные файлы из static/ftp/avatars
+### 4.3.0 - confirmation.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.1 - gallery.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.2 - likes.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.3 - notifications.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.4 - shops-platform.frontend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+### 4.3.5 - shops-platform.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.6 - tokens.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.7 - FileService - files.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
+
+---
+
+### 4.3.8- Bots Generator - admin.backend-module.md → что уже реализовано и что дальше реализовываем по задаче.
 
 ---
 
 ## 5. Project Evolution
 Проект — объединение:
-- старый Express проект (блоги)
-- новая соцсеть на NestJS
+- старый Express проект (блоги) почти весь мигрировал - остались мелочи.
+- новая соцсеть на NestJS с блогами, музыкой, видео, магазинами, галереей и интегрированным AI ассистентом в систему.
 
 Текущая цель:
 → единая DDD система уровня production
