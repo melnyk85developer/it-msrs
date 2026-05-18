@@ -76,40 +76,40 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
     describe('MESSAGES-BLOCK-TESTS', () => {
         userMessagesE2eTest()
     })
-    // describe('BLOGS-BLOCK-TESTS', () => {
-    //     blogsE2eTest()
-    // })
-    // describe('POSTS-BLOCK-TESTS', () => {
-    //     postsE2eTest()
-    // })
-    // describe('COMMENTS-BLOCK-TESTS', () => {
-    //     commentsE2eTest()
-    // })
-    // describe('LIKES-BLOCK-TESTS', () => {
-    //     likesE2eTest()
-    // })
-    // describe('SHOPS-BLOCK-TESTS', () => {
-    //     shopTypeE2ETest()
-    //     shopBrandE2ETest()
-    //     shopsE2ETest()
-    //     merchandiseTypeE2ETest()
-    //     merchandiseBrandsE2ETest()
-    //     merchandiseE2ETest()
-    //     basketE2ETest()
-    //     basketMerchandiseE2ETest()
-    // })
-    // describe('PHOTOS-BLOCK-TESTS', () => {
-    //     photoProfileE2ETest()
-    //     photoAlbumsE2ETest()
-    // })
-    // describe('USERS-BLOCK-TESTS', () => {
-    //     postForProfileE2ETest()
-    //     usersE2eTest()
-    // })
-    // describe('CONFIRMATION-BLOCK-TESTS', () => {
-    //     registrEmailResendingAndConfirmIntegrationTest()
-    //     resetPasswordInegrationTest()
-    // })
+    describe('BLOGS-BLOCK-TESTS', () => {
+        blogsE2eTest()
+    })
+    describe('POSTS-BLOCK-TESTS', () => {
+        postsE2eTest()
+    })
+    describe('COMMENTS-BLOCK-TESTS', () => {
+        commentsE2eTest()
+    })
+    describe('LIKES-BLOCK-TESTS', () => {
+        likesE2eTest()
+    })
+    describe('SHOPS-BLOCK-TESTS', () => {
+        shopTypeE2ETest()
+        shopBrandE2ETest()
+        shopsE2ETest()
+        merchandiseTypeE2ETest()
+        merchandiseBrandsE2ETest()
+        merchandiseE2ETest()
+        basketE2ETest()
+        basketMerchandiseE2ETest()
+    })
+    describe('PHOTOS-BLOCK-TESTS', () => {
+        photoProfileE2ETest()
+        photoAlbumsE2ETest()
+    })
+    describe('USERS-BLOCK-TESTS', () => {
+        postForProfileE2ETest()
+        usersE2eTest()
+    })
+    describe('CONFIRMATION-BLOCK-TESTS', () => {
+        registrEmailResendingAndConfirmIntegrationTest()
+        resetPasswordInegrationTest()
+    })
     afterAll(async () => {
         await mongoose.disconnect();
         await contextTests.app.close();
