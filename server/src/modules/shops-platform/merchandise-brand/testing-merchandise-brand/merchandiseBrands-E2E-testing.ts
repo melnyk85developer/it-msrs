@@ -64,7 +64,7 @@ export const merchandiseBrandsE2ETest = () => {
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.CREATED_201
             )
             // console.log('TEST brandsE2ETest: createdShop ?', createdShop)

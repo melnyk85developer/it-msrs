@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
-import {BuildMode, BuildPaths, BuildPlatform, BuildOptions, buildWebpack} from '@packages/build-config'
+import { BuildMode, BuildPaths, BuildPlatform, BuildOptions, buildWebpack } from '@packages/build-config'
 import packageJson from './package.json'
 
 interface EnvVariables {
@@ -51,7 +51,7 @@ export default (env: EnvVariables) => {
 
 
 
-    config.plugins.push(new webpack.container.ModuleFederationPlugin({
+    config.plugins?.push(new webpack.container.ModuleFederationPlugin({
         name: 'host',
         filename: 'remoteEntry.js',
         remotes: {

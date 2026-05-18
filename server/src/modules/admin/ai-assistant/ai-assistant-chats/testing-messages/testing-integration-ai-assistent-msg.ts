@@ -1,6 +1,4 @@
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from "src/core/utils/utils";
-import { contextTests } from "test/helpers/init-settings";
-import { deleteAllData } from "test/helpers/delete-all-data";
 import { CreateMessageAiAssistantCommand } from "../ai-assistant-msg/ai-assistant-msg-application/ai-assistant-msg.use-cases/create-msg-ai-assistant.use-case";
 import { CreatePromptAiDto } from "../ai-assistant-msg/ai-assistant-msg-dto/create-prompt-ai-assistant.dto";
 import { isCreatedUser } from "src/modules/user-accounts/testing-users/testFunctionsUser";
@@ -10,6 +8,8 @@ import { DialogAiAssistantType, GetDialogAiAssistantQuery } from "../ai-assistan
 import { PaginatedViewDto } from "src/core/dto/base.paginated.viev-dto";
 import { DialogAiAssistantSortBy } from "../ai-assistant-dialog/ai-assistant-dialog-dto/dialog-ai-assistant-sort-by";
 import { SortDirection } from "src/core/dto/base.query-params.input-dto";
+import { deleteAllData } from "../../../../../../test/helpers/delete-all-data";
+import { contextTests } from "../../../../../../test/helpers/init-settings";
 
 export const aiAssistantMessagesIntegrationTest = () => {
     describe('REGISTRATION-EMAIL-RESSENDING-INTEGRATION', () => {
@@ -57,8 +57,8 @@ export const aiAssistantMessagesIntegrationTest = () => {
             )
         });
         it('SUCCESS - Ожидается - пустой массив без переписки.', async () => {
-            const senderId = contextTests.users.createdUsers[0]!.id;
-            const receiverId = contextTests.users.createdUsers[1]!.id;
+            const senderId = contextTests.users.createdUsers[0]!.userId;
+            const receiverId = contextTests.users.createdUsers[1]!.userId;
             const query = {
                 pageNumber: 1,
                 pageSize: 10,

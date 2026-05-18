@@ -1,11 +1,12 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { delay } from './delay';
-import { MeViewDto, UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
+import { UserViewDto } from 'src/modules/user-accounts/users-dto/users.view-dto';
 import { HTTP_STATUSES, HttpStatusType } from 'src/core/utils/utils';
 import { SETTINGS } from 'src/core/settings';
 import { contextTests } from './init-settings';
 import { CreateUserInputDto } from 'src/modules/user-accounts/users-dto/users.input-dto';
+import { MeViewDto } from 'src/modules/auth/auth-dto/me.view-dto';
 
 export class AuthTestManager {
     constructor(private app: INestApplication) { }
@@ -129,11 +130,11 @@ export class AuthTestManager {
             expect(response.body)
                 .toEqual(
                     {
-                        id: expect.any(String),
+                        userId: expect.any(String),
                         avatar:  null,
                         login: expect.any(String),
                         email: expect.any(String),
-                        createdAt: expect.any(String),
+                        // createdAt: expect.any(String),
                     }
                 )
         }

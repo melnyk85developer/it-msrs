@@ -76,7 +76,7 @@ export const usersE2eTest = () => {
             )
             if (response.status === HTTP_STATUSES.CREATED_201) {
                 contextTests.users.addUserStateTest({ numUser: 0, addUser: createdEntity });
-                // console.log('TEST: contextTests.createdUser1 😡 ', contextTests.users.createdUsers[0])
+                console.log('TEST: contextTests.createdUser1 😡 ', contextTests.users.createdUsers[0])
             }
             const authData = {
                 loginOrEmail: contextTests.users.correctUserEmails[0],
@@ -104,6 +104,12 @@ export const usersE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
+            getAllUsers.items[0] = {
+                userId: getAllUsers.items[0].id,
+                login: getAllUsers.items[0].login,
+                email: getAllUsers.items[0].email,
+                createdAt: getAllUsers.items[0].createdAt,
+            }
             expect(getAllUsers).toEqual(
                 expect.objectContaining({
                     pagesCount: 1,
@@ -156,6 +162,18 @@ export const usersE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
+            getAllUsers.items[0] = {
+                userId: getAllUsers.items[0].id,
+                login: getAllUsers.items[0].login,
+                email: getAllUsers.items[0].email,
+                createdAt: getAllUsers.items[0].createdAt,
+            }
+            getAllUsers.items[1] = {
+                userId: getAllUsers.items[1].id,
+                login: getAllUsers.items[1].login,
+                email: getAllUsers.items[1].email,
+                createdAt: getAllUsers.items[1].createdAt,
+            }
             expect(getAllUsers).toEqual(
                 expect.objectContaining({
                     pagesCount: 1,
@@ -173,19 +191,23 @@ export const usersE2eTest = () => {
                 email: ''
             }
             await contextTests.usersTestManager.updateUser(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 data,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const { getUsersById } = await contextTests.usersTestManager.getUserById(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             expect(getUsersById).toEqual(
                 expect.objectContaining(
-                    contextTests.users.createdUsers[0]
+                    {
+                        id: contextTests.users.createdUsers[0]!.userId,
+                        login: contextTests.users.createdUsers[0]!.login,
+                        email: contextTests.users.createdUsers[0]!.email
+                    }
                 )
             )
         })
@@ -211,7 +233,7 @@ export const usersE2eTest = () => {
                 email: contextTests.users.correctUserEmails[2]
             }
             const { response: res } = await contextTests.usersTestManager.updateUser(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 data,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
@@ -224,7 +246,7 @@ export const usersE2eTest = () => {
             //     })
             // }
             const { getUsersById } = await contextTests.usersTestManager.getUserById(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             expect(getUsersById).toEqual(
@@ -238,35 +260,39 @@ export const usersE2eTest = () => {
                 )
             )
             const { response } = await contextTests.usersTestManager.getUserById(
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[1]!.userId,
                 HTTP_STATUSES.OK_200
             )
             expect(response.body)
                 .toEqual(
                     expect.objectContaining(
-                        contextTests.users.createdUsers[1]
+                        {
+                            id: contextTests.users.createdUsers[1]!.userId,
+                            login: contextTests.users.createdUsers[1]!.login,
+                            email: contextTests.users.createdUsers[1]!.email
+                        }
                     )
                 )
         })
         it(`DELETE - Ожидается статус код 204, - Успешное удаление обоих пользователей! Дополнительные запросы: -> GET`, async () => {
             await contextTests.usersTestManager.deleteUser(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
             await contextTests.usersTestManager.getUserById(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.NOT_FOUND_404
             )
             await contextTests.usersTestManager.deleteUser(
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.accessTokenUser2Devices[0],
                 contextTests.constants.codedAuth,
                 HTTP_STATUSES.NO_CONTENT_204
             )
             await contextTests.usersTestManager.getUserById(
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[1]!.userId,
                 HTTP_STATUSES.NOT_FOUND_404
             )
             const { getAllUsers } = await contextTests.usersTestManager.getAllUsers(

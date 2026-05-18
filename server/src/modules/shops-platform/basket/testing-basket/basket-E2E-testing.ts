@@ -52,13 +52,13 @@ export const basketE2ETest = () => {
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.CREATED_201
             )
             // console.log('TEST basketE2ETest: createdShop ', createdShop)
             // Подготавливаем данные корзины для регистрации!
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 shopId: contextTests.shops.createdShops[0]!.shopId
             }
             // Отправляем GET запрос на получение всех корзин и ожидаем в ответ статус код 200 (OK) и пустой массив!
@@ -89,7 +89,7 @@ export const basketE2ETest = () => {
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 shopId: contextTests.shops.createdShops[0]!.shopId
             }
             const { response } = await contextTests.shopBasketTestManager.getBasket(
@@ -101,7 +101,7 @@ export const basketE2ETest = () => {
         })
         it(`POST   - Ожидается статус код 201, - Успешное создание корзины! Дополнительные запросы: -> GET`, async () => {
             const data: any = {
-                userId: contextTests.users.createdUsers[1]!.id,
+                userId: contextTests.users.createdUsers[1]!.userId,
                 // shopId: contextTests.shops.createdShops[0]!.shopId
             }
             const { createdBasket } = await contextTests.shopBasketTestManager.createBasket(
@@ -114,7 +114,7 @@ export const basketE2ETest = () => {
                 addBasket: createdBasket
             });
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 // shopId: contextTests.shops.createdShops[0]!.shopId
             }
             const { getBasket } = await contextTests.shopBasketTestManager.getBasket(
@@ -125,7 +125,7 @@ export const basketE2ETest = () => {
             // console.log('TEST basketE2ETest: getBasket ', getBasket)
 
             expect(getBasket).toEqual(expect.objectContaining({
-                userId: contextTests.users.createdUsers[1]!.id,
+                userId: contextTests.users.createdUsers[1]!.userId,
                 basketId: contextTests.basket.createdBaskets[0]!.basketId,
                 createdAt: expect.any(String),
                 updatedAt: expect.any(String),
@@ -133,7 +133,7 @@ export const basketE2ETest = () => {
         })
         it(`DELETE - Ожидается статус код 204, - Должен удалить корзину! Дополнительные запросы: -> GET`, async () => {
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 // shopId: contextTests.shops.createdShops[0]!.shopId
             }
             await contextTests.shopBasketTestManager.deleteBasket(
@@ -158,7 +158,7 @@ export const basketE2ETest = () => {
                 HTTP_STATUSES.OK_200
             )
             // console.log('TEST basketE2ETest: getBasket ', response.body)
-            expect(response.body.userId).toEqual(contextTests.users.createdUsers[0]!.id);
+            expect(response.body.userId).toEqual(contextTests.users.createdUsers[0]!.userId);
         })
     })
 }

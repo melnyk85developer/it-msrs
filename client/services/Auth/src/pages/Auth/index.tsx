@@ -86,7 +86,7 @@ const Auth: React.FC<PropsType> = React.memo(() => {
         <div className={`${classes.wrapContentAuth} ${isDarkTheme !== "light" ? classes.dark : classes.light}`}>
             <div className={classes.contentAuth}>
                 <h1>Авторизация</h1>
-                {isAuth === true && authorizedUser && authorizedUser.id ? <Navigate to={routeMyProfile(authorizedUser.id)}/> : <LoginForm />}  
+                {isAuth === true && authorizedUser && authorizedUser.userId ? <Navigate to={routeMyProfile(authorizedUser.userId)}/> : <LoginForm />}  
             </div>
         </div>
     );

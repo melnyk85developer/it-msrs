@@ -2,9 +2,12 @@
   "extends": "../../services/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist/",
-    "baseUrl": ".",
+    "rootDir": "../",
+    "ignoreDeprecations": "6.0",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   }
 }

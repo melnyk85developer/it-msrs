@@ -15,12 +15,12 @@ import defaultAvatar from '../../assets/fonAvatars.png'
 import GorizontalNaw from '../GorizontalNaw';
 import { useAppSelector } from '../hooks/redux';
 import { Navigate } from 'react-router-dom';
-import classes from './styles.module.scss'
 import marsLogo from "@packages/shared/src/assets/mars.png"
 import { IoIosLogIn, IoIosLogOut, IoIosPlanet, IoMdPlanet } from 'react-icons/io';
 import { IoPlanet, IoPlanetOutline } from 'react-icons/io5';
 import { RiLoginBoxFill, RiLoginBoxLine, RiLogoutBoxFill, RiLogoutBoxRFill, RiLogoutBoxRLine } from 'react-icons/ri';
 import { TbPlanet } from 'react-icons/tb';
+import classes from './styles.module.scss'
 
 type PropsType = {
     authorizedUser: IUser;

@@ -1,13 +1,13 @@
 import { PostsType } from "./types";
 
 export interface IUser {
-    id: string;
+    userId: string;
     login: string
     avatar?: string | null;
     name?: string | null;
     surname?: string | null;
     // status: string;
-    isBot: boolean
+    isBot?: boolean
     // gender: string;
     // liveIn: string
     // originallyFrom: string;

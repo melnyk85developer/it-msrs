@@ -42,11 +42,11 @@ const MyRoutes: React.FC = () => {
     // Хук для отслеживания ширины экрана
     const screens = useBreakpoint();
 
-    const [leftNavLocalSpan, setLeftNavLocalSpan] = useState<number | null>(null);
-    const [lSidebarLocalSpan, setLSidebarLocalSpan] = useState<number | null>(null);
-    const [contentBlockSpan, setContentBlockSpan] = useState<number | null>(null);
-    const [rSidebarLocalSpan, setRSidebarLocalSpan] = useState<number | null>(null);
-    const [rightNavLocalSpan, setRightNavLocalSpan] = useState<number | null>(null);
+    const [leftNavLocalSpan, setLeftNavLocalSpan] = useState<number>(0);
+    const [lSidebarLocalSpan, setLSidebarLocalSpan] = useState<number>(0);
+    const [contentBlockSpan, setContentBlockSpan] = useState<number>(0);
+    const [rSidebarLocalSpan, setRSidebarLocalSpan] = useState<number>(0);
+    const [rightNavLocalSpan, setRightNavLocalSpan] = useState<number>(0);
 
     const {
         LeftNavSpan,

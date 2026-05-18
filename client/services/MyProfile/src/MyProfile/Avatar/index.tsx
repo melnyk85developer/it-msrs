@@ -11,7 +11,7 @@ import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import classes from './styles.module.scss'
 
 type PropsType = {
-    avatar: string;
+    avatar: string | null;
     profile: IProfile
     dispatch: AppDispatch
     authorizedUser: IUser;
@@ -40,7 +40,7 @@ const Avatar: React.FC<PropsType> = ({
                             <img
                                 className={classes.avatarImage}
                                 src={avatar !== null ? `${API_URL}/${avatar}` : defaultUserAvatar}
-                                alt={avatar}
+                                alt={avatar !== null ? `${API_URL}/${avatar}` : 'аватар'}
                             />
                             <div className={classes.wrapEditBlockAvatar} onClick={() => handleUpdateAvatar()}>
                                 <div className={classes.editBlockAvatar}>

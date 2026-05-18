@@ -46,7 +46,7 @@ export class UsersTestManager {
         accessToken: string,
         codedAuth: string,
         expectedStatusCode: HttpStatusType = HTTP_STATUSES.CREATED_201) {
-        console.log('UsersTestManager - accessToken 😡👽😡👽😡 req', accessToken)
+        // console.log('UsersTestManager - accessToken 😡👽😡👽😡 req', accessToken)
         // console.log('UsersTestManager - data 😡👽😡👽😡 req', data)
         const response = await request(this.app.getHttpServer())
             .post(`${SETTINGS.RouterPath.users}`)
@@ -77,6 +77,13 @@ export class UsersTestManager {
                         createdAt: expect.any(String),
                     }
                 )
+                createdEntity = {
+                    userId: createdEntity.id,
+                    login: createdEntity.login,
+                    email: createdEntity.email,
+                    createdAt: createdEntity.createdAt,
+                }
+
         }
         return { response: response, createdEntity: createdEntity }
     }

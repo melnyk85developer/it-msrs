@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from "react"
 import { FaRegSmile } from "react-icons/fa";
 import { useAppSelector } from "../../../../../../packages/shared/src/components/hooks/redux";
 import { AudioOutlined, PaperClipOutlined, SendOutlined } from "@ant-design/icons";
-import { AiAssistantInterlocutor, ChatType, MsgAiAssistantType } from '../../../../../../packages/shared/src/types/AiAssistantType'
 import { AppDispatch } from "@packages/shared/src/store/redux-store";
 import { IUser } from "@packages/shared/src/types/IUser";
 import HeaderMessagesList from "./HeaderMessagesList/headerMessagesList";
 import SendMessageForm from "./SendMessageForm/sendMessageForm";
 import { getDialogAiAssistantMessagesAC } from "@packages/shared/src/store/MyAdminReducers/myAiAssistantAdminSlice";
 import routeMain from "./routes";
-import classes from './styles.module.scss';
 import MessagesList from "./MessagesList/MessagesList";
 import { useNavigate } from "react-router-dom";
+import { AiAssistantInterlocutor, ChatType, MsgAiAssistantType } from "@packages/shared/src/types/AiAssistantType";
+import classes from './styles.module.scss';
 
 type PropsType = {
     dispatch: AppDispatch;

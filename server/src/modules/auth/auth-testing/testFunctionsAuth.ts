@@ -1,5 +1,5 @@
 import { HTTP_STATUSES } from "src/core/utils/utils"
-import { contextTests } from "test/helpers/init-settings"
+import { contextTests } from "../../../../test/helpers/init-settings";
 
 export const isLoginUser = async (
     numUser: number,

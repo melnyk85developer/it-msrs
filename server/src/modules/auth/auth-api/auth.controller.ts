@@ -5,7 +5,6 @@ import { LocalAuthGuard } from '../../user-accounts/users-guards/local/local-aut
 import { ExtractUserFromRequest } from '../../user-accounts/users-guards/decorators/param/extract-user-from-request.decorator';
 import { UserContextDto } from '../../user-accounts/users-guards/dto/user-context.dto';
 import { AuthAccessGuard } from '../../user-accounts/users-guards/bearer/jwt-auth.guard';
-import { MeViewDto } from '../../user-accounts/users-dto/users.view-dto';
 import { HTTP_STATUSES, INTERNAL_STATUS_CODE } from 'src/core/utils/utils';
 import { SetCookieInterceptor } from 'src/core/utils/SetCookieInterceptor';
 import { type DeviceInfo, ExtractDeviceInfo } from '../../user-accounts/users-guards/decorators/param/extract-device-info.decorator';
@@ -30,6 +29,7 @@ import { RegistrationEmailResendingCommand, RegistrationEmailResendingResult } f
 import { ConfirmationCodeRegistrationCommand, ConfirmationCodeRegistrationResult } from '../../confirmationsCodes/confirmations-application/confirmation-use-cases/confirmation-code-registration-use-case';
 import { SendPasswordRecoveryEmailCommand, SendPasswordRecoveryEmailResult } from 'src/modules/user-accounts/users-application/user-use-cases/sendPasswordRecoveryEmailUseCase';
 import { UpdatePasswordCommand, UpdatePasswordResult } from 'src/modules/user-accounts/users-application/user-use-cases/updatePasswordUseCase';
+import { MeViewDto } from '../auth-dto/me.view-dto';
 
 @Controller('/auth')
 export class AuthController {

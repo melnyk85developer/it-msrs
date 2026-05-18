@@ -50,7 +50,7 @@ export const authE2eTest = () => {
             )
         })
         it('GET    - Ожидается статус код 200, - Возвращает минимальную информацию о пользователе!', async () => {
-            const { id } = await contextTests.authTestManager.me(
+            await contextTests.authTestManager.me(
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )

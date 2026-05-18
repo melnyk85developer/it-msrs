@@ -16,7 +16,7 @@ interface AuthState {
 const initialState: AuthState = {
     authorizedUser: {} as IUser,
     isAuth: false,
-    isDarkTheme: localStorage.getItem("isDarkTheme"),
+    isDarkTheme: localStorage.getItem("isDarkTheme")!== null ? localStorage.getItem("isDarkTheme")! : "dark",
     isLoadingAuthUser: false,
     successfulRegistration: '',
     error: '',

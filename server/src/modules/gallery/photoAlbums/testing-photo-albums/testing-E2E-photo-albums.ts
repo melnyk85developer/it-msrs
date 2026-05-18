@@ -29,7 +29,7 @@ export const photoAlbumsE2ETest = () => {
         })
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const { response } = await contextTests.usersTestManager.getUserById(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             // console.log('TEST photoProfileE2ETest - response.body: ', response.body)
@@ -37,7 +37,7 @@ export const photoAlbumsE2ETest = () => {
             expect(response.body.email).toEqual(contextTests.users.correctUserEmails[0]);
             // Отправляем GET запрос на получение всех фотографий пользователя и ожидаем в ответ статус код 200 (OK) и пустой массив!
             const { response: res } = await contextTests.userPhotoAlbumsTestManager.getAllPhotoAlbums(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             // Сравниваем полученный результат, должен быть пустой массив!
@@ -65,7 +65,7 @@ export const photoAlbumsE2ETest = () => {
             )
             // Отправляем GET запрос на получение всех картинок, что бы убедится, что картинка с не валидными данными не добавилась в базу!
             const { response } = await contextTests.userPhotoAlbumsTestManager.getAllPhotoAlbums(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             // Сравниваем полученный результат, должен быть пустой массив!
@@ -76,7 +76,7 @@ export const photoAlbumsE2ETest = () => {
                 files: {
                     albumCoverFile: fs.createReadStream(contextTests.constants.image1Path)
                 },
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 albumName: 'Семейный'
             }
             const { createdEntity } = await contextTests.userPhotoAlbumsTestManager.createPhotoAlbum(
@@ -106,7 +106,7 @@ export const photoAlbumsE2ETest = () => {
                 files: {
                     albumCoverFile: fs.createReadStream(contextTests.constants.image2Path)
                 },
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 albumName: 'Новогодний'
             }
             const { createdEntity } = await contextTests.userPhotoAlbumsTestManager.createPhotoAlbum(
@@ -116,7 +116,7 @@ export const photoAlbumsE2ETest = () => {
             )
             contextTests.constants.createdPhotoAlbum2 = createdEntity
             const { response } = await contextTests.userPhotoAlbumsTestManager.getAllPhotoAlbums(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             expect(response.body.items).toEqual(
@@ -171,7 +171,7 @@ export const photoAlbumsE2ETest = () => {
             // console.log('createdUsers1', contextTests.users.createdUsers[0])
             const data: any = {
                 albumCoverName: contextTests.constants.createdPhotoAlbum2?.albumCoverName,
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 // albumId: contextTests.constants.invalidId,
                 albumName: contextTests.constants.createdPhotoAlbum2?.albumName
             }
@@ -190,7 +190,7 @@ export const photoAlbumsE2ETest = () => {
             }
             const data: any = {
                 albumCoverName: contextTests.constants.createdPhotoAlbum1?.albumCoverName,
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 albumName: 'Пасха'
             }
             await contextTests.userPhotoAlbumsTestManager.updatePhotoAlbum(
@@ -234,7 +234,7 @@ export const photoAlbumsE2ETest = () => {
             )
             // Отправляем GET запрос на получение всех пользователей, ожидем статус код 200 (OK)!
             const { response } = await contextTests.userPhotoAlbumsTestManager.getAllPhotoAlbums(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.OK_200
             )
             // Сравниваем полученный результат, должен быть пустой массив!

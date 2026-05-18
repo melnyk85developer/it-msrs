@@ -53,7 +53,7 @@ export const merchandiseTypeE2ETest = () => {
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.CREATED_201
             )
             // Отправляем GET запрос на получение всех типов магазинов и ожидаем в ответ статус код 200 (OK) и пустой массив!
@@ -80,7 +80,7 @@ export const merchandiseTypeE2ETest = () => {
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.CREATED_201
             )
             // console.log('TEST merchandiseTypeE2ETest: createdShop ', createdShop)

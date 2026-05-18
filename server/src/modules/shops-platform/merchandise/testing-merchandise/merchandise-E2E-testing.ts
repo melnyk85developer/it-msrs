@@ -56,12 +56,12 @@ export const merchandiseE2ETest = () => {
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.CREATED_201
             )
             // Отправляем GET запрос на получение всех магазинов и ожидаем статус код 200 (OK)!
             const { getEntity } = await contextTests.shopTestManager.getShops(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )

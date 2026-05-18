@@ -1,8 +1,9 @@
-import { contextTests } from 'test/helpers/init-settings';
+
 // import { isCreatedMsg1, isCreatedMsg2, isCreatedMsg3 } from './testFuncUserMSG';
 import { HTTP_STATUSES } from 'src/core/utils/utils';
 import { isCreatedUser } from 'src/modules/user-accounts/testing-users/testFunctionsUser';
 import { isLoginUser } from 'src/modules/auth/auth-testing/testFunctionsAuth';
+import { contextTests } from '../../../../../../test/helpers/init-settings';
 
 export const aiAssistantsMegsE2eTest = () => {
     // const prepareIsCreated3Msg = async () => {

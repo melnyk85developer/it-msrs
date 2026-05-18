@@ -55,11 +55,11 @@ export const basketMerchandiseE2ETest = () => {
                 contextTests.shopType.correctShopBrandsNames[0],
                 contextTests.shops.correctShopNames[0],
                 contextTests.shops.correctShopDescriptions[0],
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 HTTP_STATUSES.CREATED_201
             )
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id
+                userId: contextTests.users.createdUsers[0]!.userId
             }
             const { getBasket, response: res1 } = await contextTests.shopBasketTestManager.getBasket(
                 dataBasket,
@@ -75,7 +75,7 @@ export const basketMerchandiseE2ETest = () => {
             // contextTests.createBasketMerchandise = getBasket
 
             const dataBasketDevice: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 shopId: contextTests.shops.createdShops[0]!.shopId,
                 basketId: contextTests.basket.createdBaskets[0]!.basketId
             }
@@ -111,7 +111,7 @@ export const basketMerchandiseE2ETest = () => {
                 HTTP_STATUSES.UNAUTHORIZED_401
             )
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 shopId: contextTests.shops.createdShops[0]!.shopId,
                 basketId: contextTests.basket.createdBaskets[0]!.basketId
             }
@@ -138,7 +138,7 @@ export const basketMerchandiseE2ETest = () => {
                 HTTP_STATUSES.BAD_REQUEST_400
             )
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 shopId: contextTests.shops.createdShops[0]!.shopId,
                 basketId: contextTests.basket.createdBaskets[0]!.basketId
             }
@@ -180,7 +180,7 @@ export const basketMerchandiseE2ETest = () => {
             )
 
             const dataBasket: any = {
-                userId: contextTests.users.createdUsers[0]!.id,
+                userId: contextTests.users.createdUsers[0]!.userId,
                 shopId: contextTests.shops.createdShops[0]!.shopId
             }
             const { createdBasket } = await contextTests.shopBasketTestManager.createBasket(

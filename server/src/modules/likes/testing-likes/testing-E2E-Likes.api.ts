@@ -218,7 +218,7 @@ export const likesE2eTest = () => {
                     newestLikes: [
                         {
                             addedAt: expect.any(String),
-                            userId: contextTests.users.createdUsers[0]!.id,
+                            userId: contextTests.users.createdUsers[0]!.userId,
                             login: contextTests.users.createdUsers[0]!.login
                         }
                     ]
@@ -242,7 +242,7 @@ export const likesE2eTest = () => {
                     newestLikes: [
                         {
                             addedAt: expect.any(String),
-                            userId: contextTests.users.createdUsers[0]!.id,
+                            userId: contextTests.users.createdUsers[0]!.userId,
                             login: contextTests.users.createdUsers[0]!.login
                         }
                     ]
@@ -396,7 +396,7 @@ export const likesE2eTest = () => {
                     newestLikes: [
                         {
                             addedAt: expect.any(String),
-                            userId: contextTests.users.createdUsers[0]!.id,
+                            userId: contextTests.users.createdUsers[0]!.userId,
                             login: contextTests.users.createdUsers[0]!.login
                         }
                     ]
@@ -579,17 +579,17 @@ export const likesE2eTest = () => {
                         newestLikes: expect.arrayContaining([
                             expect.objectContaining({
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[0]!.id,
+                                userId: contextTests.users.createdUsers[0]!.userId,
                                 login: contextTests.users.createdUsers[0]!.login,
                             }),
                             expect.objectContaining({
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[1]!.id,
+                                userId: contextTests.users.createdUsers[1]!.userId,
                                 login: contextTests.users.createdUsers[1]!.login,
                             }),
                             expect.objectContaining({
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[3]!.id,
+                                userId: contextTests.users.createdUsers[3]!.userId,
                                 login: contextTests.users.createdUsers[3]!.login,
                             }),
                         ]),
@@ -640,17 +640,17 @@ export const likesE2eTest = () => {
                         newestLikes: [
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[2]!.id,
+                                userId: contextTests.users.createdUsers[2]!.userId,
                                 login: contextTests.users.createdUsers[2]!.login
                             },
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[0]!.id,
+                                userId: contextTests.users.createdUsers[0]!.userId,
                                 login: contextTests.users.createdUsers[0]!.login
                             },
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[3]!.id,
+                                userId: contextTests.users.createdUsers[3]!.userId,
                                 login: contextTests.users.createdUsers[3]!.login
                             },
                         ]
@@ -704,18 +704,18 @@ export const likesE2eTest = () => {
                         newestLikes: [
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[1]!.id,
+                                userId: contextTests.users.createdUsers[1]!.userId,
                                 login: contextTests.users.createdUsers[1]!.login
                             },
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[0]!.id,
+                                userId: contextTests.users.createdUsers[0]!.userId,
                                 login: contextTests.users.createdUsers[0]!.login
                             },
 
                             {
                                 addedAt: expect.any(String),
-                                userId: contextTests.users.createdUsers[3]!.id,
+                                userId: contextTests.users.createdUsers[3]!.userId,
                                 login: contextTests.users.createdUsers[3]!.login
                             },
                         ]

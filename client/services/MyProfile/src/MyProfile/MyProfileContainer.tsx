@@ -28,11 +28,11 @@ const MyProfileContainer: React.FC = React.memo(() => {
     // console.log('MyProfileContainer: - posts 😡 ', posts)
 
     useEffect(() => {
-        if (isAuth && authorizedUser && authorizedUser.id !== undefined) {
-            dispatch(myProfileAC(authorizedUser.id));
-            dispatch(getAllPhotoAlbumsMyProfileAC(authorizedUser.id));
-            dispatch(getAllMiniaturePhotosForCarouselMyProfileAC(authorizedUser.id));
-            // dispatch(getAllPhotosMyProfileAC(authorizedUser.id));
+        if (isAuth && authorizedUser && authorizedUser.userId !== undefined) {
+            dispatch(myProfileAC(authorizedUser.userId));
+            dispatch(getAllPhotoAlbumsMyProfileAC(authorizedUser.userId));
+            dispatch(getAllMiniaturePhotosForCarouselMyProfileAC(authorizedUser.userId));
+            // dispatch(getAllPhotosMyProfileAC(authorizedUser.userId));
             dispatch(setLSidebarAC(SIDEBAR_ON));
             dispatch(setLSidebarSpanAC(5));
             dispatch(setContentSpanAC(10));
@@ -94,7 +94,7 @@ const MyProfileContainer: React.FC = React.memo(() => {
 
     useEffect(() => {
         setContent(newContent);
-    }, [isAuth, authorizedUser.id, profile, carouselPhotos]);
+    }, [isAuth, authorizedUser.userId, profile, carouselPhotos]);
 
     useEffect(() => {
         if (error) {

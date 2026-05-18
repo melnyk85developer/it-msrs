@@ -28,7 +28,7 @@ export default (env: EnvVariables) => {
         platform: env.platform ?? 'desktop'
     })
 
-    config.plugins.push(new webpack.container.ModuleFederationPlugin({
+    config.plugins?.push(new webpack.container.ModuleFederationPlugin({
         name: 'music',
         filename: 'remoteEntry.js',
         exposes: {

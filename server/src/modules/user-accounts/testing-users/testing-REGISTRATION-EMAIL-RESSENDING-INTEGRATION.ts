@@ -83,7 +83,7 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
                     add: new Date().toISOString(),
                     minutes: 3,
                     field: 'registration',
-                    userId: contextTests.users.createdUsers[0]!.id,
+                    userId: contextTests.users.createdUsers[0]!.userId,
                 };
                 // Вычисляем время для каждого запроса, отнимая 18 - i*3 минуты
                 dataCode.add = new Date(Date.now() - (18 * 60 * 1000) + i * (3 * 60 * 1000)).toISOString();
@@ -149,7 +149,7 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
             const createdUser = await contextTests.сommandBus.execute(command);
             const findUser = await contextTests.usersRepository.findUserByIdOrNotFoundFail(createdUser.data.id)
             const addUser = {
-                id: findUser.id,
+                userId: findUser.id,
                 avatar: null,
                 login: findUser.accountData.login,
                 email: findUser.accountData.email,
@@ -170,7 +170,7 @@ export const registrEmailResendingAndConfirmIntegrationTest = () => {
             );
             // console.log('TEST: success 😡 ', success)
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
-            expect(success.data._id.toString()).toBe(contextTests.users.createdUsers[1]!.id);
+            expect(success.data._id.toString()).toBe(contextTests.users.createdUsers[1]!.userId);
             expect(success.done).toEqual(expect.any(Boolean));
         });
     });

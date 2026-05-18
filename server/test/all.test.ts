@@ -60,22 +60,22 @@ describe('ALL TESTS IT-INCUBATOR PROJEKT', () => {
         );
         // contextTests.app = result.app;
     });
-    // describe('AUTH-BLOCK-TESTS', () => {
-    //     authE2eTest()
-    //     // authIntegrationTest()
-    //     // authUnitTest()
-    // })
-    // describe('USER-SESSIONS-BLOCK-TESTS', () => {
-    //     userSessionE2eTest()
-    //     // usersSessionsInegrationTest()
-    // })
-    describe('ADMIN-BLOCK-TESTS', () => {
-        // aiAssistantsMegsE2eTest()
-        aiAssistantMessagesIntegrationTest()
+    describe('AUTH-BLOCK-TESTS', () => {
+        authE2eTest()
+        // authIntegrationTest()
+        // authUnitTest()
     })
-    // describe('MESSAGES-BLOCK-TESTS', () => {
-    //     userMessagesE2eTest()
+    describe('USER-SESSIONS-BLOCK-TESTS', () => {
+        userSessionE2eTest()
+        // usersSessionsInegrationTest()
+    })
+    // describe('ADMIN-BLOCK-TESTS', () => { 
+    //     // aiAssistantsMegsE2eTest()
+    //     aiAssistantMessagesIntegrationTest()
     // })
+    describe('MESSAGES-BLOCK-TESTS', () => {
+        userMessagesE2eTest()
+    })
     // describe('BLOGS-BLOCK-TESTS', () => {
     //     blogsE2eTest()
     // })

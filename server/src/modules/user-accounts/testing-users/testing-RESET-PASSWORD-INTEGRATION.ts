@@ -81,7 +81,7 @@ export const resetPasswordInegrationTest = () => {
                     add: new Date().toISOString(),
                     minutes: 3,
                     field: 'password',
-                    userId: contextTests.users.createdUsers[0]!.id,
+                    userId: contextTests.users.createdUsers[0]!.userId,
                 };
                 // Вычисляем время для каждого запроса, отнимая 18 - i*3 минуты
                 dataCode.add = new Date(Date.now() - (18 * 60 * 1000) + i * (3 * 60 * 1000)).toISOString();
@@ -159,7 +159,7 @@ export const resetPasswordInegrationTest = () => {
                 ));
             // console.log('TEST: success 😡 ', success)
             expect(success.code).toBe(INTERNAL_STATUS_CODE.SUCCESS);
-            expect(success.data).toBe(contextTests.users.createdUsers[0]!.id);
+            expect(success.data).toBe(contextTests.users.createdUsers[0]!.userId);
             expect(success.serviceMessage).toBe(`Пароль успешно обновлен!`);
             expect(success.done).toEqual(expect.any(Boolean));
         });

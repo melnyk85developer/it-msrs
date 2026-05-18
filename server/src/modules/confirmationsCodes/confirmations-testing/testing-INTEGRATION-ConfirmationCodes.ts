@@ -40,7 +40,7 @@ describe('CONFIRMATION-CODE-INTEGRATION', () => {
             expirationDate: new Date(),
             isBlocked: true,
             field: 'password',
-            userId: contextTests.users.createdUsers[0]!.id
+            userId: contextTests.users.createdUsers[0]!.userId
         };
 
         const result = await confirmationService.createConfirmationRepository(dataCode);
@@ -66,7 +66,7 @@ describe('CONFIRMATION-CODE-INTEGRATION', () => {
             expirationDate: new Date(),
             isBlocked: false,
             field: 'password',
-            userId: contextTests.users.createdUsers[0]!.id
+            userId: contextTests.users.createdUsers[0]!.userId
         };
         const result = await confirmationService.updateConfirmationRepository(confirmation.id, dataCode);
         const updatedConfirmation = result.dataValues;
@@ -86,13 +86,13 @@ describe('CONFIRMATION-CODE-INTEGRATION', () => {
     });
     it('DELETE - Запрос на удаление кода подтверждения по userId!', async () => {
         const result = await confirmationService.deleteConfirmationUserIdRepository(
-            contextTests.users.createdUsers[0]!.id
+            contextTests.users.createdUsers[0]!.userId
         );
         expect(result).toBe(1)
     });
     it('DELETE - Запрос на удаление не существующего кода подтверждения по userId!', async () => {
         const result = await confirmationService.deleteConfirmationUserIdRepository(
-            contextTests.users.createdUsers[0]!.id
+            contextTests.users.createdUsers[0]!.userId
         );
         expect(result).toBeGreaterThanOrEqual(0);
     });

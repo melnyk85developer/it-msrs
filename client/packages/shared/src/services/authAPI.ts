@@ -6,8 +6,8 @@ export default class AuthAPI {
     static async login(email: string, password: string, remember: boolean): Promise<AxiosResponse<AuthResponse>> {
         return await $api.post<AuthResponse>('/auth/login', { loginOrEmail: email, password, remember })
     }
-    static async me(): Promise<AxiosResponse<{ id: string, login: string, email: string, isBot: boolean }>> {
-        return await $api.get<{ id: string, login: string, email: string, isBot: boolean }>('/auth/me')
+    static async me(): Promise<AxiosResponse<{ userId: string, login: string, email: string, isBot: boolean }>> {
+        return await $api.get<{ userId: string, login: string, email: string, isBot: boolean }>('/auth/me')
     }
     static async registration(login: string, name: string, surname: string, email: string, password: string, avatar?: any): Promise<AxiosResponse<void>> {
 

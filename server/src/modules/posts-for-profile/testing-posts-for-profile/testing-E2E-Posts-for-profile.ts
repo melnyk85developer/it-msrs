@@ -87,8 +87,8 @@ export const postForProfileE2ETest = () => {
             const postData: CreatePostForProfileInputDto = {
                 title: contextTests.posts_for_profile.correctTitleUser1Posts[0],
                 content: contextTests.posts_for_profile.contentUser1Posts[0],
-                profileId: contextTests.users.createdUsers[0]!.id,
-                // postedByUserId: contextTests.users.createdUsers[0]!.id,
+                profileId: contextTests.users.createdUsers[0]!.userId,
+                // postedByUserId: contextTests.users.createdUsers[0]!.userId,
             }
             const isPost = await isCreatedPostForProfile(
                 0,
@@ -110,7 +110,7 @@ export const postForProfileE2ETest = () => {
             const postData: CreatePostForProfileInputDto = {
                 title: contextTests.posts_for_profile.correctTitleUser1Posts[2],
                 content: contextTests.posts_for_profile.contentUser1Posts[0],
-                profileId: contextTests.users.createdUsers[1]!.id,
+                profileId: contextTests.users.createdUsers[1]!.userId,
                 // postedByUserId: contextTests.createdUser2.userId
             }
             const isPost = await isCreatedPostForProfile(
@@ -142,7 +142,7 @@ export const postForProfileE2ETest = () => {
             const postData: CreatePostForProfileInputDto = {
                 title: '',
                 content: '',
-                profileId: contextTests.users.createdUsers[0]!.id,
+                profileId: contextTests.users.createdUsers[0]!.userId,
                 // postedByUserId: contextTests.createdUser1.userId,
                 // authorizedUserId: contextTests.createdUser1.userId
             }
@@ -174,7 +174,7 @@ export const postForProfileE2ETest = () => {
             const postData: any = {
                 title: contextTests.posts_for_profile.correctTitleUser1Posts[0],
                 content: contextTests.posts_for_profile.contentUser1Posts[0],
-                profileId: contextTests.users.createdUsers[0]!.id,
+                profileId: contextTests.users.createdUsers[0]!.userId,
                 // postedByUserId: contextTests.createdUser1.userId,
                 // authorizedUserId: contextTests.createdUser1.userId
             }

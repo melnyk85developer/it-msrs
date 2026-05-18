@@ -9,9 +9,9 @@ export const userMessagesE2eTest = () => {
         const msg1 = await isCreatedMsg1(
             {
                 localId: String(Date.now()),
-                message: `Успешное создание сообщение 1 от пользователя senderId ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                message: `Успешное создание сообщение 1 от пользователя senderId ${contextTests.users.createdUsers[0]!.userId} пользователю receiverId ${contextTests.users.createdUsers[1]!.userId}`,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 // read: false,
                 // createdAt: new Date().toISOString(),
                 replyToMessageId: undefined,
@@ -25,9 +25,9 @@ export const userMessagesE2eTest = () => {
         const msg2 = await isCreatedMsg2(
             {
                 localId: String(Date.now()),
-                message: `Успешное создание сообщение 2 от пользователя senderId ${contextTests.users.createdUsers[1]!.id} пользователю receiverId ${contextTests.users.createdUsers[0]!.id}`,
-                senderId: contextTests.users.createdUsers[1]!.id,
-                receiverId: contextTests.users.createdUsers[0]!.id,
+                message: `Успешное создание сообщение 2 от пользователя senderId ${contextTests.users.createdUsers[1]!.userId} пользователю receiverId ${contextTests.users.createdUsers[0]!.userId}`,
+                senderId: contextTests.users.createdUsers[1]!.userId,
+                receiverId: contextTests.users.createdUsers[0]!.userId,
                 // read: false,
                 // createdAt: new Date().toISOString(),
                 replyToMessageId: undefined,
@@ -41,9 +41,9 @@ export const userMessagesE2eTest = () => {
         const msg3 = await isCreatedMsg3(
             {
                 localId: String(Date.now()),
-                message: `Успешное создание сообщение 3 от пользователя senderId ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                message: `Успешное создание сообщение 3 от пользователя senderId ${contextTests.users.createdUsers[0]!.userId} пользователю receiverId ${contextTests.users.createdUsers[1]!.userId}`,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 // read: false,
                 // createdAt: new Date().toISOString(),
                 replyToMessageId: undefined,
@@ -76,8 +76,8 @@ export const userMessagesE2eTest = () => {
             contextTests.sessions.accessTokenUser1Devices[0],
             contextTests.sessions.refreshTokenUser1Devices[0],
             {
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 deleteOption: 'me'
             },
             contextTests.sessions.userAgent[6],
@@ -160,8 +160,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.constants.invalidId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[2],
                 HTTP_STATUSES.NOT_FOUND_404
             )
@@ -181,8 +181,8 @@ export const userMessagesE2eTest = () => {
         it(`POST   - Ожидается статус код 400, - Не валидный запрос на создание сообщения ! Дополнительные запросы: -> GET, POST`, async () => {
             const message = {
                 message: '',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 read: false,
                 createdAt: new Date().toISOString(),
                 replyToMessageId: null,
@@ -202,9 +202,9 @@ export const userMessagesE2eTest = () => {
             await isCreatedMsg1(
                 {
                     localId: String(Date.now()),
-                    message: `UNAUTHORIZED_401 ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    message: `UNAUTHORIZED_401 ${contextTests.users.createdUsers[0]!.userId} пользователю receiverId ${contextTests.users.createdUsers[1]!.userId}`,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     replyToMessageId: undefined,
                     // attachments: contextTests.constants.image2Path,
                 },
@@ -217,9 +217,9 @@ export const userMessagesE2eTest = () => {
             const msg1 = await isCreatedMsg1(
                 {
                     localId: String(Date.now()),
-                    message: `Успешное создание сообщение 1 от пользователя senderId ${contextTests.users.createdUsers[0]!.id} пользователю receiverId ${contextTests.users.createdUsers[1]!.id}`,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    message: `Успешное создание сообщение 1 от пользователя senderId ${contextTests.users.createdUsers[0]!.userId} пользователю receiverId ${contextTests.users.createdUsers[1]!.userId}`,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     replyToMessageId: undefined,
                     // attachments: contextTests.constants.image2Path,
                 },
@@ -231,8 +231,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -266,9 +266,9 @@ export const userMessagesE2eTest = () => {
             const msg2 = await isCreatedMsg2(
                 {
                     localId: String(Date.now()),
-                    message: `Успешное создание сообщение 2 от пользователя senderId ${contextTests.users.createdUsers[1]!.id} пользователю receiverId ${contextTests.users.createdUsers[0]!.id}`,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    message: `Успешное создание сообщение 2 от пользователя senderId ${contextTests.users.createdUsers[1]!.userId} пользователю receiverId ${contextTests.users.createdUsers[0]!.userId}`,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     // read: false,
                     // createdAt: new Date().toISOString(),
                     // replyToMessageId: null,
@@ -282,8 +282,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[9],
                 HTTP_STATUSES.OK_200
             )
@@ -291,8 +291,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -302,8 +302,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -319,8 +319,8 @@ export const userMessagesE2eTest = () => {
                 localId: String(Date.now()),
                 msgId: contextTests.createdMessage1.msgId,
                 message: '',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 replyToMessageId: null,
                 // attachments: contextTests.constants.image1Path,
             };
@@ -339,8 +339,8 @@ export const userMessagesE2eTest = () => {
                 localId: String(Date.now()),
                 msgId: contextTests.createdMessage1.msgId,
                 message: 'UNAUTHORIZED_401',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 replyToMessageId: null,
                 // attachments: contextTests.constants.image2Path,
             };
@@ -358,8 +358,8 @@ export const userMessagesE2eTest = () => {
                 localId: String(Date.now()),
                 msgId: contextTests.createdMessage1.msgId,
                 message: 'FORBIDDEN_403',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 replyToMessageId: undefined,
                 // attachments: contextTests.constants.image1Path,
             };
@@ -374,8 +374,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[2],
                 HTTP_STATUSES.OK_200
             )
@@ -383,8 +383,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -394,8 +394,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -409,8 +409,8 @@ export const userMessagesE2eTest = () => {
                 localId: String(Date.now()),
                 msgId: contextTests.constants.invalidId,
                 message: 'NOT_FOUND_404',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 replyToMessageId: undefined,
                 // attachments: contextTests.constants.image2Path,
             };
@@ -427,8 +427,8 @@ export const userMessagesE2eTest = () => {
                 localId: String(Date.now()),
                 msgId: contextTests.createdMessage1.msgId,
                 message: 'Обновляем сообщение 1',
-                senderId: contextTests.users.createdUsers[0]!.id,
-                receiverId: contextTests.users.createdUsers[1]!.id,
+                senderId: contextTests.users.createdUsers[0]!.userId,
+                receiverId: contextTests.users.createdUsers[1]!.userId,
                 replyToMessageId: undefined,
                 // attachments: contextTests.constants.image1Path
             };
@@ -444,8 +444,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -453,8 +453,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: message.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -464,8 +464,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -500,8 +500,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -509,8 +509,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -520,8 +520,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -546,8 +546,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -555,8 +555,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -566,8 +566,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: message.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -592,8 +592,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -601,8 +601,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -612,8 +612,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -638,8 +638,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -647,8 +647,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -658,8 +658,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -687,8 +687,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -696,8 +696,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -707,8 +707,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: message.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: message.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -739,8 +739,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -749,8 +749,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -760,8 +760,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -783,8 +783,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -792,8 +792,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -803,8 +803,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -827,8 +827,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -836,8 +836,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage1.read,
                     dialogId: contextTests.createdMessage1.dialogId,
                     replyToMessageId: contextTests.createdMessage1.replyToMessageId,
@@ -847,8 +847,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -880,8 +880,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -889,8 +889,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -911,8 +911,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[5],
                 HTTP_STATUSES.OK_200
             )
@@ -932,8 +932,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -943,8 +943,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -954,8 +954,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -965,8 +965,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage3.msgId,
                     message: contextTests.createdMessage3.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage3.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -987,7 +987,7 @@ export const userMessagesE2eTest = () => {
                     contextTests.sessions.refreshTokenUser1Devices[0],
                     {
                         senderId: incorectData[i] as any,
-                        receiverId: contextTests.users.createdUsers[1]!.id,
+                        receiverId: contextTests.users.createdUsers[1]!.userId,
                         deleteOption: 'all'
                     },
                     contextTests.sessions.userAgent[6],
@@ -997,7 +997,7 @@ export const userMessagesE2eTest = () => {
                     contextTests.sessions.accessTokenUser1Devices[0],
                     contextTests.sessions.refreshTokenUser1Devices[0],
                     {
-                        senderId: contextTests.users.createdUsers[0]!.id,
+                        senderId: contextTests.users.createdUsers[0]!.userId,
                         receiverId: incorectData[i] as any,
                         deleteOption: 'all'
                     },
@@ -1009,8 +1009,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1025,8 +1025,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1036,8 +1036,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1047,8 +1047,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1058,8 +1058,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage3.msgId,
                     message: contextTests.createdMessage3.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage3.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1072,8 +1072,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.constants.expiredToken,
                 contextTests.constants.expiredToken,
                 {
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     deleteOption: 'all'
                 },
                 contextTests.sessions.userAgent[6],
@@ -1083,8 +1083,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1099,8 +1099,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1110,8 +1110,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1121,8 +1121,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1132,8 +1132,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage3.msgId,
                     message: contextTests.createdMessage3.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage3.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1146,8 +1146,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser3Devices[0],
                 contextTests.sessions.refreshTokenUser3Devices[0],
                 {
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     deleteOption: 'all'
                 },
                 contextTests.sessions.userAgent[6],
@@ -1157,8 +1157,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1173,8 +1173,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1184,8 +1184,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1195,8 +1195,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1206,8 +1206,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage3.msgId,
                     message: contextTests.createdMessage3.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage3.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1220,8 +1220,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 {
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     deleteOption: 'all'
                 },
                 contextTests.sessions.userAgent[6],
@@ -1231,8 +1231,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1252,8 +1252,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 contextTests.createdMessage1.dialogId,
-                contextTests.users.createdUsers[0]!.id,
-                contextTests.users.createdUsers[1]!.id,
+                contextTests.users.createdUsers[0]!.userId,
+                contextTests.users.createdUsers[1]!.userId,
                 contextTests.sessions.userAgent[7],
                 HTTP_STATUSES.OK_200
             )
@@ -1262,8 +1262,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage1.msgId,
                     message: contextTests.createdMessage1.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1273,8 +1273,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage2.msgId,
                     message: contextTests.createdMessage2.message,
-                    senderId: contextTests.users.createdUsers[1]!.id,
-                    receiverId: contextTests.users.createdUsers[0]!.id,
+                    senderId: contextTests.users.createdUsers[1]!.userId,
+                    receiverId: contextTests.users.createdUsers[0]!.userId,
                     read: contextTests.createdMessage2.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1284,8 +1284,8 @@ export const userMessagesE2eTest = () => {
                 {
                     msgId: contextTests.createdMessage3.msgId,
                     message: contextTests.createdMessage3.message,
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     read: contextTests.createdMessage3.read,
                     dialogId: contextTests.createdMessage2.dialogId,
                     replyToMessageId: contextTests.createdMessage2.replyToMessageId,
@@ -1298,8 +1298,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 {
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     deleteOption: 'all'
                 },
                 contextTests.sessions.userAgent[6],
@@ -1310,8 +1310,8 @@ export const userMessagesE2eTest = () => {
                 contextTests.sessions.accessTokenUser1Devices[0],
                 contextTests.sessions.refreshTokenUser1Devices[0],
                 {
-                    senderId: contextTests.users.createdUsers[0]!.id,
-                    receiverId: contextTests.users.createdUsers[1]!.id,
+                    senderId: contextTests.users.createdUsers[0]!.userId,
+                    receiverId: contextTests.users.createdUsers[1]!.userId,
                     deleteOption: 'all'
                 },
                 contextTests.sessions.userAgent[6],
@@ -1344,7 +1344,7 @@ export const userMessagesE2eTest = () => {
             expect(response.body.items.length).toEqual(1);
             expect(response.body.items).toEqual([
                 {
-                    userId: contextTests.users.createdUsers[1]!.id,
+                    userId: contextTests.users.createdUsers[1]!.userId,
                     // login: contextTests.users.createdUsers[1]!.login,
                     // email: contextTests.users.createdUsers[1]!.email,
                     // avatar: contextTests.users.createdUsers[1]!.avatar,
@@ -1375,7 +1375,7 @@ export const userMessagesE2eTest = () => {
             expect(response.body.items.length).toEqual(1);
             expect(response.body.items).toEqual([
                 {
-                    userId: contextTests.users.createdUsers[1]!.id,
+                    userId: contextTests.users.createdUsers[1]!.userId,
                     // login: contextTests.users.createdUsers[1]!.login,
                     // email: contextTests.users.createdUsers[1]!.email,
                     // avatar: contextTests.users.createdUsers[1]!.avatar,

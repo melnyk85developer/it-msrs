@@ -25,15 +25,3 @@ export class UserViewDto {
         return dto;
     }
 }
-export class MeViewDto extends OmitType(UserViewDto, ['id'] as const) {
-    id: string;
-    static mapToView(user: UserDocument): MeViewDto {
-        const dto = new MeViewDto();
-        dto.id = user._id.toString();
-        dto.avatar = user.profileData.avatar;
-        dto.email = user.accountData.email;
-        dto.login = user.accountData.login;
-        dto.createdAt = user.createdAt;
-        return dto;
-    }
-}

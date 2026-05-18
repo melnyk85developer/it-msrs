@@ -10,9 +10,12 @@ module.exports = {
     "/dist/",  // Исключает скомпилированные файлы
     "\\.d\\.ts$",  // Игнорирует файлы .d.ts
     "\\/test\\/helpers\\/",
+    "\\/test\\/test-context\\/",
+    "\\/test\\/helpers\\/",
+    "\\/test\\/mock\\/"
   ],
   moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: '.',
+  rootDir: './',
   testEnvironment: 'node',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',

@@ -1,8 +1,8 @@
 import { HTTP_STATUSES } from "src/core/utils/utils"
 import { isLoginUser } from "src/modules/auth/auth-testing/testFunctionsAuth"
 import { isCreatedUser } from "src/modules/user-accounts/testing-users/testFunctionsUser"
-import { contextTests } from "test/helpers/init-settings"
 import { isCreatedShopBrands } from "./testFunctionsShopBrands"
+import { contextTests } from "../../../../../test/helpers/init-settings"
 
 export const shopBrandE2ETest = () => {
     describe('E2E-SHOPS-BRANDS', () => {
@@ -46,7 +46,7 @@ export const shopBrandE2ETest = () => {
         })
         it('GET    - Ожидается статус код 200, - В теле ответа ожидаем пустой массив!', async () => {
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -63,7 +63,7 @@ export const shopBrandE2ETest = () => {
 
             // Отправляем GET запрос на получение всех типов магазинов и ожидаем статус код 200 (OK)!
             const { getEntity } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -91,7 +91,7 @@ export const shopBrandE2ETest = () => {
 
             // Отправляем GET запрос на получение всех типов магазинов, что бы убедится, что тип магазина с не валидными данными не создался!
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -118,7 +118,7 @@ export const shopBrandE2ETest = () => {
 
             // Отправляем GET запрос на получение всех типов магазинов и ожидаем статус код 200 (OK)!
             const { getEntity } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -146,7 +146,7 @@ export const shopBrandE2ETest = () => {
 
             // Отправляем GET запрос на получение всех типов магазинов и ожидаем статус код 200 (OK)!
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -334,7 +334,7 @@ export const shopBrandE2ETest = () => {
             )
             // Отправляем GET запрос на получение всех типов магазинов, ожидем статус код 200 (OK)!
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -362,7 +362,7 @@ export const shopBrandE2ETest = () => {
             )
             // Отправляем GET запрос на получение всех типов магазинов, ожидем статус код 200 (OK)!
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -390,7 +390,7 @@ export const shopBrandE2ETest = () => {
             )
             // Отправляем GET запрос на получение всех типов магазинов, ожидем статус код 200 (OK)!
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
@@ -434,13 +434,13 @@ export const shopBrandE2ETest = () => {
             )
             if (res2.status === HTTP_STATUSES.NOT_FOUND_404) {
                 // console.log('TEST: - res2', res.status)
-                contextTests.shopType.deleteShopTypesStateTest({
-                    numShopType: 1
+                contextTests.shopBrand.deleteShopBrandsStateTest({
+                    numShopBrand: 1
                 })
             }
             // Отправляем GET запрос на получение всех типов магазинов, ожидем статус код 200 (OK)!
             const { response } = await contextTests.shopBrandsTestManager.getShopBrands(
-                contextTests.users.createdUsers[0]!.id,
+                contextTests.users.createdUsers[0]!.userId,
                 contextTests.sessions.accessTokenUser1Devices[0],
                 HTTP_STATUSES.OK_200
             )
