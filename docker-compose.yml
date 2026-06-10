@@ -1,0 +1,197 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: masikus
+      POSTGRES_DB: it-mars
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mars.com
+      PGADMIN_DEFAULT_PASSWORD: masikus
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    ports:
+      - "5006:5006"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - postgres
+      - mongo
+    restart: unless-stopped
+
+  # 1. Host
+  frontend-host:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=host
+    ports:
+      - "3000:3000" # Исправлено на 3000, как ты и сказал
+    restart: unless-stopped
+
+  # 2. Admin (по вебпаку: 3001)
+  frontend-admin:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=Admin
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+
+  # 3. MyProfile (по вебпаку: 3002)
+  frontend-myprofile:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=MyProfile
+    ports:
+      - "3002:3000"
+    restart: unless-stopped
+
+  # 4. Shop (по вебпаку: 3003. Проверь имя папки, ты писал MyShops)
+  frontend-shop:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=MyShops
+    ports:
+      - "3003:3000"
+    restart: unless-stopped
+
+  # 5. Auth (по вебпаку: 3004)
+  frontend-auth:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=Auth
+    ports:
+      - "3004:3000"
+    restart: unless-stopped
+
+  # 6. Users (по вебпаку: 3005)
+  frontend-users:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=Users
+    ports:
+      - "3005:3000"
+    restart: unless-stopped
+
+  # 7. UserProfile (по вебпаку: 3006)
+  frontend-userprofile:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=UserProfile
+    ports:
+      - "3006:3000"
+    restart: unless-stopped
+
+  # 8. ShopsList (по вебпаку: 3007)
+  frontend-shopslist:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=ShopsList
+    ports:
+      - "3007:3000"
+    restart: unless-stopped
+
+  # 9. Music (по вебпаку: 3008)
+  frontend-music:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=Music
+    ports:
+      - "3008:3000"
+    restart: unless-stopped
+
+  # 10. SettingsMyProfile (по вебпаку: 3009)
+  frontend-settings:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=SettingsMyProfile
+    ports:
+      - "3009:3000"
+    restart: unless-stopped
+
+  # 11. Messages (по вебпаку: 3010. Проверь имя папки, ты писал Message)
+  frontend-messages:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=Message
+    ports:
+      - "3010:3000"
+    restart: unless-stopped
+
+  # 12. Blogs (по вебпаку: 3011)
+  frontend-blogs:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=Blogs
+    ports:
+      - "3011:3000"
+    restart: unless-stopped
+
+  # 13. BlogsList (по вебпаку: 3012)
+  frontend-blogslist:
+    build:
+      context: .
+      dockerfile: ./docker/host/Dockerfile
+      args:
+        - SERVICE_NAME=BlogsList
+    ports:
+      - "3012:3000"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  mongodata:
+
